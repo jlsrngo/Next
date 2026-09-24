@@ -1,7 +1,7 @@
 import ArunakiNavbar from '@/components/ArunakiNavbar';
 import ArunakiFooter from '@/components/ArunakiFooter';
 import { Link } from '@/i18n/navigation';
-import { Download, CheckCircle2, Github, ExternalLink, Terminal } from 'lucide-react';
+import { Download, CheckCircle2, Github, ExternalLink, Terminal, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
@@ -67,15 +67,13 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
                 </li>
               </ul>
             </div>
-            <a
-              href="https://github.com/jlsrngo/Arunaki/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-sans text-sm font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            <button
+              disabled
+              className="w-full py-3 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <Download className="w-4 h-4" />
-              <span>{isId ? 'Unduh .exe' : 'Download .exe'}</span>
-            </a>
+              <Clock className="w-4 h-4" />
+              <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
+            </button>
           </div>
 
           {/* Windows Portable */}
@@ -101,15 +99,13 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
                 </li>
               </ul>
             </div>
-            <a
-              href="https://github.com/jlsrngo/Arunaki/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 font-sans text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+            <button
+              disabled
+              className="w-full py-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <Download className="w-4 h-4" />
-              <span>{isId ? 'Unduh .zip' : 'Download .zip'}</span>
-            </a>
+              <Clock className="w-4 h-4" />
+              <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
+            </button>
           </div>
 
           {/* macOS Universal */}
@@ -135,15 +131,13 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
                 </li>
               </ul>
             </div>
-            <a
-              href="https://github.com/jlsrngo/Arunaki/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 font-sans text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+            <button
+              disabled
+              className="w-full py-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <Download className="w-4 h-4" />
-              <span>{isId ? 'Unduh .dmg' : 'Download .dmg'}</span>
-            </a>
+              <Clock className="w-4 h-4" />
+              <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
+            </button>
           </div>
         </div>
 
