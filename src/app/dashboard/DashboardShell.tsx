@@ -286,7 +286,7 @@ export default function DashboardShell({
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                       active
-                        ? 'bg-[var(--accent)] text-white'
+                        ? 'bg-accent bg-[var(--accent)] text-white'
                         : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                     }`}
                   >

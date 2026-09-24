@@ -439,7 +439,11 @@
 html:not(.dark) .theme-monochrome .bg-accent,
 html:not(.dark) [data-theme-style="monochrome"] .bg-accent,
 html:not(.dark).theme-monochrome .bg-accent,
-html:not(.dark)[data-theme-style="monochrome"] .bg-accent {
+html:not(.dark)[data-theme-style="monochrome"] .bg-accent,
+html:not(.dark) .theme-monochrome .bg-\[var\(--accent\)\],
+html:not(.dark) [data-theme-style="monochrome"] .bg-\[var\(--accent\)\],
+html:not(.dark).theme-monochrome .bg-\[var\(--accent\)\],
+html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] {
   background-color: #09090b !important;
   color: #ffffff !important;
   border: 1px solid #09090b !important;
@@ -448,14 +452,22 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-accent {
 html:not(.dark) .theme-monochrome .bg-accent *,
 html:not(.dark) [data-theme-style="monochrome"] .bg-accent *,
 html:not(.dark).theme-monochrome .bg-accent *,
-html:not(.dark)[data-theme-style="monochrome"] .bg-accent * {
+html:not(.dark)[data-theme-style="monochrome"] .bg-accent *,
+html:not(.dark) .theme-monochrome .bg-\[var\(--accent\)\] *,
+html:not(.dark) [data-theme-style="monochrome"] .bg-\[var\(--accent\)\] *,
+html:not(.dark).theme-monochrome .bg-\[var\(--accent\)\] *,
+html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
   color: #ffffff !important;
 }
 
 .dark.theme-monochrome .bg-accent,
 .dark .theme-monochrome .bg-accent,
 .dark[data-theme-style="monochrome"] .bg-accent,
-.dark [data-theme-style="monochrome"] .bg-accent {
+.dark [data-theme-style="monochrome"] .bg-accent,
+.dark.theme-monochrome .bg-\[var\(--accent\)\],
+.dark .theme-monochrome .bg-\[var\(--accent\)\],
+.dark[data-theme-style="monochrome"] .bg-\[var\(--accent\)\],
+.dark [data-theme-style="monochrome"] .bg-\[var\(--accent\)\] {
   background-color: #27272a !important;
   color: #f4f4f5 !important;
   border: 1px solid #3f3f46 !important;
@@ -464,7 +476,11 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-accent * {
 .dark.theme-monochrome .bg-accent *,
 .dark .theme-monochrome .bg-accent *,
 .dark[data-theme-style="monochrome"] .bg-accent *,
-.dark [data-theme-style="monochrome"] .bg-accent * {
+.dark [data-theme-style="monochrome"] .bg-accent *,
+.dark.theme-monochrome .bg-\[var\(--accent\)\] *,
+.dark .theme-monochrome .bg-\[var\(--accent\)\] *,
+.dark[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] *,
+.dark [data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
   color: #f4f4f5 !important;
 }
 

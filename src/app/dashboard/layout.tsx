@@ -17,8 +17,10 @@ export default async function DashboardLayout({
     select: { fullName: true, avatarUrl: true, accentColor: true },
   })
 
+  const isMonochrome = profile?.accentColor === '#000000' || profile?.accentColor === 'monochrome'
+
   return (
-    <Providers>
+    <Providers initialMonochrome={isMonochrome} initialAccentColor={profile?.accentColor ?? undefined}>
       <DashboardShell
         email={session.user.email}
         profileName={profile?.fullName ?? null}
