@@ -622,10 +622,10 @@ html:not(.dark) [data-theme-style="monochrome"] .select-field {
    Ensures no colorful icons (React, TypeScript, Tailwind, FastAPI, etc.)
    appear when monochrome theme is enabled.
    ========================================================================== */
-.theme-monochrome [title] svg,
-.theme-monochrome svg[style*="color"],
-[data-theme-style="monochrome"] [title] svg,
-[data-theme-style="monochrome"] svg[style*="color"],
+.theme-monochrome [title] svg:not(.lucide),
+.theme-monochrome svg[style*="color"]:not(.lucide),
+[data-theme-style="monochrome"] [title] svg:not(.lucide),
+[data-theme-style="monochrome"] svg[style*="color"]:not(.lucide),
 .theme-monochrome .tech-badge svg,
 [data-theme-style="monochrome"] .tech-badge svg {
   color: #18181b !important;
@@ -633,16 +633,23 @@ html:not(.dark) [data-theme-style="monochrome"] .select-field {
   filter: grayscale(100%) !important;
 }
 
-.dark.theme-monochrome [title] svg,
-.dark.theme-monochrome svg[style*="color"],
-.dark [data-theme-style="monochrome"] [title] svg,
-.dark [data-theme-style="monochrome"] svg[style*="color"],
-.dark .theme-monochrome [title] svg,
-.dark .theme-monochrome svg[style*="color"] {
+.dark.theme-monochrome [title] svg:not(.lucide),
+.dark.theme-monochrome svg[style*="color"]:not(.lucide),
+.dark [data-theme-style="monochrome"] [title] svg:not(.lucide),
+.dark [data-theme-style="monochrome"] svg[style*="color"]:not(.lucide),
+.dark .theme-monochrome [title] svg:not(.lucide),
+.dark .theme-monochrome svg[style*="color"]:not(.lucide) {
   color: #e4e4e7 !important;
   fill: currentColor !important;
   filter: grayscale(100%) brightness(1.2) !important;
 }
+
+/* Ensure all outline/stroke-based icons (like Lucide) always stay outline and never fill solid */
+svg.lucide {
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
 
 /* ==========================================================================
    PURE MONOCHROME FLAT FOR ADMIN DASHBOARD

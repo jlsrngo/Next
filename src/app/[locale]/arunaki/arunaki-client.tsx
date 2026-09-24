@@ -52,45 +52,45 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           category: 'Excel (.xlsx)',
           prompt: 'Rekap pemasukan dan pengeluaran hari ini ke laporan_keuangan.xlsx pada sheet "Agustus 2026", hitung total margin otomatis.',
           logs: [
-            { tag: 'SECURITY', text: 'Memeriksa jalur dalam sandbox: ./workspace/laporan_keuangan.xlsx (Izin DIBERIKAN)' },
-            { tag: 'SNAPSHOT', text: 'Membuat checkpoint lokal: .arunaki/checkpoints/20260924_1340_laporan.xlsx' },
-            { tag: 'COM BRIDGE', text: 'Menghubungkan ke mesin Microsoft Excel COM (headless)... Terhubung PID 9482' },
-            { tag: 'EXECUTION', text: 'Menyisipkan 34 baris data ke sheet "Agustus 2026" (Rentang A24:E57)' },
-            { tag: 'FORMULA GUARD', text: 'Menjaga rumus dinamis: =SUM(D24:D57) dan =IF(E58>0,"PROFIT","DEFICIT")' },
-            { tag: 'SUCCESS', text: 'Worksheet berhasil disimpan dan ditutup. 0 konflik schema terdeteksi. Rollback tersedia.' },
+            { tag: 'Security', text: 'Memeriksa jalur dalam sandbox: ./workspace/laporan_keuangan.xlsx (Izin diberikan)' },
+            { tag: 'Snapshot', text: 'Membuat checkpoint lokal: .arunaki/checkpoints/20260924_1340_laporan.xlsx' },
+            { tag: 'COM Bridge', text: 'Menghubungkan ke mesin Microsoft Excel COM (headless)... Terhubung PID 9482' },
+            { tag: 'Execution', text: 'Menyisipkan 34 baris data ke sheet "Agustus 2026" (Rentang A24:E57)' },
+            { tag: 'Formula Guard', text: 'Menjaga rumus dinamis: =SUM(D24:D57) dan =IF(E58>0,"PROFIT","DEFICIT")' },
+            { tag: 'Success', text: 'Worksheet berhasil disimpan dan ditutup. 0 konflik schema terdeteksi. Rollback tersedia.' },
           ],
         },
         {
           category: 'Word (.docx)',
           prompt: 'Ganti nama klien di kontrak_kerjasama.docx menjadi "PT Surya Mandiri Utama" dan perbarui tanggal efektif ke 1 September 2026.',
           logs: [
-            { tag: 'SECURITY', text: 'Memverifikasi jalur: ./workspace/kontrak_kerjasama.docx (Workspace terisolasi)' },
-            { tag: 'SNAPSHOT', text: 'Backup snapshot dibuat: .arunaki/checkpoints/20260924_1341_kontrak.docx' },
-            { tag: 'COM BRIDGE', text: 'Membuka antarmuka Word.Application COM (mode headless)' },
-            { tag: 'REPLACE', text: 'Mengganti {{NAMA_KLIEN}} -> "PT Surya Mandiri Utama" (3 kecocokan)' },
-            { tag: 'REPLACE', text: 'Mengganti {{TANGGAL_EFEKTIF}} -> "1 September 2026" (1 kecocokan)' },
-            { tag: 'SUCCESS', text: 'Kontrak berhasil diperbarui. Margin (2.54cm) & font (Times New Roman 12pt) 100% terjaga.' },
+            { tag: 'Security', text: 'Memverifikasi jalur: ./workspace/kontrak_kerjasama.docx (Workspace terisolasi)' },
+            { tag: 'Snapshot', text: 'Backup snapshot dibuat: .arunaki/checkpoints/20260924_1341_kontrak.docx' },
+            { tag: 'COM Bridge', text: 'Membuka antarmuka Word.Application COM (mode headless)' },
+            { tag: 'Replace', text: 'Mengganti {{NAMA_KLIEN}} -> "PT Surya Mandiri Utama" (3 kecocokan)' },
+            { tag: 'Replace', text: 'Mengganti {{TANGGAL_EFEKTIF}} -> "1 September 2026" (1 kecocokan)' },
+            { tag: 'Success', text: 'Kontrak berhasil diperbarui. Margin (2.54cm) & font (Times New Roman 12pt) 100% terjaga.' },
           ],
         },
         {
           category: 'PDF & e-Materai',
           prompt: 'Gabungkan seluruh file invoice PDF di folder invoices/ bulan ini ke invoice_gabungan.pdf, bubuhkan e-Materai dan mask NIK/NPWP.',
           logs: [
-            { tag: 'SCAN', text: 'Menemukan 14 berkas PDF di ./workspace/invoices/*.pdf' },
-            { tag: 'MERGE', text: 'Mengeksekusi pdf_manage_pages(aksi: "merge"). Output: invoice_gabungan.pdf (28 halaman)' },
-            { tag: 'PII MASK', text: 'Memindai data identitas sensitif... 14 NIK dan 14 NPWP berhasil disamarkan' },
-            { tag: 'E-MATERAI', text: 'Membubuhkan stempel e-Materai resmi pada koordinat (X: 450, Y: 720) Halaman 1' },
-            { tag: 'SUCCESS', text: 'Dokumen telah disegel dan diverifikasi secara kriptografis. Siap dikirim ke klien.' },
+            { tag: 'Scan', text: 'Menemukan 14 berkas PDF di ./workspace/invoices/*.pdf' },
+            { tag: 'Merge', text: 'Mengeksekusi pdf_manage_pages(aksi: "merge"). Output: invoice_gabungan.pdf (28 halaman)' },
+            { tag: 'PII Mask', text: 'Memindai data identitas sensitif... 14 NIK dan 14 NPWP berhasil disamarkan' },
+            { tag: 'e-Materai', text: 'Membubuhkan stempel e-Materai resmi pada koordinat (X: 450, Y: 720) Halaman 1' },
+            { tag: 'Success', text: 'Dokumen telah disegel dan diverifikasi secara kriptografis. Siap dikirim ke klien.' },
           ],
         },
         {
           category: 'Audit Buku Besar',
           prompt: 'Audit seluruh entri jurnal transaksi di jurnal_umum.xlsx, pastikan total debit dan kredit seimbang, beri flag selisih jika ada.',
           logs: [
-            { tag: 'AUDIT', text: 'Memeriksa entri jurnal di ./workspace/jurnal_umum.xlsx (Rentang A2:F412)' },
-            { tag: 'CALCULATE', text: 'Total Debit: Rp 1.482.350.000 | Total Kredit: Rp 1.482.350.000' },
-            { tag: 'CHECK', text: 'Selisih Varian: Rp 0,00 (Keseimbangan sempurna)' },
-            { tag: 'SUCCESS', text: 'Buku besar keuangan terverifikasi seimbang. Log audit tersimpan di .arunaki/audit_2026.json' },
+            { tag: 'Audit', text: 'Memeriksa entri jurnal di ./workspace/jurnal_umum.xlsx (Rentang A2:F412)' },
+            { tag: 'Calculate', text: 'Total Debit: Rp 1.482.350.000 | Total Kredit: Rp 1.482.350.000' },
+            { tag: 'Check', text: 'Selisih Varian: Rp 0,00 (Keseimbangan sempurna)' },
+            { tag: 'Success', text: 'Buku besar keuangan terverifikasi seimbang. Log audit tersimpan di .arunaki/audit_2026.json' },
           ],
         },
       ]
@@ -99,45 +99,45 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           category: 'Excel (.xlsx)',
           prompt: 'Summarize today expenses into financial_report.xlsx on sheet "August 2026", calculate total net margin automatically.',
           logs: [
-            { tag: 'SECURITY', text: 'Checked path inside sandbox: ./workspace/financial_report.xlsx (Access GRANTED)' },
-            { tag: 'SNAPSHOT', text: 'Created immutable checkpoint: .arunaki/checkpoints/20260924_1340_report.xlsx' },
-            { tag: 'COM BRIDGE', text: 'Attaching to native Microsoft Excel COM engine (headless)... Attached PID 9482' },
-            { tag: 'EXECUTION', text: 'Injected 34 rows into sheet "August 2026" (Range A24:E57)' },
-            { tag: 'FORMULA GUARD', text: 'Preserved dynamic formula: =SUM(D24:D57) and =IF(E58>0,"PROFIT","DEFICIT")' },
-            { tag: 'SUCCESS', text: 'Worksheet saved and closed. 0 schema conflicts detected. Rollback available.' },
+            { tag: 'Security', text: 'Checked path inside sandbox: ./workspace/financial_report.xlsx (Access granted)' },
+            { tag: 'Snapshot', text: 'Created immutable checkpoint: .arunaki/checkpoints/20260924_1340_report.xlsx' },
+            { tag: 'COM Bridge', text: 'Attaching to native Microsoft Excel COM engine (headless)... Attached PID 9482' },
+            { tag: 'Execution', text: 'Injected 34 rows into sheet "August 2026" (Range A24:E57)' },
+            { tag: 'Formula Guard', text: 'Preserved dynamic formula: =SUM(D24:D57) and =IF(E58>0,"PROFIT","DEFICIT")' },
+            { tag: 'Success', text: 'Worksheet saved and closed. 0 schema conflicts detected. Rollback available.' },
           ],
         },
         {
           category: 'Word (.docx)',
           prompt: 'Replace client name in partnership_agreement.docx with "Surya Mandiri Corp" and update effective date to September 1, 2026.',
           logs: [
-            { tag: 'SECURITY', text: 'Verified path: ./workspace/partnership_agreement.docx (Isolated workspace)' },
-            { tag: 'SNAPSHOT', text: 'Backup checkpoint created: .arunaki/checkpoints/20260924_1341_contract.docx' },
-            { tag: 'COM BRIDGE', text: 'Acquired Word.Application COM interface (headless mode)' },
-            { tag: 'REPLACE', text: 'Substituted {{CLIENT_NAME}} -> "Surya Mandiri Corp" (3 occurrences)' },
-            { tag: 'REPLACE', text: 'Substituted {{EFFECTIVE_DATE}} -> "September 1, 2026" (1 occurrence)' },
-            { tag: 'SUCCESS', text: 'Contract updated successfully. Layout margins & fonts 100% preserved.' },
+            { tag: 'Security', text: 'Verified path: ./workspace/partnership_agreement.docx (Isolated workspace)' },
+            { tag: 'Snapshot', text: 'Backup checkpoint created: .arunaki/checkpoints/20260924_1341_contract.docx' },
+            { tag: 'COM Bridge', text: 'Acquired Word.Application COM interface (headless mode)' },
+            { tag: 'Replace', text: 'Substituted {{CLIENT_NAME}} -> "Surya Mandiri Corp" (3 occurrences)' },
+            { tag: 'Replace', text: 'Substituted {{EFFECTIVE_DATE}} -> "September 1, 2026" (1 occurrence)' },
+            { tag: 'Success', text: 'Contract updated successfully. Layout margins & fonts 100% preserved.' },
           ],
         },
         {
           category: 'PDF & e-Materai',
           prompt: 'Merge all invoice PDFs in invoices/ folder into combined_invoices.pdf, stamp digital seal, and redact ID/tax numbers.',
           logs: [
-            { tag: 'SCAN', text: 'Discovered 14 matching PDF files in ./workspace/invoices/*.pdf' },
-            { tag: 'MERGE', text: 'Executing pdf_manage_pages(action: "merge"). Output: combined_invoices.pdf (28 pages)' },
-            { tag: 'PII MASK', text: 'Scanning sensitive identifiers... Redacted 14 identity and tax ID records' },
-            { tag: 'E-MATERAI', text: 'Stamped official cryptographic seal at coordinates (X: 450, Y: 720) on Page 1' },
-            { tag: 'SUCCESS', text: 'Document sealed and cryptographically verified. Ready for delivery.' },
+            { tag: 'Scan', text: 'Discovered 14 matching PDF files in ./workspace/invoices/*.pdf' },
+            { tag: 'Merge', text: 'Executing pdf_manage_pages(action: "merge"). Output: combined_invoices.pdf (28 pages)' },
+            { tag: 'PII Mask', text: 'Scanning sensitive identifiers... Redacted 14 identity and tax ID records' },
+            { tag: 'e-Materai', text: 'Stamped official cryptographic seal at coordinates (X: 450, Y: 720) on Page 1' },
+            { tag: 'Success', text: 'Document sealed and cryptographically verified. Ready for delivery.' },
           ],
         },
         {
           category: 'Ledger Audit',
           prompt: 'Audit all general journal transactions in general_ledger.xlsx, verify debit and credit equilibrium, flag discrepancies.',
           logs: [
-            { tag: 'AUDIT', text: 'Inspecting journal entries in ./workspace/general_ledger.xlsx (Range A2:F412)' },
-            { tag: 'CALCULATE', text: 'Total Debit: $1,482,350.00 | Total Credit: $1,482,350.00' },
-            { tag: 'CHECK', text: 'Calculated Variance: $0.00 (Perfect equilibrium)' },
-            { tag: 'SUCCESS', text: 'Financial ledger certified balance. Audit log generated at .arunaki/audit_2026.json' },
+            { tag: 'Audit', text: 'Inspecting journal entries in ./workspace/general_ledger.xlsx (Range A2:F412)' },
+            { tag: 'Calculate', text: 'Total Debit: $1,482,350.00 | Total Credit: $1,482,350.00' },
+            { tag: 'Check', text: 'Calculated Variance: $0.00 (Perfect equilibrium)' },
+            { tag: 'Success', text: 'Financial ledger certified balance. Audit log generated at .arunaki/audit_2026.json' },
           ],
         },
       ];
@@ -187,7 +187,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
                 className="p-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white transition-colors shrink-0"
                 title={isId ? 'Salin perintah' : 'Copy command'}
               >
-                {copied === 'install' ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" /> : <Copy className="w-4 h-4 sm:w-5 sm:h-5" />}
+                {copied === 'install' ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-black dark:text-white" /> : <Copy className="w-4 h-4 sm:w-5 sm:h-5" />}
               </button>
             </div>
           </div>
@@ -196,12 +196,12 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
         {/* INTERACTIVE WORKSTATION SIMULATOR */}
         <section className="space-y-4">
           <div className="flex items-center justify-between text-sm font-sans">
-            <span className="text-zinc-500 uppercase tracking-wider font-semibold text-xs sm:text-sm">
-              {isId ? 'Pratinjau Konsol Langsung' : 'Live Workstation Preview'}
+            <span className="text-zinc-500 font-medium text-xs sm:text-sm">
+              {isId ? 'Pratinjau konsol langsung' : 'Live workstation preview'}
             </span>
-            <span className="text-emerald-500 flex items-center gap-1.5 font-medium text-xs sm:text-sm">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              {isId ? 'Sandbox Lokal Aktif' : 'Local Sandbox Active'}
+            <span className="text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 font-medium text-xs sm:text-sm">
+              <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+              {isId ? 'Sandbox lokal aktif' : 'Local sandbox active'}
             </span>
           </div>
 
@@ -237,7 +237,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
                 &gt; Workspace Root: C:\Users\Finance\Documents\Workspace
               </div>
               <div className="text-white flex items-start gap-2 text-sm sm:text-base">
-                <span className="text-emerald-400 font-bold">&gt;</span>
+                <span className="text-zinc-400 dark:text-zinc-500 font-bold">&gt;</span>
                 <span className="font-semibold">&quot;{simulations[activeSimIndex].prompt}&quot;</span>
               </div>
               <div className="pt-2 border-t border-zinc-800/80 space-y-2 pl-3 border-l border-zinc-700 text-xs sm:text-sm">

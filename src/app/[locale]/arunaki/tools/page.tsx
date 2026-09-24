@@ -429,7 +429,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
                   <code className="text-base sm:text-lg font-bold font-mono text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-md">
                     {tool.name}
                   </code>
-                  <span className="text-xs font-sans font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-xs font-sans font-medium text-zinc-500 dark:text-zinc-400 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-800">
                     {isId ? tool.categoryLabel.id : tool.categoryLabel.en}
                   </span>
                 </div>
@@ -439,8 +439,8 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
                 >
                   {copiedId === `tool-${tool.id}` ? (
                     <>
-                      <Check className="w-4 h-4 text-emerald-500" />
-                      <span className="text-emerald-500 font-medium">{isId ? 'Tersalin' : 'Copied'}</span>
+                      <Check className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
+                      <span className="text-zinc-600 dark:text-zinc-400 font-medium">{isId ? 'Tersalin' : 'Copied'}</span>
                     </>
                   ) : (
                     <>

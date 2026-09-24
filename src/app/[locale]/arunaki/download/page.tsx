@@ -47,22 +47,22 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
           {/* Windows Setup */}
           <div className="p-6 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-sans font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <span className="text-xs font-sans font-bold text-zinc-500 dark:text-zinc-400">
                 {isId ? 'Direkomendasikan' : 'Recommended'}
               </span>
               <h2 className="font-semibold text-lg text-black dark:text-white font-sans">Windows Setup (.exe)</h2>
               <p className="text-xs sm:text-sm font-mono text-zinc-500">Arunaki-Setup-x64.exe</p>
               <ul className="text-sm space-y-2 text-zinc-600 dark:text-zinc-400 font-sans pt-1">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
                   <span>Windows 10 / 11 (64-bit)</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
                   <span>{isId ? 'Pembaruan otomatis latar belakang' : 'Background auto-update'}</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
                   <span>{isId ? 'Integrasi penuh Win32 COM Office' : 'Full Win32 COM Office integration'}</span>
                 </li>
               </ul>
@@ -81,7 +81,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
           {/* Windows Portable */}
           <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-sans font-bold uppercase tracking-wider text-zinc-500">
+              <span className="text-xs font-sans font-bold text-zinc-500">
                 {isId ? 'Portabel' : 'Standalone'}
               </span>
               <h2 className="font-semibold text-lg text-black dark:text-white font-sans">Windows Portable (.zip)</h2>
@@ -115,7 +115,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
           {/* macOS Universal */}
           <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
-              <span className="text-xs font-sans font-bold uppercase tracking-wider text-zinc-500">
+              <span className="text-xs font-sans font-bold text-zinc-500">
                 {isId ? 'Universal' : 'Universal'}
               </span>
               <h2 className="font-semibold text-lg text-black dark:text-white font-sans">macOS Universal (.dmg)</h2>

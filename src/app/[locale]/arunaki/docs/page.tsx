@@ -65,8 +65,8 @@ export default function ArunakiDocsPage({ params }: { params: { locale: string }
                 <span className="text-xs font-mono text-zinc-400 mb-1">04. ADAPTERS</span>
                 <span className="text-sm font-sans">COM / PDF / Ledger</span>
               </div>
-              <div className="p-4 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 font-semibold text-emerald-700 dark:text-emerald-400 flex flex-col justify-center items-center shadow-sm">
-                <span className="text-xs font-mono text-emerald-600 dark:text-emerald-500 mb-1">05. SANDBOX</span>
+              <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 font-semibold text-zinc-700 dark:text-zinc-300 flex flex-col justify-center items-center shadow-sm">
+                <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-1">05. SANDBOX</span>
                 <span className="text-sm font-sans">Workspace Files</span>
               </div>
             </div>
@@ -135,22 +135,22 @@ export default function ArunakiDocsPage({ params }: { params: { locale: string }
                 <tr>
                   <td className="p-4 font-semibold text-black dark:text-white">{isId ? 'Kerahasiaan Dokumen' : 'Document Privacy'}</td>
                   <td className="p-4 text-red-500 font-medium">{isId ? 'File diunggah ke server cloud publik' : 'Files uploaded to public cloud servers'}</td>
-                  <td className="p-4 text-emerald-600 dark:text-emerald-400 font-semibold">{isId ? '100% lokal & sandboxed (zero data leak)' : '100% local & sandboxed (zero data leak)'}</td>
+                  <td className="p-4 text-zinc-700 dark:text-zinc-300 font-semibold">{isId ? '100% lokal & sandboxed (zero data leak)' : '100% local & sandboxed (zero data leak)'}</td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-black dark:text-white">{isId ? 'Integritas Rumus Excel' : 'Excel Formula Retention'}</td>
                   <td className="p-4 text-red-500 font-medium">{isId ? 'Rumus sering terhapus jadi teks mati' : 'Formulas overwritten into static text'}</td>
-                  <td className="p-4 text-emerald-600 dark:text-emerald-400 font-semibold">{isId ? 'Mesin COM asli menjaga semua formula' : 'Native COM engine preserves all formulas'}</td>
+                  <td className="p-4 text-zinc-700 dark:text-zinc-300 font-semibold">{isId ? 'Mesin COM asli menjaga semua formula' : 'Native COM engine preserves all formulas'}</td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-black dark:text-white">{isId ? 'Pemulihan Kesalahan' : 'Error Recovery'}</td>
                   <td className="p-4 text-zinc-500">{isId ? 'Manual lewat riwayat file OS' : 'Manual file history retrieval'}</td>
-                  <td className="p-4 text-emerald-600 dark:text-emerald-400 font-semibold">{isId ? '1-Klik Rollback Checkpoint otomatis' : 'Automatic 1-Click Rollback Checkpoints'}</td>
+                  <td className="p-4 text-zinc-700 dark:text-zinc-300 font-semibold">{isId ? '1-Klik Rollback Checkpoint otomatis' : 'Automatic 1-Click Rollback Checkpoints'}</td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-black dark:text-white">{isId ? 'Kepatuhan Regulasi PII' : 'PII Compliance'}</td>
                   <td className="p-4 text-zinc-500">{isId ? 'Rentan kebocoran data KTP/NPWP' : 'High risk of NIK/tax ID data leaks'}</td>
-                  <td className="p-4 text-emerald-600 dark:text-emerald-400 font-semibold">{isId ? 'doc_redact_pii masking otomatis' : 'Automated doc_redact_pii masking'}</td>
+                  <td className="p-4 text-zinc-700 dark:text-zinc-300 font-semibold">{isId ? 'doc_redact_pii masking otomatis' : 'Automated doc_redact_pii masking'}</td>
                 </tr>
               </tbody>
             </table>
@@ -165,7 +165,7 @@ export default function ArunakiDocsPage({ params }: { params: { locale: string }
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <div className="flex items-center gap-2 text-black dark:text-white font-semibold text-base font-sans">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                <ShieldCheck className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
                 <span>Isolated Workspace Sandbox</span>
               </div>
               <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
@@ -177,7 +177,7 @@ export default function ArunakiDocsPage({ params }: { params: { locale: string }
 
             <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <div className="flex items-center gap-2 text-black dark:text-white font-semibold text-base font-sans">
-                <Lock className="w-5 h-5 text-emerald-500" />
+                <Lock className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
                 <span>Zero OS Shell Access</span>
               </div>
               <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
@@ -201,7 +201,7 @@ export default function ArunakiDocsPage({ params }: { params: { locale: string }
 
             <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <div className="flex items-center gap-2 text-black dark:text-white font-semibold text-base font-sans">
-                <Database className="w-5 h-5 text-emerald-500" />
+                <Database className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
                 <span>Local AES-256 Storage</span>
               </div>
               <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
