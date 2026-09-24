@@ -1,12 +1,11 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import ArunakiNavbar from '@/components/ArunakiNavbar';
 import ArunakiFooter from '@/components/ArunakiFooter';
 import { Link } from '@/i18n/navigation';
-import { Menu, X, ChevronRight, Clock, Download } from 'lucide-react';
-import type { Metadata } from 'next';
+import { Menu, X, Clock, Download, CheckCircle2, ShieldCheck, Zap, Bot } from 'lucide-react';
 
 type SectionId =
   | 'intro'
@@ -22,19 +21,19 @@ const navGroups = [
   {
     group: null,
     items: [
-      { id: 'intro' as SectionId,    en: 'Intro',      id_: 'Pendahuluan' },
+      { id: 'intro' as SectionId,    en: 'Intro',       id_: 'Pendahuluan' },
     ],
   },
   {
     group: 'CONFIGURE',
     items: [
-      { id: 'agents' as SectionId,    en: 'Agents',     id_: 'Agents' },
-      { id: 'models' as SectionId,    en: 'Models',     id_: 'Model' },
-      { id: 'skills' as SectionId,    en: 'Skills',     id_: 'Skills' },
-      { id: 'tools' as SectionId,     en: 'Tools',      id_: 'Tools' },
-      { id: 'providers' as SectionId, en: 'Providers',  id_: 'Provider' },
-      { id: 'gateway' as SectionId,  en: 'App Gateway', id_: 'App Gateway' },
-      { id: 'download' as SectionId,  en: 'Download',   id_: 'Unduh' },
+      { id: 'agents' as SectionId,    en: 'Agents',      id_: 'Agents' },
+      { id: 'models' as SectionId,    en: 'Models',      id_: 'Model' },
+      { id: 'skills' as SectionId,    en: 'Skills',      id_: 'Skills' },
+      { id: 'tools' as SectionId,     en: 'Tools',       id_: 'Tools' },
+      { id: 'providers' as SectionId, en: 'Providers',   id_: 'Provider' },
+      { id: 'gateway' as SectionId,   en: 'App Gateway', id_: 'App Gateway' },
+      { id: 'download' as SectionId,  en: 'Download',    id_: 'Unduh' },
     ],
   },
 ];
@@ -56,11 +55,11 @@ function CodeBlock({ code }: { code: string }) {
 }
 
 function H1({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-3xl sm:text-4xl font-bold font-sans text-black dark:text-white mb-4">{children}</h1>;
+  return <h1 className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-black dark:text-white mb-3">{children}</h1>;
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-xl sm:text-2xl font-bold font-sans text-black dark:text-white mt-8 mb-3">{children}</h2>;
+  return <h2 className="text-lg sm:text-xl font-bold font-mono text-black dark:text-white mt-8 mb-3">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
@@ -83,47 +82,177 @@ function Card({ title, badge, desc }: { title: string; badge?: string; desc: str
   );
 }
 
-// â”€â”€â”€ SECTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -----------------------------------------------------------------------------
+// SECTIONS
+// -----------------------------------------------------------------------------
 
 function IntroSection({ isId }: { isId: boolean }) {
   return (
     <>
-      <H1>{isId ? 'Pendahuluan' : 'Intro'}</H1>
-      <P>
-        {isId
-          ? 'Arunaki adalah workstation agen dokumen desktop open-source yang berjalan sepenuhnya lokal dan sandboxed. Tidak ada data yang dikirim ke cloud.'
-          : 'Arunaki is an open-source desktop document agent workstation that runs fully local and sandboxed. No data is ever sent to the cloud.'}
-      </P>
-      <P>
-        {isId
-          ? 'Agen mengotomasi dokumen Microsoft Office, mengelola pipeline PDF, menyamarkan data sensitif PII, dan berinteraksi via chat atau Telegram Bot â€” semuanya dari mesin lokal Anda.'
-          : 'The agent automates Microsoft Office documents, manages PDF pipelines, redacts PII sensitive data, and interacts via chat or Telegram Bot â€” all from your local machine.'}
-      </P>
-      <H2>{isId ? 'Antarmuka yang tersedia' : 'Available interfaces'}</H2>
-      <ul className="space-y-2 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans mb-6">
-        {[
-          { label: 'Desktop App', desc: isId ? 'Aplikasi Windows (Bun runtime)' : 'Windows desktop app (Bun runtime)' },
-          { label: 'Web UI',      desc: isId ? 'Antarmuka web di localhost' : 'Web interface on localhost' },
-          { label: 'Telegram Bot',desc: isId ? 'Kontrol agen via Telegram chat' : 'Control the agent via Telegram chat' },
-        ].map((i) => (
-          <li key={i.label} className="flex items-start gap-2">
-            <ChevronRight className="w-4 h-4 mt-0.5 shrink-0 text-zinc-400" />
-            <span><strong className="text-black dark:text-white">{i.label}</strong> â€” {i.desc}</span>
-          </li>
-        ))}
-      </ul>
-      <H2>{isId ? 'Arsitektur sistem' : 'System architecture'}</H2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        {['01. UI Layer', '02. Agent Core', '03. Tool Registry', '04. COM Adapters', '05. Sandbox', '06. Knowledge DB'].map((s) => (
-          <div key={s} className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs font-mono text-zinc-600 dark:text-zinc-400 text-center">
-            {s}
-          </div>
-        ))}
+      <H1>{isId ? 'Dokumentasi Arunaki' : 'Arunaki Documentation'}</H1>
+      <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-6">
+        <p className="font-mono text-sm sm:text-base font-semibold text-black dark:text-white mb-1">
+          The Desktop Document Agent Workstation &amp; Automation Harness
+        </p>
+        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans italic">
+          {isId
+            ? 'Native desktop computer-use untuk spreadsheet Microsoft Excel, kontrak Word, presentasi PowerPoint, pipeline PDF, dan pembukuan finansial.'
+            : 'Native desktop computer-use for Microsoft Excel spreadsheets, Word contracts, PowerPoint decks, PDF pipelines, and financial ledgers.'}
+        </p>
       </div>
-      <H2>{isId ? 'Teknologi inti' : 'Core stack'}</H2>
+
+      <H2>{isId ? '1. Quick Start' : '1. Quick Start'}</H2>
+      <div className="space-y-4 mb-6">
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
+            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">1</span>
+            <span>{isId ? 'Unduh & Jalankan Workstation' : 'Download & Run Workstation'}</span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'Arunaki hadir sebagai aplikasi native desktop berbasis Electron untuk Windows dan macOS. Buka aplikasi workstation langsung dari sistem operasi Anda.'
+              : 'Arunaki runs as a native desktop application built with Electron for Windows and macOS. Launch the workstation app directly on your operating system.'}
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
+            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">2</span>
+            <span>{isId ? 'Pilih Folder Workspace Sandboxed' : 'Select Sandboxed Workspace Folder'}</span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-2">
+            {isId
+              ? 'Saat workstation terbuka, pilih folder kerja khusus tempat dokumen bisnis Anda berada (contoh: C:\\Users\\Admin\\Documents\\CompanyFiles).'
+              : 'When Arunaki opens, select the dedicated folder containing your business documents (e.g. C:\\Users\\Admin\\Documents\\CompanyFiles).'}
+          </p>
+          <div className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 p-2.5 rounded">
+            <strong>{isId ? 'Catatan Keamanan:' : 'Security Note:'}</strong>{' '}
+            {isId
+              ? 'Arunaki dibatasi ketat (sandboxed) hanya pada folder yang dipilih. Agen tidak dapat membaca, mengubah, atau mengakses file apapun di luar folder tersebut.'
+              : 'Arunaki is sandboxed strictly to this folder. It cannot read, modify, or access any files outside your selected workspace.'}
+          </div>
+        </div>
+
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
+            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">3</span>
+            <span>{isId ? 'Mulai Otomasi dengan Bahasa Alami' : 'Start Automating with Natural Language'}</span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-3">
+            {isId
+              ? 'Ketik instruksi langsung di konsol chat desktop workstation atau kirim via remote App Gateway:'
+              : 'Type natural instructions in the desktop workstation console or send them via remote App Gateway:'}
+          </p>
+          <div className="space-y-1.5 font-mono text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded border border-zinc-200 dark:border-zinc-800">
+            <div>&quot;Rekap pemasukan dan pengeluaran hari ini ke laporan_keuangan.xlsx&quot;</div>
+            <div>&quot;Ganti nama klien di kontrak_kerjasama.docx menjadi PT Surya Mandiri&quot;</div>
+            <div>&quot;Gabungkan semua file PDF invoice bulan ini dan beri watermark LUNAS&quot;</div>
+          </div>
+        </div>
+      </div>
+
+      <H2>{isId ? '2. Konsep Inti (Core Concepts)' : '2. Core Concepts'}</H2>
+      <div className="space-y-3 mb-6">
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-1.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+              The Workspace Sandbox
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'Semua operasi dokumen terjadi secara terisolasi di folder Workspace pilihan Anda. Harness agen tidak dapat mengeksekusi perintah sistem bebas, mengakses file sistem inti, atau menyentuh drive eksternal.'
+              : 'All document operations occur within your chosen Workspace Folder. The agent harness cannot execute arbitrary system commands, access root operating system files, or read external drives.'}
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+              Native COM vs File Modification
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'File Microsoft Office (.xlsx, .docx, .pptx) dikerjakan langsung via native Windows COM automation headless, sehingga rumus, font, margin, chart, dan styling 100% terjaga. File PDF dan teks dimodifikasi presisi tingkat byte.'
+              : 'Microsoft Office files (.xlsx, .docx, .pptx) are executed directly through native Windows COM automation, ensuring formulas, fonts, margins, charts, and colors remain 100% intact. Standard PDF and text files use precise byte-level manipulation.'}
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="flex items-center gap-2 mb-1.5">
+            <CheckCircle2 className="w-4 h-4 text-blue-500" />
+            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+              Checkpoints &amp; 1-Click Rollback
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'Sebelum menerapkan perubahan pada dokumen, Arunaki membuat snapshot lokal immutable secara otomatis. Jika ingin mengembalikan dokumen ke versi semula, cukup 1 klik rollback.'
+              : 'Before applying changes to any document, Arunaki automatically creates an immutable local snapshot. If an automated modification needs to be undone, restore the original file instantly with a single click.'}
+          </p>
+        </div>
+      </div>
+
+      <H2>{isId ? '3. Antarmuka Akses (Interfaces)' : '3. Access Interfaces'}</H2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
+          <div className="flex items-center gap-2">
+            <Bot className="w-4 h-4 text-black dark:text-white" />
+            <span className="font-mono font-semibold text-sm text-black dark:text-white">Electron Workstation</span>
+            <span className="text-[10px] font-mono bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              {isId ? 'Utama' : 'Primary'}
+            </span>
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'Aplikasi desktop native berbasis Electron dengan konsol agen, live preview dokumen, dan kontrol sandbox.'
+              : 'Native Electron desktop workstation with agent console, document preview, and sandbox controls.'}
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
+          <div className="flex items-center gap-2">
+            <Bot className="w-4 h-4 text-sky-500" />
+            <span className="font-mono font-semibold text-sm text-black dark:text-white">App Gateway</span>
+            <span className="text-[10px] font-mono bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 px-1.5 py-0.5 rounded border border-sky-200 dark:border-sky-800">
+              Telegram
+            </span>
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">
+            {isId
+              ? 'Akses remote aman via Telegram Bot untuk kirim perintah dan terima berkas hasil langsung dari chat.'
+              : 'Secure remote bridge via Telegram Bot to dispatch tasks and receive processed documents directly in chat.'}
+          </p>
+        </div>
+      </div>
+
+      <H2>{isId ? '4. Arsitektur Eksekusi Harness' : '4. Harness Architecture'}</H2>
+      <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto mb-6">
+        <div>[User Instruction]</div>
+        <div className="text-zinc-500">  │</div>
+        <div className="text-zinc-500">  ▼</div>
+        <div>[Arunaki Desktop Shell (Electron)]</div>
+        <div className="text-zinc-500">  │</div>
+        <div className="text-zinc-500">  ▼</div>
+        <div>[Agent Execution Harness]</div>
+        <div className="text-zinc-500">  │</div>
+        <div className="text-zinc-500">  ▼</div>
+        <div>[Tool Registry &amp; Normalizer]</div>
+        <div className="text-zinc-500">  ├── Native Office COM Bridge (.xlsx, .docx, .pptx)</div>
+        <div className="text-zinc-500">  ├── PDF &amp; Binary Processor</div>
+        <div className="text-zinc-500">  └── Ledger Engine</div>
+        <div className="text-zinc-500">  │</div>
+        <div className="text-zinc-500">  ▼</div>
+        <div className="text-emerald-400">[(Sandboxed Workspace Folder)]</div>
+      </div>
+
+      <H2>{isId ? 'Teknologi Inti' : 'Core Stack'}</H2>
       <div className="flex flex-wrap gap-2">
-        {['Bun', 'TypeScript', 'SQLite (Prisma)', 'pdf-lib', 'mammoth', 'COM Automation', 'Telegram Bot API'].map((t) => (
-          <span key={t} className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-1 rounded">
+        {['Electron', 'Bun / Node.js', 'TypeScript', 'Native Office COM Bridge', 'pdf-lib', 'mammoth', 'SQLite', 'Telegram Bot API'].map((t) => (
+          <span key={t} className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 px-2.5 py-1 rounded">
             {t}
           </span>
         ))}
@@ -136,21 +265,47 @@ function AgentsSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>Agents</H1>
-      <P>{isId
-        ? 'Arunaki menggunakan sistem multi-agent di mana setiap agen menangani tugas domain tertentu. Agen beroperasi secara headless dan dapat dirantai melalui pipeline.'
-        : 'Arunaki uses a multi-agent system where each agent handles a specific domain task. Agents operate headlessly and can be chained through pipelines.'}</P>
-      <H2>{isId ? 'Jenis agen' : 'Agent types'}</H2>
-      <Card title="DocumentAgent" badge="com-worker" desc={isId ? 'Otomasi Microsoft Office (Excel, Word, PowerPoint) via COM headless.' : 'Automates Microsoft Office (Excel, Word, PowerPoint) via headless COM.'} />
-      <Card title="PdfAgent"      badge="pdf-lib"    desc={isId ? 'Pipeline PDF: merge, watermark, ekstraksi halaman, stempel e-Materai.' : 'PDF pipelines: merge, watermark, page extraction, e-Materai stamp.'} />
-      <Card title="RedactAgent"   badge="pii-masker" desc={isId ? 'Deteksi & samarkan PII (NIK, NPWP, rekening, email) otomatis.' : 'Auto-detects and masks PII (NIK, NPWP, bank accounts, emails).'} />
-      <Card title="TelegramAgent" badge="bot-api"    desc={isId ? 'Terima perintah & kirim hasil dokumen via messaging app gateway.' : 'Receives commands and delivers document results via messaging app gateway.'} />
-      <H2>{isId ? 'Konfigurasi' : 'Configuration'}</H2>
+      <P>
+        {isId
+          ? 'Arunaki menggunakan sistem multi-agent di mana setiap agen menangani tugas domain tertentu di dalam harness Electron workstation. Agen beroperasi secara headless dan dapat dirantai melalui pipeline otomasi.'
+          : 'Arunaki uses a multi-agent system where each agent handles a specific domain task inside the Electron workstation harness. Agents operate headlessly and can be chained through automation pipelines.'}
+      </P>
+      <H2>{isId ? 'Daftar Agen' : 'Agent Types'}</H2>
+      <Card
+        title="DocumentAgent"
+        badge="com-worker"
+        desc={isId
+          ? 'Otomasi Microsoft Office (Excel, Word, PowerPoint) via Windows COM headless.'
+          : 'Automates Microsoft Office (Excel, Word, PowerPoint) via headless Windows COM.'}
+      />
+      <Card
+        title="PdfAgent"
+        badge="pdf-lib"
+        desc={isId
+          ? 'Pipeline PDF presisi: merge, watermark, pemisahan halaman, dan stempel e-Materai.'
+          : 'PDF pipelines: merge, watermark, page extraction, and e-Materai stamp.'}
+      />
+      <Card
+        title="RedactAgent"
+        badge="pii-masker"
+        desc={isId
+          ? 'Deteksi dan samarkan data sensitif PII (NIK, NPWP, nomor rekening, email, telepon).'
+          : 'Auto-detects and masks sensitive PII data (NIK, NPWP, bank accounts, emails, phones).'}
+      />
+      <Card
+        title="GatewayAgent"
+        badge="bot-gateway"
+        desc={isId
+          ? 'Menerima instruksi dan mengirimkan berkas hasil melalui App Gateway messaging.'
+          : 'Receives instructions and delivers document results via messaging app gateways.'}
+      />
+      <H2>{isId ? 'Konfigurasi Agen' : 'Agent Configuration'}</H2>
       <CodeBlock code={`// agent.config.ts
 export const agents = {
   document: { enabled: true, comTimeout: 30000 },
   pdf:      { enabled: true, maxPageSize: '50MB' },
   redact:   { enabled: true, targets: ['NIK', 'NPWP', 'BANK'] },
-  telegram: { enabled: true, token: process.env.TELEGRAM_BOT_TOKEN },
+  gateway:  { enabled: true, token: process.env.TELEGRAM_BOT_TOKEN },
 };`} />
     </>
   );
@@ -160,10 +315,12 @@ function ModelsSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>{isId ? 'Model' : 'Models'}</H1>
-      <P>{isId
-        ? 'Arunaki mendukung berbagai penyedia LLM. Model dapat dikonfigurasi per agen atau per tugas hanya via .env â€” tanpa mengubah kode.'
-        : 'Arunaki supports multiple LLM providers. Models can be configured per agent or task via .env only â€” no code changes needed.'}</P>
-      <H2>{isId ? 'Provider yang didukung' : 'Supported providers'}</H2>
+      <P>
+        {isId
+          ? 'Arunaki mendukung berbagai penyedia LLM. Model dapat dikonfigurasi per agen atau per tugas hanya via .env tanpa mengubah kode.'
+          : 'Arunaki supports multiple LLM providers. Models can be configured per agent or task via .env only without modifying code.'}
+      </P>
+      <H2>{isId ? 'Provider yang Didukung' : 'Supported Providers'}</H2>
       {[
         { name: 'OpenAI',           models: 'gpt-4o, gpt-4o-mini, gpt-4-turbo',     key: 'OPENAI_API_KEY' },
         { name: 'Anthropic Claude', models: 'claude-3-5-sonnet, claude-3-haiku',    key: 'ANTHROPIC_API_KEY' },
@@ -192,15 +349,53 @@ function SkillsSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>Skills</H1>
-      <P>{isId
-        ? 'Skills adalah kemampuan domain spesifik yang dapat dipanggil agen. Terdaftar di knowledge base SQLite dan diinjeksi ke system prompt secara dinamis.'
-        : 'Skills are domain-specific capabilities invokable by the agent. Registered in SQLite knowledge base and dynamically injected into system prompts.'}</P>
-      <Card title="Excel COM Automation"  badge=".xlsx .xlsm"          desc={isId ? 'Tulis sel presisi, evaluasi rumus, kloning sheet, ekspor PDF.' : 'Write precise cells, evaluate formulas, clone sheets, export PDF.'} />
-      <Card title="Word Placeholder Fill" badge=".docx"                desc={isId ? 'Ganti {{PLACEHOLDER}}, sisipkan tabel, pertahankan format asli.' : 'Replace {{PLACEHOLDER}}, inject tables, retain original formatting.'} />
-      <Card title="PowerPoint Deck"       badge=".pptx"                desc={isId ? 'Buat slide deck, modifikasi shape text, ekspor PDF.' : 'Create slide decks, modify shape text, export PDF.'} />
-      <Card title="PDF Pipeline"          badge="pdf-lib"              desc={isId ? 'Merge, watermark, ekstrak halaman, stempel e-Materai.' : 'Merge, watermark, extract pages, apply e-Materai stamp.'} />
-      <Card title="PII Redaction"         badge="doc_redact_pii"       desc={isId ? 'Deteksi & samarkan NIK, NPWP, rekening, email, telepon.' : 'Detect & mask NIK, NPWP, bank accounts, emails, phones.'} />
-      <Card title="Version Redline Diff"  badge="doc_compare_versions" desc={isId ? 'Komparasi dua versi dokumen, hasilkan tabel redline Markdown.' : 'Compare two doc versions, output Markdown redline table.'} />
+      <P>
+        {isId
+          ? 'Skills adalah kemampuan domain spesifik yang dapat dipanggil agen. Terdaftar di knowledge base SQLite dan diinjeksi ke system prompt secara dinamis sesuai kebutuhan instruksi.'
+          : 'Skills are domain-specific capabilities invokable by the agent. Registered in the SQLite knowledge base and dynamically injected into system prompts.'}
+      </P>
+      <Card
+        title="Excel COM Automation"
+        badge=".xlsx .xlsm"
+        desc={isId
+          ? 'Tulis sel presisi, evaluasi rumus dinamis, kloning sheet, dan ekspor ke PDF.'
+          : 'Write precise cell coordinates, evaluate dynamic formulas, clone sheets, and export to PDF.'}
+      />
+      <Card
+        title="Word Placeholder Fill"
+        badge=".docx"
+        desc={isId
+          ? 'Ganti {{PLACEHOLDER}}, sisipkan tabel kontrak, pertahankan format asli dan style dokumen.'
+          : 'Replace {{PLACEHOLDER}}, inject contract tables, and preserve original formatting.'}
+      />
+      <Card
+        title="PowerPoint Deck"
+        badge=".pptx"
+        desc={isId
+          ? 'Buat slide deck, modifikasi teks shape, format tata letak, dan ekspor PDF.'
+          : 'Create slide decks, modify shape text, structure presentation layout, and export PDF.'}
+      />
+      <Card
+        title="PDF Pipeline"
+        badge="pdf-lib"
+        desc={isId
+          ? 'Merge berkas, watermark, ekstrak halaman tertentu, dan stempel e-Materai.'
+          : 'Merge files, watermark, extract pages, and apply e-Materai stamps.'}
+      />
+      <Card
+        title="PII Redaction"
+        badge="doc_redact_pii"
+        desc={isId
+          ? 'Deteksi dan samarkan NIK, NPWP, nomor rekening perbankan, email, dan telepon.'
+          : 'Detect and mask NIK, NPWP, banking account numbers, emails, and phone numbers.'}
+      />
+      <Card
+        title="Version Redline Diff"
+        badge="doc_compare_versions"
+        desc={isId
+          ? 'Komparasi dua versi dokumen dan hasilkan ringkasan tabel redline Markdown.'
+          : 'Compare two doc versions and generate a Markdown redline diff summary.'}
+      />
     </>
   );
 }
@@ -212,18 +407,20 @@ function ToolsSection({ isId }: { isId: boolean }) {
     { group: 'PowerPoint', tools: ['desktop_ppt_edit', 'desktop_ppt_new', 'desktop_ppt_to_pdf'] },
     { group: 'PDF',        tools: ['pdf_merge', 'pdf_split', 'pdf_watermark', 'pdf_stamp_image', 'pdf_extract_text'] },
     { group: 'Document',   tools: ['doc_redact_pii', 'doc_compare_versions', 'doc_summarize', 'doc_translate'] },
-    { group: 'gateway',   tools: ['send_telegram', 'telegram_get_file', 'telegram_send_photo'] },
+    { group: 'Gateway',    tools: ['send_telegram', 'telegram_get_file', 'telegram_send_photo'] },
   ];
   return (
     <>
       <H1>Tools</H1>
-      <P>{isId
-        ? 'Arunaki menyediakan 50+ tool yang dapat dipanggil langsung dari chat atau pipeline agen. Setiap tool adalah fungsi TypeScript berparameter dengan validasi tipe penuh.'
-        : 'Arunaki provides 50+ tools callable directly from chat or agent pipelines. Each tool is a fully typed TypeScript function with parameter validation.'}</P>
+      <P>
+        {isId
+          ? 'Arunaki menyediakan 50+ tool bawaan yang dapat dipanggil langsung dari konsol workstation atau pipeline agen. Setiap tool adalah fungsi TypeScript berparameter dengan validasi tipe skema penuh.'
+          : 'Arunaki provides 50+ built-in tools callable directly from the workstation console or agent pipelines. Each tool is a fully typed TypeScript function with schema parameter validation.'}
+      </P>
       <div className="space-y-5">
         {groups.map((g) => (
           <div key={g.group}>
-            <h3 className="text-xs font-sans font-semibold text-zinc-400 mb-2">{g.group}</h3>
+            <h3 className="text-xs font-mono font-semibold text-zinc-400 mb-2">{g.group}</h3>
             <div className="flex flex-wrap gap-2">
               {g.tools.map((t) => (
                 <code key={t} className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 px-2.5 py-1 rounded">
@@ -242,9 +439,11 @@ function ProvidersSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>Providers</H1>
-      <P>{isId
-        ? 'Arunaki menggunakan arsitektur LLM Router. Ganti provider AI hanya dengan satu baris di .env â€” tanpa mengubah kode apapun.'
-        : 'Arunaki uses an LLM Router architecture. Switch AI providers with just one line in .env â€” no code changes required.'}</P>
+      <P>
+        {isId
+          ? 'Arunaki menggunakan arsitektur LLM Router. Ganti provider AI hanya dengan satu baris di file .env tanpa perlu menyentuh kode.'
+          : 'Arunaki uses an LLM Router architecture. Switch AI providers with a single line in your .env file without changing any code.'}
+      </P>
       <H2>OpenAI</H2>
       <CodeBlock code={`PROVIDER=openai
 OPENAI_API_KEY=sk-proj-...
@@ -258,39 +457,113 @@ CLAUDE_MODEL=claude-3-5-sonnet-20241022`} />
 GEMINI_API_KEY=AIza...
 GEMINI_MODEL=gemini-2.0-flash`} />
       <H2>Ollama (Local)</H2>
-      <P>{isId
-        ? 'Jalankan LLM secara lokal tanpa internet atau API key. Install Ollama terlebih dahulu.'
-        : 'Run LLMs locally with no internet or API key. Install Ollama first.'}</P>
+      <P>
+        {isId
+          ? 'Jalankan LLM secara lokal tanpa koneksi internet atau API key eksternal. Pastikan Ollama telah terinstal.'
+          : 'Run LLMs completely locally with no internet or external API keys. Make sure Ollama is installed.'}
+      </P>
       <CodeBlock code={`PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=llama3.1
 
-# Pull model:
+# Download model:
 # ollama pull llama3.1`} />
     </>
   );
 }
 
 function GatewaySection({ isId }: { isId: boolean }) {
+  const apps = [
+    {
+      name: 'Telegram',
+      status: 'available' as const,
+      desc: isId
+        ? 'Kirim perintah, unggah dokumen kerja, dan terima file hasil langsung dari chat Telegram.'
+        : 'Send instructions, upload documents, and receive processed outputs directly in Telegram chat.',
+    },
+    {
+      name: 'WhatsApp',
+      status: 'coming_soon' as const,
+      desc: isId
+        ? 'Gateway WhatsApp via integrasi Baileys / Cloud API untuk interaksi dokumen via chat personal dan grup.'
+        : 'WhatsApp gateway via Baileys / Cloud API integration for personal and group document automation.',
+    },
+    {
+      name: 'Discord',
+      status: 'coming_soon' as const,
+      desc: isId
+        ? 'Bot interaktif untuk server Discord tim dengan slash commands dan kanal dokumen khusus.'
+        : 'Interactive bot for team Discord servers with slash commands and dedicated channels.',
+    },
+    {
+      name: 'Slack',
+      status: 'coming_soon' as const,
+      desc: isId
+        ? 'Aplikasi Slack Workspace untuk otomasi alur kerja approval dokumen kantor dan laporan harian.'
+        : 'Slack Workspace app for enterprise document approval workflows and automated daily reports.',
+    },
+    {
+      name: 'LINE',
+      status: 'coming_soon' as const,
+      desc: isId
+        ? 'Integrasi LINE Messaging API dengan rich menu dan webhook respon dokumen.'
+        : 'LINE Messaging API integration with rich menus and document response webhooks.',
+    },
+  ];
+
   return (
     <>
       <H1>App Gateway</H1>
-      <P>{isId
-        ? 'Arunaki dapat dikendalikan sepenuhnya via messaging app gateways (e.g. Telegram). Kirim perintah teks, unggah file, terima dokumen hasil â€” tanpa membuka antarmuka desktop.'
-        : 'Arunaki can be fully controlled via messaging app gateways (e.g. Telegram). Send text commands, upload files, receive processed results â€” without opening the desktop UI.'}</P>
-      <H2>{isId ? 'Setup' : 'Setup'}</H2>
-      <P>{isId ? 'Buat bot via @BotFather di Telegram, salin token ke .env.' : 'Create a bot via @BotFather on Telegram, copy the token to .env.'}</P>
+      <P>
+        {isId
+          ? 'Arunaki dapat diakses secara remote melalui App Gateway pesan instan. Saat ini Telegram telah tersedia penuh, sementara aplikasi lainnya sedang dipersiapkan.'
+          : 'Arunaki can be controlled remotely via messaging app gateways. Currently Telegram is fully available, with additional platforms in active development.'}
+      </P>
+
+      <H2>{isId ? 'Status Integrasi Aplikasi' : 'App Integration Status'}</H2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        {apps.map((app) => (
+          <div
+            key={app.name}
+            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-black dark:text-white font-mono text-sm">{app.name}</span>
+              {app.status === 'available' ? (
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="w-3 h-3" />
+                  {isId ? 'Tersedia' : 'Available'}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border border-zinc-200 dark:border-zinc-800">
+                  <Clock className="w-3 h-3" />
+                  {isId ? 'Segera Hadir' : 'Coming Soon'}
+                </span>
+              )}
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">{app.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <H2>{isId ? 'Setup Gateway Telegram' : 'Telegram Gateway Setup'}</H2>
+      <P>
+        {isId
+          ? 'Daftarkan bot baru via @BotFather di Telegram, lalu masukkan token dan Chat ID ke file .env:'
+          : 'Register a new bot via @BotFather on Telegram, then configure token and Chat ID in your .env:'}
+      </P>
       <CodeBlock code={`# .env
 TELEGRAM_BOT_TOKEN=123456789:AAF...
 TELEGRAM_ALLOWED_CHAT_IDS=123456789`} />
-      <H2>{isId ? 'Perintah' : 'Commands'}</H2>
+
+      <H2>{isId ? 'Perintah Bot' : 'Bot Commands'}</H2>
       <div className="space-y-2 mb-6">
         {[
-          { cmd: '/start',          desc: isId ? 'Mulai sesi' : 'Start session' },
-          { cmd: '/help',           desc: isId ? 'Daftar perintah' : 'Command list' },
-          { cmd: '/status',         desc: isId ? 'Status agen & model' : 'Agent & model status' },
-          { cmd: '/process [file]', desc: isId ? 'Proses dokumen' : 'Process document' },
-          { cmd: '/redact [file]',  desc: isId ? 'Samarkan PII' : 'Redact PII' },
+          { cmd: '/start',          desc: isId ? 'Mulai sesi interaksi agen' : 'Start agent session' },
+          { cmd: '/help',           desc: isId ? 'Daftar perintah yang tersedia' : 'List available commands' },
+          { cmd: '/status',         desc: isId ? 'Cek status model dan sandbox workspace' : 'Check model and workspace sandbox status' },
+          { cmd: '/process [file]', desc: isId ? 'Jalankan instruksi otomasi pada berkas' : 'Run automated processing on document' },
+          { cmd: '/redact [file]',  desc: isId ? 'Samarkan data pribadi PII pada dokumen' : 'Redact PII from document' },
         ].map((c) => (
           <div key={c.cmd} className="flex items-start gap-3 text-sm">
             <Code>{c.cmd}</Code>
@@ -298,7 +571,8 @@ TELEGRAM_ALLOWED_CHAT_IDS=123456789`} />
           </div>
         ))}
       </div>
-      <H2>{isId ? 'Contoh tool' : 'Tool examples'}</H2>
+
+      <H2>{isId ? 'Contoh Tool Gateway' : 'Gateway Tool Examples'}</H2>
       <CodeBlock code={`send_telegram(chat_id, file: "report.pdf", caption: "Done")
 telegram_get_file(file_id)
 telegram_send_photo(chat_id, image_path)`} />
@@ -310,9 +584,11 @@ function DownloadSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>{isId ? 'Unduh Arunaki' : 'Download Arunaki'}</H1>
-      <P>{isId
-        ? 'Paket biner resmi Arunaki untuk Windows dan macOS. Semua installer sedang dalam pengembangan aktif.'
-        : 'Official Arunaki binary packages for Windows and macOS. All installers are in active development.'}</P>
+      <P>
+        {isId
+          ? 'Paket biner resmi Arunaki untuk Windows dan macOS. Workstation desktop native ini sedang dalam persiapan rilis biner.'
+          : 'Official Arunaki binary packages for Windows and macOS. The native desktop workstation is in active preparation for release.'}
+      </P>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {[
           { title: 'Windows Setup', file: 'Arunaki-Setup-x64.exe', badge: isId ? 'Direkomendasikan' : 'Recommended' },
@@ -321,40 +597,42 @@ function DownloadSection({ isId }: { isId: boolean }) {
         ].map((p) => (
           <div key={p.title} className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3">
             <div>
-              <p className="text-xs text-zinc-400 font-sans mb-1">{p.badge}</p>
-              <p className="font-semibold text-black dark:text-white font-sans text-sm">{p.title}</p>
+              <p className="text-xs text-zinc-400 font-mono mb-1">{p.badge}</p>
+              <p className="font-semibold text-black dark:text-white font-mono text-sm">{p.title}</p>
               <p className="font-mono text-xs text-zinc-500 mt-0.5">{p.file}</p>
             </div>
-            <button disabled className="w-full py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2">
+            <button disabled className="w-full py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-mono text-xs font-semibold cursor-not-allowed flex items-center justify-center gap-2">
               <Clock className="w-4 h-4" />
               {isId ? 'Segera Hadir' : 'Coming Soon'}
             </button>
           </div>
         ))}
       </div>
-      <H2>{isId ? 'Dari Source Code' : 'From Source Code'}</H2>
+      <H2>{isId ? 'Jalankan dari Source Code' : 'Run from Source Code'}</H2>
       <CodeBlock code={`# 1. Clone repository
 git clone https://github.com/jlsrngo/Arunaki.git && cd Arunaki
 
 # 2. Install dependencies (Bun)
 bun install
 
-# 3. Start workstation
+# 3. Start Electron workstation harness
 npm run dev`} />
       <a
         href="https://github.com/jlsrngo/Arunaki"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-sans text-sm font-semibold hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs sm:text-sm font-semibold hover:opacity-90 transition-opacity"
       >
         <Download className="w-4 h-4" />
-        {isId ? 'Lihat di GitHub' : 'View on GitHub'}
+        {isId ? 'Lihat Repositori di GitHub' : 'View Repository on GitHub'}
       </a>
     </>
   );
 }
 
-// â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -----------------------------------------------------------------------------
+// MAIN PAGE
+// -----------------------------------------------------------------------------
 export default function ArunakiDocsPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
@@ -363,7 +641,7 @@ export default function ArunakiDocsPage() {
   const [active, setActive] = useState<SectionId>('intro');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const getLabel = (item: { en: string; id_: string }) => isId ? item.id_ : item.en;
+  const getLabel = (item: { en: string; id_: string }) => (isId ? item.id_ : item.en);
 
   const currentLabel = navGroups
     .flatMap((g) => g.items)
@@ -377,7 +655,7 @@ export default function ArunakiDocsPage() {
       case 'skills':    return <SkillsSection isId={isId} />;
       case 'tools':     return <ToolsSection isId={isId} />;
       case 'providers': return <ProvidersSection isId={isId} />;
-      case 'gateway':  return <GatewaySection isId={isId} />;
+      case 'gateway':   return <GatewaySection isId={isId} />;
       case 'download':  return <DownloadSection isId={isId} />;
     }
   };
@@ -395,7 +673,7 @@ export default function ArunakiDocsPage() {
             <button
               key={item.id}
               onClick={() => { setActive(item.id); setSidebarOpen(false); }}
-              className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+              className={`w-full text-left px-3 py-2 rounded-md transition-colors font-mono text-sm ${
                 active === item.id
                   ? 'bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white font-semibold'
                   : 'text-zinc-500 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900/50'
@@ -418,7 +696,7 @@ export default function ArunakiDocsPage() {
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
-        <span className="text-sm font-medium text-zinc-500">{currentLabel ? getLabel(currentLabel) : ''}</span>
+        <span className="text-sm font-mono font-medium text-zinc-500">{currentLabel ? getLabel(currentLabel) : ''}</span>
       </div>
 
       {/* Mobile overlay */}
@@ -441,7 +719,7 @@ export default function ArunakiDocsPage() {
 
         {/* Content */}
         <main className="flex-1 min-w-0 px-4 sm:px-8 pt-28 lg:pt-8 pb-8 overflow-y-auto">
-          <div className="flex items-center gap-2 text-sm font-sans text-zinc-400 mb-6">
+          <div className="flex items-center gap-2 text-sm font-mono text-zinc-400 mb-6">
             <Link href="/arunaki" className="hover:underline">arunaki</Link>
             <span>/</span>
             <span className="text-black dark:text-white font-medium">{active}</span>
@@ -454,6 +732,3 @@ export default function ArunakiDocsPage() {
     </div>
   );
 }
-
-
-
