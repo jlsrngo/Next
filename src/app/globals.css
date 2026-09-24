@@ -447,52 +447,60 @@
 }
 
 /* Flat monochrome skill icons: maintain tilted background card effect with flat monochrome styling & subtle gray border */
-.theme-monochrome .group > div.relative > div:first-child,
-[data-theme-style="monochrome"] .group > div.relative > div:first-child {
+.theme-monochrome .skill-icon-backdrop,
+[data-theme-style="monochrome"] .skill-icon-backdrop {
   display: block !important;
   background-image: none !important;
   background-color: #e4e4e7 !important;
   border: 1px solid #d4d4d8 !important;
 }
 
-.dark.theme-monochrome .group > div.relative > div:first-child,
-.dark[data-theme-style="monochrome"] .group > div.relative > div:first-child {
+.dark.theme-monochrome .skill-icon-backdrop,
+.dark[data-theme-style="monochrome"] .skill-icon-backdrop,
+.dark .theme-monochrome .skill-icon-backdrop,
+.dark [data-theme-style="monochrome"] .skill-icon-backdrop {
   display: block !important;
   background-image: none !important;
   background-color: #18181b !important;
   border: 1px solid #27272a !important;
 }
 
-.theme-monochrome .group > div.relative > div:nth-child(2),
-[data-theme-style="monochrome"] .group > div.relative > div:nth-child(2) {
+.theme-monochrome .skill-icon-surface,
+[data-theme-style="monochrome"] .skill-icon-surface {
   background-color: #ffffff !important;
   border: 1px solid #e4e4e7 !important;
 }
 
-.dark.theme-monochrome .group > div.relative > div:nth-child(2),
-.dark[data-theme-style="monochrome"] .group > div.relative > div:nth-child(2) {
+.dark.theme-monochrome .skill-icon-surface,
+.dark[data-theme-style="monochrome"] .skill-icon-surface,
+.dark .theme-monochrome .skill-icon-surface,
+.dark [data-theme-style="monochrome"] .skill-icon-surface {
   background-color: #0c0c0e !important;
   border: 1px solid #27272a !important;
 }
 
 /* Keep subtle border on hover without harsh white outline */
-.theme-monochrome .group:hover > div.relative > div:first-child,
-[data-theme-style="monochrome"] .group:hover > div.relative > div:first-child {
+.theme-monochrome .group:hover .skill-icon-backdrop,
+[data-theme-style="monochrome"] .group:hover .skill-icon-backdrop {
   border-color: #d4d4d8 !important;
 }
 
-.dark.theme-monochrome .group:hover > div.relative > div:first-child,
-.dark[data-theme-style="monochrome"] .group:hover > div.relative > div:first-child {
+.dark.theme-monochrome .group:hover .skill-icon-backdrop,
+.dark[data-theme-style="monochrome"] .group:hover .skill-icon-backdrop,
+.dark .theme-monochrome .group:hover .skill-icon-backdrop,
+.dark [data-theme-style="monochrome"] .group:hover .skill-icon-backdrop {
   border-color: #3f3f46 !important;
 }
 
-.theme-monochrome .group:hover > div.relative > div:nth-child(2),
-[data-theme-style="monochrome"] .group:hover > div.relative > div:nth-child(2) {
+.theme-monochrome .group:hover .skill-icon-surface,
+[data-theme-style="monochrome"] .group:hover .skill-icon-surface {
   border-color: #e4e4e7 !important;
 }
 
-.dark.theme-monochrome .group:hover > div.relative > div:nth-child(2),
-.dark[data-theme-style="monochrome"] .group:hover > div.relative > div:nth-child(2) {
+.dark.theme-monochrome .group:hover .skill-icon-surface,
+.dark[data-theme-style="monochrome"] .group:hover .skill-icon-surface,
+.dark .theme-monochrome .group:hover .skill-icon-surface,
+.dark [data-theme-style="monochrome"] .group:hover .skill-icon-surface {
   border-color: #3f3f46 !important;
 }
 
