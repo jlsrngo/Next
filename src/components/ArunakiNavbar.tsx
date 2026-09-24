@@ -34,7 +34,7 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#09090b]/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800/80 transition-colors">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-white/95 dark:bg-[#09090b]/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800/80 transition-colors">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
         {/* Left: Portfolio Back & Arunaki Brand */}
         <div className="flex items-center gap-3">

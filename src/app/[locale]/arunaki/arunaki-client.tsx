@@ -146,7 +146,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
     <div className="min-h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors font-sans antialiased flex flex-col justify-between">
       <ArunakiNavbar locale={locale} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-20 space-y-20 w-full flex-1">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-20 space-y-20 w-full flex-1">
         {/* HERO SECTION */}
         <section id="hero" className="space-y-6">
           <div className="space-y-4 max-w-3xl">

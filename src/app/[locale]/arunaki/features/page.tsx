@@ -36,7 +36,7 @@ export default function ArunakiFeaturesPage({ params }: { params: { locale: stri
     <div className="min-h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors font-sans antialiased flex flex-col justify-between">
       <ArunakiNavbar locale={locale} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-20 space-y-16 w-full flex-1">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-20 space-y-16 w-full flex-1">
         {/* Page Header */}
         <div className="space-y-4 max-w-3xl">
           <div className="flex items-center gap-2 text-sm font-sans text-zinc-400">
