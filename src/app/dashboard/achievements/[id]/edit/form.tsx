@@ -93,10 +93,22 @@ export function AchievementEditForm({ initialData, locale, achievementsMessages 
     }
   }
 
-  const fields = achievementsMessages.fields
+  const fields = {
+    title: achievementsMessages?.fields?.title || 'Title',
+    description: achievementsMessages?.fields?.description || 'Description',
+    issuer: achievementsMessages?.fields?.issuer || 'Issuer / Organization',
+    date: achievementsMessages?.fields?.date || 'Date',
+    category: achievementsMessages?.fields?.category || 'Category',
+    type: achievementsMessages?.fields?.type || 'Type',
+    credentialId: achievementsMessages?.fields?.credentialId || 'Credential ID',
+    credentialUrl: achievementsMessages?.fields?.credentialUrl || 'Credential URL',
+    imageUrl: achievementsMessages?.fields?.imageUrl || 'Certificate Image',
+    featured: achievementsMessages?.fields?.featured || 'Featured Achievement',
+    order: achievementsMessages?.fields?.order || 'Display Order',
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-[#0c0c0e] rounded-xl border border-slate-200 dark:border-[#27272a] p-6 space-y-6">
       <div className="space-y-2">
         <label htmlFor="title" className="block text-sm font-medium">{fields.title} *</label>
         <input id="title" {...register('title')} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
