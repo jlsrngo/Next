@@ -157,15 +157,15 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
 
           <div className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 space-y-3">
             <div>
-              <span className="text-zinc-400"># 1. Clone repository</span>
+              <span className="text-zinc-400"># 1. {isId ? 'Kloning repositori' : 'Clone repository'}</span>
               <p>git clone https://github.com/jlsrngo/Arunaki.git && cd Arunaki</p>
             </div>
             <div>
-              <span className="text-zinc-400"># 2. Pasang dependensi menggunakan Bun</span>
+              <span className="text-zinc-400"># 2. {isId ? 'Pasang dependensi menggunakan Bun' : 'Install dependencies using Bun'}</span>
               <p>bun install</p>
             </div>
             <div>
-              <span className="text-zinc-400"># 3. Jalankan server web & desktop workstation</span>
+              <span className="text-zinc-400"># 3. {isId ? 'Jalankan server web & desktop workstation' : 'Start web server & desktop workstation'}</span>
               <p>npm run dev</p>
             </div>
           </div>
