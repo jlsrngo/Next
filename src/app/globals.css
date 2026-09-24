@@ -644,4 +644,141 @@ html:not(.dark) [data-theme-style="monochrome"] .select-field {
   filter: grayscale(100%) brightness(1.2) !important;
 }
 
+/* ==========================================================================
+   PURE MONOCHROME FLAT FOR ADMIN DASHBOARD
+   Matches the exact black & white, dark-zinc 1px border aesthetic of public UI
+   ========================================================================== */
+
+/* Dark mode dashboard backgrounds: convert navy-slate to pure pitch-black / dark zinc */
+.dark.theme-monochrome .dark\:bg-slate-950,
+.dark .theme-monochrome .dark\:bg-slate-950,
+.dark[data-theme-style="monochrome"] .dark\:bg-slate-950,
+.dark [data-theme-style="monochrome"] .dark\:bg-slate-950,
+.dark.theme-monochrome .bg-slate-950,
+.dark .theme-monochrome .bg-slate-950,
+.dark[data-theme-style="monochrome"] .bg-slate-950,
+.dark [data-theme-style="monochrome"] .bg-slate-950 {
+  background-color: #09090b !important;
+}
+
+/* Dark mode dashboard cards & header: convert slate-900 to dark-zinc #0c0c0e */
+.dark.theme-monochrome .dark\:bg-slate-900,
+.dark .theme-monochrome .dark\:bg-slate-900,
+.dark[data-theme-style="monochrome"] .dark\:bg-slate-900,
+.dark [data-theme-style="monochrome"] .dark\:bg-slate-900,
+.dark.theme-monochrome .bg-slate-900,
+.dark .theme-monochrome .bg-slate-900,
+.dark[data-theme-style="monochrome"] .bg-slate-900,
+.dark [data-theme-style="monochrome"] .bg-slate-900 {
+  background-color: #0c0c0e !important;
+}
+
+/* Dark mode dashboard sub-cards, inputs & hover pills */
+.dark.theme-monochrome .dark\:bg-slate-800,
+.dark .theme-monochrome .dark\:bg-slate-800,
+.dark[data-theme-style="monochrome"] .dark\:bg-slate-800,
+.dark [data-theme-style="monochrome"] .dark\:bg-slate-800,
+.dark.theme-monochrome .bg-slate-800,
+.dark .theme-monochrome .bg-slate-800,
+.dark[data-theme-style="monochrome"] .bg-slate-800,
+.dark [data-theme-style="monochrome"] .bg-slate-800 {
+  background-color: #18181b !important;
+}
+
+/* Dark mode dashboard borders: soft zinc borders #27272a */
+.dark.theme-monochrome .dark\:border-slate-800,
+.dark .theme-monochrome .dark\:border-slate-800,
+.dark[data-theme-style="monochrome"] .dark\:border-slate-800,
+.dark [data-theme-style="monochrome"] .dark\:border-slate-800,
+.dark.theme-monochrome .border-slate-800,
+.dark .theme-monochrome .border-slate-800,
+.dark[data-theme-style="monochrome"] .border-slate-800,
+.dark [data-theme-style="monochrome"] .border-slate-800 {
+  border-color: #27272a !important;
+}
+
+.dark.theme-monochrome .dark\:border-slate-700,
+.dark .theme-monochrome .dark\:border-slate-700,
+.dark[data-theme-style="monochrome"] .dark\:border-slate-700,
+.dark [data-theme-style="monochrome"] .dark\:border-slate-700,
+.dark.theme-monochrome .border-slate-700,
+.dark .theme-monochrome .border-slate-700,
+.dark[data-theme-style="monochrome"] .border-slate-700,
+.dark [data-theme-style="monochrome"] .border-slate-700 {
+  border-color: #3f3f46 !important;
+}
+
+/* Hover borders */
+.dark.theme-monochrome .dark\:hover\:border-slate-700:hover,
+.dark .theme-monochrome .dark\:hover\:border-slate-700:hover,
+.dark[data-theme-style="monochrome"] .dark\:hover\:border-slate-700:hover,
+.dark [data-theme-style="monochrome"] .dark\:hover\:border-slate-700:hover {
+  border-color: #3f3f46 !important;
+}
+
+/* Overview stat icon containers & badges in dark monochrome */
+.dark.theme-monochrome [class*="dark:bg-"][class*="/10"],
+.dark .theme-monochrome [class*="dark:bg-"][class*="/10"],
+.dark[data-theme-style="monochrome"] [class*="dark:bg-"][class*="/10"],
+.dark [data-theme-style="monochrome"] [class*="dark:bg-"][class*="/10"] {
+  background-color: #18181b !important;
+  border: 1px solid #27272a !important;
+}
+
+/* Colored stat icon text into crisp light zinc */
+.dark.theme-monochrome [class*="dark:text-blue-400"],
+.dark.theme-monochrome [class*="dark:text-emerald-400"],
+.dark.theme-monochrome [class*="dark:text-amber-400"],
+.dark.theme-monochrome [class*="dark:text-violet-400"],
+.dark.theme-monochrome [class*="dark:text-rose-400"],
+.dark.theme-monochrome [class*="dark:text-cyan-400"],
+.dark .theme-monochrome [class*="dark:text-blue-400"],
+.dark .theme-monochrome [class*="dark:text-emerald-400"],
+.dark .theme-monochrome [class*="dark:text-amber-400"],
+.dark .theme-monochrome [class*="dark:text-violet-400"],
+.dark .theme-monochrome [class*="dark:text-rose-400"],
+.dark .theme-monochrome [class*="dark:text-cyan-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-blue-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-emerald-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-amber-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-violet-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-rose-400"],
+.dark[data-theme-style="monochrome"] [class*="dark:text-cyan-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-blue-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-emerald-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-amber-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-violet-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-rose-400"],
+.dark [data-theme-style="monochrome"] [class*="dark:text-cyan-400"] {
+  color: #f4f4f5 !important;
+}
+
+/* Stat card hover accent bars */
+.dark.theme-monochrome [class*="bg-blue-500"],
+.dark.theme-monochrome [class*="bg-emerald-500"],
+.dark.theme-monochrome [class*="bg-amber-500"],
+.dark.theme-monochrome [class*="bg-violet-500"],
+.dark.theme-monochrome [class*="bg-rose-500"],
+.dark.theme-monochrome [class*="bg-cyan-500"],
+.dark .theme-monochrome [class*="bg-blue-500"],
+.dark .theme-monochrome [class*="bg-emerald-500"],
+.dark .theme-monochrome [class*="bg-amber-500"],
+.dark .theme-monochrome [class*="bg-violet-500"],
+.dark .theme-monochrome [class*="bg-rose-500"],
+.dark .theme-monochrome [class*="bg-cyan-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-blue-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-emerald-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-amber-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-violet-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-rose-500"],
+.dark[data-theme-style="monochrome"] [class*="bg-cyan-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-blue-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-emerald-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-amber-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-violet-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-rose-500"],
+.dark [data-theme-style="monochrome"] [class*="bg-cyan-500"] {
+  background-color: #52525b !important;
+}
+
 

@@ -228,14 +228,14 @@ export default function DashboardShell({
 
   if (status === 'loading') {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-[#09090b]">
         <Loader2 className="h-8 w-8 animate-spin text-[var(--accent)]" />
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#09090b]">
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -245,20 +245,20 @@ export default function DashboardShell({
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-slate-900 dark:bg-slate-950 transition-transform duration-150 ease-in-out lg:translate-x-0 lg:static lg:z-auto border-r border-slate-800 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-white dark:bg-[#09090b] transition-transform duration-150 ease-in-out lg:translate-x-0 lg:static lg:z-auto border-r border-slate-200 dark:border-[#27272a] ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center gap-3 px-5 border-b border-slate-800 shrink-0">
-          <img src="/icon.svg" alt="Logo" className="h-8 w-8 object-contain brightness-0 invert" />
+        <div className="flex h-16 items-center gap-3 px-5 border-b border-slate-200 dark:border-[#27272a] shrink-0">
+          <img src="/icon.svg" alt="Logo" className="h-8 w-8 object-contain dark:brightness-0 dark:invert" />
           <div className="flex-1 min-w-0">
-            <span className="text-sm font-semibold text-white">Portfolio <span className="text-[10px] text-slate-500 font-normal">v{latestVersion?.version || '1.0.0'}</span></span>
-            <span className="block text-[11px] text-slate-400">{t('admin.panel_title')}</span>
+            <span className="text-sm font-semibold text-slate-900 dark:text-white">Portfolio <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-normal">v{latestVersion?.version || '1.0.0'}</span></span>
+            <span className="block text-[11px] text-slate-500 dark:text-zinc-400">{t('admin.panel_title')}</span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="rounded-md p-1 text-slate-400 hover:text-white lg:hidden"
+            className="rounded-md p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white lg:hidden"
           >
             <X size={18} />
           </button>
@@ -271,7 +271,7 @@ export default function DashboardShell({
               if ('divider' in item) {
                 return (
                   <li key={idx} className="pt-4 pb-2">
-                    <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                    <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
                       {idx === 1 ? t('admin.content') : t('admin.settings')}
                     </span>
                   </li>
@@ -287,7 +287,7 @@ export default function DashboardShell({
                     className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                       active
                         ? 'bg-accent bg-[var(--accent)] text-white'
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                        : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     <Icon size={18} />
@@ -301,17 +301,17 @@ export default function DashboardShell({
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-slate-800 px-3 py-3 space-y-1 shrink-0">
+        <div className="border-t border-slate-200 dark:border-[#27272a] px-3 py-3 space-y-1 shrink-0">
           <Link
             href={`/${locale}`}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-all"
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white transition-all"
           >
             <ExternalLink size={18} />
             {t('admin.view_site')}
           </Link>
           <a
             href="/api/auth/signout"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
           >
             <LogOut size={18} />
             {t('admin.sign_out')}
@@ -322,11 +322,11 @@ export default function DashboardShell({
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
         {/* Header */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 shrink-0">
+        <header className="flex h-14 items-center justify-between border-b border-slate-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] px-6 shrink-0">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="rounded-md p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white lg:hidden"
+              className="rounded-md p-2 text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white lg:hidden"
             >
               <Menu size={20} />
             </button>
@@ -335,22 +335,22 @@ export default function DashboardShell({
           <div className="flex items-center gap-3">
             <button
               onClick={toggle}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-zinc-400 dark:hover:bg-[#18181b] dark:hover:text-white transition"
               title={isDark ? t('admin.switch_to_light') : t('admin.switch_to_dark')}
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <div className="h-5 w-px bg-slate-200 dark:bg-slate-700" />
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div className="h-5 w-px bg-slate-200 dark:bg-[#27272a]" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-[#18181b] overflow-hidden border border-slate-200 dark:border-[#27272a]">
               {avatarUrl ? (
                 <Image src={avatarUrl} alt="Avatar" width={32} height={32} unoptimized className="h-full w-full object-cover" />
               ) : (
-                <User size={14} className="text-slate-500 dark:text-slate-400" />
+                <User size={14} className="text-slate-500 dark:text-zinc-400" />
               )}
             </div>
             <div className="text-right">
               <p className="text-sm font-medium text-slate-900 dark:text-white">{fullName || session?.user?.email?.split('@')[0] || 'Admin'}</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">{session?.user?.email}</p>
+              <p className="text-[10px] text-slate-400 dark:text-zinc-500">{session?.user?.email}</p>
             </div>
           </div>
         </header>
