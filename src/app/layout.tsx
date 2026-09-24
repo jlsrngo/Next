@@ -88,7 +88,7 @@ export default async function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')};var s=localStorage.getItem('portfolio_theme_style');var c=localStorage.getItem('accent_color');if(s==='monochrome'||c==='#000000'||c==='monochrome'){document.documentElement.classList.add('theme-monochrome');document.documentElement.setAttribute('data-theme-style','monochrome')}}catch(e){document.documentElement.classList.add('dark')}})()`,
           }}
         />
         <script

@@ -20,9 +20,17 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const useTheme = () => useContext(ThemeContext)
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({
+  children,
+  initialMonochrome = false,
+  initialAccentColor,
+}: {
+  children: React.ReactNode
+  initialMonochrome?: boolean
+  initialAccentColor?: string
+}) {
   const [isDark, setIsDark] = useState(true)
-  const [themeStyle, setThemeStyleState] = useState<ThemeStyle>('default')
+  const [themeStyle, setThemeStyleState] = useState<ThemeStyle>(() => (initialMonochrome ? 'monochrome' : 'default'))
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -34,9 +42,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const storedColor = localStorage.getItem('accent_color')
     if (storedStyle === 'monochrome' || storedColor === '#000000' || storedColor === 'monochrome') {
       setThemeStyleState('monochrome')
+    } else if (storedStyle === 'default' && storedColor && storedColor !== '#000000' && storedColor !== 'monochrome') {
+      setThemeStyleState('default')
+    } else if (initialMonochrome) {
+      setThemeStyleState('monochrome')
     }
     setReady(true)
-  }, [])
+  }, [initialMonochrome])
 
   const applyThemeStyle = useCallback((style: ThemeStyle, dark: boolean) => {
     const root = document.documentElement
@@ -48,13 +60,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove('theme-monochrome')
       root.removeAttribute('data-theme-style')
-      const savedColor = localStorage.getItem('accent_color') || '#00c896'
+      const savedColor = localStorage.getItem('accent_color') || initialAccentColor || '#00c896'
       if (savedColor !== '#000000' && savedColor !== 'monochrome') {
         root.style.setProperty('--accent', savedColor)
       }
       localStorage.setItem('portfolio_theme_style', 'default')
     }
-  }, [])
+  }, [initialAccentColor])
 
   useEffect(() => {
     if (!ready) return

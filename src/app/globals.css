@@ -306,7 +306,9 @@
    ========================================================================== */
 
 :root.theme-monochrome,
-:root[data-theme-style="monochrome"] {
+:root[data-theme-style="monochrome"],
+.theme-monochrome,
+[data-theme-style="monochrome"] {
   --accent: #09090b;
   --accent-light: #27272a;
   --accent-dark: #000000;
@@ -316,7 +318,11 @@
 }
 
 :root.dark.theme-monochrome,
-:root.dark[data-theme-style="monochrome"] {
+:root.dark[data-theme-style="monochrome"],
+.dark.theme-monochrome,
+.dark .theme-monochrome,
+.dark[data-theme-style="monochrome"],
+.dark [data-theme-style="monochrome"] {
   --accent: #e4e4e7;
   --accent-light: #f4f4f5;
   --accent-dark: #a1a1aa;
@@ -368,8 +374,20 @@
   backdrop-filter: none !important;
 }
 
+/* Flat cards with thin subtle gray borders */
+.theme-monochrome .glass-card,
+[data-theme-style="monochrome"] .glass-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
 .dark.theme-monochrome .glass-card,
-.dark[data-theme-style="monochrome"] .glass-card {
+.dark .theme-monochrome .glass-card,
+.dark[data-theme-style="monochrome"] .glass-card,
+.dark [data-theme-style="monochrome"] .glass-card {
   background-color: #0c0c0e !important;
   border: 1px solid #27272a !important;
   border-radius: 12px !important;
@@ -387,7 +405,9 @@
 }
 
 .dark.theme-monochrome .glass-modal,
-.dark[data-theme-style="monochrome"] .glass-modal {
+.dark .theme-monochrome .glass-modal,
+.dark[data-theme-style="monochrome"] .glass-modal,
+.dark [data-theme-style="monochrome"] .glass-modal {
   background-color: #09090b !important;
   border: 1px solid #27272a !important;
   border-radius: 14px !important;
@@ -405,7 +425,9 @@
 }
 
 .dark.theme-monochrome .btn-primary,
-.dark[data-theme-style="monochrome"] .btn-primary {
+.dark .theme-monochrome .btn-primary,
+.dark[data-theme-style="monochrome"] .btn-primary,
+.dark [data-theme-style="monochrome"] .btn-primary {
   background-color: #27272a !important;
   color: #f4f4f5 !important;
   border: 1px solid #3f3f46 !important;
@@ -414,35 +436,47 @@
 }
 
 /* Active navigation & elements with bg-accent (subtle gray, NOT stark white) */
-.theme-monochrome:not(.dark) .bg-accent,
-[data-theme-style="monochrome"]:not(.dark) .bg-accent {
+html:not(.dark) .theme-monochrome .bg-accent,
+html:not(.dark) [data-theme-style="monochrome"] .bg-accent,
+html:not(.dark).theme-monochrome .bg-accent,
+html:not(.dark)[data-theme-style="monochrome"] .bg-accent {
   background-color: #09090b !important;
   color: #ffffff !important;
   border: 1px solid #09090b !important;
 }
 
-.theme-monochrome:not(.dark) .bg-accent *,
-[data-theme-style="monochrome"]:not(.dark) .bg-accent * {
+html:not(.dark) .theme-monochrome .bg-accent *,
+html:not(.dark) [data-theme-style="monochrome"] .bg-accent *,
+html:not(.dark).theme-monochrome .bg-accent *,
+html:not(.dark)[data-theme-style="monochrome"] .bg-accent * {
   color: #ffffff !important;
 }
 
 .dark.theme-monochrome .bg-accent,
-.dark[data-theme-style="monochrome"] .bg-accent {
+.dark .theme-monochrome .bg-accent,
+.dark[data-theme-style="monochrome"] .bg-accent,
+.dark [data-theme-style="monochrome"] .bg-accent {
   background-color: #27272a !important;
   color: #f4f4f5 !important;
   border: 1px solid #3f3f46 !important;
 }
 
 .dark.theme-monochrome .bg-accent *,
-.dark[data-theme-style="monochrome"] .bg-accent * {
+.dark .theme-monochrome .bg-accent *,
+.dark[data-theme-style="monochrome"] .bg-accent *,
+.dark [data-theme-style="monochrome"] .bg-accent * {
   color: #f4f4f5 !important;
 }
 
 /* Subtle hover on cards and list items */
 .dark.theme-monochrome [class*="hover:border-accent"]:hover,
+.dark .theme-monochrome [class*="hover:border-accent"]:hover,
 .dark[data-theme-style="monochrome"] [class*="hover:border-accent"]:hover,
+.dark [data-theme-style="monochrome"] [class*="hover:border-accent"]:hover,
 .dark.theme-monochrome .group:hover,
-.dark[data-theme-style="monochrome"] .group:hover {
+.dark .theme-monochrome .group:hover,
+.dark[data-theme-style="monochrome"] .group:hover,
+.dark [data-theme-style="monochrome"] .group:hover {
   border-color: #3f3f46 !important;
 }
 
@@ -513,43 +547,55 @@
 }
 
 .dark.theme-monochrome .bg-accent\/10,
-.dark[data-theme-style="monochrome"] .bg-accent\/10 {
+.dark[data-theme-style="monochrome"] .bg-accent\/10,
+.dark .theme-monochrome .bg-accent\/10,
+.dark [data-theme-style="monochrome"] .bg-accent\/10 {
   background-color: #18181b !important;
   color: #d4d4d8 !important;
   border: 1px solid #27272a !important;
 }
 
 /* Sidebar in monochrome flat */
-.theme-monochrome aside,
-[data-theme-style="monochrome"] aside {
+html:not(.dark) .theme-monochrome aside,
+html:not(.dark) [data-theme-style="monochrome"] aside,
+html:not(.dark).theme-monochrome aside,
+html:not(.dark)[data-theme-style="monochrome"] aside {
   background-color: #fafafa !important;
   border-color: #e4e4e7 !important;
 }
 
 .dark.theme-monochrome aside,
-.dark[data-theme-style="monochrome"] aside {
+.dark .theme-monochrome aside,
+.dark[data-theme-style="monochrome"] aside,
+.dark [data-theme-style="monochrome"] aside {
   background-color: #09090b !important;
   border-color: #222225 !important;
 }
 
 /* Flat inputs */
-.theme-monochrome .input-field,
-.theme-monochrome .textarea-field,
-.theme-monochrome .select-field,
-[data-theme-style="monochrome"] .input-field,
-[data-theme-style="monochrome"] .textarea-field,
-[data-theme-style="monochrome"] .select-field {
+html:not(.dark) .theme-monochrome .input-field,
+html:not(.dark) .theme-monochrome .textarea-field,
+html:not(.dark) .theme-monochrome .select-field,
+html:not(.dark) [data-theme-style="monochrome"] .input-field,
+html:not(.dark) [data-theme-style="monochrome"] .textarea-field,
+html:not(.dark) [data-theme-style="monochrome"] .select-field {
   border-radius: 8px !important;
   border: 1px solid #e4e4e7 !important;
   background-color: #fafafa !important;
 }
 
 .dark.theme-monochrome .input-field,
+.dark .theme-monochrome .input-field,
 .dark.theme-monochrome .textarea-field,
+.dark .theme-monochrome .textarea-field,
 .dark.theme-monochrome .select-field,
+.dark .theme-monochrome .select-field,
 .dark[data-theme-style="monochrome"] .input-field,
+.dark [data-theme-style="monochrome"] .input-field,
 .dark[data-theme-style="monochrome"] .textarea-field,
-.dark[data-theme-style="monochrome"] .select-field {
+.dark [data-theme-style="monochrome"] .textarea-field,
+.dark[data-theme-style="monochrome"] .select-field,
+.dark [data-theme-style="monochrome"] .select-field {
   border-radius: 8px !important;
   border: 1px solid #27272a !important;
   background-color: #121214 !important;

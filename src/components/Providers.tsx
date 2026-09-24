@@ -10,13 +10,15 @@ interface ProvidersProps {
   children: ReactNode
   locale: string
   messages: any
+  initialMonochrome?: boolean
+  initialAccentColor?: string
 }
 
-export function Providers({ children, locale, messages }: ProvidersProps) {
+export function Providers({ children, locale, messages, initialMonochrome, initialAccentColor }: ProvidersProps) {
   return (
     <SessionProvider>
       <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Jakarta">
-        <ThemeProvider>
+        <ThemeProvider initialMonochrome={initialMonochrome} initialAccentColor={initialAccentColor}>
           <Toaster position="top-center" richColors />
           {children}
         </ThemeProvider>

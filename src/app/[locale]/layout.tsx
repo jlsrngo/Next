@@ -50,7 +50,17 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const isMonochrome = accentColor === '#000000' || accentColor === 'monochrome'
 
   return (
-    <Providers locale={locale} messages={messages}>
+    <Providers
+      locale={locale}
+      messages={messages}
+      initialMonochrome={isMonochrome}
+      initialAccentColor={accentColor}
+    >
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var s=localStorage.getItem('portfolio_theme_style');var c=localStorage.getItem('accent_color');var m=${isMonochrome};if(s==='monochrome'||c==='#000000'||c==='monochrome'||(!s&&!c&&m)){document.documentElement.classList.add('theme-monochrome');document.documentElement.setAttribute('data-theme-style','monochrome')}else if(s==='default'||(c&&c!=='#000000'&&c!=='monochrome')){document.documentElement.classList.remove('theme-monochrome');document.documentElement.removeAttribute('data-theme-style')}}catch(e){}})()`,
+        }}
+      />
       <style dangerouslySetInnerHTML={{
         __html: isMonochrome
           ? `:root { --accent: #09090b; } .dark { --accent: #ffffff; }`
