@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -15,7 +15,7 @@ type SectionId =
   | 'skills'
   | 'tools'
   | 'providers'
-  | 'telegram'
+  | 'gateway'
   | 'download';
 
 const navGroups = [
@@ -33,7 +33,7 @@ const navGroups = [
       { id: 'skills' as SectionId,    en: 'Skills',     id_: 'Skills' },
       { id: 'tools' as SectionId,     en: 'Tools',      id_: 'Tools' },
       { id: 'providers' as SectionId, en: 'Providers',  id_: 'Provider' },
-      { id: 'telegram' as SectionId,  en: 'Telegram',   id_: 'Telegram' },
+      { id: 'gateway' as SectionId,  en: 'App Gateway', id_: 'App Gateway' },
       { id: 'download' as SectionId,  en: 'Download',   id_: 'Unduh' },
     ],
   },
@@ -83,7 +83,7 @@ function Card({ title, badge, desc }: { title: string; badge?: string; desc: str
   );
 }
 
-// ─── SECTIONS ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ SECTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IntroSection({ isId }: { isId: boolean }) {
   return (
@@ -96,8 +96,8 @@ function IntroSection({ isId }: { isId: boolean }) {
       </P>
       <P>
         {isId
-          ? 'Agen mengotomasi dokumen Microsoft Office, mengelola pipeline PDF, menyamarkan data sensitif PII, dan berinteraksi via chat atau Telegram Bot — semuanya dari mesin lokal Anda.'
-          : 'The agent automates Microsoft Office documents, manages PDF pipelines, redacts PII sensitive data, and interacts via chat or Telegram Bot — all from your local machine.'}
+          ? 'Agen mengotomasi dokumen Microsoft Office, mengelola pipeline PDF, menyamarkan data sensitif PII, dan berinteraksi via chat atau Telegram Bot â€” semuanya dari mesin lokal Anda.'
+          : 'The agent automates Microsoft Office documents, manages PDF pipelines, redacts PII sensitive data, and interacts via chat or Telegram Bot â€” all from your local machine.'}
       </P>
       <H2>{isId ? 'Antarmuka yang tersedia' : 'Available interfaces'}</H2>
       <ul className="space-y-2 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans mb-6">
@@ -108,7 +108,7 @@ function IntroSection({ isId }: { isId: boolean }) {
         ].map((i) => (
           <li key={i.label} className="flex items-start gap-2">
             <ChevronRight className="w-4 h-4 mt-0.5 shrink-0 text-zinc-400" />
-            <span><strong className="text-black dark:text-white">{i.label}</strong> — {i.desc}</span>
+            <span><strong className="text-black dark:text-white">{i.label}</strong> â€” {i.desc}</span>
           </li>
         ))}
       </ul>
@@ -143,7 +143,7 @@ function AgentsSection({ isId }: { isId: boolean }) {
       <Card title="DocumentAgent" badge="com-worker" desc={isId ? 'Otomasi Microsoft Office (Excel, Word, PowerPoint) via COM headless.' : 'Automates Microsoft Office (Excel, Word, PowerPoint) via headless COM.'} />
       <Card title="PdfAgent"      badge="pdf-lib"    desc={isId ? 'Pipeline PDF: merge, watermark, ekstraksi halaman, stempel e-Materai.' : 'PDF pipelines: merge, watermark, page extraction, e-Materai stamp.'} />
       <Card title="RedactAgent"   badge="pii-masker" desc={isId ? 'Deteksi & samarkan PII (NIK, NPWP, rekening, email) otomatis.' : 'Auto-detects and masks PII (NIK, NPWP, bank accounts, emails).'} />
-      <Card title="TelegramAgent" badge="bot-api"    desc={isId ? 'Terima perintah & kirim hasil dokumen via Telegram chat.' : 'Receives commands and delivers document results via Telegram chat.'} />
+      <Card title="TelegramAgent" badge="bot-api"    desc={isId ? 'Terima perintah & kirim hasil dokumen via messaging app gateway.' : 'Receives commands and delivers document results via messaging app gateway.'} />
       <H2>{isId ? 'Konfigurasi' : 'Configuration'}</H2>
       <CodeBlock code={`// agent.config.ts
 export const agents = {
@@ -161,8 +161,8 @@ function ModelsSection({ isId }: { isId: boolean }) {
     <>
       <H1>{isId ? 'Model' : 'Models'}</H1>
       <P>{isId
-        ? 'Arunaki mendukung berbagai penyedia LLM. Model dapat dikonfigurasi per agen atau per tugas hanya via .env — tanpa mengubah kode.'
-        : 'Arunaki supports multiple LLM providers. Models can be configured per agent or task via .env only — no code changes needed.'}</P>
+        ? 'Arunaki mendukung berbagai penyedia LLM. Model dapat dikonfigurasi per agen atau per tugas hanya via .env â€” tanpa mengubah kode.'
+        : 'Arunaki supports multiple LLM providers. Models can be configured per agent or task via .env only â€” no code changes needed.'}</P>
       <H2>{isId ? 'Provider yang didukung' : 'Supported providers'}</H2>
       {[
         { name: 'OpenAI',           models: 'gpt-4o, gpt-4o-mini, gpt-4-turbo',     key: 'OPENAI_API_KEY' },
@@ -212,7 +212,7 @@ function ToolsSection({ isId }: { isId: boolean }) {
     { group: 'PowerPoint', tools: ['desktop_ppt_edit', 'desktop_ppt_new', 'desktop_ppt_to_pdf'] },
     { group: 'PDF',        tools: ['pdf_merge', 'pdf_split', 'pdf_watermark', 'pdf_stamp_image', 'pdf_extract_text'] },
     { group: 'Document',   tools: ['doc_redact_pii', 'doc_compare_versions', 'doc_summarize', 'doc_translate'] },
-    { group: 'Telegram',   tools: ['send_telegram', 'telegram_get_file', 'telegram_send_photo'] },
+    { group: 'gateway',   tools: ['send_telegram', 'telegram_get_file', 'telegram_send_photo'] },
   ];
   return (
     <>
@@ -243,8 +243,8 @@ function ProvidersSection({ isId }: { isId: boolean }) {
     <>
       <H1>Providers</H1>
       <P>{isId
-        ? 'Arunaki menggunakan arsitektur LLM Router. Ganti provider AI hanya dengan satu baris di .env — tanpa mengubah kode apapun.'
-        : 'Arunaki uses an LLM Router architecture. Switch AI providers with just one line in .env — no code changes required.'}</P>
+        ? 'Arunaki menggunakan arsitektur LLM Router. Ganti provider AI hanya dengan satu baris di .env â€” tanpa mengubah kode apapun.'
+        : 'Arunaki uses an LLM Router architecture. Switch AI providers with just one line in .env â€” no code changes required.'}</P>
       <H2>OpenAI</H2>
       <CodeBlock code={`PROVIDER=openai
 OPENAI_API_KEY=sk-proj-...
@@ -271,13 +271,13 @@ OLLAMA_MODEL=llama3.1
   );
 }
 
-function TelegramSection({ isId }: { isId: boolean }) {
+function GatewaySection({ isId }: { isId: boolean }) {
   return (
     <>
-      <H1>Telegram</H1>
+      <H1>App Gateway</H1>
       <P>{isId
-        ? 'Arunaki dapat dikendalikan sepenuhnya via Telegram Bot. Kirim perintah teks, unggah file, terima dokumen hasil — tanpa membuka antarmuka desktop.'
-        : 'Arunaki can be fully controlled via Telegram Bot. Send text commands, upload files, receive processed results — without opening the desktop UI.'}</P>
+        ? 'Arunaki dapat dikendalikan sepenuhnya via messaging app gateways (e.g. Telegram). Kirim perintah teks, unggah file, terima dokumen hasil â€” tanpa membuka antarmuka desktop.'
+        : 'Arunaki can be fully controlled via messaging app gateways (e.g. Telegram). Send text commands, upload files, receive processed results â€” without opening the desktop UI.'}</P>
       <H2>{isId ? 'Setup' : 'Setup'}</H2>
       <P>{isId ? 'Buat bot via @BotFather di Telegram, salin token ke .env.' : 'Create a bot via @BotFather on Telegram, copy the token to .env.'}</P>
       <CodeBlock code={`# .env
@@ -354,7 +354,7 @@ npm run dev`} />
   );
 }
 
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function ArunakiDocsPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
@@ -377,7 +377,7 @@ export default function ArunakiDocsPage() {
       case 'skills':    return <SkillsSection isId={isId} />;
       case 'tools':     return <ToolsSection isId={isId} />;
       case 'providers': return <ProvidersSection isId={isId} />;
-      case 'telegram':  return <TelegramSection isId={isId} />;
+      case 'gateway':  return <GatewaySection isId={isId} />;
       case 'download':  return <DownloadSection isId={isId} />;
     }
   };
@@ -454,3 +454,6 @@ export default function ArunakiDocsPage() {
     </div>
   );
 }
+
+
+
