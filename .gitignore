@@ -3,6 +3,9 @@ node_modules
 .env.*
 .next
 .vercel
+tsconfig.tsbuildinfo
+.kiro
+check.mjs
 
 # Ignore all .md except README.md
 *.md

@@ -40,7 +40,7 @@ export default function SkillIcon({ name, iconSlug, onDelete, showDelete }: Skil
                     </button>
                 )}
             </div>
-            <span className="text-[11px] font-bold uppercase tracking-widest text-black dark:text-white transition-all duration-300 text-center -translate-y-2 group-hover:translate-y-0 relative z-0 opacity-0 group-hover:opacity-100 shadow-none">
+            <span className="text-[11px] font-semibold tracking-normal text-black dark:text-zinc-300 transition-all duration-300 text-center -translate-y-2 group-hover:translate-y-0 relative z-0 opacity-0 group-hover:opacity-100 shadow-none">
                 {name}
             </span>
         </div>

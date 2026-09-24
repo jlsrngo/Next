@@ -48,17 +48,17 @@ export default function AchievementsClient({ achievements, profile }: Achievemen
                     return (
                         <div
                             key={item.id}
-                            className="animate-scale-in group relative glass-card border-slate-200 dark:border-white/10 overflow-hidden hover:border-accent transition-all duration-500 flex flex-col cursor-pointer"
+                            className="animate-scale-in group relative glass-card border border-slate-200 dark:border-zinc-800 overflow-hidden hover:border-zinc-700 dark:hover:border-zinc-700 transition-all duration-300 flex flex-col cursor-pointer"
                             style={{ animationDelay: `${i * 50}ms` }}
                             onClick={() => setSelected(item)}
                         >
                             <div className="absolute top-4 right-4 z-10">
-                                <span className="px-3 py-1 rounded-full bg-accent backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest inline-block">
+                                <span className="px-3 py-1 rounded-full bg-zinc-900/90 dark:bg-zinc-800/90 border border-zinc-700/50 text-zinc-300 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-widest inline-block shadow-sm">
                                     {item.category}
                                 </span>
                             </div>
 
-                            <div className="relative h-36 md:h-44 overflow-hidden bg-white/30 dark:bg-black/20 border-b border-slate-200 dark:border-white/10 group-hover:bg-white/40 dark:group-hover:bg-black/30 transition-colors">
+                            <div className="relative h-36 md:h-44 overflow-hidden bg-slate-100 dark:bg-zinc-950/60 border-b border-slate-200 dark:border-zinc-800 group-hover:bg-slate-200/50 dark:group-hover:bg-zinc-900/60 transition-colors">
                                 {hasImage && !isPdf ? (
                                     <img
                                         src={item.image_url}
@@ -69,26 +69,26 @@ export default function AchievementsClient({ achievements, profile }: Achievemen
                                     />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                                        <Award className="w-12 h-12 text-accent" />
-                                        {isPdf && <span className="text-[10px] font-bold uppercase tracking-widest">{t('achievements.pdf_certificate')}</span>}
+                                        <Award className="w-12 h-12 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
+                                        {isPdf && <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{t('achievements.pdf_certificate')}</span>}
                                     </div>
                                 )}
                             </div>
 
                             <div className="p-4 md:p-5 space-y-3">
                                 <div className="space-y-1">
-                                    <h3 className="font-bold text-base md:text-lg group-hover:text-accent transition-colors line-clamp-1">{item.title}</h3>
+                                    <h3 className="font-bold text-base md:text-lg text-black dark:text-white group-hover:text-zinc-200 transition-colors line-clamp-1">{item.title}</h3>
                                     {item.issuer && (
-                                        <p className="text-accent font-bold text-xs flex items-center gap-1.5">
-                                            <ShieldCheck className="w-3.5 h-3.5" /> <span>{item.issuer}</span>
+                                        <p className="text-zinc-500 dark:text-zinc-400 font-bold text-xs flex items-center gap-1.5">
+                                            <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" /> <span>{item.issuer}</span>
                                         </p>
                                     )}
                                 </div>
 
-                                <p className="text-black dark:text-white text-xs font-bold leading-relaxed line-clamp-2">{item.description}</p>
+                                <p className="text-zinc-700 dark:text-zinc-300 text-xs font-semibold leading-relaxed line-clamp-2">{item.description}</p>
 
-                                <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-white/10">
-                                    <div className="flex items-center gap-2 text-[10px] font-bold text-black dark:text-white">
+                                <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-zinc-800">
+                                    <div className="flex items-center gap-2 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">
                                         <Calendar className="w-3.5 h-3.5" />
                                         {item.date ? new Date(item.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'N/A'}
                                     </div>

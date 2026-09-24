@@ -123,13 +123,24 @@ export default function DashboardShell({
       document.cookie = `locale=${saved};path=/;max-age=31536000`
     }
 
-    const savedColor = localStorage.getItem('accent_color')
-    if (savedColor) {
-      document.documentElement.style.setProperty('--accent', savedColor)
-    } else if (profileAccent) {
-      document.documentElement.style.setProperty('--accent', profileAccent)
-      localStorage.setItem('accent_color', profileAccent)
+    const applyTheme = () => {
+      const savedColor = localStorage.getItem('accent_color')
+      const savedStyle = localStorage.getItem('portfolio_theme_style')
+      const isMono = savedStyle === 'monochrome' || savedColor === '#000000' || savedColor === 'monochrome' || profileAccent === '#000000' || profileAccent === 'monochrome'
+
+      if (isMono) {
+        document.documentElement.classList.add('theme-monochrome')
+        document.documentElement.setAttribute('data-theme-style', 'monochrome')
+        document.documentElement.style.setProperty('--accent', isDark ? '#ffffff' : '#09090b')
+      } else {
+        document.documentElement.classList.remove('theme-monochrome')
+        document.documentElement.removeAttribute('data-theme-style')
+        const color = savedColor || profileAccent || '#00c896'
+        document.documentElement.style.setProperty('--accent', color)
+      }
     }
+
+    applyTheme()
 
     const onLocaleChanged = () => {
       const saved = localStorage.getItem('portfolio_locale') as 'en' | 'id' | null
@@ -138,9 +149,18 @@ export default function DashboardShell({
         document.cookie = `locale=${saved};path=/;max-age=31536000`
       }
     }
+
+    const onThemeStyleChanged = () => {
+      applyTheme()
+    }
+
     window.addEventListener('locale-changed', onLocaleChanged)
-    return () => window.removeEventListener('locale-changed', onLocaleChanged)
-  }, [profileAccent])
+    window.addEventListener('theme-style-changed', onThemeStyleChanged)
+    return () => {
+      window.removeEventListener('locale-changed', onLocaleChanged)
+      window.removeEventListener('theme-style-changed', onThemeStyleChanged)
+    }
+  }, [profileAccent, isDark])
 
   // Inactivity auto-logout (5 min) + browser close logout via sendBeacon
   useEffect(() => {

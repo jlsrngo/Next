@@ -47,13 +47,19 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   const accentColor = profile?.accent_color || '#00c896'
+  const isMonochrome = accentColor === '#000000' || accentColor === 'monochrome'
 
   return (
     <Providers locale={locale} messages={messages}>
       <style dangerouslySetInnerHTML={{
-        __html: `:root { --accent: ${accentColor}; }`
+        __html: isMonochrome
+          ? `:root { --accent: #09090b; } .dark { --accent: #ffffff; }`
+          : `:root { --accent: ${accentColor}; }`
       }} />
-      <div className="h-screen w-full overflow-hidden bg-light-bg dark:bg-dark-bg transition-colors duration-300">
+      <div
+        data-theme-style={isMonochrome ? 'monochrome' : undefined}
+        className={`h-screen w-full overflow-hidden bg-light-bg dark:bg-dark-bg transition-colors duration-300 ${isMonochrome ? 'theme-monochrome' : ''}`}
+      >
         <div className="max-w-[1200px] mx-auto flex w-full h-full">
           <SidebarWrapper profile={profile} />
           <main className="flex-1 w-full max-w-full px-6 py-12 lg:px-16 h-screen overflow-y-auto">

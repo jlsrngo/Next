@@ -300,3 +300,278 @@
   background-color: var(--accent);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ==========================================================================
+   Monochrome Flat Theme (Hitam Putih Plat dengan Border Tipis)
+   ========================================================================== */
+
+:root.theme-monochrome,
+:root[data-theme-style="monochrome"] {
+  --accent: #09090b;
+  --accent-light: #27272a;
+  --accent-dark: #000000;
+  --accent-darker: #000000;
+  --accent-subtle: rgba(9, 9, 11, 0.05);
+  --accent-border: #e4e4e7;
+}
+
+:root.dark.theme-monochrome,
+:root.dark[data-theme-style="monochrome"] {
+  --accent: #e4e4e7;
+  --accent-light: #f4f4f5;
+  --accent-dark: #a1a1aa;
+  --accent-darker: #71717a;
+  --accent-subtle: rgba(255, 255, 255, 0.04);
+  --accent-border: #27272a;
+}
+
+/* ==========================================================================
+   GLOBAL SUBTLE GRAY BORDERS & LINES IN DARK MONOCHROME
+   Ensure no lines or borders are harsh white #ffffff. All lines are soft,
+   gentle, elegant dark-gray tones (Zinc-800 #27272a / #222225).
+   ========================================================================== */
+
+.dark.theme-monochrome [class*="border"],
+.dark .theme-monochrome [class*="border"],
+.dark[data-theme-style="monochrome"] [class*="border"],
+.dark [data-theme-style="monochrome"] [class*="border"],
+.dark.theme-monochrome hr,
+.dark .theme-monochrome hr,
+.dark[data-theme-style="monochrome"] hr,
+.dark [data-theme-style="monochrome"] hr,
+.dark.theme-monochrome aside,
+.dark .theme-monochrome aside,
+.dark[data-theme-style="monochrome"] aside,
+.dark [data-theme-style="monochrome"] aside,
+.dark .dark\:border-white\/10,
+.dark .dark\:border-white\/5,
+.dark .dark\:border-white\/20,
+.dark [class*="dark:border-white"] {
+  border-color: #27272a !important;
+}
+
+.dark.theme-monochrome hr,
+.dark .theme-monochrome hr,
+.dark[data-theme-style="monochrome"] hr,
+.dark [data-theme-style="monochrome"] hr {
+  border-color: #222225 !important;
+  opacity: 0.8 !important;
+}
+
+/* Flat cards with thin subtle gray borders */
+.theme-monochrome .glass-card,
+[data-theme-style="monochrome"] .glass-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.dark.theme-monochrome .glass-card,
+.dark[data-theme-style="monochrome"] .glass-card {
+  background-color: #0c0c0e !important;
+  border: 1px solid #27272a !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Thin border flat containers and modals */
+.theme-monochrome .glass-modal,
+[data-theme-style="monochrome"] .glass-modal {
+  background-color: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.dark.theme-monochrome .glass-modal,
+.dark[data-theme-style="monochrome"] .glass-modal {
+  background-color: #09090b !important;
+  border: 1px solid #27272a !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* Flat Buttons in Monochrome */
+.theme-monochrome .btn-primary,
+[data-theme-style="monochrome"] .btn-primary {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  border: 1px solid #09090b !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.dark.theme-monochrome .btn-primary,
+.dark[data-theme-style="monochrome"] .btn-primary {
+  background-color: #27272a !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #3f3f46 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+/* Active navigation & elements with bg-accent (subtle gray, NOT stark white) */
+.theme-monochrome:not(.dark) .bg-accent,
+[data-theme-style="monochrome"]:not(.dark) .bg-accent {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  border: 1px solid #09090b !important;
+}
+
+.theme-monochrome:not(.dark) .bg-accent *,
+[data-theme-style="monochrome"]:not(.dark) .bg-accent * {
+  color: #ffffff !important;
+}
+
+.dark.theme-monochrome .bg-accent,
+.dark[data-theme-style="monochrome"] .bg-accent {
+  background-color: #27272a !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #3f3f46 !important;
+}
+
+.dark.theme-monochrome .bg-accent *,
+.dark[data-theme-style="monochrome"] .bg-accent * {
+  color: #f4f4f5 !important;
+}
+
+/* Subtle hover on cards and list items */
+.dark.theme-monochrome [class*="hover:border-accent"]:hover,
+.dark[data-theme-style="monochrome"] [class*="hover:border-accent"]:hover,
+.dark.theme-monochrome .group:hover,
+.dark[data-theme-style="monochrome"] .group:hover {
+  border-color: #3f3f46 !important;
+}
+
+/* Flat monochrome skill icons: maintain tilted background card effect with flat monochrome styling & subtle gray border */
+.theme-monochrome .group > div.relative > div:first-child,
+[data-theme-style="monochrome"] .group > div.relative > div:first-child {
+  display: block !important;
+  background-image: none !important;
+  background-color: #e4e4e7 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+.dark.theme-monochrome .group > div.relative > div:first-child,
+.dark[data-theme-style="monochrome"] .group > div.relative > div:first-child {
+  display: block !important;
+  background-image: none !important;
+  background-color: #18181b !important;
+  border: 1px solid #27272a !important;
+}
+
+.theme-monochrome .group > div.relative > div:nth-child(2),
+[data-theme-style="monochrome"] .group > div.relative > div:nth-child(2) {
+  background-color: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+}
+
+.dark.theme-monochrome .group > div.relative > div:nth-child(2),
+.dark[data-theme-style="monochrome"] .group > div.relative > div:nth-child(2) {
+  background-color: #0c0c0e !important;
+  border: 1px solid #27272a !important;
+}
+
+/* Keep subtle border on hover without harsh white outline */
+.theme-monochrome .group:hover > div.relative > div:first-child,
+[data-theme-style="monochrome"] .group:hover > div.relative > div:first-child {
+  border-color: #d4d4d8 !important;
+}
+
+.dark.theme-monochrome .group:hover > div.relative > div:first-child,
+.dark[data-theme-style="monochrome"] .group:hover > div.relative > div:first-child {
+  border-color: #3f3f46 !important;
+}
+
+.theme-monochrome .group:hover > div.relative > div:nth-child(2),
+[data-theme-style="monochrome"] .group:hover > div.relative > div:nth-child(2) {
+  border-color: #e4e4e7 !important;
+}
+
+.dark.theme-monochrome .group:hover > div.relative > div:nth-child(2),
+.dark[data-theme-style="monochrome"] .group:hover > div.relative > div:nth-child(2) {
+  border-color: #3f3f46 !important;
+}
+
+/* Flat badges & tags */
+.theme-monochrome .bg-accent\/10,
+[data-theme-style="monochrome"] .bg-accent\/10 {
+  background-color: #f4f4f5 !important;
+  color: #09090b !important;
+  border: 1px solid #e4e4e7 !important;
+}
+
+.dark.theme-monochrome .bg-accent\/10,
+.dark[data-theme-style="monochrome"] .bg-accent\/10 {
+  background-color: #18181b !important;
+  color: #d4d4d8 !important;
+  border: 1px solid #27272a !important;
+}
+
+/* Sidebar in monochrome flat */
+.theme-monochrome aside,
+[data-theme-style="monochrome"] aside {
+  background-color: #fafafa !important;
+  border-color: #e4e4e7 !important;
+}
+
+.dark.theme-monochrome aside,
+.dark[data-theme-style="monochrome"] aside {
+  background-color: #09090b !important;
+  border-color: #222225 !important;
+}
+
+/* Flat inputs */
+.theme-monochrome .input-field,
+.theme-monochrome .textarea-field,
+.theme-monochrome .select-field,
+[data-theme-style="monochrome"] .input-field,
+[data-theme-style="monochrome"] .textarea-field,
+[data-theme-style="monochrome"] .select-field {
+  border-radius: 8px !important;
+  border: 1px solid #e4e4e7 !important;
+  background-color: #fafafa !important;
+}
+
+.dark.theme-monochrome .input-field,
+.dark.theme-monochrome .textarea-field,
+.dark.theme-monochrome .select-field,
+.dark[data-theme-style="monochrome"] .input-field,
+.dark[data-theme-style="monochrome"] .textarea-field,
+.dark[data-theme-style="monochrome"] .select-field {
+  border-radius: 8px !important;
+  border: 1px solid #27272a !important;
+  background-color: #121214 !important;
+}
+
+/* ==========================================================================
+   STRICT MONOCHROME FOR ALL ICONS & BRAND LOGOS
+   Ensures no colorful icons (React, TypeScript, Tailwind, FastAPI, etc.)
+   appear when monochrome theme is enabled.
+   ========================================================================== */
+.theme-monochrome [title] svg,
+.theme-monochrome svg[style*="color"],
+[data-theme-style="monochrome"] [title] svg,
+[data-theme-style="monochrome"] svg[style*="color"],
+.theme-monochrome .tech-badge svg,
+[data-theme-style="monochrome"] .tech-badge svg {
+  color: #18181b !important;
+  fill: currentColor !important;
+  filter: grayscale(100%) !important;
+}
+
+.dark.theme-monochrome [title] svg,
+.dark.theme-monochrome svg[style*="color"],
+.dark [data-theme-style="monochrome"] [title] svg,
+.dark [data-theme-style="monochrome"] svg[style*="color"],
+.dark .theme-monochrome [title] svg,
+.dark .theme-monochrome svg[style*="color"] {
+  color: #e4e4e7 !important;
+  fill: currentColor !important;
+  filter: grayscale(100%) brightness(1.2) !important;
+}
+
+

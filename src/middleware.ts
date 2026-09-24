@@ -8,6 +8,12 @@ const intlMiddleware = createMiddleware(routing)
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
+  const host = req.headers.get('host') || ''
+
+  // Subdomain support for arunaki
+  if (host.startsWith('arunaki.') && (pathname === '/' || pathname === '')) {
+    return NextResponse.rewrite(new URL('/id/arunaki', req.url))
+  }
 
   if (/^\/(id|en)\/dashboard/.test(pathname)) {
     return NextResponse.redirect(new URL('/dashboard', req.url))

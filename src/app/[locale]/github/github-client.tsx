@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { FolderOpen, Trophy, Star, GitCommit, GitPullRequest, AlertCircle, Users, Github } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useTheme } from '@/context/ThemeContext'
 
 interface ContributionDay {
   date: string
@@ -23,11 +24,19 @@ interface GitHubData {
   username: string
 }
 
-const LEVEL_COLORS = [
-  'bg-slate-100 dark:bg-white/5',
-  'bg-[var(--accent)] dark:bg-[var(--accent)]/60',
-  'bg-[var(--accent)] dark:bg-[var(--accent-dark)]/80',
-  'bg-[var(--accent)] dark:bg-[var(--accent)]',
+const MONO_LEVEL_COLORS = [
+  'bg-slate-100 dark:bg-[#161b22] border border-slate-200/60 dark:border-white/[0.05]',
+  'bg-slate-300 dark:bg-white/25',
+  'bg-slate-400 dark:bg-white/50',
+  'bg-slate-600 dark:bg-white/75',
+  'bg-slate-900 dark:bg-white',
+]
+
+const ACCENT_LEVEL_COLORS = [
+  'bg-slate-100 dark:bg-[#161b22] border border-slate-200/60 dark:border-white/[0.05]',
+  'bg-[var(--accent)]/25 dark:bg-[var(--accent)]/30',
+  'bg-[var(--accent)]/50 dark:bg-[var(--accent)]/55',
+  'bg-[var(--accent)]/75 dark:bg-[var(--accent)]/80',
   'bg-[var(--accent)] dark:bg-[var(--accent)]',
 ]
 
@@ -73,17 +82,21 @@ export default function GithubClient({ profile }: { profile: any }) {
     return positions
   }, [github])
 
+  const { themeStyle } = useTheme()
+  const isMono = themeStyle === 'monochrome'
+  const levelColors = isMono ? MONO_LEVEL_COLORS : ACCENT_LEVEL_COLORS
+
   const statCards = [
-    { label: t('dashboard.total_projects'), value: stats?.total_projects || 0, icon: FolderOpen, iconColor: '#3b82f6', bg: 'bg-blue-500/10' },
-    { label: t('dashboard.featured_projects'), value: stats?.featured_projects || 0, icon: Star, iconColor: '#f59e0b', bg: 'bg-amber-500/10' },
-    { label: t('dashboard.achievements'), value: stats?.total_achievements || 0, icon: Trophy, iconColor: 'var(--accent)', bg: 'bg-accent/10' },
+    { label: t('dashboard.total_projects'), value: stats?.total_projects || 0, icon: FolderOpen, iconColor: isMono ? 'var(--accent)' : '#3b82f6', bg: isMono ? 'bg-black/5 dark:bg-white/5' : 'bg-blue-500/10' },
+    { label: t('dashboard.featured_projects'), value: stats?.featured_projects || 0, icon: Star, iconColor: isMono ? 'var(--accent)' : '#f59e0b', bg: isMono ? 'bg-black/5 dark:bg-white/5' : 'bg-amber-500/10' },
+    { label: t('dashboard.achievements'), value: stats?.total_achievements || 0, icon: Trophy, iconColor: 'var(--accent)', bg: isMono ? 'bg-black/5 dark:bg-white/5' : 'bg-accent/10' },
   ]
 
   const ghStatCards = github ? [
     { label: t('dashboard.contributions'), value: github.total_contributions, icon: GitCommit, iconColor: 'var(--accent)' },
-    { label: t('dashboard.repositories'), value: github.total_repos, icon: FolderOpen, iconColor: '#8b5cf6' },
-    { label: t('dashboard.pull_requests'), value: github.total_prs, icon: GitPullRequest, iconColor: '#3b82f6' },
-    { label: t('dashboard.followers'), value: github.followers, icon: Users, iconColor: '#ec4899' },
+    { label: t('dashboard.repositories'), value: github.total_repos, icon: FolderOpen, iconColor: isMono ? 'var(--accent)' : '#8b5cf6' },
+    { label: t('dashboard.pull_requests'), value: github.total_prs, icon: GitPullRequest, iconColor: isMono ? 'var(--accent)' : '#3b82f6' },
+    { label: t('dashboard.followers'), value: github.followers, icon: Users, iconColor: isMono ? 'var(--accent)' : '#ec4899' },
   ] : []
 
   const handleCellHover = (e: React.MouseEvent, day: ContributionDay) => {
@@ -210,7 +223,7 @@ export default function GithubClient({ profile }: { profile: any }) {
                       {week.map((day, di) => (
                         <div
                           key={di}
-                          className={`w-[12px] h-[12px] rounded-[2px] ${LEVEL_COLORS[day.level]} transition-all duration-150 hover:ring-1 hover:ring-black/30 dark:hover:ring-white/30 cursor-pointer`}
+                          className={`w-[12px] h-[12px] rounded-[2px] ${levelColors[Math.min(Math.max(day.level ?? 0, 0), 4)] || levelColors[0]} transition-all duration-150 hover:ring-1 hover:ring-black/40 dark:hover:ring-white/50 cursor-pointer`}
                           onMouseEnter={(e) => handleCellHover(e, day)}
                           onMouseLeave={() => setTooltip(null)}
                         />
@@ -221,11 +234,11 @@ export default function GithubClient({ profile }: { profile: any }) {
 
                 {/* Legend */}
                 <div className="flex items-center justify-end gap-1.5 mt-3">
-                  <span className="text-[10px] text-black dark:text-white mr-1 font-bold">{t('dashboard.less')}</span>
-                  {LEVEL_COLORS.map((color, i) => (
+                  <span className="text-[10px] text-zinc-500 mr-1 font-semibold">{t('dashboard.less')}</span>
+                  {levelColors.map((color, i) => (
                     <div key={i} className={`w-[12px] h-[12px] rounded-[2px] ${color}`} />
                   ))}
-                  <span className="text-[10px] text-black dark:text-white ml-1 font-bold">{t('dashboard.more')}</span>
+                  <span className="text-[10px] text-zinc-500 ml-1 font-semibold">{t('dashboard.more')}</span>
                 </div>
               </div>
             </div>

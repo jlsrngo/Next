@@ -85,11 +85,22 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
     }, [])
 
     useEffect(() => {
-        if (profile?.accent_color) {
-            document.documentElement.style.setProperty('--accent', profile.accent_color)
-            localStorage.setItem('accent_color', profile.accent_color)
+        const savedStyle = localStorage.getItem('portfolio_theme_style')
+        const color = profile?.accent_color || localStorage.getItem('accent_color')
+        const isMono = savedStyle === 'monochrome' || color === '#000000' || color === 'monochrome'
+
+        if (isMono) {
+            document.documentElement.classList.add('theme-monochrome')
+            document.documentElement.setAttribute('data-theme-style', 'monochrome')
+            document.documentElement.style.setProperty('--accent', isDark ? '#ffffff' : '#09090b')
+            localStorage.setItem('portfolio_theme_style', 'monochrome')
+        } else if (color) {
+            document.documentElement.classList.remove('theme-monochrome')
+            document.documentElement.removeAttribute('data-theme-style')
+            document.documentElement.style.setProperty('--accent', color)
+            localStorage.setItem('accent_color', color)
         }
-    }, [profile?.accent_color])
+    }, [profile?.accent_color, isDark])
 
     useEffect(() => {
         if (mobileOpen) {
@@ -222,8 +233,8 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                         )}
                     </div>
                 </div>
-                <div className="text-center text-[10px] leading-relaxed text-black dark:text-white font-bold mt-4">
-                    <p suppressHydrationWarning>COPYRIGHT© {new Date().getFullYear()} {profile?.name?.toUpperCase()}</p>
+                <div className="text-center text-[10px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium mt-4">
+                    <p suppressHydrationWarning>Copyright © {new Date().getFullYear()} {profile?.name || 'Julio Siringoringo'}</p>
                     <p>{t('allRightsReserved')}</p>
                 </div>
             </div>

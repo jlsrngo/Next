@@ -59,7 +59,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-[2rem] shadow-2xl ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
+        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-[2rem] shadow-2xl border border-slate-200 dark:border-zinc-800 ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
       >
         <button
           onClick={onClose}
@@ -113,7 +113,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
               </div>
             )}
 
-            <div className="border-t border-slate-200 dark:border-white/10 pt-2 mb-2.5" />
+            <div className="border-t border-slate-200 dark:border-zinc-800 pt-2 mb-2.5" />
 
             <div className="space-y-2">
               {achievement.credential_id && (
@@ -189,7 +189,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
             ) : (
               <button
                 onClick={onClose}
-                className="w-full px-6 py-2.5 rounded-xl font-bold transition-all duration-300 border border-slate-300 dark:border-white/20 bg-gray-100 dark:bg-slate-800 border-slate-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-slate-700 text-black dark:text-white"
+                className="w-full px-6 py-2.5 rounded-xl font-bold transition-all duration-300 border border-slate-200 dark:border-zinc-800 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 text-black dark:text-white"
               >
                 {t('achievements.close_details_btn')}
               </button>
