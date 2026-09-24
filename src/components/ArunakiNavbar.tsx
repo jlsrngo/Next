@@ -67,24 +67,34 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
 
           {/* Language switcher */}
           <div className="flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 p-0.5 text-sm font-mono font-medium">
-            <button
-              onClick={() => handleLanguageSwitch('id')}
+            <Link
+              href={pathname}
+              locale="id"
+              onClick={() => {
+                localStorage.setItem('portfolio_locale', 'id');
+                document.cookie = 'NEXT_LOCALE=id;path=/;max-age=31536000';
+              }}
               className={`px-2.5 py-0.5 rounded transition-colors ${
                 isId
                   ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'
               }`}
               title="Bahasa Indonesia"
-            >ID</button>
-            <button
-              onClick={() => handleLanguageSwitch('en')}
+            >ID</Link>
+            <Link
+              href={pathname}
+              locale="en"
+              onClick={() => {
+                localStorage.setItem('portfolio_locale', 'en');
+                document.cookie = 'NEXT_LOCALE=en;path=/;max-age=31536000';
+              }}
               className={`px-2.5 py-0.5 rounded transition-colors ${
                 !isId
                   ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'
               }`}
               title="English"
-            >EN</button>
+            >EN</Link>
           </div>
         </nav>
       </div>

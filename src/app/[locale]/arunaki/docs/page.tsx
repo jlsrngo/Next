@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import ArunakiNavbar from '@/components/ArunakiNavbar';
 import ArunakiFooter from '@/components/ArunakiFooter';
 import { Link } from '@/i18n/navigation';
-import { Menu, X, Clock, Download, CheckCircle2, ShieldCheck, Zap, Bot } from 'lucide-react';
+import { Menu, X, Clock, Download, CheckCircle2, ShieldCheck, Zap, Bot, Layers, Server } from 'lucide-react';
 
 type SectionId =
   | 'intro'
@@ -92,7 +92,9 @@ function IntroSection({ isId }: { isId: boolean }) {
       <H1>{isId ? 'Dokumentasi Arunaki' : 'Arunaki Documentation'}</H1>
       <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-6">
         <p className="font-mono text-sm sm:text-base font-semibold text-black dark:text-white mb-1">
-          The Desktop Document Agent Workstation &amp; Automation Harness
+          {isId
+            ? 'Workstation & Harness Otomasi Agen Dokumen Desktop'
+            : 'The Desktop Document Agent Workstation & Automation Harness'}
         </p>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans italic">
           {isId
@@ -101,7 +103,7 @@ function IntroSection({ isId }: { isId: boolean }) {
         </p>
       </div>
 
-      <H2>{isId ? '1. Quick Start' : '1. Quick Start'}</H2>
+      <H2>{isId ? '1. Panduan Cepat (Quick Start)' : '1. Quick Start'}</H2>
       <div className="space-y-4 mb-6">
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
@@ -118,7 +120,7 @@ function IntroSection({ isId }: { isId: boolean }) {
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
             <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">2</span>
-            <span>{isId ? 'Pilih Folder Workspace Sandboxed' : 'Select Sandboxed Workspace Folder'}</span>
+            <span>{isId ? 'Pilih Folder Workspace Terisolasi (Sandbox)' : 'Select Sandboxed Workspace Folder'}</span>
           </div>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-2">
             {isId
@@ -155,9 +157,9 @@ function IntroSection({ isId }: { isId: boolean }) {
       <div className="space-y-3 mb-6">
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <div className="flex items-center gap-2 mb-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <ShieldCheck className="w-4 h-4 text-black dark:text-white" />
             <span className="font-semibold font-mono text-sm text-black dark:text-white">
-              The Workspace Sandbox
+              {isId ? 'The Workspace Sandbox (Isolasi Folder Kerja)' : 'The Workspace Sandbox'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
@@ -169,9 +171,9 @@ function IntroSection({ isId }: { isId: boolean }) {
 
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <div className="flex items-center gap-2 mb-1.5">
-            <Zap className="w-4 h-4 text-amber-500" />
+            <Zap className="w-4 h-4 text-black dark:text-white" />
             <span className="font-semibold font-mono text-sm text-black dark:text-white">
-              Native COM vs File Modification
+              {isId ? 'Otomasi Native COM vs Modifikasi Berkas' : 'Native COM vs File Modification'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
@@ -183,9 +185,9 @@ function IntroSection({ isId }: { isId: boolean }) {
 
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <div className="flex items-center gap-2 mb-1.5">
-            <CheckCircle2 className="w-4 h-4 text-blue-500" />
+            <CheckCircle2 className="w-4 h-4 text-black dark:text-white" />
             <span className="font-semibold font-mono text-sm text-black dark:text-white">
-              Checkpoints &amp; 1-Click Rollback
+              {isId ? 'Checkpoint & 1-Klik Rollback' : 'Checkpoints & 1-Click Rollback'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
@@ -201,8 +203,10 @@ function IntroSection({ isId }: { isId: boolean }) {
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
           <div className="flex items-center gap-2">
             <Bot className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-mono font-semibold text-sm text-black dark:text-white">Electron Workstation</span>
-            <span className="text-[10px] font-mono bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+            <span className="font-mono font-semibold text-sm text-black dark:text-white">
+              {isId ? 'Workstation Desktop (Electron)' : 'Electron Workstation'}
+            </span>
+            <span className="text-[10px] font-mono bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-1.5 py-0.5 rounded font-semibold">
               {isId ? 'Utama' : 'Primary'}
             </span>
           </div>
@@ -215,9 +219,11 @@ function IntroSection({ isId }: { isId: boolean }) {
 
         <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
           <div className="flex items-center gap-2">
-            <Bot className="w-4 h-4 text-sky-500" />
-            <span className="font-mono font-semibold text-sm text-black dark:text-white">App Gateway</span>
-            <span className="text-[10px] font-mono bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 px-1.5 py-0.5 rounded border border-sky-200 dark:border-sky-800">
+            <Bot className="w-4 h-4 text-black dark:text-white" />
+            <span className="font-mono font-semibold text-sm text-black dark:text-white">
+              {isId ? 'App Gateway (Akses Pesan)' : 'App Gateway'}
+            </span>
+            <span className="text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
               Telegram
             </span>
           </div>
@@ -231,22 +237,22 @@ function IntroSection({ isId }: { isId: boolean }) {
 
       <H2>{isId ? '4. Arsitektur Eksekusi Harness' : '4. Harness Architecture'}</H2>
       <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto mb-6">
-        <div>[User Instruction]</div>
+        <div>{isId ? '[Instruksi Pengguna / User Instruction]' : '[User Instruction]'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
-        <div>[Arunaki Desktop Shell (Electron)]</div>
+        <div>{isId ? '[Shell Desktop Arunaki (Electron)]' : '[Arunaki Desktop Shell (Electron)]'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
-        <div>[Agent Execution Harness]</div>
+        <div>{isId ? '[Harness Eksekusi Agen]' : '[Agent Execution Harness]'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
-        <div>[Tool Registry &amp; Normalizer]</div>
-        <div className="text-zinc-500">  ├── Native Office COM Bridge (.xlsx, .docx, .pptx)</div>
-        <div className="text-zinc-500">  ├── PDF &amp; Binary Processor</div>
-        <div className="text-zinc-500">  └── Ledger Engine</div>
+        <div>{isId ? '[Registry & Normalizer Tool]' : '[Tool Registry & Normalizer]'}</div>
+        <div className="text-zinc-500">  ├── {isId ? 'Bridge Native Office COM (.xlsx, .docx, .pptx)' : 'Native Office COM Bridge (.xlsx, .docx, .pptx)'}</div>
+        <div className="text-zinc-500">  ├── {isId ? 'Pemroses Dokumen PDF & Biner' : 'PDF & Binary Processor'}</div>
+        <div className="text-zinc-500">  └── {isId ? 'Mesin Pembukuan / Ledger Engine' : 'Ledger Engine'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
-        <div className="text-emerald-400">[(Sandboxed Workspace Folder)]</div>
+        <div className="text-zinc-200 dark:text-zinc-100 font-semibold">{isId ? '[(Folder Workspace Terisolasi / Sandboxed)]' : '[(Sandboxed Workspace Folder)]'}</div>
       </div>
 
       <H2>{isId ? 'Teknologi Inti' : 'Core Stack'}</H2>
@@ -314,13 +320,14 @@ export const agents = {
 function ModelsSection({ isId }: { isId: boolean }) {
   return (
     <>
-      <H1>{isId ? 'Model' : 'Models'}</H1>
+      <H1>{isId ? 'Model & Provider LLM' : 'Models & LLM Providers'}</H1>
       <P>
         {isId
-          ? 'Arunaki mendukung berbagai penyedia LLM. Model dapat dikonfigurasi per agen atau per tugas hanya via .env tanpa mengubah kode.'
-          : 'Arunaki supports multiple LLM providers. Models can be configured per agent or task via .env only without modifying code.'}
+          ? 'Arunaki mendukung berbagai penyedia LLM utama serta penyedia pihak ketiga (third-party) via endpoint standar kompatibel OpenAI. Model dapat dikonfigurasi per agen atau per tugas hanya via file .env tanpa perlu mengubah kode.'
+          : 'Arunaki supports major LLM providers as well as third-party providers via OpenAI-compatible endpoints. Models can be configured per agent or task via .env without modifying code.'}
       </P>
-      <H2>{isId ? 'Provider yang Didukung' : 'Supported Providers'}</H2>
+
+      <H2>{isId ? 'Provider Utama (Primary Providers)' : 'Primary Supported Providers'}</H2>
       {[
         { name: 'OpenAI',           models: 'gpt-4o, gpt-4o-mini, gpt-4-turbo',     key: 'OPENAI_API_KEY' },
         { name: 'Anthropic Claude', models: 'claude-3-5-sonnet, claude-3-haiku',    key: 'ANTHROPIC_API_KEY' },
@@ -335,12 +342,80 @@ function ModelsSection({ isId }: { isId: boolean }) {
           <p className="font-mono text-xs text-zinc-500">{p.models}</p>
         </div>
       ))}
-      <CodeBlock code={`# .env
-PROVIDER=openai           # openai | claude | gemini | ollama
+
+      <H2>{isId ? 'Provider Pihak Ketiga & Kompatibilitas OpenAI (Third-Party)' : 'Third-Party & OpenAI-Compatible Providers'}</H2>
+      {[
+        {
+          name: 'OpenRouter',
+          models: 'deepseek/deepseek-r1, anthropic/claude-3.5-sonnet, meta-llama/llama-3.3-70b',
+          key: 'OPENROUTER_API_KEY',
+          desc: isId ? 'Akses agregator ke 200+ model AI (DeepSeek, Llama, Claude, Qwen) dengan satu API key terpusat.' : 'Aggregator access to 200+ AI models (DeepSeek, Llama, Claude, Qwen) with a single unified API key.',
+        },
+        {
+          name: 'Groq',
+          models: 'llama-3.3-70b-versatile, deepseek-r1-distill-llama-70b, mixtral-8x7b',
+          key: 'GROQ_API_KEY',
+          desc: isId ? 'Inferensi ultra-cepat berbasis hardware LPU untuk proses otomasi dokumen berkecepatan tinggi.' : 'Ultra-fast LPU hardware inference for high-speed automated document processing.',
+        },
+        {
+          name: 'DeepSeek',
+          models: 'deepseek-chat (V3), deepseek-reasoner (R1)',
+          key: 'DEEPSEEK_API_KEY',
+          desc: isId ? 'Model penalaran matematika dan sintesis logika tingkat tinggi langsung dari API resmi DeepSeek.' : 'Advanced reasoning and logical synthesis models directly from official DeepSeek API.',
+        },
+        {
+          name: 'Custom / OpenAI-Compatible',
+          models: 'vLLM, LM Studio, Together AI, Mistral, LocalAI, dll.',
+          key: 'OPENAI_BASE_URL',
+          desc: isId ? 'Gunakan server self-hosted atau gateway proxy apapun yang kompatibel dengan format REST API OpenAI.' : 'Use any self-hosted server or proxy gateway compatible with the standard OpenAI REST API specification.',
+        },
+      ].map((p) => (
+        <div key={p.name} className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-3 space-y-1.5">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <span className="font-semibold text-black dark:text-white font-sans text-sm">{p.name}</span>
+            <span className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2 py-0.5 rounded">{p.key}</span>
+          </div>
+          <p className="font-mono text-xs text-zinc-500">{p.models}</p>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">{p.desc}</p>
+        </div>
+      ))}
+
+      <H2>{isId ? 'Contoh Konfigurasi .env Lengkap' : 'Complete .env Configuration Example'}</H2>
+      <CodeBlock code={`# -----------------------------------------------------------
+# Provider Selection:
+# openai | claude | gemini | ollama | openrouter | groq | deepseek | custom
+# -----------------------------------------------------------
+PROVIDER=openai
+
+# Primary Providers
 OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o
+
 ANTHROPIC_API_KEY=sk-ant-...
+CLAUDE_MODEL=claude-3-5-sonnet-20241022
+
 GEMINI_API_KEY=AIza...
-OLLAMA_BASE_URL=http://localhost:11434`} />
+GEMINI_MODEL=gemini-2.0-flash
+
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.1
+
+# Third-Party: OpenRouter
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=deepseek/deepseek-r1
+
+# Third-Party: Groq
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Third-Party: DeepSeek
+DEEPSEEK_API_KEY=sk-...
+DEEPSEEK_MODEL=deepseek-chat
+
+# Third-Party / Custom OpenAI-Compatible Endpoint
+OPENAI_BASE_URL=https://api.your-provider.com/v1
+CUSTOM_API_KEY=your-custom-key
+CUSTOM_MODEL=your-model-name`} />
     </>
   );
 }
@@ -438,24 +513,28 @@ function ToolsSection({ isId }: { isId: boolean }) {
 function ProvidersSection({ isId }: { isId: boolean }) {
   return (
     <>
-      <H1>Providers</H1>
+      <H1>{isId ? 'Konfigurasi Provider' : 'Providers Configuration'}</H1>
       <P>
         {isId
           ? 'Arunaki menggunakan arsitektur LLM Router. Ganti provider AI hanya dengan satu baris di file .env tanpa perlu menyentuh kode.'
           : 'Arunaki uses an LLM Router architecture. Switch AI providers with a single line in your .env file without changing any code.'}
       </P>
+      
       <H2>OpenAI</H2>
       <CodeBlock code={`PROVIDER=openai
 OPENAI_API_KEY=sk-proj-...
 OPENAI_MODEL=gpt-4o`} />
+
       <H2>Anthropic Claude</H2>
       <CodeBlock code={`PROVIDER=claude
 ANTHROPIC_API_KEY=sk-ant-...
 CLAUDE_MODEL=claude-3-5-sonnet-20241022`} />
+
       <H2>Google Gemini</H2>
       <CodeBlock code={`PROVIDER=gemini
 GEMINI_API_KEY=AIza...
 GEMINI_MODEL=gemini-2.0-flash`} />
+
       <H2>Ollama (Local)</H2>
       <P>
         {isId
@@ -468,6 +547,37 @@ OLLAMA_MODEL=llama3.1
 
 # Download model:
 # ollama pull llama3.1`} />
+
+      <H2>{isId ? 'Third-Party: OpenRouter (Multi-Model Agregator)' : 'Third-Party: OpenRouter (Multi-Model Aggregator)'}</H2>
+      <P>
+        {isId
+          ? 'Akses model seperti DeepSeek R1, Llama 3.3, dan Claude via gateway OpenRouter.'
+          : 'Access models like DeepSeek R1, Llama 3.3, and Claude via the OpenRouter gateway.'}
+      </P>
+      <CodeBlock code={`PROVIDER=openrouter
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=deepseek/deepseek-r1`} />
+
+      <H2>{isId ? 'Third-Party: Groq (Kecepatan Ekstrem LPU)' : 'Third-Party: Groq (Ultra-Fast LPU Inference)'}</H2>
+      <CodeBlock code={`PROVIDER=groq
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=llama-3.3-70b-versatile`} />
+
+      <H2>{isId ? 'Third-Party: DeepSeek Resmi' : 'Third-Party: Official DeepSeek'}</H2>
+      <CodeBlock code={`PROVIDER=deepseek
+DEEPSEEK_API_KEY=sk-...
+DEEPSEEK_MODEL=deepseek-chat`} />
+
+      <H2>{isId ? 'Custom OpenAI-Compatible Endpoint' : 'Custom OpenAI-Compatible Endpoint'}</H2>
+      <P>
+        {isId
+          ? 'Koneksikan ke server mandiri (vLLM, LM Studio, Together AI, Mistral API, atau gateway enterprise).'
+          : 'Connect to self-hosted servers (vLLM, LM Studio, Together AI, Mistral API, or enterprise proxy gateways).'}
+      </P>
+      <CodeBlock code={`PROVIDER=custom
+OPENAI_BASE_URL=https://api.your-provider.com/v1
+CUSTOM_API_KEY=your-api-key
+CUSTOM_MODEL=your-model-name`} />
     </>
   );
 }
@@ -530,7 +640,7 @@ function GatewaySection({ isId }: { isId: boolean }) {
             <div className="flex items-center justify-between">
               <span className="font-semibold text-black dark:text-white font-mono text-sm">{app.name}</span>
               {app.status === 'available' ? (
-                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold">
                   <CheckCircle2 className="w-3 h-3" />
                   {isId ? 'Tersedia' : 'Available'}
                 </span>
