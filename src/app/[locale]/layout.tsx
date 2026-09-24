@@ -1,7 +1,7 @@
 import { Providers } from '@/components/Providers'
 import { getMessages } from 'next-intl/server'
 import { Locale, routing } from '@/i18n/routing'
-import SidebarWrapper from '@/components/SidebarWrapper'
+import PortfolioShell from '@/components/PortfolioShell'
 import { prisma } from '@/lib/prisma'
 import { localize } from '@/lib/localize'
 
@@ -66,19 +66,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           ? `:root { --accent: #09090b; } .dark { --accent: #ffffff; }`
           : `:root { --accent: ${accentColor}; }`
       }} />
-      <div
-        data-theme-style={isMonochrome ? 'monochrome' : undefined}
-        className={`h-screen w-full overflow-hidden bg-light-bg dark:bg-dark-bg transition-colors duration-300 ${isMonochrome ? 'theme-monochrome' : ''}`}
-      >
-        <div className="max-w-[1200px] mx-auto flex w-full h-full">
-          <SidebarWrapper profile={profile} />
-          <main className="flex-1 w-full max-w-full px-6 py-12 lg:px-16 h-screen overflow-y-auto">
-            <div className="max-w-4xl mx-auto w-full">
-              {children}
-            </div>
-          </main>
-        </div>
-      </div>
+      <PortfolioShell profile={profile} isMonochrome={isMonochrome}>
+        {children}
+      </PortfolioShell>
     </Providers>
   )
 }
