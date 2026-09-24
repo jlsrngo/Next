@@ -13,6 +13,8 @@ import {
   Package,
   Workflow,
   Table,
+  MessageCircle,
+  Cpu,
 } from 'lucide-react';
 import type { Metadata } from 'next';
 
@@ -179,6 +181,47 @@ export default function ArunakiFeaturesPage({ params }: { params: { locale: stri
             </p>
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 overflow-x-auto">
               <code>doc_compare_versions(original: &quot;v1.docx&quot;, revised: &quot;v2.docx&quot;)</code>
+            </div>
+          </div>
+          {/* Feature 7: Telegram Integration */}
+          <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <MessageCircle className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+                <h2 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
+                  {isId ? 'Integrasi Telegram Bot' : 'Telegram Bot Integration'}
+                </h2>
+              </div>
+              <span className="text-xs font-mono text-zinc-400 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded">Telegram API</span>
+            </div>
+            <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+              {isId
+                ? 'Kirim instruksi dan terima dokumen hasil olahan langsung melalui Telegram Bot. Agen dapat memproses perintah berbasis teks, menerima file dari chat, dan mengirimkan laporan PDF atau ringkasan tabel ke pengguna — sepenuhnya sandboxed di mesin lokal.'
+                : 'Send instructions and receive processed documents directly via Telegram Bot. The agent handles text commands, accepts file uploads from chat, and delivers PDF reports or table summaries to users — fully sandboxed on the local machine.'}
+            </p>
+            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 overflow-x-auto">
+              <code>send_telegram(chat_id, file: &quot;laporan_q3.pdf&quot;, caption: &quot;Laporan selesai&quot;)</code>
+            </div>
+          </div>
+
+          {/* Feature 8: Multi-Provider AI */}
+          <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <Cpu className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+                <h2 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
+                  {isId ? 'Multi-Provider AI' : 'Multi-Provider AI'}
+                </h2>
+              </div>
+              <span className="text-xs font-mono text-zinc-400 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded">LLM Router</span>
+            </div>
+            <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+              {isId
+                ? 'Arunaki mendukung lebih dari satu penyedia model AI secara bersamaan. Pilih antara OpenAI GPT, Anthropic Claude, Google Gemini, atau model lokal Ollama — dapat dikonfigurasi per tugas melalui panel pengaturan tanpa perlu mengubah kode.'
+                : 'Arunaki supports multiple AI model providers simultaneously. Switch between OpenAI GPT, Anthropic Claude, Google Gemini, or local Ollama models — configurable per task via the settings panel without code changes.'}
+            </p>
+            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 overflow-x-auto">
+              <code>provider: &quot;openai&quot; | &quot;claude&quot; | &quot;gemini&quot; | &quot;ollama&quot;</code>
             </div>
           </div>
         </div>
