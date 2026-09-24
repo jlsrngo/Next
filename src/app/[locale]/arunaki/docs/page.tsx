@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import ArunakiNavbar from '@/components/ArunakiNavbar';
 import ArunakiFooter from '@/components/ArunakiFooter';
 import { Link } from '@/i18n/navigation';
-import { Menu, X, Clock, Download, CheckCircle2, ShieldCheck, Zap, Bot, Layers, Server } from 'lucide-react';
+import { Menu, X, Clock, Download, CheckCircle2, ShieldCheck, Zap, Bot } from 'lucide-react';
 
 type SectionId =
   | 'intro'
@@ -40,7 +40,7 @@ const navGroups = [
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="font-mono text-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 py-0.5 rounded">
+    <code className="font-mono text-sm sm:text-base bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 px-2.5 py-1 rounded">
       {children}
     </code>
   );
@@ -48,36 +48,36 @@ function Code({ children }: { children: React.ReactNode }) {
 
 function CodeBlock({ code }: { code: string }) {
   return (
-    <pre className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-xs sm:text-sm text-zinc-300 overflow-x-auto my-4 leading-relaxed">
+    <pre className="p-4 sm:p-5 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 overflow-x-auto my-4 sm:my-5 leading-relaxed">
       {code}
     </pre>
   );
 }
 
 function H1({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-black dark:text-white mb-3">{children}</h1>;
+  return <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-mono tracking-tight text-black dark:text-white mb-4 sm:mb-5">{children}</h1>;
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-lg sm:text-xl font-bold font-mono text-black dark:text-white mt-8 mb-3">{children}</h2>;
+  return <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold font-mono text-black dark:text-white mt-10 mb-4">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans mb-4">{children}</p>;
+  return <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-sans mb-5">{children}</p>;
 }
 
 function Card({ title, badge, desc }: { title: string; badge?: string; desc: string }) {
   return (
-    <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1.5 mb-3">
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-semibold text-black dark:text-white font-sans text-sm">{title}</span>
+    <div className="p-4 sm:p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2 mb-4">
+      <div className="flex items-center gap-2.5 flex-wrap">
+        <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{title}</span>
         {badge && (
-          <span className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2 py-0.5 rounded">
+          <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-0.5 rounded">
             {badge}
           </span>
         )}
       </div>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 font-sans">{desc}</p>
+      <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">{desc}</p>
     </div>
   );
 }
@@ -90,13 +90,13 @@ function IntroSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>{isId ? 'Dokumentasi Arunaki' : 'Arunaki Documentation'}</H1>
-      <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-6">
-        <p className="font-mono text-sm sm:text-base font-semibold text-black dark:text-white mb-1">
+      <div className="p-5 sm:p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-8 space-y-2">
+        <p className="font-mono text-lg sm:text-xl font-bold text-black dark:text-white">
           {isId
             ? 'Workstation & Harness Otomasi Agen Dokumen Desktop'
             : 'The Desktop Document Agent Workstation & Automation Harness'}
         </p>
-        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans italic">
+        <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-sans italic leading-relaxed">
           {isId
             ? 'Native desktop computer-use untuk spreadsheet Microsoft Excel, kontrak Word, presentasi PowerPoint, pipeline PDF, dan pembukuan finansial.'
             : 'Native desktop computer-use for Microsoft Excel spreadsheets, Word contracts, PowerPoint decks, PDF pipelines, and financial ledgers.'}
@@ -104,48 +104,48 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? '1. Panduan Cepat (Quick Start)' : '1. Quick Start'}</H2>
-      <div className="space-y-4 mb-6">
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
-            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">1</span>
+      <div className="space-y-4 sm:space-y-5 mb-8">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
+            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">1</span>
             <span>{isId ? 'Unduh & Jalankan Workstation' : 'Download & Run Workstation'}</span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Arunaki hadir sebagai aplikasi native desktop berbasis Electron untuk Windows dan macOS. Buka aplikasi workstation langsung dari sistem operasi Anda.'
               : 'Arunaki runs as a native desktop application built with Electron for Windows and macOS. Launch the workstation app directly on your operating system.'}
           </p>
         </div>
 
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
-            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">2</span>
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
+          <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
+            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">2</span>
             <span>{isId ? 'Pilih Folder Workspace Terisolasi (Sandbox)' : 'Select Sandboxed Workspace Folder'}</span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-2">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Saat workstation terbuka, pilih folder kerja khusus tempat dokumen bisnis Anda berada (contoh: C:\\Users\\Admin\\Documents\\CompanyFiles).'
               : 'When Arunaki opens, select the dedicated folder containing your business documents (e.g. C:\\Users\\Admin\\Documents\\CompanyFiles).'}
           </p>
-          <div className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 p-2.5 rounded">
-            <strong>{isId ? 'Catatan Keamanan:' : 'Security Note:'}</strong>{' '}
+          <div className="text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 p-3 sm:p-3.5 rounded leading-relaxed">
+            <strong className="text-black dark:text-white">{isId ? 'Catatan Keamanan:' : 'Security Note:'}</strong>{' '}
             {isId
               ? 'Arunaki dibatasi ketat (sandboxed) hanya pada folder yang dipilih. Agen tidak dapat membaca, mengubah, atau mengakses file apapun di luar folder tersebut.'
               : 'Arunaki is sandboxed strictly to this folder. It cannot read, modify, or access any files outside your selected workspace.'}
           </div>
         </div>
 
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-2 font-mono text-sm font-semibold text-black dark:text-white">
-            <span className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs">3</span>
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
+          <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
+            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">3</span>
             <span>{isId ? 'Mulai Otomasi dengan Bahasa Alami' : 'Start Automating with Natural Language'}</span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans mb-3">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Ketik instruksi langsung di konsol chat desktop workstation atau kirim via remote App Gateway:'
               : 'Type natural instructions in the desktop workstation console or send them via remote App Gateway:'}
           </p>
-          <div className="space-y-1.5 font-mono text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded border border-zinc-200 dark:border-zinc-800">
+          <div className="space-y-2 font-mono text-sm sm:text-base text-zinc-800 dark:text-zinc-200 bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded border border-zinc-200 dark:border-zinc-800 leading-relaxed">
             <div>&quot;Rekap pemasukan dan pengeluaran hari ini ke laporan_keuangan.xlsx&quot;</div>
             <div>&quot;Ganti nama klien di kontrak_kerjasama.docx menjadi PT Surya Mandiri&quot;</div>
             <div>&quot;Gabungkan semua file PDF invoice bulan ini dan beri watermark LUNAS&quot;</div>
@@ -154,43 +154,43 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? '2. Konsep Inti (Core Concepts)' : '2. Core Concepts'}</H2>
-      <div className="space-y-3 mb-6">
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-1.5">
-            <ShieldCheck className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+      <div className="space-y-4 mb-8">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="w-5 h-5 text-black dark:text-white" />
+            <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
               {isId ? 'The Workspace Sandbox (Isolasi Folder Kerja)' : 'The Workspace Sandbox'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Semua operasi dokumen terjadi secara terisolasi di folder Workspace pilihan Anda. Harness agen tidak dapat mengeksekusi perintah sistem bebas, mengakses file sistem inti, atau menyentuh drive eksternal.'
               : 'All document operations occur within your chosen Workspace Folder. The agent harness cannot execute arbitrary system commands, access root operating system files, or read external drives.'}
           </p>
         </div>
 
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-1.5">
-            <Zap className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center gap-2.5">
+            <Zap className="w-5 h-5 text-black dark:text-white" />
+            <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
               {isId ? 'Otomasi Native COM vs Modifikasi Berkas' : 'Native COM vs File Modification'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'File Microsoft Office (.xlsx, .docx, .pptx) dikerjakan langsung via native Windows COM automation headless, sehingga rumus, font, margin, chart, dan styling 100% terjaga. File PDF dan teks dimodifikasi presisi tingkat byte.'
               : 'Microsoft Office files (.xlsx, .docx, .pptx) are executed directly through native Windows COM automation, ensuring formulas, fonts, margins, charts, and colors remain 100% intact. Standard PDF and text files use precise byte-level manipulation.'}
           </p>
         </div>
 
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <div className="flex items-center gap-2 mb-1.5">
-            <CheckCircle2 className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-semibold font-mono text-sm text-black dark:text-white">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-black dark:text-white" />
+            <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
               {isId ? 'Checkpoint & 1-Klik Rollback' : 'Checkpoints & 1-Click Rollback'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Sebelum menerapkan perubahan pada dokumen, Arunaki membuat snapshot lokal immutable secara otomatis. Jika ingin mengembalikan dokumen ke versi semula, cukup 1 klik rollback.'
               : 'Before applying changes to any document, Arunaki automatically creates an immutable local snapshot. If an automated modification needs to be undone, restore the original file instantly with a single click.'}
@@ -199,35 +199,39 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? '3. Antarmuka Akses (Interfaces)' : '3. Access Interfaces'}</H2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
-          <div className="flex items-center gap-2">
-            <Bot className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-mono font-semibold text-sm text-black dark:text-white">
-              {isId ? 'Workstation Desktop (Electron)' : 'Electron Workstation'}
-            </span>
-            <span className="text-[10px] font-mono bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-1.5 py-0.5 rounded font-semibold">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Bot className="w-5 h-5 text-black dark:text-white" />
+              <span className="font-mono font-bold text-base sm:text-lg text-black dark:text-white">
+                {isId ? 'Workstation Desktop (Electron)' : 'Electron Workstation'}
+              </span>
+            </div>
+            <span className="text-xs sm:text-sm font-mono bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-2.5 py-0.5 rounded font-semibold">
               {isId ? 'Utama' : 'Primary'}
             </span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Aplikasi desktop native berbasis Electron dengan konsol agen, live preview dokumen, dan kontrol sandbox.'
               : 'Native Electron desktop workstation with agent console, document preview, and sandbox controls.'}
           </p>
         </div>
 
-        <div className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-1">
-          <div className="flex items-center gap-2">
-            <Bot className="w-4 h-4 text-black dark:text-white" />
-            <span className="font-mono font-semibold text-sm text-black dark:text-white">
-              {isId ? 'App Gateway (Akses Pesan)' : 'App Gateway'}
-            </span>
-            <span className="text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
+        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Bot className="w-5 h-5 text-black dark:text-white" />
+              <span className="font-mono font-bold text-base sm:text-lg text-black dark:text-white">
+                {isId ? 'App Gateway (Akses Pesan)' : 'App Gateway'}
+              </span>
+            </div>
+            <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
               Telegram
             </span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Akses remote aman via Telegram Bot untuk kirim perintah dan terima berkas hasil langsung dari chat.'
               : 'Secure remote bridge via Telegram Bot to dispatch tasks and receive processed documents directly in chat.'}
@@ -236,7 +240,7 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? '4. Arsitektur Eksekusi Harness' : '4. Harness Architecture'}</H2>
-      <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto mb-6">
+      <div className="p-5 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 leading-relaxed overflow-x-auto mb-8">
         <div>{isId ? '[Instruksi Pengguna / User Instruction]' : '[User Instruction]'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
@@ -256,9 +260,9 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? 'Teknologi Inti' : 'Core Stack'}</H2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5 mb-8">
         {['Electron', 'Bun / Node.js', 'TypeScript', 'Native Office COM Bridge', 'pdf-lib', 'mammoth', 'SQLite', 'Telegram Bot API'].map((t) => (
-          <span key={t} className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 px-2.5 py-1 rounded">
+          <span key={t} className="text-sm sm:text-base font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded">
             {t}
           </span>
         ))}
@@ -334,12 +338,12 @@ function ModelsSection({ isId }: { isId: boolean }) {
         { name: 'Google Gemini',    models: 'gemini-2.0-flash, gemini-1.5-pro',     key: 'GEMINI_API_KEY' },
         { name: 'Ollama (Local)',   models: 'llama3, mistral, phi3, qwen2',         key: isId ? 'Tanpa API key' : 'No API key' },
       ].map((p) => (
-        <div key={p.name} className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-3 space-y-1">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <span className="font-semibold text-black dark:text-white font-sans text-sm">{p.name}</span>
-            <span className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2 py-0.5 rounded">{p.key}</span>
+        <div key={p.name} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
+          <div className="flex items-center justify-between flex-wrap gap-2.5">
+            <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.name}</span>
+            <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-0.5 rounded">{p.key}</span>
           </div>
-          <p className="font-mono text-xs text-zinc-500">{p.models}</p>
+          <p className="font-mono text-sm sm:text-base text-zinc-500">{p.models}</p>
         </div>
       ))}
 
@@ -370,13 +374,13 @@ function ModelsSection({ isId }: { isId: boolean }) {
           desc: isId ? 'Gunakan server self-hosted atau gateway proxy apapun yang kompatibel dengan format REST API OpenAI.' : 'Use any self-hosted server or proxy gateway compatible with the standard OpenAI REST API specification.',
         },
       ].map((p) => (
-        <div key={p.name} className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-3 space-y-1.5">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <span className="font-semibold text-black dark:text-white font-sans text-sm">{p.name}</span>
-            <span className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2 py-0.5 rounded">{p.key}</span>
+        <div key={p.name} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
+          <div className="flex items-center justify-between flex-wrap gap-2.5">
+            <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.name}</span>
+            <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-0.5 rounded">{p.key}</span>
           </div>
-          <p className="font-mono text-xs text-zinc-500">{p.models}</p>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-sans">{p.desc}</p>
+          <p className="font-mono text-sm sm:text-base text-zinc-500">{p.models}</p>
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">{p.desc}</p>
         </div>
       ))}
 
@@ -492,13 +496,13 @@ function ToolsSection({ isId }: { isId: boolean }) {
           ? 'Arunaki menyediakan 50+ tool bawaan yang dapat dipanggil langsung dari konsol workstation atau pipeline agen. Setiap tool adalah fungsi TypeScript berparameter dengan validasi tipe skema penuh.'
           : 'Arunaki provides 50+ built-in tools callable directly from the workstation console or agent pipelines. Each tool is a fully typed TypeScript function with schema parameter validation.'}
       </P>
-      <div className="space-y-5">
+      <div className="space-y-6 sm:space-y-7">
         {groups.map((g) => (
           <div key={g.group}>
-            <h3 className="text-xs font-mono font-semibold text-zinc-400 mb-2">{g.group}</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="text-sm sm:text-base font-mono font-bold text-zinc-400 mb-3">{g.group}</h3>
+            <div className="flex flex-wrap gap-2.5">
               {g.tools.map((t) => (
-                <code key={t} className="text-xs font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 px-2.5 py-1 rounded">
+                <code key={t} className="text-sm sm:text-base font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 px-3 py-1.5 rounded">
                   {t}
                 </code>
               ))}
@@ -631,27 +635,27 @@ function GatewaySection({ isId }: { isId: boolean }) {
       </P>
 
       <H2>{isId ? 'Status Integrasi Aplikasi' : 'App Integration Status'}</H2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         {apps.map((app) => (
           <div
             key={app.name}
-            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2"
+            className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5"
           >
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-black dark:text-white font-mono text-sm">{app.name}</span>
+              <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{app.name}</span>
               {app.status === 'available' ? (
-                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold">
-                  <CheckCircle2 className="w-3 h-3" />
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                   {isId ? 'Tersedia' : 'Available'}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border border-zinc-200 dark:border-zinc-800">
-                  <Clock className="w-3 h-3" />
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border border-zinc-200 dark:border-zinc-800">
+                  <Clock className="w-3.5 h-3.5" />
                   {isId ? 'Segera Hadir' : 'Coming Soon'}
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans">{app.desc}</p>
+            <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">{app.desc}</p>
           </div>
         ))}
       </div>
@@ -667,7 +671,7 @@ TELEGRAM_BOT_TOKEN=123456789:AAF...
 TELEGRAM_ALLOWED_CHAT_IDS=123456789`} />
 
       <H2>{isId ? 'Perintah Bot' : 'Bot Commands'}</H2>
-      <div className="space-y-2 mb-6">
+      <div className="space-y-3 mb-8">
         {[
           { cmd: '/start',          desc: isId ? 'Mulai sesi interaksi agen' : 'Start agent session' },
           { cmd: '/help',           desc: isId ? 'Daftar perintah yang tersedia' : 'List available commands' },
@@ -675,9 +679,9 @@ TELEGRAM_ALLOWED_CHAT_IDS=123456789`} />
           { cmd: '/process [file]', desc: isId ? 'Jalankan instruksi otomasi pada berkas' : 'Run automated processing on document' },
           { cmd: '/redact [file]',  desc: isId ? 'Samarkan data pribadi PII pada dokumen' : 'Redact PII from document' },
         ].map((c) => (
-          <div key={c.cmd} className="flex items-start gap-3 text-sm">
+          <div key={c.cmd} className="flex items-start gap-3.5 text-base">
             <Code>{c.cmd}</Code>
-            <span className="text-zinc-600 dark:text-zinc-400 font-sans">{c.desc}</span>
+            <span className="text-zinc-600 dark:text-zinc-400 font-sans text-sm sm:text-base leading-relaxed pt-0.5">{c.desc}</span>
           </div>
         ))}
       </div>
@@ -699,19 +703,19 @@ function DownloadSection({ isId }: { isId: boolean }) {
           ? 'Paket biner resmi Arunaki untuk Windows dan macOS. Workstation desktop native ini sedang dalam persiapan rilis biner.'
           : 'Official Arunaki binary packages for Windows and macOS. The native desktop workstation is in active preparation for release.'}
       </P>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-8">
         {[
           { title: 'Windows Setup', file: 'Arunaki-Setup-x64.exe', badge: isId ? 'Direkomendasikan' : 'Recommended' },
           { title: 'Windows Portable', file: 'Arunaki-Portable.zip', badge: isId ? 'Portabel' : 'Standalone' },
           { title: 'macOS Universal', file: 'Arunaki-Universal.dmg', badge: 'Universal' },
         ].map((p) => (
-          <div key={p.title} className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3">
+          <div key={p.title} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5">
             <div>
-              <p className="text-xs text-zinc-400 font-mono mb-1">{p.badge}</p>
-              <p className="font-semibold text-black dark:text-white font-mono text-sm">{p.title}</p>
-              <p className="font-mono text-xs text-zinc-500 mt-0.5">{p.file}</p>
+              <p className="text-xs sm:text-sm text-zinc-400 font-mono mb-1.5">{p.badge}</p>
+              <p className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.title}</p>
+              <p className="font-mono text-xs sm:text-sm text-zinc-500 mt-1">{p.file}</p>
             </div>
-            <button disabled className="w-full py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-mono text-xs font-semibold cursor-not-allowed flex items-center justify-center gap-2">
+            <button disabled className="w-full py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-mono text-xs sm:text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2">
               <Clock className="w-4 h-4" />
               {isId ? 'Segera Hadir' : 'Coming Soon'}
             </button>
@@ -731,7 +735,7 @@ npm run dev`} />
         href="https://github.com/jlsrngo/Arunaki"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs sm:text-sm font-semibold hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-mono text-sm sm:text-base font-semibold hover:opacity-90 transition-opacity"
       >
         <Download className="w-4 h-4" />
         {isId ? 'Lihat Repositori di GitHub' : 'View Repository on GitHub'}
@@ -771,21 +775,21 @@ export default function ArunakiDocsPage() {
   };
 
   const SidebarContent = () => (
-    <nav className="space-y-0.5 text-base font-mono">
+    <nav className="space-y-1 font-mono">
       {navGroups.map((g) => (
         <div key={g.group ?? 'top'}>
           {g.group && (
-            <div className="pt-4 pb-1.5 px-3">
-              <span className="text-[11px] font-mono font-semibold text-zinc-400 tracking-widest">{g.group}</span>
+            <div className="pt-5 pb-2 px-3">
+              <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400 tracking-wider">{g.group}</span>
             </div>
           )}
           {g.items.map((item) => (
             <button
               key={item.id}
               onClick={() => { setActive(item.id); setSidebarOpen(false); }}
-              className={`w-full text-left px-3 py-2 rounded-md transition-colors font-mono text-sm ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-md transition-colors font-mono text-base ${
                 active === item.id
-                  ? 'bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white font-semibold'
+                  ? 'bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white font-bold'
                   : 'text-zinc-500 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900/50'
               }`}
             >
@@ -806,7 +810,7 @@ export default function ArunakiDocsPage() {
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
-        <span className="text-sm font-mono font-medium text-zinc-500">{currentLabel ? getLabel(currentLabel) : ''}</span>
+        <span className="text-base font-mono font-medium text-zinc-500">{currentLabel ? getLabel(currentLabel) : ''}</span>
       </div>
 
       {/* Mobile overlay */}
@@ -814,10 +818,10 @@ export default function ArunakiDocsPage() {
         <div className="fixed inset-0 z-30 bg-black/20 dark:bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <div className="flex flex-1 overflow-hidden w-full max-w-5xl mx-auto sm:px-6">
+      <div className="flex flex-1 overflow-hidden w-full max-w-6xl mx-auto sm:px-6">
         {/* Sidebar */}
         <aside
-          className={`fixed lg:relative top-16 lg:top-auto left-0 z-40 lg:z-auto w-52 shrink-0
+          className={`fixed lg:relative top-16 lg:top-auto left-0 z-40 lg:z-auto w-56 sm:w-60 shrink-0
             bg-white dark:bg-[#09090b] border-r border-zinc-200 dark:border-zinc-800
             h-[calc(100vh-64px)] lg:h-full overflow-y-auto
             pt-14 lg:pt-8 px-2 pb-10
@@ -828,8 +832,8 @@ export default function ArunakiDocsPage() {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 min-w-0 px-4 sm:px-8 pt-28 lg:pt-8 pb-8 overflow-y-auto">
-          <div className="flex items-center gap-2 text-sm font-mono text-zinc-400 mb-6">
+        <main className="flex-1 min-w-0 px-5 sm:px-10 pt-28 lg:pt-8 pb-10 overflow-y-auto">
+          <div className="flex items-center gap-2 text-base font-mono text-zinc-400 mb-8">
             <Link href="/arunaki" className="hover:underline">arunaki</Link>
             <span>/</span>
             <span className="text-black dark:text-white font-medium">{active}</span>
