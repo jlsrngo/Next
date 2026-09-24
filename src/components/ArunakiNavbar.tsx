@@ -28,7 +28,7 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
         <div className="flex items-center gap-3">
           <Link
             href="/projects"
-            className="text-sm font-medium text-zinc-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5"
+            className="text-base font-medium font-mono text-zinc-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5"
             title={isId ? 'Kembali ke Portofolio' : 'Back to Portfolio'}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -43,12 +43,12 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
         </div>
 
         {/* Right: GitHub, Docs, Language */}
-        <nav className="flex items-center gap-4 sm:gap-6 text-sm font-sans font-medium text-zinc-600 dark:text-zinc-400">
+        <nav className="flex items-center gap-5 sm:gap-7">
           <a
             href="https://github.com/jlsrngo/Arunaki"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5"
+            className="text-base font-mono font-medium text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5"
           >
             <span>GitHub</span>
             <ExternalLink className="w-3.5 h-3.5 opacity-60" />
@@ -56,20 +56,20 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
 
           <Link
             href="/arunaki/docs"
-            className={`transition-colors ${
+            className={`text-base font-mono font-medium transition-colors ${
               isDocsActive
                 ? 'text-black dark:text-white font-semibold'
-                : 'hover:text-black dark:hover:text-white'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
             }`}
           >
             {isId ? 'Dokumentasi' : 'Docs'}
           </Link>
 
           {/* Language switcher */}
-          <div className="flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 p-0.5 text-xs sm:text-sm font-medium">
+          <div className="flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 p-0.5 text-sm font-mono font-medium">
             <button
               onClick={() => handleLanguageSwitch('id')}
-              className={`px-2 py-0.5 rounded transition-colors ${
+              className={`px-2.5 py-0.5 rounded transition-colors ${
                 isId
                   ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'
@@ -78,7 +78,7 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
             >ID</button>
             <button
               onClick={() => handleLanguageSwitch('en')}
-              className={`px-2 py-0.5 rounded transition-colors ${
+              className={`px-2.5 py-0.5 rounded transition-colors ${
                 !isId
                   ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'

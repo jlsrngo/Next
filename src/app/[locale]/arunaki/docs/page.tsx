@@ -383,12 +383,12 @@ export default function ArunakiDocsPage() {
   };
 
   const SidebarContent = () => (
-    <nav className="space-y-0.5 text-sm font-sans">
+    <nav className="space-y-0.5 text-base font-mono">
       {navGroups.map((g) => (
         <div key={g.group ?? 'top'}>
           {g.group && (
             <div className="pt-4 pb-1.5 px-3">
-              <span className="text-[11px] font-semibold text-zinc-400 tracking-widest">{g.group}</span>
+              <span className="text-[11px] font-mono font-semibold text-zinc-400 tracking-widest">{g.group}</span>
             </div>
           )}
           {g.items.map((item) => (
@@ -410,7 +410,7 @@ export default function ArunakiDocsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 transition-colors font-sans antialiased flex flex-col">
+    <div className="h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 transition-colors font-sans antialiased flex flex-col overflow-hidden">
       <ArunakiNavbar locale={locale} />
 
       {/* Mobile top bar */}
@@ -426,12 +426,12 @@ export default function ArunakiDocsPage() {
         <div className="fixed inset-0 z-30 bg-black/20 dark:bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <div className="flex flex-1 w-full max-w-5xl mx-auto sm:px-6">
+      <div className="flex flex-1 overflow-hidden w-full max-w-5xl mx-auto sm:px-6">
         {/* Sidebar */}
         <aside
-          className={`fixed lg:sticky top-16 left-0 z-40 lg:z-auto w-52 shrink-0
+          className={`fixed lg:relative top-16 lg:top-auto left-0 z-40 lg:z-auto w-52 shrink-0
             bg-white dark:bg-[#09090b] border-r border-zinc-200 dark:border-zinc-800
-            h-[calc(100vh-64px)] overflow-y-auto
+            h-[calc(100vh-64px)] lg:h-full overflow-y-auto
             pt-14 lg:pt-8 px-2 pb-10
             transition-transform duration-200 lg:translate-x-0
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
@@ -440,7 +440,7 @@ export default function ArunakiDocsPage() {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 min-w-0 px-4 sm:px-8 pt-28 lg:pt-8 pb-20">
+        <main className="flex-1 min-w-0 px-4 sm:px-8 pt-28 lg:pt-8 pb-8 overflow-y-auto">
           <div className="flex items-center gap-2 text-sm font-sans text-zinc-400 mb-6">
             <Link href="/arunaki" className="hover:underline">arunaki</Link>
             <span>/</span>
