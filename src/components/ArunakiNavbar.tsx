@@ -34,38 +34,38 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/90 dark:bg-[#09090b]/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800/80 transition-colors">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#09090b]/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800/80 transition-colors">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
         {/* Left: Portfolio Back & Arunaki Brand */}
         <div className="flex items-center gap-3">
           <Link
             href="/projects"
-            className="text-xs font-mono text-zinc-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1 mr-2"
+            className="text-sm font-medium text-zinc-400 hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5 mr-2"
             title={isId ? 'Kembali ke Portofolio' : 'Back to Portfolio'}
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">{isId ? 'Portofolio' : 'Portfolio'}</span>
           </Link>
 
           <span className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
 
           <Link href="/arunaki" className="flex items-center gap-2 tracking-tight">
-            <span className="text-xl font-bold font-mono tracking-tighter text-black dark:text-white">
+            <span className="text-xl sm:text-2xl font-bold font-mono tracking-tighter text-black dark:text-white">
               arunaki
             </span>
           </Link>
         </div>
 
         {/* Center / Right: Nav links that navigate to separate pages */}
-        <nav className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm font-mono text-zinc-600 dark:text-zinc-400">
+        <nav className="flex items-center gap-3 sm:gap-7 text-sm sm:text-[15px] font-sans font-medium text-zinc-600 dark:text-zinc-400">
           <a
             href="https://github.com/jlsrngo/Arunaki"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-black dark:hover:text-white transition-colors flex items-center gap-1"
+            className="hover:text-black dark:hover:text-white transition-colors flex items-center gap-1.5"
           >
             <span>GitHub</span>
-            <ExternalLink className="w-3 h-3 opacity-60" />
+            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
           </a>
 
           {navItems.map((item) => {
@@ -74,9 +74,9 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`transition-colors ${
+                className={`transition-colors py-1 ${
                   active
-                    ? 'text-black dark:text-white font-bold border-b-2 border-black dark:border-white py-1 -mb-[2px]'
+                    ? 'text-black dark:text-white font-semibold border-b-2 border-black dark:border-white -mb-[2px]'
                     : 'hover:text-black dark:hover:text-white'
                 }`}
               >
@@ -86,12 +86,12 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
           })}
 
           {/* Language Switcher Pill */}
-          <div className="flex items-center rounded border border-zinc-200 dark:border-zinc-800 p-0.5 text-xs font-mono">
+          <div className="flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 p-0.5 text-xs sm:text-sm font-medium">
             <button
               onClick={() => handleLanguageSwitch('id')}
-              className={`px-1.5 py-0.5 rounded transition-colors ${
+              className={`px-2 py-0.5 rounded transition-colors ${
                 isId
-                  ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold'
+                  ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'
               }`}
               title="Bahasa Indonesia"
@@ -100,9 +100,9 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
             </button>
             <button
               onClick={() => handleLanguageSwitch('en')}
-              className={`px-1.5 py-0.5 rounded transition-colors ${
+              className={`px-2 py-0.5 rounded transition-colors ${
                 !isId
-                  ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold'
+                  ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                   : 'text-zinc-400 hover:text-black dark:hover:text-white'
               }`}
               title="English"
@@ -114,13 +114,13 @@ export default function ArunakiNavbar({ locale }: ArunakiNavbarProps) {
           {/* Download CTA Button */}
           <Link
             href="/arunaki/download"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded font-mono text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md font-sans text-xs sm:text-sm font-semibold transition-all ${
               pathname.includes('/arunaki/download')
                 ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-950 ring-2 ring-zinc-400'
                 : 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:opacity-90'
             }`}
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>{isId ? 'Unduh' : 'Download'}</span>
           </Link>
         </nav>

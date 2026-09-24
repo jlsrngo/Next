@@ -352,18 +352,18 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
     <div className="min-h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors font-sans antialiased flex flex-col justify-between">
       <ArunakiNavbar locale={locale} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-20 space-y-12 w-full flex-1">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-20 space-y-10 w-full flex-1">
         {/* Header */}
         <div className="space-y-4 max-w-3xl">
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+          <div className="flex items-center gap-2 text-sm font-sans text-zinc-400">
             <Link href="/arunaki" className="hover:underline">arunaki</Link>
             <span>/</span>
             <span className="text-black dark:text-white font-semibold">tools</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white font-mono leading-[1.1]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white font-sans leading-tight">
             {isId ? 'Katalog Tool Harness (50+ Tool)' : 'Tool Harness Catalog (50+ Tools)'}
           </h1>
-          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-mono leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
             {isId
               ? 'Registri lengkap alat agen dokumen dengan parameter signature dan contoh pemanggilan terprogram (PTC).'
               : 'Complete agent tool registry with parameter signatures and programmatic tool calling (PTC) examples.'}
@@ -371,20 +371,20 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
         </div>
 
         {/* Search & Filter Controls */}
-        <div className="space-y-3">
+        <div className="space-y-3.5">
           <div className="relative">
-            <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isId ? 'Cari nama tool, parameter, atau kata kunci...' : 'Search tools by name, parameters, or keywords...'}
-              className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 text-black dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 font-mono"
+              className="w-full pl-11 pr-16 py-3 text-sm sm:text-base rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 text-black dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 font-sans transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="text-xs font-mono text-zinc-400 hover:text-black dark:hover:text-white absolute right-3 top-1/2 -translate-y-1/2"
+                className="text-xs sm:text-sm font-sans font-medium text-zinc-400 hover:text-black dark:hover:text-white absolute right-4 top-1/2 -translate-y-1/2"
               >
                 Clear
               </button>
@@ -392,7 +392,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex overflow-x-auto gap-1.5 pb-1">
+          <div className="flex overflow-x-auto gap-2 pb-1">
             {[
               { id: 'all', label: isId ? 'Semua Kategori' : 'All Categories' },
               { id: 'workspace', label: isId ? 'Berkas Workspace' : 'Workspace Files' },
@@ -405,10 +405,10 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-3 py-1.5 rounded text-xs font-mono transition-colors whitespace-nowrap ${
+                className={`px-3.5 py-2 rounded-lg text-sm font-sans transition-colors whitespace-nowrap ${
                   activeCategory === cat.id
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold'
-                    : 'border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white'
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
+                    : 'border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
                 }`}
               >
                 {cat.label}
@@ -422,53 +422,53 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
           {filteredTools.map((tool) => (
             <div
               key={tool.id}
-              className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
+              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors shadow-sm"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <code className="text-sm font-bold font-mono text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div className="flex items-center gap-3">
+                  <code className="text-base sm:text-lg font-bold font-mono text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-md">
                     {tool.name}
                   </code>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-xs font-sans font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-800">
                     {isId ? tool.categoryLabel.id : tool.categoryLabel.en}
                   </span>
                 </div>
                 <button
                   onClick={() => copyToClipboard(tool.example, `tool-${tool.id}`)}
-                  className="self-end sm:self-center text-xs font-mono text-zinc-400 hover:text-black dark:hover:text-white flex items-center gap-1"
+                  className="self-end sm:self-center text-xs sm:text-sm font-sans font-medium text-zinc-500 hover:text-black dark:hover:text-white flex items-center gap-1.5 transition-colors"
                 >
                   {copiedId === `tool-${tool.id}` ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-500" />
-                      <span className="text-emerald-500">{isId ? 'Tersalin' : 'Copied'}</span>
+                      <Check className="w-4 h-4 text-emerald-500" />
+                      <span className="text-emerald-500 font-medium">{isId ? 'Tersalin' : 'Copied'}</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy call</span>
+                      <Copy className="w-4 h-4" />
+                      <span>{isId ? 'Salin panggil' : 'Copy call'}</span>
                     </>
                   )}
                 </button>
               </div>
 
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-mono">
+              <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
                 {isId ? tool.description.id : tool.description.en}
               </p>
 
-              <div className="space-y-1.5 pt-1">
-                <div className="text-[11px] font-mono text-zinc-500 flex flex-wrap items-center gap-1.5">
-                  <span className="font-bold text-zinc-400">Parameters:</span>
+              <div className="space-y-2 pt-1">
+                <div className="text-xs sm:text-sm font-sans text-zinc-500 flex flex-wrap items-center gap-2">
+                  <span className="font-semibold text-zinc-600 dark:text-zinc-400">Parameters:</span>
                   {tool.parameters.map((param, pIdx) => (
                     <span
                       key={pIdx}
-                      className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300"
+                      className="px-2 py-0.5 rounded font-mono text-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200"
                     >
                       {param}
                     </span>
                   ))}
                 </div>
 
-                <div className="p-3 rounded bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 font-mono text-xs text-zinc-800 dark:text-zinc-200 overflow-x-auto">
+                <div className="p-3.5 sm:p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 overflow-x-auto">
                   <code>{tool.example}</code>
                 </div>
               </div>
@@ -480,7 +480,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
         <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-end">
           <Link
             href="/arunaki/download"
-            className="inline-flex items-center gap-2 text-sm font-mono font-bold text-black dark:text-white hover:underline group"
+            className="inline-flex items-center gap-2 text-base font-sans font-semibold text-black dark:text-white hover:underline group"
           >
             <span>{isId ? 'Lanjut ke Pusat Unduhan' : 'Next: Download Center'}</span>
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

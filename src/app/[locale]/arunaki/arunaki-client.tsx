@@ -146,14 +146,14 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
     <div className="min-h-screen bg-white dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors font-sans antialiased flex flex-col justify-between">
       <ArunakiNavbar locale={locale} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-20 space-y-20 w-full flex-1">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-20 space-y-20 w-full flex-1">
         {/* HERO SECTION */}
         <section id="hero" className="space-y-6">
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white leading-[1.1] font-sans">
               {isId ? 'Agen dokumen open source' : 'The open source document agent'}
             </h1>
-            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-mono leading-relaxed">
+            <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
               {isId
                 ? 'Otomasi dokumen desktop cerdas untuk spreadsheet Microsoft Excel, kontrak Word, slide presentasi PowerPoint, pipeline PDF, dan pembukuan finansial. Beroperasi secara lokal dan sandboxed di komputer Anda.'
                 : 'Native desktop computer-use for Microsoft Excel spreadsheets, Word contracts, PowerPoint decks, PDF pipelines, and financial ledgers. Strictly sandboxed to your local machine.'}
@@ -161,13 +161,13 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           </div>
 
           {/* INSTALL BOX */}
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-950/80 overflow-hidden font-mono shadow-sm">
+          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-950/80 overflow-hidden shadow-sm">
             <div className="flex border-b border-zinc-200 dark:border-zinc-800 px-2 overflow-x-auto">
               {(['curl', 'winget', 'bun', 'npm', 'brew', 'git'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2.5 text-xs font-mono transition-colors border-b-2 -mb-px whitespace-nowrap ${
+                  className={`px-4 py-2.5 text-sm font-sans font-medium transition-colors border-b-2 -mb-px whitespace-nowrap ${
                     activeTab === tab
                       ? 'border-black dark:border-white text-black dark:text-white font-semibold'
                       : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300'
@@ -178,16 +178,16 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               ))}
             </div>
 
-            <div className="p-4 flex items-center justify-between gap-3 text-xs sm:text-sm">
+            <div className="p-4 sm:p-5 flex items-center justify-between gap-3 text-sm sm:text-base font-mono">
               <code className="text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap selection:bg-zinc-300 dark:selection:bg-zinc-700">
                 {installCommands[activeTab]}
               </code>
               <button
                 onClick={() => copyToClipboard(installCommands[activeTab], 'install')}
-                className="p-1.5 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white transition-colors shrink-0"
+                className="p-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white transition-colors shrink-0"
                 title={isId ? 'Salin perintah' : 'Copy command'}
               >
-                {copied === 'install' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                {copied === 'install' ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" /> : <Copy className="w-4 h-4 sm:w-5 sm:h-5" />}
               </button>
             </div>
           </div>
@@ -195,33 +195,33 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
 
         {/* INTERACTIVE WORKSTATION SIMULATOR */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-zinc-500 uppercase tracking-wider font-semibold">
+          <div className="flex items-center justify-between text-sm font-sans">
+            <span className="text-zinc-500 uppercase tracking-wider font-semibold text-xs sm:text-sm">
               {isId ? 'Pratinjau Konsol Langsung' : 'Live Workstation Preview'}
             </span>
-            <span className="text-emerald-500 flex items-center gap-1.5 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-emerald-500 flex items-center gap-1.5 font-medium text-xs sm:text-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               {isId ? 'Sandbox Lokal Aktif' : 'Local Sandbox Active'}
             </span>
           </div>
 
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-[#09090b] text-zinc-200 font-mono text-xs overflow-hidden shadow-sm">
-            <div className="px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between bg-[#0c0c0e]">
+          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-[#09090b] text-zinc-200 font-mono text-xs sm:text-sm overflow-hidden shadow-sm">
+            <div className="px-4 py-3 border-b border-zinc-800 flex items-center justify-between bg-[#0c0c0e]">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
                 <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
                 <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <span className="text-zinc-400 ml-2 text-[11px]">arunaki-agent // headless-com-worker</span>
+                <span className="text-zinc-400 ml-2 text-xs">arunaki-agent // headless-com-worker</span>
               </div>
-              <span className="text-zinc-500 text-[11px]">bun: 1.3.14 • electron: 43.2</span>
+              <span className="text-zinc-500 text-xs">bun: 1.3.14 • electron: 43.2</span>
             </div>
 
-            <div className="p-2 border-b border-zinc-800/80 bg-zinc-950 flex gap-1.5 overflow-x-auto">
+            <div className="p-2 border-b border-zinc-800/80 bg-zinc-950 flex gap-2 overflow-x-auto">
               {simulations.map((sim, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveSimIndex(i)}
-                  className={`px-3 py-1 rounded text-[11px] whitespace-nowrap transition-colors ${
+                  className={`px-3.5 py-1.5 rounded-md text-xs sm:text-sm whitespace-nowrap transition-colors ${
                     activeSimIndex === i
                       ? 'bg-zinc-800 text-white font-medium'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
@@ -232,18 +232,18 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               ))}
             </div>
 
-            <div className="p-4 sm:p-5 space-y-2.5 leading-relaxed">
-              <div className="text-zinc-500 text-[11px]">
+            <div className="p-5 sm:p-6 space-y-3 leading-relaxed">
+              <div className="text-zinc-500 text-xs sm:text-sm">
                 &gt; Workspace Root: C:\Users\Finance\Documents\Workspace
               </div>
-              <div className="text-white flex items-start gap-2">
-                <span className="text-emerald-400">&gt;</span>
+              <div className="text-white flex items-start gap-2 text-sm sm:text-base">
+                <span className="text-emerald-400 font-bold">&gt;</span>
                 <span className="font-semibold">&quot;{simulations[activeSimIndex].prompt}&quot;</span>
               </div>
-              <div className="pt-2 border-t border-zinc-800/80 space-y-1.5 pl-3 border-l border-zinc-700 text-[11px]">
+              <div className="pt-2 border-t border-zinc-800/80 space-y-2 pl-3 border-l border-zinc-700 text-xs sm:text-sm">
                 {simulations[activeSimIndex].logs.map((log, lIdx) => (
                   <div key={lIdx} className="flex items-start gap-2">
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-bold shrink-0">
+                    <span className="text-xs px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-semibold shrink-0">
                       {log.tag}
                     </span>
                     <span className="text-zinc-300 break-all">{log.text}</span>
@@ -257,10 +257,10 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
         {/* QUICK START 3-STEP WALKTHROUGH */}
         <section className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white font-mono">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white font-sans">
               {isId ? 'Panduan Memulai' : 'Getting Started'}
             </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 font-mono">
+            <p className="text-base text-zinc-600 dark:text-zinc-400 font-sans">
               {isId
                 ? 'Langkah mudah mengoperasikan Arunaki di workstation Windows atau macOS Anda.'
                 : 'Simple steps to get Arunaki running on your Windows or macOS workstation.'}
@@ -268,36 +268,36 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
-              <span className="text-xs font-mono font-bold text-zinc-400">01</span>
-              <h3 className="font-bold text-sm text-black dark:text-white font-mono">
+            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+              <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">01</span>
+              <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Unduh Paket Installer' : 'Download Package'}
               </h3>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
                 {isId
                   ? 'Gunakan installer Setup (.exe) untuk Windows atau DMG untuk macOS dari menu unduhan.'
                   : 'Get the pre-built setup installer (.exe) for Windows or DMG for macOS from the download center.'}
               </p>
             </div>
 
-            <div className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
-              <span className="text-xs font-mono font-bold text-zinc-400">02</span>
-              <h3 className="font-bold text-sm text-black dark:text-white font-mono">
+            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+              <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">02</span>
+              <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Tentukan Folder Workspace' : 'Select Workspace'}
               </h3>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
                 {isId
                   ? 'Pilih folder dokumen lokal Anda. Arunaki terkunci secara ketat dan sandboxed di folder tersebut.'
                   : 'Select your local working folder. Arunaki is strictly sandboxed to prevent any path traversals.'}
               </p>
             </div>
 
-            <div className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
-              <span className="text-xs font-mono font-bold text-zinc-400">03</span>
-              <h3 className="font-bold text-sm text-black dark:text-white font-mono">
+            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+              <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">03</span>
+              <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Ketik Instruksi Dokumen' : 'Automate with Prompts'}
               </h3>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
                 {isId
                   ? 'Ketik instruksi bahasa alami: rekap Excel, ubah kontrak Word, atau bubuhkan e-Materai pada PDF.'
                   : 'Type natural instructions: update Excel formulas, redline Word clauses, or stamp PDF invoices.'}
@@ -309,10 +309,10 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
         {/* SECTION NAVIGATION CARDS (NAVIGATING TO SEPARATE PAGES) */}
         <section className="space-y-6 pt-4">
           <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white font-mono">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white font-sans">
               {isId ? 'Jelajahi Dokumentasi Lengkap' : 'Explore Full Documentation'}
             </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 font-mono">
+            <p className="text-base text-zinc-600 dark:text-zinc-400 font-sans">
               {isId
                 ? 'Pilih bagian di bawah ini untuk membaca panduan terpisah.'
                 : 'Select a section below to read comprehensive standalone documentation.'}
@@ -322,74 +322,74 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               href="/arunaki/docs"
-              className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group"
+              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-zinc-500" />
-                  <h3 className="font-bold text-sm text-black dark:text-white font-mono group-hover:underline">
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-5 h-5 text-zinc-500" />
+                  <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans group-hover:underline">
                     {isId ? 'Dokumentasi & Arsitektur' : 'Docs & Architecture'}
                   </h3>
                 </div>
-                <p className="text-xs text-zinc-500 font-mono">
+                <p className="text-sm text-zinc-500 font-sans">
                   {isId ? 'Batas sandbox, COM headless, 1-klik rollback' : 'Sandbox isolation, headless COM, rollback checkpoints'}
                 </p>
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-5 h-5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <Link
               href="/arunaki/features"
-              className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group"
+              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Boxes className="w-4 h-4 text-zinc-500" />
-                  <h3 className="font-bold text-sm text-black dark:text-white font-mono group-hover:underline">
+                <div className="flex items-center gap-2.5">
+                  <Boxes className="w-5 h-5 text-zinc-500" />
+                  <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans group-hover:underline">
                     {isId ? 'Panduan Fitur Dokumen' : 'Document Features'}
                   </h3>
                 </div>
-                <p className="text-xs text-zinc-500 font-mono">
+                <p className="text-sm text-zinc-500 font-sans">
                   {isId ? 'Excel, Word, PowerPoint, e-Materai, PII Redaction' : 'Excel, Word, PowerPoint, e-Materai, PII Redaction'}
                 </p>
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-5 h-5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <Link
               href="/arunaki/tools"
-              className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group"
+              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Code2 className="w-4 h-4 text-zinc-500" />
-                  <h3 className="font-bold text-sm text-black dark:text-white font-mono group-hover:underline">
+                <div className="flex items-center gap-2.5">
+                  <Code2 className="w-5 h-5 text-zinc-500" />
+                  <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans group-hover:underline">
                     {isId ? 'Katalog 50+ Tool' : '50+ Tool Catalog'}
                   </h3>
                 </div>
-                <p className="text-xs text-zinc-500 font-mono">
+                <p className="text-sm text-zinc-500 font-sans">
                   {isId ? 'Registri lengkap alat agen dengan parameter signature' : 'Complete tool registry with call signatures'}
                 </p>
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-5 h-5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <Link
               href="/arunaki/download"
-              className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group"
+              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-zinc-500" />
-                  <h3 className="font-bold text-sm text-black dark:text-white font-mono group-hover:underline">
+                <div className="flex items-center gap-2.5">
+                  <Package className="w-5 h-5 text-zinc-500" />
+                  <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans group-hover:underline">
                     {isId ? 'Pusat Unduhan Biner' : 'Download Center'}
                   </h3>
                 </div>
-                <p className="text-xs text-zinc-500 font-mono">
+                <p className="text-sm text-zinc-500 font-sans">
                   {isId ? 'Windows Setup, Portable .zip, macOS DMG' : 'Windows Setup, Portable .zip, macOS DMG'}
                 </p>
               </div>
-              <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-5 h-5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </section>
