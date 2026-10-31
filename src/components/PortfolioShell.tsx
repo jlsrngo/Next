@@ -32,22 +32,21 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
   return (
     <div
       data-theme-style={isMonochrome ? 'monochrome' : undefined}
-      className={`h-screen w-full overflow-hidden bg-bg text-ink transition-colors duration-200 ${
+      className={`h-screen w-full overflow-hidden bg-bg text-ink transition-colors duration-200 blueprint-grid flex justify-center ${
         isMonochrome ? 'theme-monochrome' : ''
       }`}
     >
-      <div className="w-full flex h-full relative">
+      {/* Centered Workstation: Sidebar + Content + Ruler together */}
+      <div className="flex h-full w-full max-w-[1280px] xl:max-w-[1340px] border-x border-black/20 dark:border-white/20 bg-bg relative">
         <SidebarWrapper profile={profile} />
         <main
           ref={mainRef}
-          className="flex-1 w-full h-screen overflow-y-auto relative scroll-smooth blueprint-grid pr-14 md:pr-16"
+          className="flex-1 h-screen overflow-y-auto relative scroll-smooth px-6 sm:px-10 py-6 sm:py-10 pr-16 md:pr-20"
         >
-          <div className="w-full max-w-3xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
-            {children}
-          </div>
+          <div className="w-full">{children}</div>
         </main>
 
-        {/* ArtCraft Technical Coordinate Scroll Ruler - Pinned to far right with zero gap */}
+        {/* Technical Coordinate Scroll Ruler - Pinned to right edge of main */}
         <TechnicalRuler scrollContainerRef={mainRef} />
       </div>
     </div>

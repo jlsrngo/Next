@@ -4,24 +4,28 @@ import { ExternalLink, Github, Star, Layout } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getSkillIconData, loadIcon } from '@/utils/skillIconMap';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary';
-import { useTheme } from '@/context/ThemeContext';
+
+function CornerCrosses() {
+    return (
+        <>
+            <span className="absolute -top-1.5 -left-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -top-1.5 -right-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -bottom-1.5 -left-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -bottom-1.5 -right-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+        </>
+    );
+}
 
 function TechBadge({ tech }: { tech: string }) {
-    const { themeStyle } = useTheme();
-    const isMonochrome = themeStyle === 'monochrome';
-    const { iconName, brandColor } = getSkillIconData(tech);
+    const { iconName } = getSkillIconData(tech);
     const IconComponent = loadIcon(iconName);
-    const isWhite = brandColor?.toLowerCase() === '#ffffff' || brandColor?.toLowerCase() === 'white';
 
     return (
-        <div className="flex items-center gap-1.5 px-2 py-1 bg-bg-sunken border border-line rounded-none">
-            {IconComponent ? (
-                <IconComponent
-                    className={`w-3.5 h-3.5 ${isMonochrome || isWhite ? 'text-ink' : ''}`}
-                    style={{ color: isMonochrome || isWhite ? undefined : brandColor }}
-                />
-            ) : null}
-            <span className="font-mono text-[10px] uppercase font-bold text-ink">{tech}</span>
+        <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white dark:bg-black border border-black dark:border-white rounded-none">
+            {IconComponent && (
+                <IconComponent className="w-3 h-3 text-black dark:text-white" />
+            )}
+            <span className="font-mono text-[9px] uppercase font-bold text-black dark:text-white">{tech}</span>
         </div>
     );
 }
@@ -43,34 +47,41 @@ interface ProjectsClientProps {
     profile: any;
 }
 
-export default function ProjectsClient({ projects, profile }: ProjectsClientProps) {
+export default function ProjectsClient({ projects = [], profile }: ProjectsClientProps) {
     const t = useTranslations();
+    const safeProjects = Array.isArray(projects) ? projects : [];
 
     return (
-        <div className="py-8 md:py-16 space-y-10">
-            <div className="border-b border-line pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
+        <div className="py-6 md:py-10 space-y-10">
+            {/* Header */}
+            <div className="border-b border-black dark:border-white pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
                 <div className="space-y-1">
-                    <div className="hud-label">[ 03 // PORTFOLIO WORKS ]</div>
-                    <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-ink flex items-center gap-3">
+                    <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
+                        [ 03 // PORTFOLIO WORKS ]
+                    </div>
+                    <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white flex items-center gap-3">
                         {t('projects.title')}
                     </h1>
-                    <p className="text-sm sm:text-base text-muted max-w-xl">
+                    <p className="text-sm sm:text-base text-black/70 dark:text-white/70 max-w-xl">
                         {t('projects.subtitle')}
                     </p>
                 </div>
-                <div className="hud-label">
-                    {projects.length} PROJECTS DISPLAYED
+                <div className="font-mono text-[10px] font-bold text-black dark:text-white">
+                    {safeProjects.length} PROJECTS DISPLAYED
                 </div>
             </div>
 
+            {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.map((project, i) => (
+                {safeProjects.map((project, i) => (
                     <div
                         key={project.id}
-                        className="group relative border border-line bg-bg-raised overflow-hidden flex flex-col rounded-none animate-fade-in hover:border-line-strong transition-colors"
+                        className="group relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] overflow-hidden flex flex-col rounded-none animate-fade-in shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
                         style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
                     >
-                        <div className="relative h-48 md:h-56 overflow-hidden bg-bg-sunken border-b border-line">
+                        <CornerCrosses />
+
+                        <div className="relative h-48 md:h-56 overflow-hidden bg-black/5 dark:bg-white/5 border-b border-black dark:border-white">
                             {project.image_url ? (
                                 <img
                                     src={optimizeCloudinaryUrl(project.image_url || '')}
@@ -81,13 +92,14 @@ export default function ProjectsClient({ projects, profile }: ProjectsClientProp
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center opacity-20">
-                                    <Layout className="w-16 h-16 text-muted" />
+                                    <Layout className="w-16 h-16 text-black dark:text-white" />
                                 </div>
                             )}
 
                             {project.featured && (
-                                <div className="absolute top-3 right-3 px-2 py-0.5 bg-bg-raised border border-line text-ink font-mono text-[10px] uppercase font-bold tracking-wider flex items-center gap-1">
-                                    <Star className="w-3 h-3 fill-current text-accent" /> {t('featured')}
+                                <div className="absolute top-3 right-3 px-2 py-0.5 bg-white dark:bg-black border border-black dark:border-white text-black dark:text-white font-mono text-[9px] uppercase font-bold tracking-wider flex items-center gap-1">
+                                    <Star className="w-3 h-3 fill-current text-black dark:text-white" />
+                                    <span>{t('featured') || 'FEATURED'}</span>
                                 </div>
                             )}
                         </div>
@@ -95,52 +107,40 @@ export default function ProjectsClient({ projects, profile }: ProjectsClientProp
                         <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div className="space-y-3">
                                 <div>
-                                    <h3 className="font-display text-xl font-bold text-ink line-clamp-1">{project.title}</h3>
-                                    <p className="text-muted text-xs sm:text-sm leading-relaxed line-clamp-2 mt-1">{project.description}</p>
+                                    <h3 className="font-display text-xl font-bold text-black dark:text-white line-clamp-1">{project.title}</h3>
+                                    <p className="text-black/80 dark:text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2 mt-1 font-sans">{project.description}</p>
                                 </div>
 
-                                <div className="flex flex-wrap gap-1.5 pt-1">
-                                    {(() => {
-                                        let techs: string[] = [];
-                                        if (Array.isArray(project.tech_stack)) {
-                                            techs = project.tech_stack;
-                                        } else {
-                                            try {
-                                                const parsed = JSON.parse(project.tech_stack || '[]');
-                                                techs = Array.isArray(parsed) ? parsed : [];
-                                            } catch {
-                                                techs = String(project.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
-                                            }
-                                        }
-                                        return techs.map((tech, i) => (
-                                            <TechBadge key={i} tech={tech} />
-                                        ));
-                                    })()}
-                                </div>
+                                {project.tech_stack && (
+                                    <div className="flex flex-wrap gap-1.5 pt-1">
+                                        {project.tech_stack.split(',').map((tech, idx) => (
+                                            <TechBadge key={idx} tech={tech.trim()} />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="flex items-center gap-2 pt-4 border-t border-line mt-4">
-                                {project.live_url && (() => {
-                                    const isArunaki = project.title.toLowerCase().includes('arunaki') || project.live_url?.includes('arunaki');
-                                    return (
-                                        <a
-                                            href={project.live_url}
-                                            target={project.live_url.startsWith('http') ? '_blank' : '_self'}
-                                            rel="noopener noreferrer"
-                                            className="btn-primary flex-1 h-9 !text-[10px]"
-                                        >
-                                            <ExternalLink className="w-3.5 h-3.5" /> {isArunaki ? 'Arunaki App' : (t('projects.view_live') || 'Demo')}
-                                        </a>
-                                    );
-                                })()}
+                            <div className="flex items-center gap-2 pt-3 border-t border-black dark:border-white">
+                                {project.live_url && (
+                                    <a
+                                        href={project.live_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:opacity-85"
+                                    >
+                                        <span>Live Demo</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                )}
                                 {project.github_url && (
                                     <a
                                         href={project.github_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn-secondary flex-1 h-9 !text-[10px]"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-black dark:border-white bg-white dark:bg-black text-black dark:text-white font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5"
                                     >
-                                        <Github className="w-3.5 h-3.5" /> {t('code')}
+                                        <Github className="w-3 h-3" />
+                                        <span>Code</span>
                                     </a>
                                 )}
                             </div>

@@ -17,9 +17,9 @@ export default function SkillIcon({ name, iconSlug, onDelete, showDelete }: Skil
     return (
         <div className="group flex flex-col items-center w-16 sm:w-20 cursor-pointer pt-2 select-none">
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 z-10 block">
-                {/* Backdrop Card that moves out and rotates on hover (sharp square) */}
+                {/* Backdrop Card that moves out and rotates on hover (monochrome square, no colorful gradient) */}
                 <div
-                    className={`skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e3e2dc] dark:bg-[#25272e] border border-black dark:border-white opacity-80 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:bg-gradient-to-br ${gradient}`}
+                    className="skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e5e4de] dark:bg-[#222328] border border-black dark:border-white opacity-80 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:bg-[#d8d7cf] dark:group-hover:bg-[#2e2f38]"
                     style={{ willChange: 'transform' }}
                 />
                 {/* Surface Card with Icon (sharp square with solid black/white border) */}

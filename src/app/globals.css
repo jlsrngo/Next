@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Grand+Hotel&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,11 +22,11 @@
     --line-strong: rgba(16, 16, 20, 0.38);
     --invert-bg: #101014;
     --invert-fg: #f2f1ee;
-    --accent: #2d81ff;
-    --accent-dark: #1659c4;
-    --accent-light: #5ca1ff;
-    --accent-subtle: rgba(45, 129, 255, 0.12);
-    --accent-border: rgba(45, 129, 255, 0.35);
+    --accent: #101014;
+    --accent-dark: #000000;
+    --accent-light: #2c2d33;
+    --accent-subtle: rgba(16, 16, 20, 0.08);
+    --accent-border: rgba(16, 16, 20, 0.25);
     --grid-line: rgba(16, 16, 20, 0.05);
   }
 
@@ -45,11 +47,11 @@
     --line-strong: rgba(242, 241, 238, 0.4);
     --invert-bg: #ffffff;
     --invert-fg: #0b0b0c;
-    --accent: #2d81ff;
-    --accent-dark: #1659c4;
-    --accent-light: #74aaff;
-    --accent-subtle: rgba(45, 129, 255, 0.15);
-    --accent-border: rgba(45, 129, 255, 0.4);
+    --accent: #ffffff;
+    --accent-dark: #e5e5e5;
+    --accent-light: #ffffff;
+    --accent-subtle: rgba(255, 255, 255, 0.12);
+    --accent-border: rgba(255, 255, 255, 0.3);
     --grid-line: rgba(242, 241, 238, 0.05);
   }
 

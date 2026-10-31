@@ -77,7 +77,7 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
             {/* Top Telemetry Strip with 1px Solid Black Borders */}
             <div className="flex items-center justify-between border-b border-black dark:border-white pb-3 font-mono text-[10px] tracking-widest text-black dark:text-white uppercase select-none">
                 <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-accent inline-block" />
+                    <span className="w-2 h-2 bg-black dark:bg-white inline-block" />
                     <span className="font-bold">SYS // CORE [01]</span>
                     <span className="text-black dark:text-white font-bold">|</span>
                     <span className="hidden sm:inline font-semibold">LAT: 0.7893° S · LON: 113.9213° E</span>
@@ -85,8 +85,8 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                 <div className="flex items-center gap-2 sm:gap-4">
                     <span className="hidden md:inline font-semibold">SPEC: INDEPENDENT ENGINEERING</span>
                     <span className="text-black dark:text-white font-bold hidden md:inline">|</span>
-                    <span className="text-accent font-bold flex items-center gap-1.5">
-                        <Cpu className="w-3.5 h-3.5 text-accent inline" />
+                    <span className="text-black dark:text-white font-bold flex items-center gap-1.5">
+                        <Cpu className="w-3.5 h-3.5 text-black dark:text-white inline" />
                         <span>RUST AXUM 0.7</span>
                     </span>
                 </div>
@@ -107,9 +107,9 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                 </div>
 
                 <div className="space-y-4">
-                    <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-[-0.03em] leading-[1.05] text-black dark:text-white">
+                    <h1 className="font-display text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-tight text-black dark:text-white whitespace-normal sm:whitespace-nowrap">
                         {t('home.greeting')}{' '}
-                        <span className="font-serif italic font-normal text-black dark:text-white">
+                        <span className="font-serif italic font-normal text-black dark:text-white" style={{ fontFamily: '"Instrument Serif", Georgia, serif' }}>
                             {profile?.name || '...'}
                         </span>
                     </h1>
@@ -159,9 +159,9 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
             <div className="relative flex items-center my-8 sm:my-12 select-none">
                 <div className="flex-grow border-t border-black dark:border-white"></div>
                 <div className="flex-shrink mx-4 font-mono text-[10px] uppercase tracking-[0.25em] text-black dark:text-white font-bold flex items-center gap-2">
-                    <span className="text-accent">+</span>
+                    <span className="font-bold">+</span>
                     <span>SEC.02 // ARSENAL MATRIX</span>
-                    <span className="text-accent">+</span>
+                    <span className="font-bold">+</span>
                 </div>
                 <div className="flex-grow border-t border-black dark:border-white"></div>
             </div>
@@ -177,7 +177,7 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                             </h2>
                         </div>
                         <div className="text-right hidden sm:block font-mono text-[10px] text-black dark:text-white font-bold">
-                            <span className="text-accent">{skills.length}</span> TECHNOLOGIES INDEXED
+                            <span className="font-bold">{skills.length}</span> TECHNOLOGIES INDEXED
                         </div>
                     </div>
 

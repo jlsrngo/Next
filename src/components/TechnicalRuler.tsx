@@ -80,17 +80,17 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
           </div>
         ))}
 
-        {/* Dynamic Blue Active Scroll Indicator - Integrated on ruler */}
+        {/* Dynamic Active Scroll Indicator - Solid Black / White */}
         <div
           className="absolute left-0 right-0 flex items-center justify-end pr-1.5 pointer-events-none transition-all duration-75 ease-out z-20"
           style={{ top: `${indicatorTop}%`, transform: 'translateY(-50%)' }}
         >
           {/* Active Percentage Text */}
-          <span className="font-mono text-[9px] font-bold text-accent tracking-tighter mr-1 select-none bg-bg border border-accent/40 px-1 shadow-sm">
+          <span className="font-mono text-[9px] font-bold text-black dark:text-white tracking-tight mr-1 select-none bg-bg border border-black dark:border-white px-1 whitespace-nowrap shadow-none">
             {String(Math.round(percent)).padStart(3, '0')} %
           </span>
-          {/* Active Accent Horizontal Tick Line */}
-          <span className="h-[2px] w-5 bg-accent shadow-[0_0_8px_var(--accent)]" />
+          {/* Active Solid Black/White Horizontal Tick Line */}
+          <span className="h-[2px] w-5 bg-black dark:bg-white" />
         </div>
       </div>
     </aside>

@@ -59,11 +59,11 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-none border border-line-strong bg-bg-raised ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
+        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-none border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-none border border-line flex items-center justify-center bg-invert-bg text-invert-fg hover:opacity-85 transition-opacity"
+          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-none border border-black dark:border-white flex items-center justify-center bg-black dark:bg-white text-white dark:text-black hover:opacity-85 transition-opacity"
         >
           <X className="w-4 h-4" />
         </button>
