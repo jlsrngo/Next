@@ -31,6 +31,10 @@ path = "api/skills.rs"
 name = "dashboard"
 path = "api/dashboard.rs"
 
+[[bin]]
+name = "about"
+path = "api/about.rs"
+
 [dependencies]
 vercel_runtime = "1.1.0"
 axum = "0.7"
