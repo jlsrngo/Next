@@ -1,14 +1,22 @@
 use axum::{
-    extract::Query,
+    extract::{Query, State},
     http::{header, Method, StatusCode},
     response::{IntoResponse, Json},
     routing::get,
     Router,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::json;
+use serde_json::{json, Value};
+use sqlx::{postgres::PgPoolOptions, PgPool, Row};
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
+
+#[derive(Clone)]
+struct AppState {
+    pool: Option<PgPool>,
+    http_client: reqwest::Client,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 struct LocaleQuery {
@@ -17,6 +25,41 @@ struct LocaleQuery {
 
 #[tokio::main]
 async fn main() {
+    dotenvy::dotenv().ok();
+
+    let database_url = std::env::var("DATABASE_URL").unwrap_or_default();
+    println!(">>> [Rust Axum Engine] Connecting to Database...");
+
+    let pool = if !database_url.is_empty() {
+        match PgPoolOptions::new()
+            .max_connections(5)
+            .connect(&database_url)
+            .await
+        {
+            Ok(p) => {
+                println!(">>> [Rust Axum Engine] PostgreSQL Database Connected Successfully!");
+                Some(p)
+            }
+            Err(e) => {
+                eprintln!(">>> [Rust Axum Engine] DB Connection warning: {}", e);
+                None
+            }
+        }
+    } else {
+        println!(">>> [Rust Axum Engine] DATABASE_URL not set, operating with synced snapshot.");
+        None
+    };
+
+    let http_client = reqwest::Client::builder()
+        .user_agent("Portfolio-Axum/1.0")
+        .build()
+        .unwrap_or_default();
+
+    let state = Arc::new(AppState {
+        pool,
+        http_client,
+    });
+
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
@@ -31,7 +74,8 @@ async fn main() {
         .route("/api/skills", get(skills_handler))
         .route("/api/about", get(about_handler))
         .route("/api/github/contributions", get(github_contributions_handler))
-        .layer(cors);
+        .layer(cors)
+        .with_state(state);
 
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "8080".to_string())
@@ -45,23 +89,26 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn health_handler() -> impl IntoResponse {
+async fn health_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let db_connected = state.pool.is_some();
     (
         StatusCode::OK,
         Json(json!({
             "status": "healthy",
+            "database_connected": db_connected,
             "engine": "Rust / Axum 0.7",
-            "runtime": "Tokio Async",
+            "runtime": "Tokio Async Native",
             "uptime_ms": 10
         })),
     )
 }
 
-async fn stats_handler() -> impl IntoResponse {
+async fn stats_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
     (
         StatusCode::OK,
         Json(json!({
             "engine": "Axum 0.7 (Rust Native)",
+            "database_live": state.pool.is_some(),
             "status": "optimal",
             "memory_usage_mb": 14.2,
             "cold_start_ms": 1,
@@ -70,221 +117,327 @@ async fn stats_handler() -> impl IntoResponse {
     )
 }
 
-async fn dashboard_handler() -> impl IntoResponse {
-    (
-        StatusCode::OK,
-        Json(json!({
-            "total_projects": 2,
-            "featured_projects": 2,
-            "total_achievements": 2,
-            "total_contributions": 1656,
-            "total_repos": 17,
-            "total_prs": 0,
-            "followers": 0
-        })),
-    )
+// Fallback loader to public/db-data.json if direct pool query encounters network transient
+fn get_snapshot() -> Option<Value> {
+    if let Ok(content) = std::fs::read_to_string("public/db-data.json") {
+        if let Ok(val) = serde_json::from_str::<Value>(&content) {
+            return Some(val);
+        }
+    }
+    None
 }
 
-async fn profile_handler(_q: Query<LocaleQuery>) -> impl IntoResponse {
-    (
-        StatusCode::OK,
-        Json(json!({
-            "name": "Julio Siringoringo",
-            "fullName": "Julio Siringoringo",
-            "username": "jlsrngo",
-            "headline": "Junior Full-Stack Web Developer",
-            "bio_home": "I am a web developer with expertise in building fast, scalable applications using modern technologies.",
-            "bio_about": "Passionate developer focused on high-performance web systems, Swiss brutalist aesthetics, and robust software architecture.",
-            "location": "Indonesia",
-            "work_status": "Open to Opportunities",
-            "avatar_url": "/avatar.jpg",
-            "github_url": "https://github.com/jlsrngo",
-            "linkedin_url": "https://linkedin.com/in/jlsrngo",
-            "email": "juliosiringo777@gmail.com",
-            "website": "https://jlsrngo.com",
-            "accent_color": "#2d81ff"
-        })),
-    )
-}
+async fn dashboard_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let mut total_projects: i64 = 0;
+    let mut featured_projects: i64 = 0;
+    let mut total_achievements: i64 = 0;
 
-async fn projects_handler() -> impl IntoResponse {
-    (
-        StatusCode::OK,
-        Json(json!([
-            {
-                "id": "1",
-                "title": "Portfolio ArtCraft System",
-                "description": "High-performance portfolio built with Swiss wireframe editorial brutalism, accelerated with Rust and Axum.",
-                "image_url": "/projects/artcraft.png",
-                "live_url": "https://getartcraft.com",
-                "github_url": "https://github.com/jlsrngo/Next",
-                "tech_stack": ["Rust", "Axum", "React", "Vite", "Tailwind CSS"],
-                "featured": true,
-                "order_index": 0
-            },
-            {
-                "id": "2",
-                "title": "Arunaki Engine Docs",
-                "description": "Documentation and developer hub for the Arunaki CLI system and workflow tools.",
-                "image_url": null,
-                "live_url": "/arunaki/docs",
-                "github_url": "https://github.com/jlsrngo",
-                "tech_stack": ["Next.js", "TypeScript", "Tailwind CSS", "Rust"],
-                "featured": true,
-                "order_index": 1
+    if let Some(pool) = &state.pool {
+        if let Ok(row) = sqlx::query("SELECT count(*) as count FROM projects").fetch_one(pool).await {
+            total_projects = row.try_get::<i64, _>("count").unwrap_or(0);
+        }
+        if let Ok(row) = sqlx::query("SELECT count(*) as count FROM projects WHERE featured = true").fetch_one(pool).await {
+            featured_projects = row.try_get::<i64, _>("count").unwrap_or(0);
+        }
+        if let Ok(row) = sqlx::query("SELECT count(*) as count FROM achievements").fetch_one(pool).await {
+            total_achievements = row.try_get::<i64, _>("count").unwrap_or(0);
+        }
+    } else if let Some(snap) = get_snapshot() {
+        if let Some(stats) = snap.get("stats") {
+            total_projects = stats.get("total_projects").and_then(|v| v.as_i64()).unwrap_or(0);
+            featured_projects = stats.get("featured_projects").and_then(|v| v.as_i64()).unwrap_or(0);
+            total_achievements = stats.get("total_achievements").and_then(|v| v.as_i64()).unwrap_or(0);
+        }
+    }
+
+    // Dynamic GitHub Stats from synced API feed
+    let mut total_contributions: i64 = 1957;
+    let mut total_repos: i64 = 17;
+    let mut total_prs: i64 = 0;
+    let mut followers: i64 = 0;
+
+    if let Ok(content) = std::fs::read_to_string("public/github-contributions.json") {
+        if let Ok(gh) = serde_json::from_str::<Value>(&content) {
+            if let Some(v) = gh.get("total_contributions").and_then(|v| v.as_i64()) {
+                total_contributions = v;
             }
-        ])),
-    )
-}
+            if let Some(v) = gh.get("total_repos").and_then(|v| v.as_i64()) {
+                total_repos = v;
+            }
+            if let Some(v) = gh.get("total_prs").and_then(|v| v.as_i64()) {
+                total_prs = v;
+            }
+            if let Some(v) = gh.get("followers").and_then(|v| v.as_i64()) {
+                followers = v;
+            }
+        }
+    }
 
-async fn skills_handler() -> impl IntoResponse {
-    (
-        StatusCode::OK,
-        Json(json!([
-            { "id": "1", "name": "TypeScript", "icon": "typescript", "iconName": "typescript", "category": "Languages", "proficiency": 92, "featured": true },
-            { "id": "2", "name": "JavaScript", "icon": "javascript", "iconName": "javascript", "category": "Languages", "proficiency": 95, "featured": true },
-            { "id": "3", "name": "Rust", "icon": "rust", "iconName": "rust", "category": "Languages", "proficiency": 88, "featured": true },
-            { "id": "4", "name": "Python", "icon": "python", "iconName": "python", "category": "Languages", "proficiency": 85, "featured": true },
-            { "id": "5", "name": "Go", "icon": "go", "iconName": "go", "category": "Languages", "proficiency": 80, "featured": false },
-            { "id": "6", "name": "HTML5", "icon": "html5", "iconName": "html5", "category": "Languages", "proficiency": 98, "featured": false },
-            { "id": "7", "name": "CSS3", "icon": "css3", "iconName": "css3", "category": "Languages", "proficiency": 95, "featured": false },
-
-            { "id": "8", "name": "React", "icon": "react", "iconName": "react", "category": "Frontend", "proficiency": 94, "featured": true },
-            { "id": "9", "name": "Next.js", "icon": "nextdotjs", "iconName": "nextdotjs", "category": "Frontend", "proficiency": 90, "featured": true },
-            { "id": "10", "name": "Vite", "icon": "vite", "iconName": "vite", "category": "Frontend", "proficiency": 92, "featured": true },
-            { "id": "11", "name": "Tailwind CSS", "icon": "tailwindcss", "iconName": "tailwindcss", "category": "Frontend", "proficiency": 96, "featured": true },
-            { "id": "12", "name": "Svelte", "icon": "svelte", "iconName": "svelte", "category": "Frontend", "proficiency": 78, "featured": false },
-
-            { "id": "13", "name": "Axum", "icon": "rust", "iconName": "rust", "category": "Backend", "proficiency": 88, "featured": true },
-            { "id": "14", "name": "Node.js", "icon": "nodejs", "iconName": "nodejs", "category": "Backend", "proficiency": 92, "featured": true },
-            { "id": "15", "name": "Express", "icon": "express", "iconName": "express", "category": "Backend", "proficiency": 90, "featured": false },
-            { "id": "16", "name": "GraphQL", "icon": "graphql", "iconName": "graphql", "category": "Backend", "proficiency": 82, "featured": false },
-
-            { "id": "17", "name": "PostgreSQL", "icon": "postgresql", "iconName": "postgresql", "category": "Database", "proficiency": 88, "featured": true },
-            { "id": "18", "name": "Redis", "icon": "redis", "iconName": "redis", "category": "Database", "proficiency": 85, "featured": true },
-            { "id": "19", "name": "SQLite", "icon": "sqlite", "iconName": "sqlite", "category": "Database", "proficiency": 90, "featured": false },
-            { "id": "20", "name": "Prisma", "icon": "prisma", "iconName": "prisma", "category": "Database", "proficiency": 86, "featured": false },
-
-            { "id": "21", "name": "Docker", "icon": "docker", "iconName": "docker", "category": "Tools & DevOps", "proficiency": 85, "featured": true },
-            { "id": "22", "name": "Git", "icon": "git", "iconName": "git", "category": "Tools & DevOps", "proficiency": 94, "featured": true },
-            { "id": "23", "name": "Linux", "icon": "linux", "iconName": "linux", "category": "Tools & DevOps", "proficiency": 88, "featured": true },
-            { "id": "24", "name": "GitHub Actions", "icon": "githubactions", "iconName": "githubactions", "category": "Tools & DevOps", "proficiency": 84, "featured": false },
-            { "id": "25", "name": "Nginx", "icon": "nginx", "iconName": "nginx", "category": "Tools & DevOps", "proficiency": 80, "featured": false },
-
-            { "id": "26", "name": "Vercel", "icon": "vercel", "iconName": "vercel", "category": "Cloud", "proficiency": 92, "featured": true },
-            { "id": "27", "name": "Cloudflare", "icon": "cloudflare", "iconName": "cloudflare", "category": "Cloud", "proficiency": 85, "featured": false },
-            { "id": "28", "name": "AWS", "icon": "aws", "iconName": "aws", "category": "Cloud", "proficiency": 78, "featured": false }
-        ])),
-    )
-}
-
-async fn about_handler() -> impl IntoResponse {
     (
         StatusCode::OK,
         Json(json!({
-            "experiences": [
-                {
-                    "id": 1,
-                    "company_name": "Independent Engineering & Systems",
-                    "company_logo_url": null,
-                    "position": "Lead Full-Stack Web Developer",
-                    "location": "Remote / Indonesia",
-                    "start_date": "2023-01-01",
-                    "end_date": null,
-                    "is_current": true,
-                    "employment_type": "Full-time",
-                    "work_type": "Remote",
-                    "responsibilities": [
-                        "Architecting ultra-high-performance web systems using Vite, React 18, and Rust Axum microservices",
-                        "Migrating legacy Next.js runtimes to sub-millisecond asynchronous Rust Tokio web services",
-                        "Designing Swiss Technical Brutalism UI design systems with precision hairline grids and HUD telemetry"
-                    ],
-                    "what_i_learned": [
-                        "Asynchronous concurrency patterns with Tokio, Serde zero-copy deserialization, and Axum routing",
-                        "Zero-runtime CSS architecture and technical typography systems"
-                    ],
-                    "impact": [
-                        "Reduced frontend bundle size by 85% and cut API response latency to under 5ms",
-                        "Achieved 100/100 performance scores across mobile and desktop Lighthouse audits"
-                    ]
-                },
-                {
-                    "id": 2,
-                    "company_name": "Digital Application Engineering Lab",
-                    "company_logo_url": null,
-                    "position": "Full-Stack Web Developer",
-                    "location": "Indonesia",
-                    "start_date": "2022-01-01",
-                    "end_date": "2022-12-31",
-                    "is_current": false,
-                    "employment_type": "Contract",
-                    "work_type": "Hybrid",
-                    "responsibilities": [
-                        "Developed high-traffic responsive web applications using React, TypeScript, and PostgreSQL",
-                        "Integrated third-party APIs and implemented secure JWT / OAuth authentication workflows",
-                        "Collaborated in agile cross-functional engineering teams delivering enterprise-grade software"
-                    ],
-                    "what_i_learned": [
-                        "Relational database query optimization and PostgreSQL indexing strategies",
-                        "Advanced React state management architectures and component performance tuning"
-                    ],
-                    "impact": [
-                        "Delivered 12+ mission-critical web applications with zero production downtime",
-                        "Improved application page load speeds by 40% through code splitting and asset optimization"
-                    ]
-                },
-                {
-                    "id": 3,
-                    "company_name": "Open-Source Web & Systems Community",
-                    "company_logo_url": null,
-                    "position": "Software Engineer & Open Source Contributor",
-                    "location": "Global / Remote",
-                    "start_date": "2021-03-01",
-                    "end_date": "2021-12-31",
-                    "is_current": false,
-                    "employment_type": "Open Source",
-                    "work_type": "Remote",
-                    "responsibilities": [
-                        "Authored modular open-source developer tooling and reusable UI component primitives",
-                        "Reviewed community pull requests and benchmarked asynchronous network protocols"
-                    ],
-                    "what_i_learned": [
-                        "Open-source software governance, automated CI/CD pipelines, and semantic versioning",
-                        "Deep insights into low-level systems programming and compiler optimizations"
-                    ],
-                    "impact": [
-                        "Published libraries and technical developer resources utilized by hundreds of engineers"
-                    ]
-                }
-            ],
-            "educations": [
-                {
-                    "id": 1,
-                    "institution_name": "University / Institute of Technology",
-                    "institution_logo_url": null,
-                    "degree": "Bachelor of Computer Science (S.Kom)",
-                    "field_of_study": "Informatics & Software Engineering",
-                    "location": "Indonesia",
-                    "gpa": "3.85 / 4.00 (Cum Laude)",
-                    "start_date": "2020-09-01",
-                    "end_date": "2024-07-01",
-                    "is_current": false,
-                    "description": "Specialized in distributed systems, web architectures, algorithms, and database systems optimization."
-                },
-                {
-                    "id": 2,
-                    "institution_name": "Systems Architecture & Cloud Institute",
-                    "institution_logo_url": null,
-                    "degree": "Professional Certification",
-                    "field_of_study": "High-Concurrency Web Systems & Rust Programming",
-                    "location": "Online / Global",
-                    "gpa": null,
-                    "start_date": "2023-05-01",
-                    "end_date": "2023-11-01",
-                    "is_current": false,
-                    "description": "Intensive mastery in microservice patterns, containerized deployments, and high-performance network engineering."
-                }
-            ]
+            "total_projects": total_projects,
+            "featured_projects": featured_projects,
+            "total_achievements": total_achievements,
+            "total_contributions": total_contributions,
+            "total_repos": total_repos,
+            "total_prs": total_prs,
+            "followers": followers
+        })),
+    )
+}
+
+async fn profile_handler(
+    State(state): State<Arc<AppState>>,
+    _q: Query<LocaleQuery>,
+) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let query_result = sqlx::query(
+            "SELECT id, full_name, headline, bio_home, bio_about, avatar_url, accent_color, email, location, website, github_url, linkedin_url FROM profiles LIMIT 1"
+        )
+        .fetch_one(pool)
+        .await;
+
+        if let Ok(row) = query_result {
+            let full_name: String = row.try_get("full_name").unwrap_or_else(|_| "Julio Siringoringo".to_string());
+            let headline: Option<String> = row.try_get("headline").ok();
+            let bio_home: Option<String> = row.try_get("bio_home").ok();
+            let bio_about: Option<String> = row.try_get("bio_about").ok();
+            let avatar_url: Option<String> = row.try_get("avatar_url").ok();
+            let accent_color: String = row.try_get("accent_color").unwrap_or_else(|_| "#3B82F6".to_string());
+            let email: Option<String> = row.try_get("email").ok();
+            let location: Option<String> = row.try_get("location").ok();
+            let website: Option<String> = row.try_get("website").ok();
+            let github_url: Option<String> = row.try_get("github_url").ok();
+            let linkedin_url: Option<String> = row.try_get("linkedin_url").ok();
+
+            return (
+                StatusCode::OK,
+                Json(json!({
+                    "name": full_name,
+                    "fullName": full_name,
+                    "username": "jlsrngo",
+                    "headline": headline.unwrap_or_else(|| "Full Stack Developer".to_string()),
+                    "bio_home": bio_home.unwrap_or_default(),
+                    "bio_about": bio_about.unwrap_or_default(),
+                    "location": location.unwrap_or_else(|| "Indonesia".to_string()),
+                    "work_status": "Open to Opportunities",
+                    "avatar_url": avatar_url.unwrap_or_else(|| "/avatar.jpg".to_string()),
+                    "github_url": github_url.unwrap_or_else(|| "https://github.com/jlsrngo".to_string()),
+                    "linkedin_url": linkedin_url.unwrap_or_else(|| "https://linkedin.com/in/jlsrngo".to_string()),
+                    "email": email.unwrap_or_else(|| "juliosiringo777@gmail.com".to_string()),
+                    "website": website.unwrap_or_else(|| "https://jlsrngo.com".to_string()),
+                    "accent_color": accent_color
+                })),
+            );
+        }
+    }
+
+    if let Some(snap) = get_snapshot() {
+        if let Some(p) = snap.get("profile") {
+            return (StatusCode::OK, Json(p.clone()));
+        }
+    }
+
+    (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({ "error": "Profile not found" })))
+}
+
+async fn projects_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let query_result = sqlx::query(
+            "SELECT id, title, description, image_url, live_url, github_url, tech_stack, featured, \"order\" FROM projects ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        if let Ok(rows) = query_result {
+            let mut list = Vec::new();
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let title: String = r.try_get("title").unwrap_or_default();
+                let description: String = r.try_get("description").unwrap_or_default();
+                let image_url: Option<String> = r.try_get("image_url").ok();
+                let live_url: Option<String> = r.try_get("live_url").ok();
+                let github_url: Option<String> = r.try_get("github_url").ok();
+                let tech_stack: Vec<String> = r.try_get("tech_stack").unwrap_or_default();
+                let featured: bool = r.try_get("featured").unwrap_or(false);
+                let order: i32 = r.try_get("order").unwrap_or(0);
+
+                list.push(json!({
+                    "id": id,
+                    "title": title,
+                    "description": description,
+                    "image_url": image_url,
+                    "live_url": live_url,
+                    "github_url": github_url,
+                    "tech_stack": tech_stack,
+                    "featured": featured,
+                    "order": order,
+                    "order_index": order
+                }));
+            }
+            return (StatusCode::OK, Json(json!(list)));
+        }
+    }
+
+    if let Some(snap) = get_snapshot() {
+        if let Some(projects) = snap.get("projects") {
+            return (StatusCode::OK, Json(projects.clone()));
+        }
+    }
+
+    (StatusCode::OK, Json(json!([])))
+}
+
+async fn skills_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let query_result = sqlx::query(
+            "SELECT id, name, category, icon_name, proficiency, featured, \"order\" FROM skills ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        if let Ok(rows) = query_result {
+            let mut list = Vec::new();
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let name: String = r.try_get("name").unwrap_or_default();
+                let category: String = r.try_get("category").unwrap_or_default();
+                let icon_name: Option<String> = r.try_get("icon_name").ok();
+                let proficiency: i32 = r.try_get("proficiency").unwrap_or(80);
+                let featured: bool = r.try_get("featured").unwrap_or(false);
+                let order: i32 = r.try_get("order").unwrap_or(0);
+
+                list.push(json!({
+                    "id": id,
+                    "name": name,
+                    "category": category,
+                    "icon": icon_name,
+                    "iconName": icon_name,
+                    "proficiency": proficiency,
+                    "featured": featured,
+                    "order": order
+                }));
+            }
+            return (StatusCode::OK, Json(json!(list)));
+        }
+    }
+
+    if let Some(snap) = get_snapshot() {
+        if let Some(skills) = snap.get("skills") {
+            return (StatusCode::OK, Json(skills.clone()));
+        }
+    }
+
+    (StatusCode::OK, Json(json!([])))
+}
+
+async fn about_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let exp_rows = sqlx::query(
+            "SELECT id, company, company_logo_url, position, location, start_date::text as start_date, end_date::text as end_date, current, description, employment_type, work_type, responsibilities, what_i_learned, impact, \"order\" FROM work_experiences ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        let edu_rows = sqlx::query(
+            "SELECT id, institution, institution_logo_url, degree, field_of_study, location, gpa, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM educations ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        let mut experiences = Vec::new();
+        if let Ok(rows) = exp_rows {
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let company: String = r.try_get("company").unwrap_or_default();
+                let company_logo_url: Option<String> = r.try_get("company_logo_url").ok();
+                let position: String = r.try_get("position").unwrap_or_default();
+                let location: Option<String> = r.try_get("location").ok();
+                let start_date: Option<String> = r.try_get("start_date").ok();
+                let end_date: Option<String> = r.try_get("end_date").ok();
+                let current: bool = r.try_get("current").unwrap_or(false);
+                let description: String = r.try_get("description").unwrap_or_default();
+                let employment_type: Option<String> = r.try_get("employment_type").ok();
+                let work_type: Option<String> = r.try_get("work_type").ok();
+                let responsibilities: Option<serde_json::Value> = r.try_get("responsibilities").ok();
+                let what_i_learned: Option<serde_json::Value> = r.try_get("what_i_learned").ok();
+                let impact: Option<serde_json::Value> = r.try_get("impact").ok();
+
+                experiences.push(json!({
+                    "id": id,
+                    "company_name": company,
+                    "company_logo_url": company_logo_url,
+                    "position": position,
+                    "location": location.unwrap_or_else(|| "Indonesia".to_string()),
+                    "start_date": start_date.unwrap_or_else(|| "2023-01-01".to_string()),
+                    "end_date": end_date,
+                    "is_current": current,
+                    "description": description,
+                    "employment_type": employment_type.unwrap_or_else(|| "Full-time".to_string()),
+                    "work_type": work_type.unwrap_or_else(|| "Remote".to_string()),
+                    "responsibilities": responsibilities.unwrap_or_else(|| json!([])),
+                    "what_i_learned": what_i_learned.unwrap_or_else(|| json!([])),
+                    "impact": impact.unwrap_or_else(|| json!([]))
+                }));
+            }
+        }
+
+        let mut educations = Vec::new();
+        if let Ok(rows) = edu_rows {
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let institution: String = r.try_get("institution").unwrap_or_default();
+                let institution_logo_url: Option<String> = r.try_get("institution_logo_url").ok();
+                let degree: String = r.try_get("degree").unwrap_or_default();
+                let field_of_study: Option<String> = r.try_get("field_of_study").ok();
+                let location: Option<String> = r.try_get("location").ok();
+                let gpa: Option<String> = r.try_get("gpa").ok();
+                let start_date: Option<String> = r.try_get("start_date").ok();
+                let end_date: Option<String> = r.try_get("end_date").ok();
+                let current: bool = r.try_get("current").unwrap_or(false);
+                let description: Option<String> = r.try_get("description").ok();
+
+                educations.push(json!({
+                    "id": id,
+                    "institution_name": institution,
+                    "institution_logo_url": institution_logo_url,
+                    "degree": degree,
+                    "field_of_study": field_of_study.unwrap_or_default(),
+                    "location": location,
+                    "gpa": gpa,
+                    "start_date": start_date.unwrap_or_default(),
+                    "end_date": end_date,
+                    "is_current": current,
+                    "description": description
+                }));
+            }
+        }
+
+        return (
+            StatusCode::OK,
+            Json(json!({
+                "experiences": experiences,
+                "educations": educations
+            })),
+        );
+    }
+
+    if let Some(snap) = get_snapshot() {
+        return (
+            StatusCode::OK,
+            Json(json!({
+                "experiences": snap.get("experiences").unwrap_or(&json!([])),
+                "educations": snap.get("educations").unwrap_or(&json!([]))
+            })),
+        );
+    }
+
+    (
+        StatusCode::OK,
+        Json(json!({
+            "experiences": [],
+            "educations": []
         })),
     )
 }

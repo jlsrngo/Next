@@ -68,12 +68,14 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
   useEffect(() => {
-    if (!github && typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       try {
-        const stored = sessionStorage.getItem('portfolio_github_cache');
+        sessionStorage.removeItem('portfolio_github_cache');
+        sessionStorage.removeItem('portfolio_github_cache_v2');
+        const stored = sessionStorage.getItem('portfolio_github_cache_v4');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed && parsed.data && Date.now() - parsed.timestamp < 1000 * 60 * 30) {
+          if (parsed && parsed.data && Date.now() - parsed.timestamp < 1000 * 60 * 15) {
             memoryGithubCache = parsed.data;
             setGithub(parsed.data);
             setGhLoading(false);
@@ -97,8 +99,11 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
         .catch(() => setLoading(false));
     }
 
-    fetch('/api/github/contributions')
-      .then(r => r.json())
+    fetch('/github-contributions.json')
+      .then(r => {
+        if (!r.ok) return fetch('/api/github/contributions').then(res => res.json());
+        return r.json();
+      })
       .then(data => {
         if (data.error) {
           if (!memoryGithubCache) setGhLoading(false);
@@ -106,7 +111,7 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
         }
         memoryGithubCache = data;
         try {
-          sessionStorage.setItem('portfolio_github_cache', JSON.stringify({ data, timestamp: Date.now() }));
+          sessionStorage.setItem('portfolio_github_cache_v4', JSON.stringify({ data, timestamp: Date.now() }));
         } catch {}
         setGithub(data);
         setGhLoading(false);

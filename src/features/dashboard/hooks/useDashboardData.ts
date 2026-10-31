@@ -30,13 +30,14 @@ export function useDashboardData() {
   const [ghLoading, setGhLoading] = useState<boolean>(() => !memoryGithubCache);
 
   useEffect(() => {
-    // Session cache restoration
-    if (!github && typeof window !== 'undefined') {
+    // Clear legacy mock cache
+    if (typeof window !== 'undefined') {
       try {
-        const stored = sessionStorage.getItem('portfolio_github_cache');
+        sessionStorage.removeItem('portfolio_github_cache');
+        const stored = sessionStorage.getItem('portfolio_github_cache_v3');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed?.data && Date.now() - parsed.timestamp < 1000 * 60 * 30) {
+          if (parsed?.data?.weeks && Date.now() - parsed.timestamp < 1000 * 60 * 30) {
             memoryGithubCache = parsed.data;
             setGithub(parsed.data);
             setGhLoading(false);
@@ -54,17 +55,28 @@ export function useDashboardData() {
         .finally(() => setLoading(false));
     }
 
-    fetch('/api/github/contributions')
-      .then(r => (r.ok ? r.json() : fetch('/github-contributions.json').then(res => res.json())))
-      .catch(() => fetch('/github-contributions.json').then(res => res.json()))
+    // Always fetch verified real contributions dataset
+    fetch('/github-contributions.json')
+      .then(r => r.json())
       .then(data => {
-        if (data && !data.error && data.weeks) {
+        if (data && data.weeks) {
           memoryGithubCache = data;
           try {
-            sessionStorage.setItem('portfolio_github_cache', JSON.stringify({ data, timestamp: Date.now() }));
+            sessionStorage.setItem('portfolio_github_cache_v3', JSON.stringify({ data, timestamp: Date.now() }));
           } catch {}
           setGithub(data);
         }
+      })
+      .catch(() => {
+        // Fallback to API if static file fails
+        return fetch('/api/github/contributions')
+          .then(r => r.json())
+          .then(data => {
+            if (data && data.weeks) {
+              memoryGithubCache = data;
+              setGithub(data);
+            }
+          });
       })
       .catch(() => {})
       .finally(() => setGhLoading(false));
