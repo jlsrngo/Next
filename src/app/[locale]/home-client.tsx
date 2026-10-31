@@ -30,6 +30,7 @@ const CATEGORY_ORDER = ['Languages', 'Frontend', 'Backend', 'Mobile', 'Database'
 
 function SkillItem({ skill, index }: { skill: Skill; index: number }) {
     const ref = useRef<HTMLDivElement>(null);
+    const iconSlug = (skill as any).iconName || (skill as any).icon || (skill as any).icon_name || skill.name;
 
     return (
         <div
@@ -39,7 +40,7 @@ function SkillItem({ skill, index }: { skill: Skill; index: number }) {
         >
             <SkillIcon
                 name={skill.name}
-                iconSlug={skill.iconName || ''}
+                iconSlug={iconSlug}
             />
         </div>
     );

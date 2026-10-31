@@ -128,6 +128,7 @@ export const nameToSlug: Record<string, string> = {
   'python': 'python', 'java': 'java', 'c#': 'csharp', 'csharp': 'csharp',
   'go': 'go', 'kotlin': 'kotlin', 'swift': 'swift', 'dart': 'dart', 'php': 'php',
   'react': 'react', 'next.js': 'nextdotjs', 'nextdotjs': 'nextdotjs', 'nextjs': 'nextdotjs',
+  'rust': 'rust', 'axum': 'rust',
   'vue.js': 'vuedotjs', 'vue': 'vuedotjs', 'nuxt.js': 'nuxtdotjs', 'nuxt': 'nuxtdotjs',
   'angular': 'angular', 'svelte': 'svelte', 'astro': 'astro',
   'tailwind css': 'tailwindcss', 'tailwind': 'tailwindcss', 'tailwindcss': 'tailwindcss',
