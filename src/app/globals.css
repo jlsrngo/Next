@@ -25,6 +25,7 @@
     --accent-light: #5ca1ff;
     --accent-subtle: rgba(45, 129, 255, 0.12);
     --accent-border: rgba(45, 129, 255, 0.35);
+    --grid-line: rgba(16, 16, 20, 0.05);
   }
 
   .dark {
@@ -49,6 +50,7 @@
     --accent-light: #74aaff;
     --accent-subtle: rgba(45, 129, 255, 0.15);
     --accent-border: rgba(45, 129, 255, 0.4);
+    --grid-line: rgba(242, 241, 238, 0.05);
   }
 
   .dark img[src="/icon.svg"] {
@@ -85,6 +87,15 @@
 }
 
 @layer components {
+  .blueprint-grid {
+    background-color: var(--bg);
+    background-image: 
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+  }
+
   .glass-card,
   .artcraft-card {
     background-color: var(--bg-raised);

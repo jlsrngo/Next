@@ -40,7 +40,7 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
         <SidebarWrapper profile={profile} />
         <main
           ref={mainRef}
-          className="flex-1 w-full px-6 py-10 lg:px-14 xl:px-20 h-screen overflow-y-auto relative scroll-smooth pr-16 md:pr-20"
+          className="flex-1 w-full px-6 py-10 lg:px-14 xl:px-20 h-screen overflow-y-auto relative scroll-smooth pr-16 md:pr-20 blueprint-grid"
         >
           <div className="max-w-4xl mx-auto w-full">{children}</div>
         </main>
