@@ -1,7 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import SidebarWrapper from '@/components/SidebarWrapper'
+import TechnicalRuler from '@/components/TechnicalRuler'
 
 interface PortfolioShellProps {
   profile: any
@@ -12,6 +14,7 @@ interface PortfolioShellProps {
 export default function PortfolioShell({ profile, isMonochrome, children }: PortfolioShellProps) {
   const pathname = usePathname()
   const isArunaki = pathname?.includes('/arunaki')
+  const mainRef = useRef<HTMLElement>(null)
 
   if (isArunaki) {
     return (
@@ -35,18 +38,15 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
     >
       <div className="max-w-[1280px] mx-auto flex w-full h-full border-x border-line relative">
         <SidebarWrapper profile={profile} />
-        <main className="flex-1 w-full max-w-full px-6 py-10 lg:px-14 h-screen overflow-y-auto relative">
+        <main
+          ref={mainRef}
+          className="flex-1 w-full max-w-full px-6 py-10 lg:px-14 h-screen overflow-y-auto relative scroll-smooth pr-14 md:pr-16"
+        >
           <div className="max-w-4xl mx-auto w-full">{children}</div>
-
-          {/* Subtle ArtCraft Technical Coordinate Ruler on Right Border */}
-          <div className="hidden xl:flex flex-col justify-between absolute right-2 top-8 bottom-8 pointer-events-none select-none text-[9px] font-mono text-faint">
-            <span>00</span>
-            <span>05</span>
-            <span>10</span>
-            <span>15</span>
-            <span>20</span>
-          </div>
         </main>
+
+        {/* ArtCraft Technical Coordinate Scroll Ruler */}
+        <TechnicalRuler scrollContainerRef={mainRef} />
       </div>
     </div>
   )

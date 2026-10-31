@@ -159,21 +159,44 @@ async fn about_handler() -> impl IntoResponse {
         Json(json!({
             "experiences": [
                 {
-                    "id": "1",
-                    "role": "Full-Stack Web Developer",
-                    "company": "Independent Engineering",
-                    "period": "2023 - Present",
-                    "description": "Architecting ultra-fast web applications, migrating legacy runtimes to Rust, designing Swiss technical UI design systems.",
-                    "tags": ["Rust", "Axum", "React", "Vite", "PostgreSQL"]
+                    "id": 1,
+                    "company_name": "Independent Engineering",
+                    "company_logo_url": null,
+                    "position": "Full-Stack Web Developer",
+                    "location": "Remote / Indonesia",
+                    "start_date": "2023-01-01",
+                    "end_date": null,
+                    "is_current": true,
+                    "employment_type": "Full-time",
+                    "work_type": "Remote",
+                    "responsibilities": [
+                        "Architecting high-performance web systems using Vite, React, and Rust Axum",
+                        "Migrating legacy runtimes to sub-millisecond asynchronous Rust Tokio microservices",
+                        "Designing Swiss Technical Brutalism UI design systems with hairline wireframe grids"
+                    ],
+                    "what_i_learned": [
+                        "Advanced Tokio asynchronous concurrency patterns and Axum routing",
+                        "Zero-runtime CSS architecture and technical typography systems"
+                    ],
+                    "impact": [
+                        "Reduced frontend bundle size by 85% and cut API response latency to under 5ms",
+                        "Achieved 100/100 performance scores across mobile and desktop audits"
+                    ]
                 }
             ],
             "educations": [
                 {
-                    "id": "1",
-                    "degree": "Informatics Engineering",
-                    "institution": "University / Institute",
-                    "period": "2020 - 2024",
-                    "description": "Focused on software engineering, algorithm design, distributed computing, and web architectures."
+                    "id": 1,
+                    "institution_name": "University / Institute of Technology",
+                    "institution_logo_url": null,
+                    "degree": "Bachelor of Computer Science",
+                    "field_of_study": "Informatics & Software Engineering",
+                    "location": "Indonesia",
+                    "gpa": "3.85",
+                    "start_date": "2020-09-01",
+                    "end_date": "2024-07-01",
+                    "is_current": false,
+                    "description": "Specialized in distributed systems, web architectures, algorithms, and database optimization."
                 }
             ]
         })),

@@ -72,6 +72,11 @@
     border-radius: 0px !important;
   }
 
+  .skill-icon-surface,
+  .skill-icon-backdrop {
+    border-radius: 16px !important;
+  }
+
   *::-webkit-scrollbar {
     display: none;
   }

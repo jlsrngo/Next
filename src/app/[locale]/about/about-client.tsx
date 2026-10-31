@@ -42,24 +42,30 @@ interface AboutClientProps {
     educations: Education[];
 }
 
-export default function AboutClient({ profile, experiences, educations }: AboutClientProps) {
+export default function AboutClient({ profile, experiences = [], educations = [] }: AboutClientProps) {
     const t = useTranslations();
     const [expandedExp, setExpandedExp] = useState<number | null>(null);
     const [activeTabs, setActiveTabs] = useState<Record<number, 'resp' | 'learn' | 'impact'>>({});
     const nowRef = useRef<Date>(new Date());
 
-    const getDuration = (start: string, end: string | null, isCurrent: boolean) => {
+    const safeExperiences = Array.isArray(experiences) ? experiences : [];
+    const safeEducations = Array.isArray(educations) ? educations : [];
+
+    const getDuration = (start: string | null | undefined, end: string | null | undefined, isCurrent: boolean) => {
+        if (!start) return '1 yr';
         const startDate = new Date(start);
+        if (isNaN(startDate.getTime())) return '1 yr';
         const endDate = isCurrent ? nowRef.current : (end ? new Date(end) : nowRef.current);
-        const diffYears = endDate.getFullYear() - startDate.getFullYear();
-        const diffMonths = endDate.getMonth() - startDate.getMonth();
-        const totalMonths = diffYears * 12 + diffMonths;
+        const validEndDate = isNaN(endDate.getTime()) ? nowRef.current : endDate;
+        const diffYears = validEndDate.getFullYear() - startDate.getFullYear();
+        const diffMonths = validEndDate.getMonth() - startDate.getMonth();
+        const totalMonths = Math.max(diffYears * 12 + diffMonths, 1);
         const years = Math.floor(totalMonths / 12);
         const months = totalMonths % 12;
         let duration = '';
         if (years > 0) duration += `${years} yr `;
         if (months > 0) duration += `${months} mos`;
-        return duration || '1 mo';
+        return duration.trim() || '1 mo';
     };
 
     return (
@@ -88,7 +94,21 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                 </h2>
 
                 <div className="space-y-4">
-                    {experiences.map((exp) => (
+                    {safeExperiences.map((exp: any) => {
+                        const companyName = exp.company_name || exp.company || 'Company';
+                        const position = exp.position || exp.role || 'Developer';
+                        const startDate = exp.start_date || '2023-01-01';
+                        const endDate = exp.end_date;
+                        const isCurrent = exp.is_current ?? true;
+                        const empType = exp.employment_type || 'Full-time';
+                        const workType = exp.work_type || 'Remote';
+                        const tabList = (activeTabs[exp.id] || 'resp') === 'resp' 
+                            ? (Array.isArray(exp.responsibilities) ? exp.responsibilities : [])
+                            : (activeTabs[exp.id] || 'resp') === 'learn'
+                            ? (Array.isArray(exp.what_i_learned) ? exp.what_i_learned : [])
+                            : (Array.isArray(exp.impact) ? exp.impact : []);
+
+                        return (
                         <div
                             key={exp.id}
                             className={`group relative border transition-colors rounded-none overflow-hidden ${expandedExp === exp.id ? 'border-line-strong bg-bg-raised' : 'border-line bg-bg-raised hover:border-line-strong'}`}
@@ -101,7 +121,7 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                                     {exp.company_logo_url ? (
                                         <Image
                                             src={optimizeCloudinaryUrl(exp.company_logo_url || '')}
-                                            alt={exp.company_name}
+                                            alt={companyName}
                                             width={48}
                                             height={48}
                                             className="w-full h-full object-contain"
@@ -111,17 +131,17 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                                     )}
                                 </div>
                                 <div className="flex-1 space-y-1">
-                                    <h3 className="font-display font-bold text-base md:text-lg leading-tight text-ink">{exp.position}</h3>
-                                    <p className="hud-label text-accent">{exp.company_name}</p>
+                                    <h3 className="font-display font-bold text-base md:text-lg leading-tight text-ink">{position}</h3>
+                                    <p className="hud-label text-accent">{companyName}</p>
                                     <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-faint uppercase font-bold">
                                         <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
-                                            {new Date(exp.start_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {exp.is_current ? t('about.present') : new Date(exp.end_date!).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}
+                                            {new Date(startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {isCurrent ? t('about.present') : (endDate ? new Date(endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : t('about.present'))}
                                         </span>
                                         <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
-                                            {getDuration(exp.start_date, exp.end_date, exp.is_current)}
+                                            {getDuration(startDate, endDate, isCurrent)}
                                         </span>
                                         <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none text-ink">
-                                            {exp.employment_type} • {exp.work_type}
+                                            {empType} • {workType}
                                         </span>
                                     </div>
                                 </div>
@@ -152,11 +172,7 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
 
                                             <div className="min-h-[140px]">
                                                 <ul className="space-y-3">
-                                                    {(
-                                                        (activeTabs[exp.id] || 'resp') === 'resp' ? exp.responsibilities :
-                                                            (activeTabs[exp.id] || 'resp') === 'learn' ? exp.what_i_learned :
-                                                                exp.impact
-                                                    ).map((point, i) => (
+                                                    {tabList.map((point: string, i: number) => (
                                                         <li
                                                             key={`${exp.id}-${(activeTabs[exp.id] || 'resp')}-${i}`}
                                                             className="animate-list-item flex gap-3 text-sm font-medium leading-relaxed"
@@ -173,8 +189,9 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                                 </div>
                             </div>
                         </div>
-                    ))}
-                    {experiences.length === 0 && (
+                        );
+                    })}
+                    {safeExperiences.length === 0 && (
                         <p className="text-center py-10 text-black dark:text-white font-bold italic shadow-none">{t('common.no_data')}</p>
                     )}
                 </div>
@@ -186,13 +203,18 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {educations.map((edu) => (
+                    {safeEducations.map((edu: any) => {
+                        const institution = edu.institution_name || edu.institution || 'University';
+                        const startYear = edu.start_date ? new Date(edu.start_date).getFullYear() : 2020;
+                        const endYear = edu.is_current ? t('about.present') : (edu.end_date ? new Date(edu.end_date).getFullYear() : 2024);
+
+                        return (
                         <div key={edu.id} className="group relative p-5 border border-line bg-bg-raised rounded-none hover:border-line-strong transition-colors flex items-start gap-4">
                             <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-bg-sunken border border-line p-2">
                                 {edu.institution_logo_url ? (
                                     <Image
                                         src={optimizeCloudinaryUrl(edu.institution_logo_url || '')}
-                                        alt={edu.institution_name}
+                                        alt={institution}
                                         width={48}
                                         height={48}
                                         className="w-full h-full object-contain"
@@ -202,22 +224,23 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                                 )}
                             </div>
                             <div className="flex-1 space-y-1">
-                                <h3 className="font-display font-bold text-base leading-tight text-ink">{edu.institution_name}</h3>
+                                <h3 className="font-display font-bold text-base leading-tight text-ink">{institution}</h3>
                                 <p className="text-xs text-muted">
                                     {edu.degree} • {edu.field_of_study}
                                 </p>
                                 {edu.gpa && <p className="hud-label text-accent">GPA: {edu.gpa}</p>}
                                 <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-faint uppercase font-bold">
                                     <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
-                                        {new Date(edu.start_date).getFullYear()} - {edu.is_current ? t('about.present') : new Date(edu.end_date!).getFullYear()}
+                                        {startYear} - {endYear}
                                     </span>
                                     <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
-                                        {edu.location}
+                                        {edu.location || 'Indonesia'}
                                     </span>
                                 </div>
                             </div>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </section>
         </div>

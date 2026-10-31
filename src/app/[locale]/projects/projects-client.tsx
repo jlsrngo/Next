@@ -102,11 +102,15 @@ export default function ProjectsClient({ projects, profile }: ProjectsClientProp
                                 <div className="flex flex-wrap gap-1.5 pt-1">
                                     {(() => {
                                         let techs: string[] = [];
-                                        try {
-                                            const parsed = JSON.parse(project.tech_stack || '[]');
-                                            techs = Array.isArray(parsed) ? parsed : [];
-                                        } catch {
-                                            techs = (project.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
+                                        if (Array.isArray(project.tech_stack)) {
+                                            techs = project.tech_stack;
+                                        } else {
+                                            try {
+                                                const parsed = JSON.parse(project.tech_stack || '[]');
+                                                techs = Array.isArray(parsed) ? parsed : [];
+                                            } catch {
+                                                techs = String(project.tech_stack || '').split(',').map(t => t.trim()).filter(Boolean);
+                                            }
                                         }
                                         return techs.map((tech, i) => (
                                             <TechBadge key={i} tech={tech} />
