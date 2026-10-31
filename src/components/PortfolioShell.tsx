@@ -40,9 +40,11 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
         <SidebarWrapper profile={profile} />
         <main
           ref={mainRef}
-          className="flex-1 w-full px-6 py-10 lg:px-14 xl:px-20 h-screen overflow-y-auto relative scroll-smooth pr-16 md:pr-20 blueprint-grid"
+          className="flex-1 w-full h-screen overflow-y-auto relative scroll-smooth blueprint-grid pr-14 md:pr-16"
         >
-          <div className="max-w-4xl mx-auto w-full">{children}</div>
+          <div className="w-full max-w-3xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
+            {children}
+          </div>
         </main>
 
         {/* ArtCraft Technical Coordinate Scroll Ruler - Pinned to far right with zero gap */}

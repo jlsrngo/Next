@@ -86,7 +86,7 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
           style={{ top: `${indicatorTop}%`, transform: 'translateY(-50%)' }}
         >
           {/* Active Percentage Text */}
-          <span className="font-mono text-[9px] font-bold text-accent tracking-tighter mr-1.5 select-none bg-bg/80 px-0.5">
+          <span className="font-mono text-[9px] font-bold text-accent tracking-tighter mr-1 select-none bg-bg border border-accent/40 px-1 shadow-sm">
             {String(Math.round(percent)).padStart(3, '0')} %
           </span>
           {/* Active Accent Horizontal Tick Line */}
