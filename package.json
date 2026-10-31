@@ -1,17 +1,15 @@
 {
-  "name": "portfolio-nextjs",
+  "name": "portfolio-axum-vite",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "npx prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "db:push": "npx prisma db push",
-    "db:migrate": "npx prisma migrate dev",
-    "db:migrate:deploy": "npx prisma migrate deploy",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "npx prisma studio"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "cargo run --bin server",
+    "start": "cargo run --bin server",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
@@ -28,6 +26,7 @@
     "react-dom": "^18.3.0",
     "react-hook-form": "^7.51.0",
     "react-icons": "^5.7.0",
+    "react-router-dom": "^7.18.5",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.0"
@@ -37,6 +36,7 @@
     "@types/node": "^20.12.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.0",
@@ -46,6 +46,7 @@
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.0",
     "tsx": "^4.7.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vite": "^8.3.5"
   }
 }
