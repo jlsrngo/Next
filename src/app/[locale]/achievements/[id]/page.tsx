@@ -65,12 +65,12 @@ export default async function AchievementDetailPage({ params }: AchievementDetai
           </Link>
           <article className="max-w-3xl mx-auto text-center">
             <header className="mb-8">
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground mb-4">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-bg-sunken border border-line rounded-none text-xs font-mono uppercase text-muted mb-4">
                 {achievement.category}
               </span>
               {achievement.featured && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber/10 text-amber-600 dark:text-amber-400 text-sm font-medium rounded-full mb-4">
-                  ⭐ {common.featured}
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-bg-sunken border border-line text-ink text-xs font-mono uppercase font-bold rounded-none mb-4 ml-2">
+                  [ FEATURED ]
                 </span>
               )}
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
@@ -98,7 +98,7 @@ export default async function AchievementDetailPage({ params }: AchievementDetai
                   href={achievement.credentialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-invert-bg text-invert-fg border border-line rounded-none font-mono text-xs uppercase font-bold tracking-wider hover:opacity-85 transition"
                 >
                   <ExternalLink className="h-5 w-5" />
                   {achievements.verifyCredential}

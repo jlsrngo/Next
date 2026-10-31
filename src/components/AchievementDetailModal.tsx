@@ -59,11 +59,11 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-[2rem] shadow-2xl border border-slate-200 dark:border-zinc-800 ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
+        className={`relative flex flex-col md:flex-row w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-none border border-line-strong bg-bg-raised ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center bg-[var(--accent)] text-white hover:brightness-90 transition-all"
+          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-none border border-line flex items-center justify-center bg-invert-bg text-invert-fg hover:opacity-85 transition-opacity"
         >
           <X className="w-4 h-4" />
         </button>
@@ -71,9 +71,9 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
         <div className="w-full md:w-[65%] shrink-0 flex items-center justify-center min-h-[250px] md:min-h-[400px]">
           {hasImage ? (
             isPdf ? (
-              <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center gap-4 px-10 bg-slate-50 dark:bg-[#0a0a0a]">
-                <div className="w-20 h-20 rounded-2xl border-2 border-[var(--accent)] flex items-center justify-center text-[var(--accent)]">
-                  <FileText className="w-10 h-10" />
+              <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center gap-4 px-10 bg-bg-sunken">
+                <div className="w-16 h-16 rounded-none border border-line flex items-center justify-center text-ink">
+                  <FileText className="w-8 h-8" />
                 </div>
                 <div className="text-center space-y-1">
                   <p className="font-bold text-black dark:text-white">{t('achievements.pdf_certificate')}</p>
@@ -94,34 +94,34 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
           )}
         </div>
 
-        <div className="w-full md:w-[35%] p-4 overflow-y-auto bg-white dark:bg-[#0a0a0a] md:rounded-r-3xl text-black dark:text-white flex flex-col">
+        <div className="w-full md:w-[35%] p-4 overflow-y-auto bg-bg-raised rounded-none text-ink flex flex-col border-t md:border-t-0 md:border-l border-line">
           <div className="flex-1">
             <div className="mb-1.5">
-              <div className="inline-flex px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white bg-[var(--accent)] rounded-full">
+              <div className="inline-flex px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-ink bg-bg-sunken border border-line rounded-none font-mono">
                 {achievement.category}
               </div>
             </div>
 
-            <h2 className="text-sm font-bold leading-snug mb-1">
+            <h2 className="text-sm font-bold leading-snug mb-1 font-display">
               {achievement.title}
             </h2>
 
             {achievement.issuer && (
-              <div className="text-xs mb-2.5 text-black dark:text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[var(--accent)]" />
+              <div className="text-xs mb-2.5 text-muted flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-accent" />
                 <span className="font-bold">{achievement.issuer}</span>
               </div>
             )}
 
-            <div className="border-t border-slate-200 dark:border-zinc-800 pt-2 mb-2.5" />
+            <div className="border-t border-line pt-2 mb-2.5" />
 
             <div className="space-y-2">
               {achievement.credential_id && (
                 <div className="mb-2">
-                  <div className="text-[9px] mb-px tracking-wider text-black dark:text-white font-bold uppercase">
+                  <div className="text-[9px] mb-px tracking-wider text-muted font-bold uppercase font-mono">
                     Credential ID
                   </div>
-                  <p className="text-xs font-bold text-black dark:text-white break-all">
+                  <p className="text-xs font-mono font-bold text-ink break-all">
                     {achievement.credential_id}
                   </p>
                 </div>
@@ -129,11 +129,11 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
 
               {achievement.date && (
                 <div className="mb-2">
-                  <div className="text-[9px] mb-px tracking-wider text-black dark:text-white font-bold uppercase">
+                  <div className="text-[9px] mb-px tracking-wider text-muted font-bold uppercase font-mono">
                     {t('achievements.issue_date')}
                   </div>
-                  <p className="text-xs font-bold flex items-center gap-2 text-black dark:text-white">
-                    <Calendar className="w-3.5 h-3.5 text-[var(--accent)]" />
+                  <p className="text-xs font-bold flex items-center gap-2 text-ink">
+                    <Calendar className="w-3.5 h-3.5 text-accent" />
                     {new Date(achievement.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}
                   </p>
                 </div>
@@ -141,10 +141,10 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
 
               {achievement.description && (
                 <div className="mb-2">
-                  <div className="text-[9px] mb-px tracking-wider text-black dark:text-white font-bold uppercase">
+                  <div className="text-[9px] mb-px tracking-wider text-muted font-bold uppercase font-mono">
                     {t('achievements.description_label')}
                   </div>
-                  <p className="text-xs text-black dark:text-white leading-relaxed">
+                  <p className="text-xs text-muted leading-relaxed font-sans">
                     {achievement.description}
                   </p>
                 </div>
@@ -158,7 +158,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
                 href={achievement.credential_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[var(--accent)] hover:brightness-90 rounded-xl transition-all"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-invert-fg bg-invert-bg border border-line rounded-none font-mono hover:opacity-85 transition-opacity"
               >
                 <span className="flex-1">{t('achievements.credential_url_btn')}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -168,7 +168,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
                 href={achievement.image_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[var(--accent)] hover:brightness-90 rounded-xl transition-all"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-invert-fg bg-invert-bg border border-line rounded-none font-mono hover:opacity-85 transition-opacity"
               >
                 <span className="flex-1">{t('achievements.open_pdf')}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -181,7 +181,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
                   link.download = `achievement-${achievement.id}.jpg`
                   link.click()
                 }}
-                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[var(--accent)] hover:brightness-90 rounded-xl transition-all"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold uppercase tracking-wider text-invert-fg bg-invert-bg border border-line rounded-none font-mono hover:opacity-85 transition-opacity"
               >
                 <span className="flex-1">{t('achievements.download_image') || 'Download Image'}</span>
                 <Download className="w-4 h-4" />
@@ -189,7 +189,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
             ) : (
               <button
                 onClick={onClose}
-                className="w-full px-6 py-2.5 rounded-xl font-bold transition-all duration-300 border border-slate-200 dark:border-zinc-800 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 text-black dark:text-white"
+                className="w-full px-6 py-2.5 rounded-none font-mono text-xs uppercase font-bold tracking-wider transition-colors border border-line bg-bg-sunken text-ink hover:border-line-strong"
               >
                 {t('achievements.close_details_btn')}
               </button>

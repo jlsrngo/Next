@@ -67,9 +67,9 @@ export default function AccountPage() {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Left: Change Email */}
-      <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-5">
+      <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6 space-y-5">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
             <Mail size={18} className="text-slate-600 dark:text-slate-300" />
           </div>
           <div>
@@ -81,13 +81,13 @@ export default function AccountPage() {
         <div className="space-y-4">
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">New Email *</label>
-            <input type="email" {...emailForm.register('newEmail')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="new@email.com" />
+            <input type="email" {...emailForm.register('newEmail')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="new@email.com" />
             {emailForm.formState.errors.newEmail && <p className="text-xs text-red-500">{emailForm.formState.errors.newEmail.message}</p>}
           </div>
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Current Password *</label>
             <div className="relative">
-              <input type={showEmailPw ? 'text' : 'password'} {...emailForm.register('currentPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Confirm with password" />
+              <input type={showEmailPw ? 'text' : 'password'} {...emailForm.register('currentPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Confirm with password" />
               <button type="button" onClick={() => setShowEmailPw(!showEmailPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                 {showEmailPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -97,16 +97,16 @@ export default function AccountPage() {
         </div>
 
         <div className="flex justify-end pt-2">
-          <button type="submit" disabled={emailLoading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-lg hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
+          <button type="submit" disabled={emailLoading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-none hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
             {emailLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</> : 'Update Email'}
           </button>
         </div>
       </form>
 
       {/* Right: Change Password */}
-      <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-5">
+      <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6 space-y-5">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
             <Shield size={18} className="text-slate-600 dark:text-slate-300" />
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function AccountPage() {
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Current Password *</label>
             <div className="relative">
-              <input type={showCurrentPw ? 'text' : 'password'} {...passwordForm.register('currentPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Enter current password" />
+              <input type={showCurrentPw ? 'text' : 'password'} {...passwordForm.register('currentPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Enter current password" />
               <button type="button" onClick={() => setShowCurrentPw(!showCurrentPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                 {showCurrentPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -129,7 +129,7 @@ export default function AccountPage() {
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">New Password *</label>
             <div className="relative">
-              <input type={showNewPw ? 'text' : 'password'} {...passwordForm.register('newPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Min 6 characters" />
+              <input type={showNewPw ? 'text' : 'password'} {...passwordForm.register('newPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Min 6 characters" />
               <button type="button" onClick={() => setShowNewPw(!showNewPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                 {showNewPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -139,7 +139,7 @@ export default function AccountPage() {
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Confirm New Password *</label>
             <div className="relative">
-              <input type={showConfirmPw ? 'text' : 'password'} {...passwordForm.register('confirmPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Repeat new password" />
+              <input type={showConfirmPw ? 'text' : 'password'} {...passwordForm.register('confirmPassword')} className="w-full px-4 py-2.5 pr-10 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Repeat new password" />
               <button type="button" onClick={() => setShowConfirmPw(!showConfirmPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                 {showConfirmPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -149,7 +149,7 @@ export default function AccountPage() {
         </div>
 
         <div className="flex justify-end pt-2">
-          <button type="submit" disabled={passwordLoading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-lg hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
+          <button type="submit" disabled={passwordLoading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-none hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
             {passwordLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</> : 'Update Password'}
           </button>
         </div>

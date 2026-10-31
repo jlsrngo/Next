@@ -42,29 +42,67 @@ const ACCENT_LEVEL_COLORS = [
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-export default function GithubClient({ profile }: { profile: any }) {
+let memoryGithubCache: GitHubData | null = null
+let memoryStatsCache: any = null
+
+export default function GithubClient({ profile, initialStats }: { profile: any; initialStats?: any }) {
   const t = useTranslations()
-  const [stats, setStats] = useState<any>(null)
-  const [github, setGithub] = useState<GitHubData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [ghLoading, setGhLoading] = useState(true)
+  const [stats, setStats] = useState<any>(() => initialStats || memoryStatsCache || null)
+  const [github, setGithub] = useState<GitHubData | null>(() => memoryGithubCache || null)
+  const [loading, setLoading] = useState(() => !(initialStats || memoryStatsCache))
+  const [ghLoading, setGhLoading] = useState(() => !memoryGithubCache)
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null)
 
   useEffect(() => {
-    fetch('/api/dashboard')
-      .then(r => r.json())
-      .then(data => { setStats(data); setLoading(false) })
-      .catch(() => setLoading(false))
+    // 1. Restore from sessionStorage if in-memory cache is empty
+    if (!github && typeof window !== 'undefined') {
+      try {
+        const stored = sessionStorage.getItem('portfolio_github_cache')
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          if (parsed && parsed.data && Date.now() - parsed.timestamp < 1000 * 60 * 30) {
+            memoryGithubCache = parsed.data
+            setGithub(parsed.data)
+            setGhLoading(false)
+          }
+        }
+      } catch {}
+    }
 
+    if (initialStats) {
+      memoryStatsCache = initialStats
+      setStats(initialStats)
+      setLoading(false)
+    } else if (!stats) {
+      fetch('/api/dashboard')
+        .then(r => r.json())
+        .then(data => {
+          memoryStatsCache = data
+          setStats(data)
+          setLoading(false)
+        })
+        .catch(() => setLoading(false))
+    }
+
+    // Background stale-while-revalidate for GitHub data
     fetch('/api/github/contributions')
       .then(r => r.json())
       .then(data => {
-        if (data.error) { setGhLoading(false); return }
+        if (data.error) {
+          if (!memoryGithubCache) setGhLoading(false)
+          return
+        }
+        memoryGithubCache = data
+        try {
+          sessionStorage.setItem('portfolio_github_cache', JSON.stringify({ data, timestamp: Date.now() }))
+        } catch {}
         setGithub(data)
         setGhLoading(false)
       })
-      .catch(() => setGhLoading(false))
-  }, [])
+      .catch(() => {
+        if (!memoryGithubCache) setGhLoading(false)
+      })
+  }, [initialStats])
 
   const monthPositions = useMemo(() => {
     if (!github?.weeks) return []
@@ -113,66 +151,67 @@ export default function GithubClient({ profile }: { profile: any }) {
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{t('dashboard.title')}</h1>
-        <p className="text-black dark:text-white font-bold">{t('dashboard.subtitle')}</p>
+    <div className="py-8 md:py-14 space-y-10">
+      <div className="border-b border-line pb-4 animate-fade-in">
+        <div className="hud-label mb-1">[ 04 // METRICS & ACTIVITY ]</div>
+        <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-ink">{t('dashboard.title')}</h1>
+        <p className="text-sm sm:text-base text-muted mt-1">{t('dashboard.subtitle')}</p>
       </div>
 
       {/* Portfolio Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {loading ? (
           [1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-6">
-              <div className="skeleton h-10 w-10 rounded-xl mb-4" />
-              <div className="skeleton h-8 w-16 mb-2" />
-              <div className="skeleton h-4 w-24" />
+            <div key={i} className="border border-line bg-bg-raised p-5 rounded-none animate-pulse">
+              <div className="h-9 w-9 bg-bg-sunken rounded-none mb-3" />
+              <div className="h-7 w-16 bg-bg-sunken rounded-none mb-2" />
+              <div className="h-3 w-24 bg-bg-sunken rounded-none" />
             </div>
           ))
         ) : (
           statCards.map(card => (
-            <div key={card.label} className="glass-card p-6 transition-all duration-300 hover:-translate-y-1">
-              <div className={`w-10 h-10 rounded-xl ${card.bg} flex items-center justify-center mb-4`}>
-                <card.icon className="w-5 h-5" style={{ color: card.iconColor }} />
+            <div key={card.label} className="border border-line bg-bg-raised p-5 rounded-none transition-colors hover:border-line-strong">
+              <div className="w-9 h-9 rounded-none border border-line bg-bg-sunken flex items-center justify-center mb-3">
+                <card.icon className="w-4 h-4 text-ink" />
               </div>
-              <h3 className="text-3xl font-bold mb-1">{card.value}</h3>
-              <p className="text-sm text-black dark:text-white font-black">{card.label}</p>
+              <h3 className="font-display text-3xl font-bold text-ink mb-1">{card.value}</h3>
+              <p className="hud-label text-muted">{card.label}</p>
             </div>
           ))
         )}
       </div>
 
       {/* GitHub Section */}
-      <div className="mb-6">
-        <div className="flex items-center gap-3">
-          <Github className="w-6 h-6 text-black dark:text-white" />
-          <h2 className="text-2xl font-bold">{t('dashboard.github_activity')}</h2>
-          {github && (
-            <a
-              href={`https://github.com/${github.username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-accent hover:underline ml-auto"
-            >
-              @{github.username}
-            </a>
-          )}
+      <div className="border-b border-line pb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <Github className="w-5 h-5 text-ink" />
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">{t('dashboard.github_activity')}</h2>
         </div>
+        {github && (
+          <a
+            href={`https://github.com/${github.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hud-label text-accent hover:underline"
+          >
+            @{github.username}
+          </a>
+        )}
       </div>
 
       {ghLoading ? (
         <div className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="glass-card p-4">
-                <div className="skeleton h-5 w-5 rounded mb-3" />
-                <div className="skeleton h-7 w-12 mb-1" />
-                <div className="skeleton h-3 w-20" />
+              <div key={i} className="border border-line bg-bg-raised p-4 rounded-none animate-pulse">
+                <div className="h-5 w-5 bg-bg-sunken rounded-none mb-3" />
+                <div className="h-6 w-12 bg-bg-sunken rounded-none mb-1" />
+                <div className="h-3 w-20 bg-bg-sunken rounded-none" />
               </div>
             ))}
           </div>
-          <div className="glass-card p-6">
-            <div className="skeleton h-[120px] w-full rounded-lg" />
+          <div className="border border-line bg-bg-raised p-6 rounded-none">
+            <div className="h-[120px] w-full bg-bg-sunken rounded-none animate-pulse" />
           </div>
         </div>
       ) : github ? (
@@ -180,18 +219,18 @@ export default function GithubClient({ profile }: { profile: any }) {
           {/* GitHub Stat Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {ghStatCards.map(card => (
-              <div key={card.label} className="glass-card p-4 transition-all duration-300">
-                <card.icon className="w-5 h-5 mb-2" style={{ color: card.iconColor }} />
-                <h4 className="text-2xl font-bold">{card.value.toLocaleString()}</h4>
-                <p className="text-xs text-black dark:text-white mt-0.5 font-black">{card.label}</p>
+              <div key={card.label} className="border border-line bg-bg-raised p-4 rounded-none transition-colors hover:border-line-strong">
+                <card.icon className="w-4 h-4 mb-2 text-faint" />
+                <h4 className="font-display text-2xl font-bold text-ink">{card.value.toLocaleString()}</h4>
+                <p className="hud-label text-muted mt-1">{card.label}</p>
               </div>
             ))}
           </div>
 
           {/* Contribution Heatmap */}
-          <div className="glass-card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-sm text-black dark:text-white">
+          <div className="border border-line bg-bg-raised p-6 rounded-none">
+            <div className="flex items-center justify-between mb-4 border-b border-line pb-3">
+              <h3 className="hud-label text-ink">
                 {github.total_contributions.toLocaleString()} {t('dashboard.contributions_last_year')}
               </h3>
             </div>
@@ -199,9 +238,9 @@ export default function GithubClient({ profile }: { profile: any }) {
             <div className="overflow-x-auto pb-2">
               <div className="min-w-[720px]">
                 {/* Month labels */}
-                <div className="relative mb-1 ml-8 h-4">
+                <div className="relative mb-2 ml-8 h-4">
                   {monthPositions.map((mp, i) => (
-                    <span key={i} className="absolute text-[10px] text-black dark:text-white font-bold" style={{ left: `${mp.col * 14}px` }}>
+                    <span key={i} className="absolute font-mono text-[10px] text-faint uppercase font-bold" style={{ left: `${mp.col * 14}px` }}>
                       {mp.label}
                     </span>
                   ))}
@@ -211,7 +250,7 @@ export default function GithubClient({ profile }: { profile: any }) {
                   {/* Day labels */}
                   <div className="flex flex-col gap-[2px] pr-1 pt-0">
                     {['', 'Mon', '', 'Wed', '', 'Fri', ''].map((label, i) => (
-                      <span key={i} className="text-[10px] text-black dark:text-white font-bold h-[12px] leading-[12px] flex items-center">
+                      <span key={i} className="font-mono text-[9px] text-faint uppercase font-bold h-[12px] leading-[12px] flex items-center">
                         {label}
                       </span>
                     ))}
@@ -223,7 +262,7 @@ export default function GithubClient({ profile }: { profile: any }) {
                       {week.map((day, di) => (
                         <div
                           key={di}
-                          className={`w-[12px] h-[12px] rounded-[2px] ${levelColors[Math.min(Math.max(day.level ?? 0, 0), 4)] || levelColors[0]} transition-all duration-150 hover:ring-1 hover:ring-black/40 dark:hover:ring-white/50 cursor-pointer`}
+                          className={`w-[12px] h-[12px] rounded-none ${levelColors[Math.min(Math.max(day.level ?? 0, 0), 4)] || levelColors[0]} transition-opacity hover:opacity-75 cursor-pointer`}
                           onMouseEnter={(e) => handleCellHover(e, day)}
                           onMouseLeave={() => setTooltip(null)}
                         />
@@ -233,12 +272,12 @@ export default function GithubClient({ profile }: { profile: any }) {
                 </div>
 
                 {/* Legend */}
-                <div className="flex items-center justify-end gap-1.5 mt-3">
-                  <span className="text-[10px] text-zinc-500 mr-1 font-semibold">{t('dashboard.less')}</span>
+                <div className="flex items-center justify-end gap-1.5 mt-4 pt-3 border-t border-line">
+                  <span className="hud-label text-faint mr-1">{t('dashboard.less')}</span>
                   {levelColors.map((color, i) => (
-                    <div key={i} className={`w-[12px] h-[12px] rounded-[2px] ${color}`} />
+                    <div key={i} className={`w-[11px] h-[11px] rounded-none ${color}`} />
                   ))}
-                  <span className="text-[10px] text-zinc-500 ml-1 font-semibold">{t('dashboard.more')}</span>
+                  <span className="hud-label text-faint ml-1">{t('dashboard.more')}</span>
                 </div>
               </div>
             </div>
@@ -246,23 +285,23 @@ export default function GithubClient({ profile }: { profile: any }) {
 
           {/* Top Languages */}
           {github.top_languages.length > 0 && (
-            <div className="glass-card p-6">
-              <h3 className="font-bold text-sm mb-4 text-black dark:text-white">{t('dashboard.top_languages')}</h3>
+            <div className="border border-line bg-bg-raised p-6 rounded-none">
+              <h3 className="hud-label mb-4 text-ink border-b border-line pb-2">{t('dashboard.top_languages')}</h3>
               <div className="space-y-3">
                 {github.top_languages.map(lang => {
                   const maxCount = github.top_languages[0].count
                   const pct = (lang.count / maxCount) * 100
                   return (
                     <div key={lang.name} className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: lang.color }} />
-                      <span className="text-sm w-24 flex-shrink-0">{lang.name}</span>
-                      <div className="flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-2.5 h-2.5 rounded-none flex-shrink-0" style={{ backgroundColor: lang.color }} />
+                      <span className="font-mono text-xs uppercase font-bold text-ink w-24 flex-shrink-0">{lang.name}</span>
+                      <div className="flex-1 h-2 bg-bg-sunken border border-line rounded-none overflow-hidden">
                         <div
-                          className="h-full rounded-full transition-all duration-700"
+                          className="h-full rounded-none transition-all duration-700"
                           style={{ backgroundColor: lang.color, width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-black dark:text-white font-bold w-12 text-right">
+                      <span className="font-mono text-xs text-muted font-bold w-16 text-right">
                         {lang.count} {lang.count !== 1 ? t('dashboard.repos') : t('dashboard.repo')}
                       </span>
                     </div>
@@ -273,16 +312,16 @@ export default function GithubClient({ profile }: { profile: any }) {
           )}
         </div>
       ) : (
-        <div className="glass-card p-8 text-center">
-          <AlertCircle className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
-          <p className="text-black dark:text-white font-bold text-sm">{t('dashboard.github_error')}</p>
+        <div className="border border-line bg-bg-raised p-8 text-center rounded-none">
+          <AlertCircle className="w-6 h-6 text-faint mx-auto mb-2" />
+          <p className="font-mono text-xs uppercase text-muted font-bold">{t('dashboard.github_error')}</p>
         </div>
       )}
 
       {/* Tooltip */}
       {tooltip && (
         <div
-          className="fixed z-50 px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-medium shadow-xl pointer-events-none whitespace-nowrap"
+          className="fixed z-50 px-3 py-1.5 rounded-none border border-line bg-invert-bg text-invert-fg font-mono text-[11px] uppercase tracking-wider shadow-lg pointer-events-none whitespace-nowrap"
           style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -100%)' }}
         >
           {tooltip.text}

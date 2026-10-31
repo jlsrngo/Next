@@ -258,7 +258,7 @@ export default function DashboardShell({
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="rounded-md p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white lg:hidden"
+            className="rounded-none p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white lg:hidden"
           >
             <X size={18} />
           </button>
@@ -271,7 +271,7 @@ export default function DashboardShell({
               if ('divider' in item) {
                 return (
                   <li key={idx} className="pt-4 pb-2">
-                    <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+                    <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500 font-mono">
                       {idx === 1 ? t('admin.content') : t('admin.settings')}
                     </span>
                   </li>
@@ -284,9 +284,9 @@ export default function DashboardShell({
                   <Link
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                    className={`flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium transition-all ${
                       active
-                        ? 'bg-accent bg-[var(--accent)] text-white'
+                        ? 'bg-invert-bg text-invert-fg'
                         : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
@@ -304,14 +304,14 @@ export default function DashboardShell({
         <div className="border-t border-slate-200 dark:border-[#27272a] px-3 py-3 space-y-1 shrink-0">
           <Link
             href={`/${locale}`}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white transition-all"
+            className="flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white transition-all"
           >
             <ExternalLink size={18} />
             {t('admin.view_site')}
           </Link>
           <a
             href="/api/auth/signout"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+            className="flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
           >
             <LogOut size={18} />
             {t('admin.sign_out')}
@@ -326,7 +326,7 @@ export default function DashboardShell({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="rounded-md p-2 text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white lg:hidden"
+              className="rounded-none p-2 text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white lg:hidden"
             >
               <Menu size={20} />
             </button>
@@ -335,13 +335,13 @@ export default function DashboardShell({
           <div className="flex items-center gap-3">
             <button
               onClick={toggle}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-zinc-400 dark:hover:bg-[#18181b] dark:hover:text-white transition"
+              className="rounded-none p-2 text-slate-500 hover:bg-slate-100 dark:text-zinc-400 dark:hover:bg-[#18181b] dark:hover:text-white transition"
               title={isDark ? t('admin.switch_to_light') : t('admin.switch_to_dark')}
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <div className="h-5 w-px bg-slate-200 dark:bg-[#27272a]" />
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-[#18181b] overflow-hidden border border-slate-200 dark:border-[#27272a]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-none bg-slate-100 dark:bg-[#18181b] overflow-hidden border border-slate-200 dark:border-[#27272a]">
               {avatarUrl ? (
                 <Image src={avatarUrl} alt="Avatar" width={32} height={32} unoptimized className="h-full w-full object-cover" />
               ) : (

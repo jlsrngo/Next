@@ -5,14 +5,14 @@ import { Tag, Sparkles, Bug, Zap, AlertTriangle, Clock, CheckCircle2, Calendar }
 function StatusBadge({ status, isEn }: { status: ChangelogStatus; isEn: boolean }) {
   if (status === 'released') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+      <span className="inline-flex items-center gap-1.5 rounded-none bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
         <CheckCircle2 size={13} />
         {isEn ? 'Released' : 'Dirilis'}
       </span>
     )
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-400">
+    <span className="inline-flex items-center gap-1.5 rounded-none bg-blue-50 dark:bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-400">
       <Clock size={13} />
       {isEn ? 'Planned' : 'Direncanakan'}
     </span>
@@ -68,7 +68,7 @@ export default async function ChangelogPage() {
       </div>
 
       {visible.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
+        <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
           <Tag size={40} className="mx-auto text-slate-300 mb-3" />
           <p className="text-slate-500 dark:text-slate-400">{isEn ? 'No changelog entries yet' : 'Belum ada entri changelog'}</p>
         </div>
@@ -81,13 +81,13 @@ export default async function ChangelogPage() {
             {visible.map((entry) => (
               <div key={entry.version} className="relative pl-10">
                 {/* Timeline dot */}
-                <div className={`absolute left-[8px] top-2 h-[15px] w-[15px] rounded-full border-[3px] ${
+                <div className={`absolute left-[8px] top-2 h-[15px] w-[15px] rounded-none border-[3px] ${
                   entry.status === 'released'
                     ? 'border-emerald-500 bg-white dark:bg-slate-950'
                     : 'border-blue-500 bg-white dark:bg-slate-950'
                 }`} />
 
-                <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+                <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
                   {/* Header */}
                   <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
                     <StatusBadge status={entry.status} isEn={isEn} />

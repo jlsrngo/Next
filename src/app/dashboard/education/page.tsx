@@ -23,23 +23,23 @@ export default async function EducationPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500 dark:text-slate-400">{displayEducations.length} record{displayEducations.length !== 1 ? 's' : ''} total</p>
-        <Link href="/dashboard/education/new" className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+        <Link href="/dashboard/education/new" className="inline-flex items-center gap-2 rounded-none bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
           <Plus size={16} />
           Add Education
         </Link>
       </div>
 
       {displayEducations.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
+        <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
           <GraduationCap size={40} className="mx-auto text-slate-300 mb-3" />
           <p className="text-slate-500 dark:text-slate-400 mb-4">No education entries yet</p>
-          <Link href="/dashboard/education/new" className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+          <Link href="/dashboard/education/new" className="inline-flex items-center gap-2 rounded-none bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
             <Plus size={16} />
             Add your first education
           </Link>
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+        <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800">
@@ -62,18 +62,18 @@ export default async function EducationPage() {
                     {formatDate(edu.startDate)} - {edu.current ? 'Present' : formatDate(edu.endDate)}
                   </td>
                   <td className="px-5 py-3.5">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${edu.current ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
+                    <span className={`inline-flex items-center rounded-none px-2.5 py-0.5 text-xs font-medium ${edu.current ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
                       {edu.current ? 'Current' : 'Completed'}
                     </span>
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center justify-end gap-1">
-                      <Link href={`/dashboard/education/${edu.id}/edit`} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--accent)] hover:bg-[var(--accent)]/5 rounded-lg transition" title="Edit">
+                      <Link href={`/dashboard/education/${edu.id}/edit`} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--accent)] hover:bg-[var(--accent)]/5 rounded-none transition" title="Edit">
                         <Edit size={15} />
                       </Link>
                       <form action={deleteEduAction} className="inline">
                         <input type="hidden" name="id" value={edu.id} />
-                        <button type="submit" className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition" title="Delete">
+                        <button type="submit" className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-none transition" title="Delete">
                           <Trash2 size={15} />
                         </button>
                       </form>

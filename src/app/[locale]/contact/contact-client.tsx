@@ -116,12 +116,8 @@ function BentoCard({ link, span, isMono }: { link: SocialLink; span: 'full' | 'h
 
   return (
     <div
-      className={`social-bento-card group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer ${
+      className={`social-bento-card group relative rounded-none border border-line bg-bg-raised overflow-hidden transition-colors hover:border-line-strong cursor-pointer ${
         span === 'full' ? 'min-h-[170px]' : 'min-h-[190px]'
-      } ${
-        isMono
-          ? 'bg-slate-50 dark:bg-zinc-950/70 border border-slate-200 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-none'
-          : 'hover:shadow-2xl'
       }`}
       style={{ background: isMono ? undefined : style.gradient }}
       onClick={() => window.open(link.url, '_blank')}
@@ -148,11 +144,7 @@ function BentoCard({ link, span, isMono }: { link: SocialLink; span: 'full' | 'h
         </div>
         <div className="mt-5">
           <span
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
-              isMono
-                ? 'bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-slate-100 dark:hover:bg-zinc-800'
-                : 'bg-white/15 backdrop-blur-sm border border-white/20 text-white font-bold group-hover:bg-white/25'
-            }`}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-none border border-line bg-invert-bg text-invert-fg font-mono text-xs uppercase tracking-wider font-bold transition-opacity group-hover:opacity-85"
           >
             {t('contact.go_to')} {label} <ExternalLink className="w-3.5 h-3.5" />
           </span>

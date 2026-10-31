@@ -379,7 +379,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isId ? 'Cari nama tool, parameter, atau kata kunci...' : 'Search tools by name, parameters, or keywords...'}
-              className="w-full pl-11 pr-16 py-3 text-sm sm:text-base rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 text-black dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 font-sans transition-all"
+              className="w-full pl-11 pr-16 py-3 text-sm sm:text-base rounded-none border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 text-black dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 font-sans transition-all"
             />
             {searchQuery && (
               <button
@@ -405,7 +405,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-2 rounded-lg text-sm font-sans transition-colors whitespace-nowrap ${
+                className={`px-3.5 py-2 rounded-none text-sm font-sans transition-colors whitespace-nowrap ${
                   activeCategory === cat.id
                     ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold'
                     : 'border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
@@ -422,14 +422,14 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
           {filteredTools.map((tool) => (
             <div
               key={tool.id}
-              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors shadow-sm"
+              className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors shadow-sm"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div className="flex items-center gap-3">
-                  <code className="text-base sm:text-lg font-bold font-mono text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-md">
+                  <code className="text-base sm:text-lg font-bold font-mono text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-none">
                     {tool.name}
                   </code>
-                  <span className="text-xs font-sans font-medium text-zinc-500 dark:text-zinc-400 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-xs font-sans font-medium text-zinc-500 dark:text-zinc-400 px-2.5 py-1 rounded-none border border-zinc-200 dark:border-zinc-800">
                     {isId ? tool.categoryLabel.id : tool.categoryLabel.en}
                   </span>
                 </div>
@@ -468,7 +468,7 @@ export default function ArunakiToolsPage({ params }: { params: { locale: string 
                   ))}
                 </div>
 
-                <div className="p-3.5 sm:p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 overflow-x-auto">
+                <div className="p-3.5 sm:p-4 rounded-none bg-zinc-50 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 overflow-x-auto">
                   <code>{tool.example}</code>
                 </div>
               </div>

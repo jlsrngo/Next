@@ -133,7 +133,7 @@ export default function EditProfilePage() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column: Avatar + Name */}
           <div className="space-y-6">
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+            <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6">
               <div className="flex flex-col items-center gap-5">
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Avatar</label>
 
@@ -141,7 +141,7 @@ export default function EditProfilePage() {
                 <div className="relative">
                   <div
                     ref={avatarContainerRef}
-                    className={`w-40 h-40 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden border-4 border-slate-200 dark:border-slate-700 mx-auto transition-all ${watchedAvatar ? (isDragging ? 'ring-4 ring-[var(--accent)]/40 cursor-grabbing' : 'cursor-grab') : 'cursor-pointer'}`}
+                    className={`w-40 h-40 rounded-none bg-slate-100 dark:bg-slate-800 overflow-hidden border-4 border-slate-200 dark:border-slate-700 mx-auto transition-all ${watchedAvatar ? (isDragging ? 'ring-4 ring-[var(--accent)]/40 cursor-grabbing' : 'cursor-grab') : 'cursor-pointer'}`}
                     onClick={() => { if (!isDragging && !watchedAvatar) fileInputRef.current?.click() }}
                     onMouseDown={(e) => { if (watchedAvatar) { e.preventDefault(); onDragStart(e.clientX, e.clientY) } }}
                     onTouchStart={(e) => { if (watchedAvatar) { onDragStart(e.touches[0].clientX, e.touches[0].clientY) } }}
@@ -157,7 +157,7 @@ export default function EditProfilePage() {
 
                   {/* Upload overlay (only when no image) */}
                   {!watchedAvatar && (
-                    <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center pointer-events-none">
+                    <div className="absolute inset-0 rounded-none bg-black/40 flex items-center justify-center pointer-events-none">
                       <div className="text-center">
                         <Camera size={24} className="text-white mx-auto" />
                         <p className="text-xs text-white/80 mt-1 font-medium">Upload Photo</p>
@@ -180,28 +180,28 @@ export default function EditProfilePage() {
                 <div className="w-full grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="fullName" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Full Name *</label>
-                    <input id="fullName" {...register('fullName')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
+                    <input id="fullName" {...register('fullName')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
                     {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="headline" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Headline</label>
-                    <input id="headline" {...register('headline')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Full Stack Developer" />
+                    <input id="headline" {...register('headline')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="Full Stack Developer" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Bio */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6 space-y-4">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Bio</h3>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="bioHome" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Homepage Bio</label>
-                  <textarea id="bioHome" rows={3} {...register('bioHome')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm resize-none" placeholder="Short bio for homepage..." />
+                  <textarea id="bioHome" rows={3} {...register('bioHome')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm resize-none" placeholder="Short bio for homepage..." />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="bioAbout" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">About Page Bio</label>
-                  <textarea id="bioAbout" rows={3} {...register('bioAbout')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm resize-none" placeholder="Detailed bio for about page..." />
+                  <textarea id="bioAbout" rows={3} {...register('bioAbout')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm resize-none" placeholder="Detailed bio for about page..." />
                 </div>
               </div>
             </div>
@@ -209,50 +209,50 @@ export default function EditProfilePage() {
 
           {/* Right Column: Contact + Social */}
           <div className="space-y-6">
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6 space-y-4">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Contact</h3>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</label>
-                  <input id="email" {...register('email')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
+                  <input id="email" {...register('email')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="phone" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Phone</label>
-                  <input id="phone" {...register('phone')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
+                  <input id="phone" {...register('phone')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="location" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Location</label>
-                  <input id="location" {...register('location')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="City, Country" />
+                  <input id="location" {...register('location')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="City, Country" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+            <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6 space-y-4">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Social Links</h3>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="website" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Website</label>
-                  <input id="website" type="url" {...register('website')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://..." />
+                  <input id="website" type="url" {...register('website')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://..." />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="githubUrl" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">GitHub</label>
-                  <input id="githubUrl" type="url" {...register('githubUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://github.com/username" />
+                  <input id="githubUrl" type="url" {...register('githubUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://github.com/username" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="linkedinUrl" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">LinkedIn</label>
-                  <input id="linkedinUrl" type="url" {...register('linkedinUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://linkedin.com/in/username" />
+                  <input id="linkedinUrl" type="url" {...register('linkedinUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://linkedin.com/in/username" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="twitterUrl" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Twitter</label>
-                  <input id="twitterUrl" type="url" {...register('twitterUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://twitter.com/username" />
+                  <input id="twitterUrl" type="url" {...register('twitterUrl')} className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm" placeholder="https://twitter.com/username" />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-6 px-6 py-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-          <button type="submit" disabled={loading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-lg hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
+        <div className="flex justify-end gap-3 mt-6 px-6 py-4 bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800">
+          <button type="submit" disabled={loading} className="px-5 py-2.5 bg-[var(--accent)] text-white rounded-none hover:opacity-90 disabled:opacity-50 flex items-center gap-2 text-sm font-semibold">
             {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</> : <><Save className="h-4 w-4" /> Save Changes</>}
           </button>
         </div>

@@ -23,7 +23,7 @@ export default function Error({ error, reset }: ErrorProps) {
         </p>
         <button
           onClick={reset}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent)] text-white rounded-lg font-medium hover:opacity-90 transition"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent)] text-white rounded-none font-medium hover:opacity-90 transition"
         >
           <RefreshCw className="h-4 w-4" />
           Try Again

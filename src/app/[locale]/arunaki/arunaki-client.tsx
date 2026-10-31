@@ -148,29 +148,51 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-20 space-y-20 w-full flex-1">
         {/* HERO SECTION */}
-        <section id="hero" className="space-y-6">
+        <section id="hero" className="space-y-6 pt-4">
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black dark:text-white leading-[1.1] font-sans">
-              {isId ? 'Agen dokumen open source' : 'The open source document agent'}
+            <div className="hud-label flex items-center gap-2">
+              <span className="w-2 h-2 bg-accent inline-block" />
+              <span>[ 01 // OVERVIEW ]</span>
+              <span className="hidden sm:inline">· NATIVE DESKTOP DOCUMENT AGENT</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-ink leading-[1.05] font-display">
+              {isId ? 'Agen dokumen ' : 'The open source '}
+              <span className="font-serif italic font-normal text-ink-strong">
+                {isId ? 'open source.' : 'document agent.'}
+              </span>
             </h1>
-            <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
+            <p className="text-base sm:text-lg text-muted leading-relaxed font-sans max-w-2xl">
               {isId
                 ? 'Otomasi dokumen desktop cerdas untuk spreadsheet Microsoft Excel, kontrak Word, slide presentasi PowerPoint, pipeline PDF, dan pembukuan finansial. Beroperasi secara lokal dan sandboxed di komputer Anda.'
                 : 'Native desktop computer-use for Microsoft Excel spreadsheets, Word contracts, PowerPoint decks, PDF pipelines, and financial ledgers. Strictly sandboxed to your local machine.'}
             </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Link href="/arunaki/download" className="btn-primary">
+                <Download className="w-3.5 h-3.5" />
+                <span>{isId ? 'UNDUH INSTALLER' : 'DOWNLOAD INSTALLER'}</span>
+              </Link>
+              <Link href="/arunaki/docs" className="btn-secondary">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>{isId ? 'BACA DOKUMENTASI' : 'EXPLORE DOCS'}</span>
+              </Link>
+            </div>
+            <p className="hud-label text-faint pt-1">
+              FOR WINDOWS (64-BIT) · NO SUBSCRIPTION REQUIRED · 100% LOCAL
+            </p>
           </div>
 
           {/* INSTALL BOX */}
-          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-950/80 overflow-hidden shadow-sm">
-            <div className="flex border-b border-zinc-200 dark:border-zinc-800 px-2 overflow-x-auto">
+          <div className="rounded-none border border-line bg-bg-raised overflow-hidden">
+            <div className="flex border-b border-line px-2 overflow-x-auto">
               {(['curl', 'winget', 'bun', 'npm', 'brew', 'git'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2.5 text-sm font-sans font-medium transition-colors border-b-2 -mb-px whitespace-nowrap ${
+                  className={`px-4 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-colors border-b-2 -mb-px whitespace-nowrap ${
                     activeTab === tab
-                      ? 'border-black dark:border-white text-black dark:text-white font-semibold'
-                      : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300'
+                      ? 'border-ink text-ink bg-bg-sunken'
+                      : 'border-transparent text-faint hover:text-ink'
                   }`}
                 >
                   {tab}
@@ -178,23 +200,23 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               ))}
             </div>
 
-            <div className="p-4 sm:p-5 flex items-center justify-between gap-3 text-sm sm:text-base font-mono">
-              <code className="text-zinc-800 dark:text-zinc-200 overflow-x-auto whitespace-nowrap selection:bg-zinc-300 dark:selection:bg-zinc-700">
+            <div className="p-4 sm:p-5 flex items-center justify-between gap-3 font-mono text-xs sm:text-sm">
+              <code className="text-ink overflow-x-auto whitespace-nowrap">
                 {installCommands[activeTab]}
               </code>
               <button
                 onClick={() => copyToClipboard(installCommands[activeTab], 'install')}
-                className="p-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white transition-colors shrink-0"
+                className="p-2 rounded-none border border-line hover:border-line-strong text-muted hover:text-ink transition-colors shrink-0"
                 title={isId ? 'Salin perintah' : 'Copy command'}
               >
-                {copied === 'install' ? <Check className="w-4 h-4 sm:w-5 sm:h-5 text-black dark:text-white" /> : <Copy className="w-4 h-4 sm:w-5 sm:h-5" />}
+                {copied === 'install' ? <Check className="w-4 h-4 text-ink" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
           {/* Warning: CLI not yet available */}
-          <div className="flex items-start gap-2.5 mt-3 px-3.5 py-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs sm:text-sm font-sans text-zinc-500 dark:text-zinc-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 shrink-0 mt-0.5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="flex items-start gap-2.5 mt-3 px-3.5 py-3 rounded-none border border-line bg-bg-sunken text-xs font-mono text-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 shrink-0 mt-0.5 text-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
               <line x1="12" y1="9" x2="12" y2="13"/>
               <line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -215,17 +237,17 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               {isId ? 'Pratinjau konsol langsung' : 'Live workstation preview'}
             </span>
             <span className="text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 font-medium text-xs sm:text-sm">
-              <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+              <span className="w-2 h-2 rounded-none bg-zinc-400 dark:bg-zinc-500" />
               {isId ? 'Sandbox lokal aktif' : 'Local sandbox active'}
             </span>
           </div>
 
-          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-[#09090b] text-zinc-200 font-mono text-xs sm:text-sm overflow-hidden shadow-sm">
+          <div className="rounded-none border border-zinc-200 dark:border-zinc-800 bg-[#09090b] text-zinc-200 font-mono text-xs sm:text-sm overflow-hidden shadow-sm">
             <div className="px-4 py-3 border-b border-zinc-800 flex items-center justify-between bg-[#0c0c0e]">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+                <span className="w-2.5 h-2.5 rounded-none bg-zinc-700" />
+                <span className="w-2.5 h-2.5 rounded-none bg-zinc-700" />
+                <span className="w-2.5 h-2.5 rounded-none bg-zinc-700" />
                 <span className="text-zinc-400 ml-2 text-xs">arunaki-agent // headless-com-worker</span>
               </div>
               <span className="text-zinc-500 text-xs">bun: 1.3.14 • electron: 43.2</span>
@@ -236,7 +258,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
                 <button
                   key={i}
                   onClick={() => setActiveSimIndex(i)}
-                  className={`px-3.5 py-1.5 rounded-md text-xs sm:text-sm whitespace-nowrap transition-colors ${
+                  className={`px-3.5 py-1.5 rounded-none text-xs sm:text-sm whitespace-nowrap transition-colors ${
                     activeSimIndex === i
                       ? 'bg-zinc-800 text-white font-medium'
                       : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
@@ -283,7 +305,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+            <div className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">01</span>
               <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Unduh Paket Installer' : 'Download Package'}
@@ -295,7 +317,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               </p>
             </div>
 
-            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+            <div className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">02</span>
               <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Tentukan Folder Workspace' : 'Select Workspace'}
@@ -307,7 +329,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
               </p>
             </div>
 
-            <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
+            <div className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5 shadow-sm">
               <span className="text-xs sm:text-sm font-mono font-bold text-zinc-400">03</span>
               <h3 className="font-semibold text-base sm:text-lg text-black dark:text-white font-sans">
                 {isId ? 'Ketik Instruksi Dokumen' : 'Automate with Prompts'}
@@ -337,7 +359,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               href="/arunaki/docs"
-              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
+              className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
@@ -355,7 +377,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
 
             <Link
               href="/arunaki/features"
-              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
+              className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
@@ -373,7 +395,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
 
             <Link
               href="/arunaki/tools"
-              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
+              className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
@@ -391,7 +413,7 @@ export default function ArunakiClient({ locale }: ArunakiClientProps) {
 
             <Link
               href="/arunaki/download"
-              className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
+              className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors flex items-center justify-between group shadow-sm"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">

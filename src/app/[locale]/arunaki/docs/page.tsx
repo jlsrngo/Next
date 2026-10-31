@@ -48,7 +48,7 @@ function Code({ children }: { children: React.ReactNode }) {
 
 function CodeBlock({ code }: { code: string }) {
   return (
-    <pre className="p-4 sm:p-5 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 overflow-x-auto my-4 sm:my-5 leading-relaxed">
+    <pre className="p-4 sm:p-5 rounded-none bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 overflow-x-auto my-4 sm:my-5 leading-relaxed">
       {code}
     </pre>
   );
@@ -68,7 +68,7 @@ function P({ children }: { children: React.ReactNode }) {
 
 function Card({ title, badge, desc }: { title: string; badge?: string; desc: string }) {
   return (
-    <div className="p-4 sm:p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2 mb-4">
+    <div className="p-4 sm:p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2 mb-4">
       <div className="flex items-center gap-2.5 flex-wrap">
         <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{title}</span>
         {badge && (
@@ -90,7 +90,7 @@ function IntroSection({ isId }: { isId: boolean }) {
   return (
     <>
       <H1>{isId ? 'Dokumentasi Arunaki' : 'Arunaki Documentation'}</H1>
-      <div className="p-5 sm:p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-8 space-y-2">
+      <div className="p-5 sm:p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 mb-8 space-y-2">
         <p className="font-mono text-lg sm:text-xl font-bold text-black dark:text-white">
           {isId
             ? 'Workstation & Harness Otomasi Agen Dokumen Desktop'
@@ -105,9 +105,9 @@ function IntroSection({ isId }: { isId: boolean }) {
 
       <H2>{isId ? '1. Panduan Cepat (Quick Start)' : '1. Quick Start'}</H2>
       <div className="space-y-4 sm:space-y-5 mb-8">
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
-            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">1</span>
+            <span className="w-6 h-6 rounded-none bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">1</span>
             <span>{isId ? 'Unduh & Jalankan Workstation' : 'Download & Run Workstation'}</span>
           </div>
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
@@ -117,9 +117,9 @@ function IntroSection({ isId }: { isId: boolean }) {
           </p>
         </div>
 
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
           <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
-            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">2</span>
+            <span className="w-6 h-6 rounded-none bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">2</span>
             <span>{isId ? 'Pilih Folder Workspace Terisolasi (Sandbox)' : 'Select Sandboxed Workspace Folder'}</span>
           </div>
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
@@ -135,9 +135,9 @@ function IntroSection({ isId }: { isId: boolean }) {
           </div>
         </div>
 
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5">
           <div className="flex items-center gap-2.5 font-mono text-base sm:text-lg font-bold text-black dark:text-white">
-            <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">3</span>
+            <span className="w-6 h-6 rounded-none bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs sm:text-sm font-bold">3</span>
             <span>{isId ? 'Mulai Otomasi dengan Bahasa Alami' : 'Start Automating with Natural Language'}</span>
           </div>
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed">
@@ -155,7 +155,7 @@ function IntroSection({ isId }: { isId: boolean }) {
 
       <H2>{isId ? '2. Konsep Inti (Core Concepts)' : '2. Core Concepts'}</H2>
       <div className="space-y-4 mb-8">
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-5 h-5 text-black dark:text-white" />
             <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
@@ -169,7 +169,7 @@ function IntroSection({ isId }: { isId: boolean }) {
           </p>
         </div>
 
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center gap-2.5">
             <Zap className="w-5 h-5 text-black dark:text-white" />
             <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
@@ -183,7 +183,7 @@ function IntroSection({ isId }: { isId: boolean }) {
           </p>
         </div>
 
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-5 h-5 text-black dark:text-white" />
             <span className="font-bold font-mono text-base sm:text-lg text-black dark:text-white">
@@ -200,7 +200,7 @@ function IntroSection({ isId }: { isId: boolean }) {
 
       <H2>{isId ? '3. Antarmuka Akses (Interfaces)' : '3. Access Interfaces'}</H2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Bot className="w-5 h-5 text-black dark:text-white" />
@@ -219,7 +219,7 @@ function IntroSection({ isId }: { isId: boolean }) {
           </p>
         </div>
 
-        <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
+        <div className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Bot className="w-5 h-5 text-black dark:text-white" />
@@ -240,7 +240,7 @@ function IntroSection({ isId }: { isId: boolean }) {
       </div>
 
       <H2>{isId ? '4. Arsitektur Eksekusi Harness' : '4. Harness Architecture'}</H2>
-      <div className="p-5 rounded-lg bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 leading-relaxed overflow-x-auto mb-8">
+      <div className="p-5 rounded-none bg-zinc-950 border border-zinc-800 font-mono text-sm sm:text-base text-zinc-300 leading-relaxed overflow-x-auto mb-8">
         <div>{isId ? '[Instruksi Pengguna / User Instruction]' : '[User Instruction]'}</div>
         <div className="text-zinc-500">  │</div>
         <div className="text-zinc-500">  ▼</div>
@@ -338,7 +338,7 @@ function ModelsSection({ isId }: { isId: boolean }) {
         { name: 'Google Gemini',    models: 'gemini-2.0-flash, gemini-1.5-pro',     key: 'GEMINI_API_KEY' },
         { name: 'Ollama (Local)',   models: 'llama3, mistral, phi3, qwen2',         key: isId ? 'Tanpa API key' : 'No API key' },
       ].map((p) => (
-        <div key={p.name} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
+        <div key={p.name} className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
           <div className="flex items-center justify-between flex-wrap gap-2.5">
             <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.name}</span>
             <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-0.5 rounded">{p.key}</span>
@@ -374,7 +374,7 @@ function ModelsSection({ isId }: { isId: boolean }) {
           desc: isId ? 'Gunakan server self-hosted atau gateway proxy apapun yang kompatibel dengan format REST API OpenAI.' : 'Use any self-hosted server or proxy gateway compatible with the standard OpenAI REST API specification.',
         },
       ].map((p) => (
-        <div key={p.name} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
+        <div key={p.name} className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mb-4 space-y-2">
           <div className="flex items-center justify-between flex-wrap gap-2.5">
             <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.name}</span>
             <span className="text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 px-2.5 py-0.5 rounded">{p.key}</span>
@@ -639,7 +639,7 @@ function GatewaySection({ isId }: { isId: boolean }) {
         {apps.map((app) => (
           <div
             key={app.name}
-            className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5"
+            className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2.5"
           >
             <div className="flex items-center justify-between">
               <span className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{app.name}</span>
@@ -709,13 +709,13 @@ function DownloadSection({ isId }: { isId: boolean }) {
           { title: 'Windows Portable', file: 'Arunaki-Portable.zip', badge: isId ? 'Portabel' : 'Standalone' },
           { title: 'macOS Universal', file: 'Arunaki-Universal.dmg', badge: 'Universal' },
         ].map((p) => (
-          <div key={p.title} className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5">
+          <div key={p.title} className="p-5 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5">
             <div>
               <p className="text-xs sm:text-sm text-zinc-400 font-mono mb-1.5">{p.badge}</p>
               <p className="font-bold text-black dark:text-white font-mono text-base sm:text-lg">{p.title}</p>
               <p className="font-mono text-xs sm:text-sm text-zinc-500 mt-1">{p.file}</p>
             </div>
-            <button disabled className="w-full py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-mono text-xs sm:text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2">
+            <button disabled className="w-full py-2.5 rounded-none bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-mono text-xs sm:text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2">
               <Clock className="w-4 h-4" />
               {isId ? 'Segera Hadir' : 'Coming Soon'}
             </button>
@@ -735,7 +735,7 @@ npm run dev`} />
         href="https://github.com/jlsrngo/Arunaki"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-mono text-sm sm:text-base font-semibold hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-mono text-sm sm:text-base font-semibold hover:opacity-90 transition-opacity"
       >
         <Download className="w-4 h-4" />
         {isId ? 'Lihat Repositori di GitHub' : 'View Repository on GitHub'}
@@ -787,7 +787,7 @@ export default function ArunakiDocsPage() {
             <button
               key={item.id}
               onClick={() => { setActive(item.id); setSidebarOpen(false); }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-md transition-colors font-mono text-base ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-none transition-colors font-mono text-base ${
                 active === item.id
                   ? 'bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white font-bold'
                   : 'text-zinc-500 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900/50'

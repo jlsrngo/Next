@@ -48,16 +48,16 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           <article className="max-w-3xl mx-auto">
             <header className="mb-8 text-center">
               {project.featured && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
-                  {projects.filters.featured}
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-bg-sunken border border-line text-ink text-xs font-mono uppercase font-bold rounded-none mb-4">
+                  [ {projects.filters.featured} ]
                 </span>
               )}
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{project.title}</h1>
-              <p className="text-xl text-muted-foreground">{project.description}</p>
+              <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 text-ink">{project.title}</h1>
+              <p className="text-lg text-muted">{project.description}</p>
             </header>
 
             {project.imageUrl && (
-              <div className="relative rounded-xl overflow-hidden mb-8">
+              <div className="relative rounded-none border border-line overflow-hidden mb-8 bg-bg-raised">
                 <Image
                   src={project.imageUrl}
                   alt={project.title}
@@ -71,7 +71,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
             <div className="flex flex-wrap gap-2 justify-center mb-8">
               {project.techStack.map((tech: string) => (
-                <span key={tech} className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
+                <span key={tech} className="px-3 py-1 bg-bg-sunken border border-line rounded-none font-mono text-xs uppercase text-muted">
                   {tech}
                 </span>
               ))}
@@ -83,9 +83,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-invert-bg text-invert-fg border border-line rounded-none font-mono text-xs uppercase font-bold tracking-wider hover:opacity-85 transition"
                 >
-                  <Globe className="h-5 w-5" />
+                  <Globe className="h-4 w-4" />
                   {projects.liveDemo}
                 </Link>
               )}
@@ -94,14 +94,14 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 border border-muted-foreground/20 rounded-lg font-medium hover:bg-muted transition"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-line bg-bg-raised text-ink rounded-none font-mono text-xs uppercase font-bold tracking-wider hover:border-line-strong transition"
                 >
-                  <Github className="h-5 w-5" />
+                  <Github className="h-4 w-4" />
                   {projects.sourceCode}
                 </Link>
               )}
-              <Link href={`/${locale}/projects`} className="inline-flex items-center gap-2 px-6 py-3 border border-muted-foreground/20 rounded-lg font-medium hover:bg-muted transition">
-                <ArrowLeft className="h-5 w-5" />
+              <Link href={`/${locale}/projects`} className="inline-flex items-center gap-2 px-6 py-3 border border-line bg-bg-raised text-ink rounded-none font-mono text-xs uppercase font-bold tracking-wider hover:border-line-strong transition">
+                <ArrowLeft className="h-4 w-4" />
                 {common.back}
               </Link>
             </div>

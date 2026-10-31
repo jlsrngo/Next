@@ -120,16 +120,16 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-[#0c0c0e] rounded-xl border border-slate-200 dark:border-[#27272a] p-6 space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-[#0c0c0e] rounded-none border border-slate-200 dark:border-[#27272a] p-6 space-y-6">
       <div className="space-y-2">
         <label htmlFor="title" className="block text-sm font-medium">{fields.title} *</label>
-        <input id="title" {...register('title')} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
+        <input id="title" {...register('title')} className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
         {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>}
       </div>
 
       <div className="space-y-2">
         <label htmlFor="description" className="block text-sm font-medium">{fields.description} *</label>
-        <textarea id="description" rows={4} {...register('description')} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
+        <textarea id="description" rows={4} {...register('description')} className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
         {errors.description && <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>}
       </div>
 
@@ -139,15 +139,15 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
         <input type="hidden" {...register('imageUrl')} />
         {(imagePreview || watchedImageUrl) ? (
           <div className="relative inline-block">
-            <img src={imagePreview || watchedImageUrl || ''} alt="Preview" className="h-40 w-auto rounded-lg object-cover border border-slate-200 dark:border-slate-700" />
-            <button type="button" onClick={removeImage} className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition">
+            <img src={imagePreview || watchedImageUrl || ''} alt="Preview" className="h-40 w-auto rounded-none object-cover border border-slate-200 dark:border-slate-700" />
+            <button type="button" onClick={removeImage} className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-none flex items-center justify-center hover:bg-red-600 transition">
               <X size={14} />
             </button>
           </div>
         ) : (
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="flex flex-col items-center justify-center gap-2 h-40 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg cursor-pointer hover:border-[var(--accent)] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition"
+            className="flex flex-col items-center justify-center gap-2 h-40 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-none cursor-pointer hover:border-[var(--accent)] hover:bg-slate-50 dark:hover:bg-slate-800/50 transition"
           >
             {uploadingImage ? (
               <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
@@ -170,18 +170,18 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
             setImagePreview(null)
             setValue('imageUrl', e.target.value, { shouldValidate: true })
           }}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700 text-sm"
+          className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700 text-sm"
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <label htmlFor="liveUrl" className="block text-sm font-medium">{fields.liveUrl}</label>
-          <input id="liveUrl" type="url" {...register('liveUrl')} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" placeholder="https://..." />
+          <input id="liveUrl" type="url" {...register('liveUrl')} className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" placeholder="https://..." />
         </div>
         <div className="space-y-2">
           <label htmlFor="githubUrl" className="block text-sm font-medium">{fields.githubUrl}</label>
-          <input id="githubUrl" type="url" {...register('githubUrl')} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" placeholder="https://..." />
+          <input id="githubUrl" type="url" {...register('githubUrl')} className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" placeholder="https://..." />
         </div>
       </div>
 
@@ -194,7 +194,7 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
         {techStack.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
             {techStack.map((tech) => (
-              <span key={tech} className="inline-flex items-center gap-1.5 px-3 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded-full text-sm font-medium">
+              <span key={tech} className="inline-flex items-center gap-1.5 px-3 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded-none text-sm font-medium">
                 {tech}
                 <button type="button" onClick={() => toggleTech(tech)} className="hover:text-red-500 transition">
                   <X size={14} />
@@ -213,7 +213,7 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
                   key={tech.slug}
                   onClick={() => toggleTech(tech.name)}
                   title={tech.name}
-                  className={`p-1.5 rounded-lg border-2 transition-all duration-200 ${
+                  className={`p-1.5 rounded-none border-2 transition-all duration-200 ${
                     isSelected
                       ? 'border-current scale-110 shadow-md'
                       : 'border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:scale-105'
@@ -245,13 +245,13 @@ export function ProjectEditForm({ initialData, locale, projectsMessages }: Proje
         </div>
         <div className="space-y-2">
           <label htmlFor="order" className="block text-sm font-medium">{fields.order}</label>
-          <input id="order" type="number" min="0" {...register('order', { valueAsNumber: true })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
+          <input id="order" type="number" min="0" {...register('order', { valueAsNumber: true })} className="w-full px-4 py-2 border rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent dark:bg-slate-800 dark:text-white dark:border-slate-700" />
         </div>
       </div>
 
       <div className="flex justify-end gap-4 pt-4 border-t dark:border-slate-800">
-        <Link href="/dashboard/projects" className="px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition">Cancel</Link>
-        <button type="submit" disabled={loading || uploadingImage} className="px-6 py-2.5 bg-[var(--accent)] text-white rounded-lg hover:opacity-90 disabled:opacity-50 flex items-center gap-2">
+        <Link href="/dashboard/projects" className="px-6 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none hover:bg-slate-50 dark:hover:bg-slate-800 transition">Cancel</Link>
+        <button type="submit" disabled={loading || uploadingImage} className="px-6 py-2.5 bg-[var(--accent)] text-white rounded-none hover:opacity-90 disabled:opacity-50 flex items-center gap-2">
           {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving... </> : 'Save Changes'}
         </button>
       </div>

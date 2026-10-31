@@ -93,14 +93,14 @@ export default function SkillsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search technologies..."
-          className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm dark:bg-slate-800 dark:text-white"
+          className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm dark:bg-slate-800 dark:text-white"
         />
       </div>
 
       {loading ? (
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="aspect-square rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
+            <div key={i} className="aspect-square rounded-none bg-slate-100 dark:bg-slate-800 animate-pulse" />
           ))}
         </div>
       ) : (
@@ -118,7 +118,7 @@ export default function SkillsPage() {
                       onClick={() => handleToggle(tech)}
                       disabled={isToggling}
                       title={tech.name}
-                      className={`group relative aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-1.5 transition-all duration-150 ${
+                      className={`group relative aspect-square rounded-none border-2 flex flex-col items-center justify-center gap-1.5 transition-all duration-150 ${
                         isToggling ? 'opacity-50 scale-95' : ''
                       }`}
                       style={
@@ -132,7 +132,7 @@ export default function SkillsPage() {
                       }
                     >
                       {!isActive && (
-                        <div className="absolute inset-0 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                        <div className="absolute inset-0 rounded-none border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
                       )}
 
                       <div className={`relative z-10 transition-transform duration-150 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`}>

@@ -91,41 +91,41 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                     {experiences.map((exp) => (
                         <div
                             key={exp.id}
-                            className={`group relative border transition-all duration-300 rounded-2xl overflow-hidden ${expandedExp === exp.id ? 'border-accent ring-1 ring-accent/30 bg-accent/5' : 'border-slate-200 dark:border-white/10 bg-white dark:bg-black/20 hover:border-accent/40'}`}
+                            className={`group relative border transition-colors rounded-none overflow-hidden ${expandedExp === exp.id ? 'border-line-strong bg-bg-raised' : 'border-line bg-bg-raised hover:border-line-strong'}`}
                         >
                             <div
-                                className="p-6 cursor-pointer flex items-start gap-5"
+                                className="p-5 cursor-pointer flex items-start gap-4"
                                 onClick={() => setExpandedExp(expandedExp === exp.id ? null : exp.id)}
                             >
-                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden flex-shrink-0 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-2">
+                                <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-bg-sunken border border-line p-2">
                                     {exp.company_logo_url ? (
                                         <Image
                                             src={optimizeCloudinaryUrl(exp.company_logo_url || '')}
                                             alt={exp.company_name}
-                                            width={56}
-                                            height={56}
+                                            width={48}
+                                            height={48}
                                             className="w-full h-full object-contain"
                                         />
                                     ) : (
-                                        <Building className="w-full h-full text-black dark:text-white" />
+                                        <Building className="w-full h-full text-ink" />
                                     )}
                                 </div>
                                 <div className="flex-1 space-y-1">
-                                    <h3 className="font-bold text-base md:text-lg leading-tight group-hover:text-accent transition-colors">{exp.position}</h3>
-                                    <p className="text-accent font-bold text-xs md:text-sm tracking-wide">{exp.company_name}</p>
-                                    <div className="flex flex-wrap gap-2 pt-1.5 font-bold">
-                                        <span className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-[10px] font-bold uppercase tracking-wider text-black dark:text-white">
+                                    <h3 className="font-display font-bold text-base md:text-lg leading-tight text-ink">{exp.position}</h3>
+                                    <p className="hud-label text-accent">{exp.company_name}</p>
+                                    <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-faint uppercase font-bold">
+                                        <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
                                             {new Date(exp.start_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {exp.is_current ? t('about.present') : new Date(exp.end_date!).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-[10px] font-bold uppercase tracking-wider text-black dark:text-white">
+                                        <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
                                             {getDuration(exp.start_date, exp.end_date, exp.is_current)}
                                         </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-accent/10 text-accent text-[10px] uppercase tracking-wider">
+                                        <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none text-ink">
                                             {exp.employment_type} • {exp.work_type}
                                         </span>
                                     </div>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-black dark:text-white transition-transform duration-300 mt-1 ${expandedExp === exp.id ? 'rotate-180 text-accent' : ''}`} />
+                                <ChevronDown className={`w-4 h-4 text-faint transition-transform duration-200 mt-1 ${expandedExp === exp.id ? 'rotate-180 text-ink' : ''}`} />
                             </div>
 
                             <div className={`grid-expand ${expandedExp === exp.id ? 'grid-expand-open' : ''}`}>
@@ -162,7 +162,7 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                                                             className="animate-list-item flex gap-3 text-sm font-medium leading-relaxed"
                                                             style={{ animationDelay: `${i * 50}ms` }}
                                                         >
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                                                            <span className="w-1.5 h-1.5 rounded-none bg-ink mt-2 flex-shrink-0" />
                                                             <span className="text-black dark:text-white font-bold shadow-none text-left">{point}</span>
                                                         </li>
                                                     ))}
@@ -185,33 +185,33 @@ export default function AboutClient({ profile, experiences, educations }: AboutC
                     <GraduationCap className="w-6 h-6 text-accent" /> {t('about.education')}
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {educations.map((edu) => (
-                        <div key={edu.id} className="group relative p-4 md:p-6 border border-slate-200 dark:border-white/10 bg-white dark:bg-black/20 rounded-2xl hover:border-accent transition-all duration-300 flex items-start gap-4 md:gap-5">
-                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden flex-shrink-0 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-2">
+                        <div key={edu.id} className="group relative p-5 border border-line bg-bg-raised rounded-none hover:border-line-strong transition-colors flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-bg-sunken border border-line p-2">
                                 {edu.institution_logo_url ? (
                                     <Image
                                         src={optimizeCloudinaryUrl(edu.institution_logo_url || '')}
                                         alt={edu.institution_name}
-                                        width={56}
-                                        height={56}
+                                        width={48}
+                                        height={48}
                                         className="w-full h-full object-contain"
                                     />
                                 ) : (
-                                    <GraduationIcon className="w-full h-full text-black dark:text-white" />
+                                    <GraduationIcon className="w-full h-full text-ink" />
                                 )}
                             </div>
                             <div className="flex-1 space-y-1">
-                                <h3 className="font-bold text-base md:text-lg leading-tight group-hover:text-accent transition-colors shadow-none">{edu.institution_name}</h3>
-                                <p className="text-xs md:text-sm font-bold text-black dark:text-white shadow-none">
+                                <h3 className="font-display font-bold text-base leading-tight text-ink">{edu.institution_name}</h3>
+                                <p className="text-xs text-muted">
                                     {edu.degree} • {edu.field_of_study}
                                 </p>
-                                {edu.gpa && <p className="text-[11px] font-extrabold text-accent uppercase tracking-wider shadow-none">GPA: {edu.gpa}</p>}
-                                <div className="flex flex-wrap gap-2 pt-2">
-                                    <span className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-[10px] font-bold uppercase tracking-wider text-black dark:text-white">
+                                {edu.gpa && <p className="hud-label text-accent">GPA: {edu.gpa}</p>}
+                                <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-faint uppercase font-bold">
+                                    <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
                                         {new Date(edu.start_date).getFullYear()} - {edu.is_current ? t('about.present') : new Date(edu.end_date!).getFullYear()}
                                     </span>
-                                    <span className="px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-[10px] font-bold uppercase tracking-wider text-black dark:text-white">
+                                    <span className="px-2 py-0.5 border border-line bg-bg-sunken rounded-none">
                                         {edu.location}
                                     </span>
                                 </div>

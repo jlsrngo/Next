@@ -45,7 +45,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
         {/* 1. Pre-built Binaries Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Windows Setup */}
-          <div className="p-6 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
+          <div className="p-6 rounded-none border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
               <span className="text-xs font-sans font-bold text-zinc-500 dark:text-zinc-400">
                 {isId ? 'Direkomendasikan' : 'Recommended'}
@@ -69,7 +69,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
             </div>
             <button
               disabled
-              className="w-full py-3 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-none bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Clock className="w-4 h-4" />
               <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
@@ -77,7 +77,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
           </div>
 
           {/* Windows Portable */}
-          <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
+          <div className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
               <span className="text-xs font-sans font-bold text-zinc-500">
                 {isId ? 'Portabel' : 'Standalone'}
@@ -101,7 +101,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
             </div>
             <button
               disabled
-              className="w-full py-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-none border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Clock className="w-4 h-4" />
               <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
@@ -109,7 +109,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
           </div>
 
           {/* macOS Universal */}
-          <div className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
+          <div className="p-6 rounded-none border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col justify-between space-y-6 shadow-sm">
             <div className="space-y-3">
               <span className="text-xs font-sans font-bold text-zinc-500">
                 {isId ? 'Universal' : 'Universal'}
@@ -133,7 +133,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
             </div>
             <button
               disabled
-              className="w-full py-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-none border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 font-sans text-sm font-semibold cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Clock className="w-4 h-4" />
               <span>{isId ? 'Segera Hadir' : 'Coming Soon'}</span>
@@ -142,7 +142,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
         </div>
 
         {/* 2. Developer / CLI Setup */}
-        <div className="p-6 sm:p-8 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 space-y-4 shadow-sm">
+        <div className="p-6 sm:p-8 rounded-none border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/60 space-y-4 shadow-sm">
           <div className="flex items-center gap-2.5">
             <Terminal className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
             <h2 className="font-semibold text-lg text-black dark:text-white font-sans">
@@ -155,7 +155,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
               : 'Run Arunaki directly from source code using the Bun runtime:'}
           </p>
 
-          <div className="p-4 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 space-y-3">
+          <div className="p-4 rounded-none bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 space-y-3">
             <div>
               <span className="text-zinc-400"># 1. {isId ? 'Kloning repositori' : 'Clone repository'}</span>
               <p>git clone https://github.com/jlsrngo/Arunaki.git && cd Arunaki</p>
@@ -175,7 +175,7 @@ export default function ArunakiDownloadPage({ params }: { params: { locale: stri
               href="https://github.com/jlsrngo/Arunaki"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-sans text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-sans text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               <Github className="w-4 h-4" />
               <span>{isId ? 'Lihat Repositori di GitHub' : 'View Repository on GitHub'}</span>

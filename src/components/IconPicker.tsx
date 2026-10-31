@@ -45,11 +45,11 @@ export default function IconPicker({ value, onChange, error }: IconPickerProps) 
         onChange={e => { setSearch(e.target.value); setOpen(true) }}
         onFocus={() => setOpen(true)}
         placeholder="Search technology..."
-        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm dark:bg-slate-800 dark:text-white"
+        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-none focus:ring-1 focus:ring-[var(--accent)] focus:border-transparent text-sm dark:bg-slate-800 dark:text-white"
       />
 
       {open && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg z-50 max-h-64 overflow-y-auto shadow-lg">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none z-50 max-h-64 overflow-y-auto shadow-lg">
           {filtered.length === 0 ? (
             <div className="px-4 py-3 text-slate-500 dark:text-slate-400 text-sm">
               No technology found
@@ -77,7 +77,7 @@ export default function IconPicker({ value, onChange, error }: IconPickerProps) 
       )}
 
       {selected && !open && (
-        <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-none bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
           <TechIcon name={selected.icon} size={20} color={selected.color} />
           <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{selected.name}</span>
           <button

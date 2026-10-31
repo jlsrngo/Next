@@ -26,10 +26,10 @@ export default async function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 overflow-hidden">
         {/* Avatar + Name Header */}
         <div className="flex items-center gap-5 p-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="h-20 w-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0">
+          <div className="h-20 w-20 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0">
             {avatarUrl ? (
               <Image src={avatarUrl} alt={p?.fullName || profile?.fullName || 'Avatar'} width={80} height={80} unoptimized className="h-full w-full object-cover" />
             ) : (
@@ -42,7 +42,7 @@ export default async function ProfilePage() {
           </div>
           <Link
             href="/dashboard/profile/edit"
-            className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition shrink-0"
+            className="inline-flex items-center gap-2 rounded-none bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition shrink-0"
           >
             <Pencil size={14} />
             Edit
@@ -76,7 +76,7 @@ export default async function ProfilePage() {
               if (!field.value) return null
               const Icon = field.icon
               const content = (
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800">
+                <div className="flex items-center gap-3 p-3 rounded-none bg-slate-50 dark:bg-slate-800">
                   <Icon size={16} className="text-slate-400 dark:text-slate-500 shrink-0" />
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-slate-400 dark:text-slate-500">{field.label}</p>
@@ -85,7 +85,7 @@ export default async function ProfilePage() {
                 </div>
               )
               return field.href ? (
-                <a key={field.label} href={field.href} target="_blank" rel="noopener noreferrer" className="block hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition">
+                <a key={field.label} href={field.href} target="_blank" rel="noopener noreferrer" className="block hover:bg-slate-100 dark:hover:bg-slate-700 rounded-none transition">
                   {content}
                 </a>
               ) : (
@@ -99,7 +99,7 @@ export default async function ProfilePage() {
         <div className="px-6 pb-6">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">Accent Color</h3>
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg border border-slate-200 dark:border-slate-700" style={{ backgroundColor: profile?.accentColor || '#00c896' }} />
+            <div className="h-8 w-8 rounded-none border border-slate-200 dark:border-slate-700" style={{ backgroundColor: profile?.accentColor || '#00c896' }} />
             <span className="text-sm text-slate-500 dark:text-slate-400 font-mono">{profile?.accentColor || '#00c896'}</span>
           </div>
         </div>

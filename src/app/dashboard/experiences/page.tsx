@@ -23,23 +23,23 @@ export default async function ExperiencesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500 dark:text-slate-400">{displayExps.length} experience{displayExps.length !== 1 ? 's' : ''} total</p>
-        <Link href="/dashboard/experiences/new" className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+        <Link href="/dashboard/experiences/new" className="inline-flex items-center gap-2 rounded-none bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
           <Plus size={16} />
           Add Experience
         </Link>
       </div>
 
       {displayExps.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
+        <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center">
           <Briefcase size={40} className="mx-auto text-slate-300 mb-3" />
           <p className="text-slate-500 dark:text-slate-400 mb-4">No work experiences yet</p>
-          <Link href="/dashboard/experiences/new" className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+          <Link href="/dashboard/experiences/new" className="inline-flex items-center gap-2 rounded-none bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
             <Plus size={16} />
             Add your first experience
           </Link>
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+        <div className="rounded-none border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800">
@@ -69,12 +69,12 @@ export default async function ExperiencesPage() {
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center justify-end gap-1">
-                      <Link href={`/dashboard/experiences/${exp.id}/edit`} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--accent)] hover:bg-[var(--accent)]/5 rounded-lg transition" title="Edit">
+                      <Link href={`/dashboard/experiences/${exp.id}/edit`} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--accent)] hover:bg-[var(--accent)]/5 rounded-none transition" title="Edit">
                         <Edit size={15} />
                       </Link>
                       <form action={deleteExpAction} className="inline">
                         <input type="hidden" name="id" value={exp.id} />
-                        <button type="submit" className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition" title="Delete">
+                        <button type="submit" className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-none transition" title="Delete">
                           <Trash2 size={15} />
                         </button>
                       </form>

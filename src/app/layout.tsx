@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Grand_Hotel } from 'next/font/google'
+import { Inter, Instrument_Serif, Archivo, JetBrains_Mono, Grand_Hotel } from 'next/font/google'
 import dynamic from 'next/dynamic'
 import { prisma } from '@/lib/prisma'
 import '@/app/globals.css'
@@ -15,6 +15,20 @@ const SpeedInsights = dynamic(
 )
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const instrumentSerif = Instrument_Serif({
+  weight: '400',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-instrument',
+})
+const archivo = Archivo({
+  subsets: ['latin'],
+  variable: '--font-archivo',
+})
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+})
 const grandHotel = Grand_Hotel({ weight: '400', subsets: ['latin'], variable: '--font-grand-hotel' })
 
 async function getProfileName(): Promise<string> {
@@ -84,7 +98,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${grandHotel.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${instrumentSerif.variable} ${archivo.variable} ${jetbrainsMono.variable} ${grandHotel.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{

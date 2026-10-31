@@ -28,19 +28,23 @@ export default function AchievementsClient({ achievements, profile }: Achievemen
     const [selected, setSelected] = useState<Achievement | null>(null);
 
     return (
-        <div className="py-12 md:py-16 space-y-12">
-            <div className="animate-fade-in-up flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="space-y-2">
-                    <h1 className="text-4xl font-extrabold flex items-center gap-3">
-                        <Award className="w-8 h-8 text-accent" /> {t('achievements.title')}
+        <div className="py-8 md:py-16 space-y-10">
+            <div className="border-b border-line pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
+                <div className="space-y-1">
+                    <div className="hud-label">[ 05 // CREDENTIALS & AWARDS ]</div>
+                    <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-ink flex items-center gap-3">
+                        {t('achievements.title')}
                     </h1>
-                    <p className="text-lg text-black dark:text-white font-bold max-w-xl">
+                    <p className="text-sm sm:text-base text-muted max-w-xl">
                         {t('achievements.subtitle')}
                     </p>
                 </div>
+                <div className="hud-label">
+                    {achievements.length} AWARDS INDEXED
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {achievements.map((item, i) => {
                     const isPdf = item.image_url?.toLowerCase().endsWith('.pdf');
                     const hasImage = !!item.image_url;
@@ -48,49 +52,49 @@ export default function AchievementsClient({ achievements, profile }: Achievemen
                     return (
                         <div
                             key={item.id}
-                            className="animate-scale-in group relative glass-card border border-slate-200 dark:border-zinc-800 overflow-hidden hover:border-zinc-700 dark:hover:border-zinc-700 transition-all duration-300 flex flex-col cursor-pointer"
+                            className="group relative border border-line bg-bg-raised rounded-none overflow-hidden hover:border-line-strong transition-colors flex flex-col cursor-pointer animate-fade-in"
                             style={{ animationDelay: `${i * 50}ms` }}
                             onClick={() => setSelected(item)}
                         >
-                            <div className="absolute top-4 right-4 z-10">
-                                <span className="px-3 py-1 rounded-full bg-zinc-900/90 dark:bg-zinc-800/90 border border-zinc-700/50 text-zinc-300 dark:text-zinc-300 text-[10px] font-bold uppercase tracking-widest inline-block shadow-sm">
+                            <div className="absolute top-3 right-3 z-10">
+                                <span className="px-2 py-0.5 rounded-none bg-bg-raised border border-line text-ink font-mono text-[9px] uppercase font-bold tracking-wider inline-block">
                                     {item.category}
                                 </span>
                             </div>
 
-                            <div className="relative h-36 md:h-44 overflow-hidden bg-slate-100 dark:bg-zinc-950/60 border-b border-slate-200 dark:border-zinc-800 group-hover:bg-slate-200/50 dark:group-hover:bg-zinc-900/60 transition-colors">
+                            <div className="relative h-36 md:h-44 overflow-hidden bg-bg-sunken border-b border-line transition-colors">
                                 {hasImage && !isPdf ? (
                                     <img
                                         src={item.image_url}
                                         alt={item.title}
                                         loading="lazy"
                                         decoding="async"
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                                        <Award className="w-12 h-12 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
-                                        {isPdf && <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{t('achievements.pdf_certificate')}</span>}
+                                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                                        <Award className="w-10 h-10 text-faint" />
+                                        {isPdf && <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-faint">{t('achievements.pdf_certificate')}</span>}
                                     </div>
                                 )}
                             </div>
 
-                            <div className="p-4 md:p-5 space-y-3">
+                            <div className="p-4 space-y-2.5 flex-1 flex flex-col justify-between">
                                 <div className="space-y-1">
-                                    <h3 className="font-bold text-base md:text-lg text-black dark:text-white group-hover:text-zinc-200 transition-colors line-clamp-1">{item.title}</h3>
+                                    <h3 className="font-display font-bold text-base text-ink line-clamp-1">{item.title}</h3>
                                     {item.issuer && (
-                                        <p className="text-zinc-500 dark:text-zinc-400 font-bold text-xs flex items-center gap-1.5">
-                                            <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" /> <span>{item.issuer}</span>
+                                        <p className="hud-label text-accent flex items-center gap-1.5">
+                                            <ShieldCheck className="w-3.5 h-3.5" /> <span>{item.issuer}</span>
                                         </p>
                                     )}
                                 </div>
 
-                                <p className="text-zinc-700 dark:text-zinc-300 text-xs font-semibold leading-relaxed line-clamp-2">{item.description}</p>
+                                <p className="text-muted text-xs leading-relaxed line-clamp-2">{item.description}</p>
 
-                                <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-zinc-800">
-                                    <div className="flex items-center gap-2 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">
+                                <div className="flex items-center justify-between pt-2 border-t border-line font-mono text-[10px] text-faint uppercase font-bold">
+                                    <div className="flex items-center gap-1.5">
                                         <Calendar className="w-3.5 h-3.5" />
-                                        {item.date ? new Date(item.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'N/A'}
+                                        <span>{item.date ? new Date(item.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'N/A'}</span>
                                     </div>
                                 </div>
                             </div>

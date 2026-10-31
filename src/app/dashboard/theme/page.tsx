@@ -104,9 +104,9 @@ export default function ThemePage() {
   return (
     <div className="space-y-6">
       {/* Dark/Light Mode */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
             {isDark ? <Moon size={18} className="text-slate-600 dark:text-slate-300" /> : <Sun size={18} className="text-slate-600 dark:text-slate-300" />}
           </div>
           <div>
@@ -117,9 +117,9 @@ export default function ThemePage() {
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => isDark && toggle()}
-            className={`relative rounded-xl border-2 p-4 transition-all ${!isDark ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative rounded-none border-2 p-4 transition-all ${!isDark ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
-            <div className="w-full h-20 rounded-lg bg-white border border-slate-200 mb-3 flex items-center justify-center">
+            <div className="w-full h-20 rounded-none bg-white border border-slate-200 mb-3 flex items-center justify-center">
               <Sun size={24} className="text-amber-500" />
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">{t('admin.light')}</p>
@@ -127,9 +127,9 @@ export default function ThemePage() {
           </button>
           <button
             onClick={() => !isDark && toggle()}
-            className={`relative rounded-xl border-2 p-4 transition-all ${isDark ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative rounded-none border-2 p-4 transition-all ${isDark ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
-            <div className="w-full h-20 rounded-lg bg-slate-900 border border-slate-700 mb-3 flex items-center justify-center">
+            <div className="w-full h-20 rounded-none bg-slate-900 border border-slate-700 mb-3 flex items-center justify-center">
               <Moon size={24} className="text-blue-400" />
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">{t('admin.dark')}</p>
@@ -139,9 +139,9 @@ export default function ThemePage() {
       </div>
 
       {/* Theme Style: Default vs Monochrome Flat */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
             <Layers size={18} className="text-slate-600 dark:text-slate-300" />
           </div>
           <div>
@@ -153,14 +153,14 @@ export default function ThemePage() {
           {/* Default Style */}
           <button
             onClick={() => handleStyleSelect('default')}
-            className={`relative text-left rounded-xl border-2 p-4 transition-all flex flex-col justify-between ${themeStyle !== 'monochrome' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative text-left rounded-none border-2 p-4 transition-all flex flex-col justify-between ${themeStyle !== 'monochrome' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
-            <div className="w-full h-20 rounded-lg bg-gradient-to-br from-amber-500/10 via-purple-500/10 to-blue-500/10 border border-slate-200 dark:border-slate-700 mb-3 p-3 flex items-center justify-between">
+            <div className="w-full h-20 rounded-none bg-gradient-to-br from-amber-500/10 via-purple-500/10 to-blue-500/10 border border-slate-200 dark:border-slate-700 mb-3 p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-orange-400 shadow-sm" />
-                <div className="h-2 w-12 rounded-full bg-slate-300 dark:bg-slate-600" />
+                <div className="w-6 h-6 rounded-none bg-gradient-to-tr from-amber-500 to-orange-400 shadow-sm" />
+                <div className="h-2 w-12 rounded-none bg-slate-300 dark:bg-slate-600" />
               </div>
-              <div className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400">
+              <div className="px-2 py-0.5 rounded-none text-[10px] font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400">
                 Gradient
               </div>
             </div>
@@ -174,11 +174,11 @@ export default function ThemePage() {
           {/* Monochrome Flat Style */}
           <button
             onClick={() => handleStyleSelect('monochrome')}
-            className={`relative text-left rounded-xl border-2 p-4 transition-all flex flex-col justify-between ${themeStyle === 'monochrome' ? 'border-slate-950 dark:border-white bg-black/5 dark:bg-white/5 ring-1 ring-black dark:ring-white' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative text-left rounded-none border-2 p-4 transition-all flex flex-col justify-between ${themeStyle === 'monochrome' ? 'border-slate-950 dark:border-white bg-black/5 dark:bg-white/5 ring-1 ring-black dark:ring-white' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
-            <div className="w-full h-20 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 mb-3 p-3 flex items-center justify-between">
+            <div className="w-full h-20 rounded-none bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 mb-3 p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-black dark:bg-white border border-zinc-400 dark:border-zinc-600" />
+                <div className="w-6 h-6 rounded-none bg-black dark:bg-white border border-zinc-400 dark:border-zinc-600" />
                 <div className="h-1.5 w-12 rounded bg-zinc-300 dark:bg-zinc-700" />
               </div>
               <div className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-black text-white dark:bg-white dark:text-black border border-zinc-300 dark:border-zinc-700">
@@ -200,9 +200,9 @@ export default function ThemePage() {
       </div>
 
       {/* Accent Color */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
             <Palette size={18} className="text-slate-600 dark:text-slate-300" />
           </div>
           <div>
@@ -219,12 +219,12 @@ export default function ThemePage() {
               <button
                 key={color}
                 onClick={() => handleAccentChange(color)}
-                className={`relative rounded-xl border-2 p-3 transition-all flex flex-col items-center gap-2 ${isSelected ? 'border-slate-900 dark:border-white scale-105 ring-1 ring-slate-900 dark:ring-white' : 'border-slate-200 dark:border-slate-700 hover:scale-105'}`}
+                className={`relative rounded-none border-2 p-3 transition-all flex flex-col items-center gap-2 ${isSelected ? 'border-slate-900 dark:border-white scale-105 ring-1 ring-slate-900 dark:ring-white' : 'border-slate-200 dark:border-slate-700 hover:scale-105'}`}
               >
                 {isMonochrome ? (
-                  <div className="w-8 h-8 rounded-full border border-zinc-400 dark:border-zinc-500 overflow-hidden relative shadow-sm" style={{ background: 'linear-gradient(135deg, #09090b 50%, #ffffff 50%)' }} />
+                  <div className="w-8 h-8 rounded-none border border-zinc-400 dark:border-zinc-500 overflow-hidden relative shadow-sm" style={{ background: 'linear-gradient(135deg, #09090b 50%, #ffffff 50%)' }} />
                 ) : (
-                  <div className="w-8 h-8 rounded-full shadow-sm" style={{ backgroundColor: color }} />
+                  <div className="w-8 h-8 rounded-none shadow-sm" style={{ backgroundColor: color }} />
                 )}
                 <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 truncate max-w-[60px]">{name}</span>
                 {isSelected && <Check size={14} className="absolute top-1.5 right-1.5 text-slate-900 dark:text-white" />}
@@ -239,7 +239,7 @@ export default function ThemePage() {
             value={customColor}
             onChange={(e) => setCustomColor(e.target.value)}
             onBlur={() => handleAccentChange(customColor)}
-            className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer flex-shrink-0"
+            className="w-10 h-10 rounded-none border border-slate-200 dark:border-slate-700 cursor-pointer flex-shrink-0"
           />
           <input
             type="text"
@@ -251,16 +251,16 @@ export default function ThemePage() {
               }
             }}
             onBlur={() => handleAccentChange(customColor)}
-            className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg text-xs font-mono focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-none text-xs font-mono focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
             placeholder="#00c896"
           />
         </div>
       </div>
 
       {/* Language */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-none border border-slate-200 dark:border-slate-800 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <div className="h-9 w-9 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
             <Globe size={18} className="text-slate-600 dark:text-slate-300" />
           </div>
           <div>
@@ -271,7 +271,7 @@ export default function ThemePage() {
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => handleLocaleChange('en')}
-            className={`relative rounded-xl border-2 p-4 transition-all text-left ${locale === 'en' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative rounded-none border-2 p-4 transition-all text-left ${locale === 'en' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
             <p className="text-lg mb-1">🇬🇧</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">English</p>
@@ -280,7 +280,7 @@ export default function ThemePage() {
           </button>
           <button
             onClick={() => handleLocaleChange('id')}
-            className={`relative rounded-xl border-2 p-4 transition-all text-left ${locale === 'id' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
+            className={`relative rounded-none border-2 p-4 transition-all text-left ${locale === 'id' ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'}`}
           >
             <p className="text-lg mb-1">🇮🇩</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">Indonesia</p>

@@ -65,9 +65,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             >
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className={`relative w-full max-w-[380px] p-8 flex flex-col glass-modal text-black dark:text-white overflow-hidden ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
+                    className={`relative w-full max-w-[380px] p-8 flex flex-col rounded-none border border-line-strong bg-bg-raised text-ink overflow-hidden ${visible ? 'animate-modal-content-in' : 'opacity-0'}`}
                 >
-                    <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors z-10 w-8 h-8 flex items-center justify-center text-black dark:text-white border border-slate-200 dark:border-white/10 shadow-none">
+                    <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-none hover:bg-bg-sunken transition-colors z-10 w-8 h-8 flex items-center justify-center text-ink border border-line shadow-none">
                         <X className="w-4 h-4" />
                     </button>
 
@@ -80,52 +80,52 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     <h2
-                        className="text-2xl font-black text-center mb-2 tracking-tight text-black dark:text-white uppercase"
+                        className="font-display text-2xl font-bold text-center mb-1 tracking-tight text-ink uppercase"
                     >
                         {t('common.login_title')}
                     </h2>
                     <p
-                        className="text-xs text-center mb-8 font-bold text-black/50 dark:text-white/50 uppercase tracking-widest"
+                        className="hud-label text-center mb-6 text-faint"
                     >
                         {t('common.login_subtitle')}
                     </p>
 
                     <form onSubmit={handleSubmit} className="w-full space-y-4 relative z-10">
                         <div className="relative">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black dark:text-white" />
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-faint" />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="input-field pl-11 !rounded-2xl shadow-none ring-0 focus:ring-0 placeholder:text-black/50 dark:placeholder:text-white/50"
+                                className="input-field pl-11 !rounded-none shadow-none ring-0 focus:ring-0"
                                 placeholder={t('common.username_placeholder')}
                                 required
                             />
                         </div>
 
                         <div className="relative">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black dark:text-white" />
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-faint" />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="input-field pl-11 pr-11 !rounded-2xl shadow-none ring-0 focus:ring-0 placeholder:text-black/50 dark:placeholder:text-white/50"
+                                className="input-field pl-11 pr-11 !rounded-none shadow-none ring-0 focus:ring-0"
                                 placeholder={t('common.password_placeholder')}
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 hover:scale-110 transition-transform"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-faint hover:text-ink transition-colors"
                             >
-                                {showPassword ? <EyeOff className="w-4 h-4 text-black dark:text-white" /> : <Eye className="w-4 h-4 text-black dark:text-white" />}
+                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="btn-modal-save w-full py-3.5 !rounded-2xl mt-4 shadow-none ring-0 active:scale-95 transition-transform"
+                            className="btn-primary w-full py-3 !rounded-none mt-4 uppercase font-bold"
                         >
                             {loading ? t('common.loading') : t('common.sign_in')}
                         </button>

@@ -17,7 +17,7 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
     return (
       <div
         data-theme-style={isMonochrome ? 'monochrome' : undefined}
-        className={`min-h-screen w-full bg-light-bg dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 antialiased overflow-x-hidden ${
+        className={`min-h-screen w-full bg-bg text-ink antialiased overflow-x-hidden ${
           isMonochrome ? 'theme-monochrome' : ''
         }`}
       >
@@ -29,14 +29,23 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
   return (
     <div
       data-theme-style={isMonochrome ? 'monochrome' : undefined}
-      className={`h-screen w-full overflow-hidden bg-light-bg dark:bg-dark-bg transition-colors duration-300 ${
+      className={`h-screen w-full overflow-hidden bg-bg text-ink transition-colors duration-200 ${
         isMonochrome ? 'theme-monochrome' : ''
       }`}
     >
-      <div className="max-w-[1200px] mx-auto flex w-full h-full">
+      <div className="max-w-[1280px] mx-auto flex w-full h-full border-x border-line relative">
         <SidebarWrapper profile={profile} />
-        <main className="flex-1 w-full max-w-full px-6 py-12 lg:px-16 h-screen overflow-y-auto">
+        <main className="flex-1 w-full max-w-full px-6 py-10 lg:px-14 h-screen overflow-y-auto relative">
           <div className="max-w-4xl mx-auto w-full">{children}</div>
+
+          {/* Subtle ArtCraft Technical Coordinate Ruler on Right Border */}
+          <div className="hidden xl:flex flex-col justify-between absolute right-2 top-8 bottom-8 pointer-events-none select-none text-[9px] font-mono text-faint">
+            <span>00</span>
+            <span>05</span>
+            <span>10</span>
+            <span>15</span>
+            <span>20</span>
+          </div>
         </main>
       </div>
     </div>
