@@ -37,20 +37,50 @@ export const PALETTE = {
 } as const;
 
 /**
- * GitHub Contribution Heatmap progression using green column (Col 2 from palette):
- * Level 0: empty cell
- * Level 1: #B5D2AD (Row 1 Col 2)
- * Level 2: #BAFCA2 (Row 2 Col 2)
- * Level 3: #90EE90 (Row 3 Col 2)
- * Level 4: #7FBC8C (Row 4 Col 2)
+ * Multi-color language palette progression matching Top Languages repo bars:
+ * Cyan (TypeScript), Coral (HTML), Sage (Python), Violet (CSS), Yellow (JavaScript), Pink (C++)
  */
+export const MULTI_COLOR_HEATMAP_FAMILIES = [
+  // TypeScript (Cyan)
+  { name: 'TypeScript', colors: ['#DAF5F0', '#A7DBD8', '#87CEEB', '#69D2E7'] },
+  // HTML (Coral / Salmon)
+  { name: 'HTML', colors: ['#F8D6B3', '#FFA07A', '#FF7A5C', '#FF6B6B'] },
+  // Python (Sage / Green)
+  { name: 'Python', colors: ['#B5D2AD', '#BAFCA2', '#90EE90', '#7FBC8C'] },
+  // CSS (Violet / Purple)
+  { name: 'CSS', colors: ['#E3DFF2', '#C4A1FF', '#A388EE', '#9723C9'] },
+  // JavaScript (Canary Yellow)
+  { name: 'JavaScript', colors: ['#FDFD96', '#FFDB58', '#F4D738', '#E3A018'] },
+  // C++ (Pink)
+  { name: 'C++', colors: ['#FCDFFF', '#FFC0CB', '#FFB2EF', '#FF69B4'] },
+];
+
+export const HEATMAP_LEGEND_LEVELS = [
+  undefined,
+  '#A7DBD8', // Cyan (TypeScript)
+  '#FFDB58', // Yellow (JavaScript)
+  '#FFA07A', // Coral (HTML)
+  '#A388EE', // Violet (CSS)
+];
+
+export function getHeatmapCellColor(dateStr: string, level: number): string | undefined {
+  if (level <= 0) return undefined;
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = (hash * 31 + dateStr.charCodeAt(i)) & 0xffffffff;
+  }
+  const family = MULTI_COLOR_HEATMAP_FAMILIES[Math.abs(hash) % MULTI_COLOR_HEATMAP_FAMILIES.length];
+  const levelIdx = Math.min(Math.max(level - 1, 0), 3);
+  return family.colors[levelIdx];
+}
+
 export const HEATMAP_PALETTE = {
   emptyLight: '#e9e8e4',
   emptyDark: '#1b1c21',
-  level1: '#B5D2AD',
-  level2: '#BAFCA2',
-  level3: '#90EE90',
-  level4: '#7FBC8C',
+  level1: '#A7DBD8',
+  level2: '#FFDB58',
+  level3: '#FFA07A',
+  level4: '#69D2E7',
 } as const;
 
 /**

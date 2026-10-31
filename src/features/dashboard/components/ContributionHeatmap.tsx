@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
-import { HEATMAP_PALETTE } from '@/constants/palette';
+import { HEATMAP_PALETTE, getHeatmapCellColor, HEATMAP_LEGEND_LEVELS } from '@/constants/palette';
 import type { GitHubData } from '../hooks/useDashboardData';
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -13,14 +13,6 @@ const MONO_LEVEL_CLASSES = [
   'bg-[#9d9c94] dark:bg-[#606370]',
   'bg-[#52514c] dark:bg-[#9a9db0]',
   'bg-[#101014] dark:bg-[#ffffff]',
-];
-
-const PALETTE_LEVEL_STYLES = [
-  { backgroundColor: undefined },
-  { backgroundColor: HEATMAP_PALETTE.level1 }, // #B5D2AD
-  { backgroundColor: HEATMAP_PALETTE.level2 }, // #BAFCA2
-  { backgroundColor: HEATMAP_PALETTE.level3 }, // #90EE90
-  { backgroundColor: HEATMAP_PALETTE.level4 }, // #7FBC8C
 ];
 
 export default function ContributionHeatmap({ github }: { github: GitHubData }) {
@@ -102,6 +94,7 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
                   {week.map((day, di) => {
                     const level = Math.min(Math.max(day.level ?? 0, 0), 4);
                     const isEmpty = level === 0;
+                    const cellBg = !isEmpty ? getHeatmapCellColor(day.date, level) : undefined;
 
                     return (
                       <div
@@ -109,9 +102,9 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
                         className={`w-[12px] h-[12px] rounded-none transition-opacity hover:opacity-75 cursor-pointer ${
                           isEmpty
                             ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
-                            : 'border border-black/20'
+                            : 'border border-black/15'
                         }`}
-                        style={!isEmpty ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                        style={!isEmpty && cellBg ? { backgroundColor: cellBg } : undefined}
                         onMouseEnter={(e) => handleCellHover(e, day)}
                         onMouseLeave={() => setTooltip(null)}
                       />
@@ -133,9 +126,9 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
                 className={`w-[11px] h-[11px] rounded-none ${
                   level === 0
                     ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
-                    : 'border border-black/20'
+                    : 'border border-black/15'
                 }`}
-                style={level > 0 ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                style={level > 0 ? { backgroundColor: HEATMAP_LEGEND_LEVELS[level] } : undefined}
               />
             ))}
             <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 ml-1">

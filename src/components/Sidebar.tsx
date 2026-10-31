@@ -224,7 +224,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                 </div>
                 <div className="text-center font-mono text-[9px] uppercase tracking-wider text-faint leading-relaxed mt-2">
                     <p suppressHydrationWarning>© {new Date().getFullYear()} {profile?.name || 'Julio Siringoringo'}</p>
-                    <p>{t('footer.architecture') || 'SYSTEM // FULLSTACK ARCHITECTURE'}</p>
                 </div>
             </div>
         </>

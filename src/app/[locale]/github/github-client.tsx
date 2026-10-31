@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { FolderOpen, Trophy, Star, GitCommit, GitPullRequest, AlertCircle, Users, Github } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
-import { HEATMAP_PALETTE, getLanguageColor } from '@/constants/palette';
+import { HEATMAP_PALETTE, getLanguageColor, getHeatmapCellColor, HEATMAP_LEGEND_LEVELS } from '@/constants/palette';
 
 interface ContributionDay {
   date: string;
@@ -294,18 +294,17 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
                         {week.map((day, di) => {
                           const level = Math.min(Math.max(day.level ?? 0, 0), 4);
                           const isEmpty = level === 0;
+                          const cellBg = !isEmpty ? getHeatmapCellColor(day.date, level) : undefined;
 
                           return (
                             <div
                               key={di}
                               className={`w-[12px] h-[12px] rounded-none transition-opacity hover:opacity-75 cursor-pointer ${
-                                isMono
-                                  ? MONO_LEVEL_CLASSES[level]
-                                  : isEmpty
+                                isEmpty
                                   ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
                                   : 'border border-black/15'
                               }`}
-                              style={!isMono && !isEmpty ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                              style={!isEmpty && cellBg ? { backgroundColor: cellBg } : undefined}
                               onMouseEnter={(e) => handleCellHover(e, day)}
                               onMouseLeave={() => setTooltip(null)}
                             />
@@ -323,13 +322,11 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
                     <div
                       key={level}
                       className={`w-[11px] h-[11px] rounded-none ${
-                        isMono
-                          ? MONO_LEVEL_CLASSES[level]
-                          : level === 0
+                        level === 0
                           ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
                           : 'border border-black/15'
                       }`}
-                      style={!isMono && level > 0 ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                      style={level > 0 ? { backgroundColor: HEATMAP_LEGEND_LEVELS[level] } : undefined}
                     />
                   ))}
                   <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 ml-1">{t('dashboard.more')}</span>
