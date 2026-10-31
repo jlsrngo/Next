@@ -31,10 +31,10 @@ const CATEGORY_ORDER = ['Languages', 'Frontend', 'Backend', 'Mobile', 'Database'
 function CornerCrosses() {
     return (
         <>
-            <span className="absolute -top-2 -left-2 font-mono text-xs font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
-            <span className="absolute -top-2 -right-2 font-mono text-xs font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
-            <span className="absolute -bottom-2 -left-2 font-mono text-xs font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
-            <span className="absolute -bottom-2 -right-2 font-mono text-xs font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -top-1.5 -left-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -top-1.5 -right-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -bottom-1.5 -left-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
+            <span className="absolute -bottom-1.5 -right-1.5 font-mono text-[10px] font-bold leading-none text-black dark:text-white select-none pointer-events-none">+</span>
         </>
     );
 }
@@ -74,8 +74,8 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
 
     return (
         <div className="py-6 md:py-10 space-y-10 relative">
-            {/* Top Telemetry Strip with Solid Black Borders */}
-            <div className="flex items-center justify-between border-b-2 border-black dark:border-white pb-3 font-mono text-[10px] tracking-widest text-black dark:text-white uppercase select-none">
+            {/* Top Telemetry Strip with 1px Solid Black Borders */}
+            <div className="flex items-center justify-between border-b border-black dark:border-white pb-3 font-mono text-[10px] tracking-widest text-black dark:text-white uppercase select-none">
                 <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-accent inline-block" />
                     <span className="font-bold">SYS // CORE [01]</span>
@@ -92,8 +92,8 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                 </div>
             </div>
 
-            {/* Hero / Introduction Header Box - Solid Background & Solid Black Borders */}
-            <div className="relative border-2 border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 sm:p-10 space-y-6 shadow-none">
+            {/* Hero / Introduction Header Box - Solid Background & 1px Solid Black Border */}
+            <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 sm:p-10 space-y-6 shadow-none">
                 <CornerCrosses />
 
                 {/* Sub-header spec line */}
@@ -138,15 +138,15 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                     {profile?.bio_home || '...'}
                 </p>
 
-                {/* Signature Actions with Solid Brutalist Framing */}
+                {/* Signature Actions with 1px Brutalist Framing */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <Link href="/projects" className="btn-primary group relative border-2 border-black dark:border-white">
+                    <Link href="/projects" className="btn-primary group relative border border-black dark:border-white">
                         <span className="flex items-center gap-2">
                             <span>Explore Projects</span>
                             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </span>
                     </Link>
-                    <Link href="/contact" className="btn-secondary group relative border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white">
+                    <Link href="/contact" className="btn-secondary group relative border border-black dark:border-white bg-white dark:bg-black text-black dark:text-white">
                         <span className="flex items-center gap-2">
                             <span>Get in Touch</span>
                             <span className="font-mono text-[10px]">[→]</span>
@@ -155,21 +155,21 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                 </div>
             </div>
 
-            {/* Technical Notched Divider - Solid Black */}
+            {/* Technical Notched Divider - 1px Solid Black */}
             <div className="relative flex items-center my-8 sm:my-12 select-none">
-                <div className="flex-grow border-t-2 border-black dark:border-white"></div>
+                <div className="flex-grow border-t border-black dark:border-white"></div>
                 <div className="flex-shrink mx-4 font-mono text-[10px] uppercase tracking-[0.25em] text-black dark:text-white font-bold flex items-center gap-2">
                     <span className="text-accent">+</span>
                     <span>SEC.02 // ARSENAL MATRIX</span>
                     <span className="text-accent">+</span>
                 </div>
-                <div className="flex-grow border-t-2 border-black dark:border-white"></div>
+                <div className="flex-grow border-t border-black dark:border-white"></div>
             </div>
 
-            {/* Tech Arsenal Section - Solid Background & Solid Black Borders */}
+            {/* Tech Arsenal Section - Solid Background & 1px Solid Black Borders */}
             {grouped.length > 0 && (
                 <div className="space-y-6 animate-fade-in">
-                    <div className="border-b-2 border-black dark:border-white pb-3 flex items-end justify-between">
+                    <div className="border-b border-black dark:border-white pb-3 flex items-end justify-between">
                         <div>
                             <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">[ 02 // TECH ARSENAL ]</div>
                             <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white flex items-center gap-2">
@@ -183,7 +183,7 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
 
                     <div className="space-y-6">
                         {grouped.map((group, groupIdx) => (
-                            <div key={group.category} className="relative border-2 border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 sm:p-7 shadow-none">
+                            <div key={group.category} className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 sm:p-7 shadow-none">
                                 <CornerCrosses />
                                 <div className="font-mono text-[10px] mb-5 border-b border-black dark:border-white pb-2.5 flex items-center justify-between text-black dark:text-white select-none">
                                     <span className="flex items-center gap-2">
