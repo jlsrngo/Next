@@ -6,9 +6,31 @@ export class ApiError extends Error {
 }
 
 export async function apiClient<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const url = endpoint.startsWith('http') ? endpoint : endpoint;
+  // 1. In local development, attempt direct sub-millisecond connection to Rust Axum server
+  const isLocal = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  if (isLocal && endpoint.startsWith('/api')) {
+    try {
+      const axumRes = await fetch(`http://127.0.0.1:8080${endpoint}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...options?.headers,
+        },
+        ...options,
+      });
+
+      if (axumRes.ok) {
+        return (await axumRes.json()) as T;
+      }
+    } catch {
+      // Continue to next layer if Axum daemon is not active
+    }
+  }
+
+  // 2. Standard relative endpoint (proxied or serverless)
   try {
-    const res = await fetch(url, {
+    const res = await fetch(endpoint, {
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
@@ -17,13 +39,16 @@ export async function apiClient<T>(endpoint: string, options?: RequestInit): Pro
     });
 
     if (res.ok) {
-      return (await res.json()) as T;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return (await res.json()) as T;
+      }
     }
-  } catch (err) {
-    // Attempt local database snapshot fallback if connection drops
+  } catch {
+    // Continue to verified database snapshot fallback
   }
 
-  // Graceful fallback to verified database snapshot
+  // 3. Graceful fallback to verified Neon PostgreSQL snapshot
   try {
     const fallbackRes = await fetch('/db-data.json');
     if (fallbackRes.ok) {
@@ -37,7 +62,6 @@ export async function apiClient<T>(endpoint: string, options?: RequestInit): Pro
       if (endpoint.includes('social-links') || endpoint.includes('contact')) return (db.socialLinks || []) as T;
       if (endpoint.includes('about')) {
         return {
-          profile: db.profile,
           experiences: db.experiences,
           educations: db.educations,
         } as T;
