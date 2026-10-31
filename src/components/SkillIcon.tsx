@@ -17,17 +17,17 @@ export default function SkillIcon({ name, iconSlug, onDelete, showDelete }: Skil
     return (
         <div className="group flex flex-col items-center w-16 sm:w-20 cursor-pointer pt-2 select-none">
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 z-10 block">
-                {/* Backdrop Card that moves out and rotates on hover */}
+                {/* Backdrop Card that moves out and rotates on hover (sharp square) */}
                 <div
-                    className={`skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e3e2dc] dark:bg-[#25272e] border border-line-strong/30 dark:border-white/10 opacity-75 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[18deg] group-hover:opacity-100 group-hover:bg-gradient-to-br ${gradient}`}
+                    className={`skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e3e2dc] dark:bg-[#25272e] border border-black dark:border-white opacity-80 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:bg-gradient-to-br ${gradient}`}
                     style={{ willChange: 'transform' }}
                 />
-                {/* Surface Card with Icon */}
-                <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-line flex items-center justify-center transition-all duration-300 z-10 group-hover:border-ink group-hover:scale-105 shadow-sm">
+                {/* Surface Card with Icon (sharp square with solid black/white border) */}
+                <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-black dark:border-white flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105 shadow-sm">
                     {IconComponent ? (
                         <IconComponent className="w-7 h-7 sm:w-8 sm:h-8 text-ink transition-transform duration-300 relative z-20 group-hover:scale-110" />
                     ) : (
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-black/10 dark:bg-white/10 rounded-2xl animate-pulse relative z-20" />
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-black/10 dark:bg-white/10 animate-pulse relative z-20" />
                     )}
                 </div>
                 {showDelete && (

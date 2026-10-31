@@ -78,7 +78,7 @@
 
   .skill-icon-surface,
   .skill-icon-backdrop {
-    border-radius: 16px !important;
+    border-radius: 0px !important;
   }
 
   *::-webkit-scrollbar {

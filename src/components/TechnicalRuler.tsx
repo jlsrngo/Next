@@ -59,32 +59,22 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
       ref={rulerRef}
       onClick={handleRulerClick}
       aria-label="Technical Scroll Ruler"
-      className="hidden md:flex flex-col justify-between absolute right-0 top-0 bottom-0 w-14 border-l border-line bg-bg/40 backdrop-blur-[2px] z-30 select-none cursor-pointer py-4"
+      className="hidden md:flex flex-col justify-between absolute right-0 top-0 bottom-0 w-14 border-l border-black/30 dark:border-white/30 bg-bg select-none cursor-pointer py-4 z-30"
     >
-      {/* Background Vertical Watermark (Rotated) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 dark:opacity-25 overflow-hidden">
-        <span
-          className="font-mono text-[9px] uppercase tracking-[0.35em] font-bold text-ink whitespace-nowrap rotate-90"
-          style={{ letterSpacing: '0.4em' }}
-        >
-          ARTCRAFT // 2026
-        </span>
-      </div>
-
       {/* Static Scale Ticks */}
       <div className="relative w-full h-full flex flex-col justify-between pointer-events-none">
         {TICKS.map((val) => (
           <div key={val} className="relative flex items-center justify-end w-full pr-1.5">
             {/* Number on Major Ticks (every 10%) */}
             {val % 10 === 0 && (
-              <span className="font-mono text-[8px] text-faint pr-1.5 tracking-tight font-bold">
+              <span className="font-mono text-[8px] text-ink font-bold pr-1.5 tracking-tight">
                 {String(val).padStart(2, '0')}
               </span>
             )}
             {/* Tick Line */}
             <span
               className={`h-[1px] ${
-                val % 10 === 0 ? 'w-4 bg-line-strong' : 'w-2 bg-line'
+                val % 10 === 0 ? 'w-4 bg-black dark:bg-white' : 'w-2 bg-black/40 dark:bg-white/40'
               }`}
             />
           </div>
