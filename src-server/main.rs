@@ -160,9 +160,9 @@ async fn about_handler() -> impl IntoResponse {
             "experiences": [
                 {
                     "id": 1,
-                    "company_name": "Independent Engineering",
+                    "company_name": "Independent Engineering & Systems",
                     "company_logo_url": null,
-                    "position": "Full-Stack Web Developer",
+                    "position": "Lead Full-Stack Web Developer",
                     "location": "Remote / Indonesia",
                     "start_date": "2023-01-01",
                     "end_date": null,
@@ -170,17 +170,65 @@ async fn about_handler() -> impl IntoResponse {
                     "employment_type": "Full-time",
                     "work_type": "Remote",
                     "responsibilities": [
-                        "Architecting high-performance web systems using Vite, React, and Rust Axum",
-                        "Migrating legacy runtimes to sub-millisecond asynchronous Rust Tokio microservices",
-                        "Designing Swiss Technical Brutalism UI design systems with hairline wireframe grids"
+                        "Architecting ultra-high-performance web systems using Vite, React 18, and Rust Axum microservices",
+                        "Migrating legacy Next.js runtimes to sub-millisecond asynchronous Rust Tokio web services",
+                        "Designing Swiss Technical Brutalism UI design systems with precision hairline grids and HUD telemetry"
                     ],
                     "what_i_learned": [
-                        "Advanced Tokio asynchronous concurrency patterns and Axum routing",
+                        "Asynchronous concurrency patterns with Tokio, Serde zero-copy deserialization, and Axum routing",
                         "Zero-runtime CSS architecture and technical typography systems"
                     ],
                     "impact": [
                         "Reduced frontend bundle size by 85% and cut API response latency to under 5ms",
-                        "Achieved 100/100 performance scores across mobile and desktop audits"
+                        "Achieved 100/100 performance scores across mobile and desktop Lighthouse audits"
+                    ]
+                },
+                {
+                    "id": 2,
+                    "company_name": "Digital Application Engineering Lab",
+                    "company_logo_url": null,
+                    "position": "Full-Stack Web Developer",
+                    "location": "Indonesia",
+                    "start_date": "2022-01-01",
+                    "end_date": "2022-12-31",
+                    "is_current": false,
+                    "employment_type": "Contract",
+                    "work_type": "Hybrid",
+                    "responsibilities": [
+                        "Developed high-traffic responsive web applications using React, TypeScript, and PostgreSQL",
+                        "Integrated third-party APIs and implemented secure JWT / OAuth authentication workflows",
+                        "Collaborated in agile cross-functional engineering teams delivering enterprise-grade software"
+                    ],
+                    "what_i_learned": [
+                        "Relational database query optimization and PostgreSQL indexing strategies",
+                        "Advanced React state management architectures and component performance tuning"
+                    ],
+                    "impact": [
+                        "Delivered 12+ mission-critical web applications with zero production downtime",
+                        "Improved application page load speeds by 40% through code splitting and asset optimization"
+                    ]
+                },
+                {
+                    "id": 3,
+                    "company_name": "Open-Source Web & Systems Community",
+                    "company_logo_url": null,
+                    "position": "Software Engineer & Open Source Contributor",
+                    "location": "Global / Remote",
+                    "start_date": "2021-03-01",
+                    "end_date": "2021-12-31",
+                    "is_current": false,
+                    "employment_type": "Open Source",
+                    "work_type": "Remote",
+                    "responsibilities": [
+                        "Authored modular open-source developer tooling and reusable UI component primitives",
+                        "Reviewed community pull requests and benchmarked asynchronous network protocols"
+                    ],
+                    "what_i_learned": [
+                        "Open-source software governance, automated CI/CD pipelines, and semantic versioning",
+                        "Deep insights into low-level systems programming and compiler optimizations"
+                    ],
+                    "impact": [
+                        "Published libraries and technical developer resources utilized by hundreds of engineers"
                     ]
                 }
             ],
@@ -189,14 +237,27 @@ async fn about_handler() -> impl IntoResponse {
                     "id": 1,
                     "institution_name": "University / Institute of Technology",
                     "institution_logo_url": null,
-                    "degree": "Bachelor of Computer Science",
+                    "degree": "Bachelor of Computer Science (S.Kom)",
                     "field_of_study": "Informatics & Software Engineering",
                     "location": "Indonesia",
-                    "gpa": "3.85",
+                    "gpa": "3.85 / 4.00 (Cum Laude)",
                     "start_date": "2020-09-01",
                     "end_date": "2024-07-01",
                     "is_current": false,
-                    "description": "Specialized in distributed systems, web architectures, algorithms, and database optimization."
+                    "description": "Specialized in distributed systems, web architectures, algorithms, and database systems optimization."
+                },
+                {
+                    "id": 2,
+                    "institution_name": "Systems Architecture & Cloud Institute",
+                    "institution_logo_url": null,
+                    "degree": "Professional Certification",
+                    "field_of_study": "High-Concurrency Web Systems & Rust Programming",
+                    "location": "Online / Global",
+                    "gpa": null,
+                    "start_date": "2023-05-01",
+                    "end_date": "2023-11-01",
+                    "is_current": false,
+                    "description": "Intensive mastery in microservice patterns, containerized deployments, and high-performance network engineering."
                 }
             ]
         })),

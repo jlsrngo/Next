@@ -59,7 +59,7 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
       ref={rulerRef}
       onClick={handleRulerClick}
       aria-label="Technical Scroll Ruler"
-      className="hidden md:flex flex-col justify-between absolute right-0 top-0 bottom-0 w-12 xl:w-14 border-l border-line bg-bg/50 backdrop-blur-[2px] z-30 select-none cursor-pointer py-4"
+      className="hidden md:flex flex-col justify-between absolute right-0 top-0 bottom-0 w-14 border-l border-line bg-bg/40 backdrop-blur-[2px] z-30 select-none cursor-pointer py-4"
     >
       {/* Background Vertical Watermark (Rotated) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 dark:opacity-25 overflow-hidden">
@@ -77,34 +77,30 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
           <div key={val} className="relative flex items-center justify-end w-full pr-1.5">
             {/* Number on Major Ticks (every 10%) */}
             {val % 10 === 0 && (
-              <span className="font-mono text-[8px] text-faint pr-1 tracking-tight font-bold">
+              <span className="font-mono text-[8px] text-faint pr-1.5 tracking-tight font-bold">
                 {String(val).padStart(2, '0')}
               </span>
             )}
             {/* Tick Line */}
             <span
               className={`h-[1px] ${
-                val % 10 === 0 ? 'w-3.5 bg-line-strong' : 'w-2 bg-line'
+                val % 10 === 0 ? 'w-4 bg-line-strong' : 'w-2 bg-line'
               }`}
             />
           </div>
         ))}
 
-        {/* Dynamic Blue Active Scroll Indicator */}
+        {/* Dynamic Blue Active Scroll Indicator - Integrated on ruler */}
         <div
-          className="absolute left-0 right-0 flex items-center pointer-events-none transition-all duration-75 ease-out z-20"
+          className="absolute left-0 right-0 flex items-center justify-end pr-1.5 pointer-events-none transition-all duration-75 ease-out z-20"
           style={{ top: `${indicatorTop}%`, transform: 'translateY(-50%)' }}
         >
-          {/* Active Accent Horizontal Line */}
-          <div className="h-[2px] w-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
-
-          {/* Active Percentage Badge (Floating Left from Ruler) */}
-          <div className="absolute right-full mr-2 flex items-center gap-1 bg-bg-raised border border-[var(--accent)] px-1.5 py-0.5 shadow-md">
-            <span className="w-1.5 h-1.5 bg-[var(--accent)] animate-pulse" />
-            <span className="font-mono text-[9px] font-bold text-[var(--accent)] tracking-wider whitespace-nowrap">
-              {String(Math.round(percent)).padStart(3, '0')} %
-            </span>
-          </div>
+          {/* Active Percentage Text */}
+          <span className="font-mono text-[9px] font-bold text-accent tracking-tighter mr-1.5 select-none bg-bg/80 px-0.5">
+            {String(Math.round(percent)).padStart(3, '0')} %
+          </span>
+          {/* Active Accent Horizontal Tick Line */}
+          <span className="h-[2px] w-5 bg-accent shadow-[0_0_8px_var(--accent)]" />
         </div>
       </div>
     </aside>

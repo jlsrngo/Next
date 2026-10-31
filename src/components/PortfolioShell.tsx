@@ -36,16 +36,16 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
         isMonochrome ? 'theme-monochrome' : ''
       }`}
     >
-      <div className="max-w-[1280px] mx-auto flex w-full h-full border-x border-line relative">
+      <div className="w-full flex h-full relative">
         <SidebarWrapper profile={profile} />
         <main
           ref={mainRef}
-          className="flex-1 w-full max-w-full px-6 py-10 lg:px-14 h-screen overflow-y-auto relative scroll-smooth pr-14 md:pr-16"
+          className="flex-1 w-full px-6 py-10 lg:px-14 xl:px-20 h-screen overflow-y-auto relative scroll-smooth pr-16 md:pr-20"
         >
           <div className="max-w-4xl mx-auto w-full">{children}</div>
         </main>
 
-        {/* ArtCraft Technical Coordinate Scroll Ruler */}
+        {/* ArtCraft Technical Coordinate Scroll Ruler - Pinned to far right with zero gap */}
         <TechnicalRuler scrollContainerRef={mainRef} />
       </div>
     </div>

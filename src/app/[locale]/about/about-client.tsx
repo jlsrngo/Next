@@ -69,29 +69,68 @@ export default function AboutClient({ profile, experiences = [], educations = []
     };
 
     return (
-        <div className="py-12 md:py-16 space-y-20">
-            <section className="space-y-6 relative">
-                <h2 className="text-3xl font-extrabold tracking-tight">{t('about.title')}</h2>
-                <div className="border-b border-slate-200 dark:border-white/10 pb-8 space-y-6">
-                    <p className="text-base md:text-xl text-black dark:text-white leading-relaxed whitespace-pre-wrap font-bold text-justify">
-                      {profile?.bio_about || profile?.bio_home || '...'}
-                    </p>
-                    <div className="pt-4">
-                        <p className="text-black dark:text-white font-bold italic">{t('about.warm_regards')}</p>
+        <div className="py-8 md:py-16 space-y-12">
+            {/* Header with ArtCraft HUD Dossier Label */}
+            <div className="border-b border-line pb-4 animate-fade-in">
+                <div className="hud-label mb-1">[ 02 // DOSSIER & BACKGROUND ]</div>
+                <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-ink">{t('about.title')}</h1>
+                <p className="text-sm sm:text-base text-muted mt-1">{t('about.subtitle')}</p>
+            </div>
+
+            {/* Quick Specs HUD Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-fade-in">
+                <div className="border border-line bg-bg-raised p-3.5">
+                    <span className="hud-label text-faint block mb-1">SPEC 01 // FOCUS</span>
+                    <span className="font-mono text-xs font-bold text-ink">Full-Stack & Systems</span>
+                </div>
+                <div className="border border-line bg-bg-raised p-3.5">
+                    <span className="hud-label text-faint block mb-1">SPEC 02 // RUNTIME</span>
+                    <span className="font-mono text-xs font-bold text-ink">Rust Axum + React Vite</span>
+                </div>
+                <div className="border border-line bg-bg-raised p-3.5">
+                    <span className="hud-label text-faint block mb-1">SPEC 03 // LOCATION</span>
+                    <span className="font-mono text-xs font-bold text-ink">{profile?.location || 'Indonesia'}</span>
+                </div>
+                <div className="border border-line bg-bg-raised p-3.5">
+                    <span className="hud-label text-faint block mb-1">SPEC 04 // STATUS</span>
+                    <span className="font-mono text-xs font-bold text-accent">{profile?.work_status || 'Open to Opportunities'}</span>
+                </div>
+            </div>
+
+            {/* Biography & Signature Section */}
+            <section className="space-y-6 relative border border-line bg-bg-raised p-6 md:p-8">
+                <div className="hud-label mb-2 border-b border-line pb-2 flex items-center justify-between">
+                    <span>BIOGRAPHY & PHILOSOPHY</span>
+                    <span>AUTHOR: {profile?.name || 'JULIO SIRINGORINGO'}</span>
+                </div>
+                <p className="text-base md:text-lg text-ink leading-relaxed whitespace-pre-wrap font-sans">
+                    {profile?.bio_about || profile?.bio_home || '...'}
+                </p>
+                <div className="pt-4 border-t border-line mt-6 flex items-center justify-between">
+                    <div>
+                        <p className="font-mono text-xs uppercase tracking-wider text-muted font-bold">{t('about.warm_regards')}</p>
                         <p
-                            className="text-5xl text-accent mt-1"
-                            style={{ fontFamily: 'var(--font-grand-hotel), cursive' }}
+                            className="text-6xl sm:text-7xl text-accent mt-1 leading-none select-none"
+                            style={{ fontFamily: "'Grand Hotel', cursive" }}
                         >
-                            {profile?.name ? profile.name.split(' ')[0].charAt(0).toUpperCase() + profile.name.split(' ')[0].slice(1).toLowerCase() : '...'}
+                            {profile?.name ? profile.name.split(' ')[0] : 'Julio'}
                         </p>
+                    </div>
+                    <div className="hidden sm:block text-right">
+                        <span className="hud-label block text-faint">VERIFIED PROFILE</span>
+                        <span className="font-mono text-[10px] text-muted">ID: ENG-2026-JS</span>
                     </div>
                 </div>
             </section>
 
-            <section className="space-y-8">
-                <h2 className="text-2xl font-extrabold flex items-center gap-3">
-                    <Briefcase className="w-6 h-6 text-accent" /> {t('about.experience')}
-                </h2>
+            <section className="space-y-6">
+                <div className="border-b border-line pb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                        <Briefcase className="w-5 h-5 text-ink" />
+                        <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">{t('about.experience')}</h2>
+                    </div>
+                    <span className="hud-label">{safeExperiences.length} POSITIONS LOGGED</span>
+                </div>
 
                 <div className="space-y-4">
                     {safeExperiences.map((exp: any) => {
@@ -197,10 +236,14 @@ export default function AboutClient({ profile, experiences = [], educations = []
                 </div>
             </section>
 
-            <section className="space-y-8">
-                <h2 className="text-2xl font-extrabold flex items-center gap-3">
-                    <GraduationCap className="w-6 h-6 text-accent" /> {t('about.education')}
-                </h2>
+            <section className="space-y-6">
+                <div className="border-b border-line pb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                        <GraduationCap className="w-5 h-5 text-ink" />
+                        <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">{t('about.education')}</h2>
+                    </div>
+                    <span className="hud-label">{safeEducations.length} CREDENTIALS VERIFIED</span>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {safeEducations.map((edu: any) => {
