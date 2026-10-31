@@ -290,47 +290,16 @@ async fn about_handler() -> impl IntoResponse {
 }
 
 async fn github_contributions_handler() -> impl IntoResponse {
-    // Generates a mock/cached 52-week calendar with realistic levels
-    let mut weeks = Vec::new();
-    let total_weeks = 52;
-    for w in 0..total_weeks {
-        let mut days = Vec::new();
-        for d in 0..7 {
-            let count = if w > 35 && (w + d) % 2 == 0 { (w % 6) + 1 } else { 0 };
-            let level = match count {
-                0 => 0,
-                1..=2 => 1,
-                3..=4 => 2,
-                5..=7 => 3,
-                _ => 4,
-            };
-            days.push(json!({
-                "date": format!("2026-{:02}-{:02}", (w / 4) + 1, (d * 4) + 1),
-                "count": count,
-                "level": level
-            }));
-        }
-        weeks.push(days);
-    }
+    let content = match std::fs::read_to_string("public/github-contributions.json") {
+        Ok(s) => s,
+        Err(_) => include_str!("../public/github-contributions.json").to_string(),
+    };
 
-    (
-        StatusCode::OK,
-        Json(json!({
-            "username": "jlsrngo",
-            "total_contributions": 1656,
-            "total_repos": 17,
-            "total_prs": 0,
-            "followers": 0,
-            "weeks": weeks,
-            "top_languages": [
-                { "name": "TypeScript", "color": "#3178c6", "count": 4 },
-                { "name": "HTML", "color": "#e34c26", "count": 4 },
-                { "name": "Python", "color": "#3572A5", "count": 2 },
-                { "name": "CSS", "color": "#563d7c", "count": 2 },
-                { "name": "JavaScript", "color": "#f1e05a", "count": 1 },
-                { "name": "C++", "color": "#f34b7d", "count": 1 },
-                { "name": "Rust", "color": "#dea584", "count": 1 }
-            ]
-        })),
-    )
+    match serde_json::from_str::<serde_json::Value>(&content) {
+        Ok(val) => (StatusCode::OK, Json(val)),
+        Err(_) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(json!({ "error": "failed to parse contributions json" })),
+        ),
+    }
 }

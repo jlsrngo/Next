@@ -29,7 +29,7 @@ export default function TechArsenalSection({ skills }: TechArsenalSectionProps) 
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="border-b border-black dark:border-white pb-3 flex items-end justify-between">
+      <div className="border-b border-line pb-3 flex items-end justify-between">
         <div>
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
             [ 02 // TECH ARSENAL ]
@@ -47,10 +47,10 @@ export default function TechArsenalSection({ skills }: TechArsenalSectionProps) 
         {grouped.map((group, groupIdx) => (
           <div
             key={group.category}
-            className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 sm:p-7 shadow-none"
+            className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-5 sm:p-7 shadow-none"
           >
             <CornerCrosses />
-            <div className="font-mono text-[10px] mb-5 border-b border-black dark:border-white pb-2.5 flex items-center justify-between text-black dark:text-white select-none">
+            <div className="font-mono text-[10px] mb-5 border-b border-line pb-2.5 flex items-center justify-between text-black dark:text-white select-none">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-black dark:bg-white" />
                 <span className="font-bold tracking-wider">{group.category.toUpperCase()}</span>

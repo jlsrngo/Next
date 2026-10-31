@@ -13,9 +13,9 @@ export default function TopLanguagesList({ languages }: TopLanguagesListProps) {
   if (!languages || languages.length === 0) return null;
 
   return (
-    <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none shadow-none">
+    <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none shadow-none">
       <CornerCrosses />
-      <h3 className="font-mono text-[11px] font-bold uppercase tracking-wider text-black dark:text-white mb-4 border-b border-black dark:border-white pb-2">
+      <h3 className="font-mono text-[11px] font-bold uppercase tracking-wider text-black dark:text-white mb-4 border-b border-line pb-2">
         {t('dashboard.top_languages') || 'Top Languages'}
       </h3>
       <div className="space-y-3">
@@ -33,7 +33,7 @@ export default function TopLanguagesList({ languages }: TopLanguagesListProps) {
               <span className="font-mono text-xs uppercase font-bold text-black dark:text-white w-28 flex-shrink-0">
                 {lang.name}
               </span>
-              <div className="flex-1 h-2.5 bg-black/5 dark:bg-white/5 border border-black dark:border-white rounded-none overflow-hidden">
+              <div className="flex-1 h-2.5 bg-black/5 dark:bg-white/5 border border-line rounded-none overflow-hidden">
                 <div
                   className="h-full rounded-none transition-all duration-700"
                   style={{ backgroundColor: mappedColor, width: `${pct}%` }}

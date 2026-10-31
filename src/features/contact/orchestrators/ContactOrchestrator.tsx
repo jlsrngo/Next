@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useContactData } from '../hooks/useContactData';
+import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import ContactCard from '../components/ContactCard';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 
@@ -13,8 +14,16 @@ export default function ContactOrchestrator() {
 
   return (
     <div className="py-6 md:py-10 space-y-10">
+      {/* Telemetry Strip */}
+      <TelemetryHeader
+        systemCode="SYS // RELAY [06]"
+        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        spec={t('telemetry.contact_spec') || 'SPEC: SECURE TRANSMISSION'}
+        engine={t('telemetry.contact_engine') || 'SIGNAL NETWORK READY'}
+      />
+
       {/* Top Header */}
-      <div className="border-b border-black dark:border-white pb-4 animate-fade-in">
+      <div className="border-b border-line pb-4 animate-fade-in">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
           [ 06 // TRANSMISSION & NETWORK ]
         </div>
@@ -43,7 +52,7 @@ export default function ContactOrchestrator() {
       )}
 
       {socialLinks.length === 0 && (
-        <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-10 text-center">
+        <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-10 text-center">
           <CornerCrosses />
           <p className="font-mono text-xs uppercase font-bold text-black/70 dark:text-white/70">
             {t('common.no_data') || 'No contact channels available.'}

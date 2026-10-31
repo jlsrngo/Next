@@ -2,6 +2,7 @@ import React from 'react';
 import { Cpu } from 'lucide-react';
 
 interface TelemetryHeaderProps {
+  sysId?: string;
   systemCode?: string;
   coordinates?: string;
   spec?: string;
@@ -9,16 +10,19 @@ interface TelemetryHeaderProps {
 }
 
 export function TelemetryHeader({
-  systemCode = 'SYS // CORE [01]',
+  sysId,
+  systemCode,
   coordinates = 'LAT: 0.7893° S · LON: 113.9213° E',
   spec = 'SPEC: INDEPENDENT ENGINEERING',
-  engine = 'RUST AXUM 0.7',
+  engine = 'KERNEL ACTIVE v4.2',
 }: TelemetryHeaderProps) {
+  const code = systemCode || (sysId ? `SYS // CORE [${sysId}]` : 'SYS // CORE [01]');
+
   return (
-    <div className="flex items-center justify-between border-b border-black dark:border-white pb-3 font-mono text-[10px] tracking-widest text-black dark:text-white uppercase select-none">
+    <div className="flex items-center justify-between border-b border-line pb-3 font-mono text-[10px] tracking-widest text-black dark:text-white uppercase select-none">
       <div className="flex items-center gap-2">
         <span className="w-2 h-2 bg-black dark:bg-white inline-block" />
-        <span className="font-bold">{systemCode}</span>
+        <span className="font-bold">{code}</span>
         <span className="text-black dark:text-white font-bold">|</span>
         <span className="hidden sm:inline font-semibold">{coordinates}</span>
       </div>

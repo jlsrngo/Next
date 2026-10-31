@@ -16,12 +16,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
   return (
     <div
-      className="group relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] overflow-hidden flex flex-col rounded-none animate-fade-in shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
+      className="group relative border border-line bg-[#faf9f7] dark:bg-[#101014] overflow-hidden flex flex-col rounded-none animate-fade-in shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
       style={{ animationDelay: `${index * 60}ms`, animationFillMode: 'both' }}
     >
       <CornerCrosses />
 
-      <div className="relative h-48 md:h-56 overflow-hidden bg-black/5 dark:bg-white/5 border-b border-black dark:border-white">
+      <div className="relative h-48 md:h-56 overflow-hidden bg-black/5 dark:bg-white/5 border-b border-line">
         {project.image_url ? (
           <img
             src={optimizeCloudinaryUrl(project.image_url || '')}
@@ -37,7 +37,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         )}
 
         {project.featured && (
-          <div className="absolute top-3 right-3 px-2 py-0.5 bg-white dark:bg-black border border-black dark:border-white text-black dark:text-white font-mono text-[9px] uppercase font-bold tracking-wider flex items-center gap-1">
+          <div className="absolute top-3 right-3 px-2 py-0.5 bg-white dark:bg-black border border-line text-black dark:text-white font-mono text-[9px] uppercase font-bold tracking-wider flex items-center gap-1">
             <Star className="w-3 h-3 fill-current text-black dark:text-white" />
             <span>{t('featured') || 'FEATURED'}</span>
           </div>
@@ -57,20 +57,25 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
           {project.tech_stack && (
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {project.tech_stack.split(',').map((tech, idx) => (
-                <TechBadge key={idx} tech={tech.trim()} />
+              {(Array.isArray(project.tech_stack)
+                ? project.tech_stack
+                : typeof project.tech_stack === 'string'
+                ? project.tech_stack.split(',')
+                : []
+              ).map((tech: string, idx: number) => (
+                <TechBadge key={idx} tech={String(tech).trim()} />
               ))}
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-2 pt-3 border-t border-black dark:border-white">
+        <div className="flex items-center gap-2 pt-3 border-t border-line">
           {project.live_url && (
             <a
               href={project.live_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:opacity-85"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:opacity-85"
             >
               <span>Live Demo</span>
               <ExternalLink className="w-3 h-3" />
@@ -81,7 +86,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               href={project.github_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-black dark:border-white bg-white dark:bg-black text-black dark:text-white font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white dark:bg-black text-black dark:text-white font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5"
             >
               <Github className="w-3 h-3" />
               <span>Code</span>

@@ -1,8 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,300..900&family=Grand+Hotel&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/InstrumentSerif-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/InstrumentSerif-Regular.ttf') format('truetype');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*, ::before, ::after {
+  border-radius: 0px !important;
+}
 
 @layer base {
   :root {
@@ -18,8 +38,8 @@
     --ink-strong: #000000;
     --muted: rgba(16, 16, 20, 0.62);
     --faint: rgba(16, 16, 20, 0.42);
-    --line: rgba(16, 16, 20, 0.16);
-    --line-strong: rgba(16, 16, 20, 0.38);
+    --line: rgba(16, 16, 20, 0.48);
+    --line-strong: rgba(16, 16, 20, 0.72);
     --invert-bg: #101014;
     --invert-fg: #f2f1ee;
     --accent: #101014;
@@ -43,8 +63,8 @@
     --ink-strong: #ffffff;
     --muted: rgba(242, 241, 238, 0.6);
     --faint: rgba(242, 241, 238, 0.38);
-    --line: rgba(242, 241, 238, 0.15);
-    --line-strong: rgba(242, 241, 238, 0.4);
+    --line: rgba(255, 255, 255, 0.42);
+    --line-strong: rgba(255, 255, 255, 0.85);
     --invert-bg: #ffffff;
     --invert-fg: #0b0b0c;
     --accent: #ffffff;
@@ -85,6 +105,14 @@
 
   *::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Refined Swiss Brutalist wireframe borders: lighter than pitch black in light mode */
+  .border-black:not(button):not(a):not([data-solid="true"]) {
+    border-color: var(--line);
+  }
+  .dark .border-white:not(button):not(a):not([data-solid="true"]) {
+    border-color: var(--line);
   }
 }
 

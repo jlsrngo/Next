@@ -13,10 +13,10 @@ export default function BiographyCard({ profile }: BiographyCardProps) {
   const firstName = authorName.split(' ')[0] || 'Julio';
 
   return (
-    <section className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 md:p-8 space-y-6 shadow-none">
+    <section className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 md:p-8 space-y-6 shadow-none">
       <CornerCrosses />
 
-      <div className="font-mono text-[10px] mb-2 border-b border-black dark:border-white pb-2 flex items-center justify-between text-black dark:text-white font-bold select-none">
+      <div className="font-mono text-[10px] mb-2 border-b border-line pb-2 flex items-center justify-between text-black dark:text-white font-bold select-none">
         <span>BIOGRAPHY & PHILOSOPHY</span>
         <span>AUTHOR: {authorName.toUpperCase()}</span>
       </div>
@@ -25,14 +25,14 @@ export default function BiographyCard({ profile }: BiographyCardProps) {
         {profile?.bio_about || profile?.bio_home || 'Passionate developer focused on high-performance web systems, Swiss brutalist aesthetics, and robust software architecture.'}
       </p>
 
-      <div className="pt-4 border-t border-black dark:border-white mt-6 flex items-center justify-between">
+      <div className="pt-4 border-t border-line mt-6 flex items-center justify-between">
         <div>
           <p className="font-mono text-xs uppercase tracking-wider text-black dark:text-white font-bold">
             {t('about.warm_regards') || 'Warm regards,'}
           </p>
           <p
-            className="text-6xl sm:text-7xl text-black dark:text-white mt-1 leading-none select-none"
-            style={{ fontFamily: "'Grand Hotel', cursive" }}
+            className="text-6xl sm:text-7xl mt-1 leading-none select-none font-serif italic"
+            style={{ fontFamily: '"Instrument Serif", Georgia, serif', color: '#FFDB58' }}
           >
             {firstName}
           </p>

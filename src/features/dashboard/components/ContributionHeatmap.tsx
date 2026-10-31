@@ -59,9 +59,9 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
   };
 
   return (
-    <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none shadow-none">
+    <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none shadow-none">
       <CornerCrosses />
-      <div className="flex items-center justify-between mb-4 border-b border-black dark:border-white pb-3">
+      <div className="flex items-center justify-between mb-4 border-b border-line pb-3">
         <h3 className="font-mono text-[11px] font-bold uppercase tracking-wider text-black dark:text-white">
           {github.total_contributions.toLocaleString()} {t('dashboard.contributions_last_year') || 'contributions in the last year'}
         </h3>
@@ -107,13 +107,11 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
                       <div
                         key={di}
                         className={`w-[12px] h-[12px] rounded-none transition-opacity hover:opacity-75 cursor-pointer ${
-                          isMono
-                            ? MONO_LEVEL_CLASSES[level]
-                            : isEmpty
+                          isEmpty
                             ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
-                            : 'border border-black/15'
+                            : 'border border-black/20'
                         }`}
-                        style={!isMono && !isEmpty ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                        style={!isEmpty ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
                         onMouseEnter={(e) => handleCellHover(e, day)}
                         onMouseLeave={() => setTooltip(null)}
                       />
@@ -125,7 +123,7 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
           </div>
 
           {/* Legend */}
-          <div className="flex items-center justify-end gap-1.5 mt-4 pt-3 border-t border-black dark:border-white">
+          <div className="flex items-center justify-end gap-1.5 mt-4 pt-3 border-t border-line">
             <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 mr-1">
               {t('dashboard.less') || 'Less'}
             </span>
@@ -133,13 +131,11 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
               <div
                 key={level}
                 className={`w-[11px] h-[11px] rounded-none ${
-                  isMono
-                    ? MONO_LEVEL_CLASSES[level]
-                    : level === 0
+                  level === 0
                     ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
-                    : 'border border-black/15'
+                    : 'border border-black/20'
                 }`}
-                style={!isMono && level > 0 ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
+                style={level > 0 ? { backgroundColor: PALETTE_LEVEL_STYLES[level].backgroundColor } : undefined}
               />
             ))}
             <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 ml-1">
@@ -151,7 +147,7 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
 
       {tooltip && (
         <div
-          className="fixed z-50 px-3 py-1.5 rounded-none border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider shadow-lg pointer-events-none whitespace-nowrap"
+          className="fixed z-50 px-3 py-1.5 rounded-none border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider shadow-lg pointer-events-none whitespace-nowrap"
           style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -100%)' }}
         >
           {tooltip.text}

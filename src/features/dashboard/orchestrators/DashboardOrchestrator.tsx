@@ -2,6 +2,7 @@ import React from 'react';
 import { FolderOpen, Star, Trophy, GitCommit, GitPullRequest, Users, Github, AlertCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useDashboardData } from '../hooks/useDashboardData';
+import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import MetricCard from '../components/MetricCard';
 import ContributionHeatmap from '../components/ContributionHeatmap';
 import TopLanguagesList from '../components/TopLanguagesList';
@@ -26,8 +27,16 @@ export default function DashboardOrchestrator() {
 
   return (
     <div className="py-6 md:py-10 space-y-10">
+      {/* Telemetry Strip */}
+      <TelemetryHeader
+        systemCode="SYS // TELEMETRY [04]"
+        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        spec={t('telemetry.dashboard_spec') || 'SPEC: REALTIME METRICS'}
+        engine={t('telemetry.dashboard_engine') || 'EVENT STREAM SYNCED'}
+      />
+
       {/* Header */}
-      <div className="border-b border-black dark:border-white pb-4 animate-fade-in">
+      <div className="border-b border-line pb-4 animate-fade-in">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
           [ 04 // METRICS & ACTIVITY ]
         </div>
@@ -43,7 +52,7 @@ export default function DashboardOrchestrator() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {loading ? (
           [1, 2, 3].map((i) => (
-            <div key={i} className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none animate-pulse">
+            <div key={i} className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none animate-pulse">
               <CornerCrosses />
               <div className="h-9 w-9 bg-black/10 dark:bg-white/10 rounded-none mb-3" />
               <div className="h-7 w-16 bg-black/10 dark:bg-white/10 rounded-none mb-2" />
@@ -58,7 +67,7 @@ export default function DashboardOrchestrator() {
       </div>
 
       {/* GitHub Section Header */}
-      <div className="border-b border-black dark:border-white pb-3 flex items-center justify-between">
+      <div className="border-b border-line pb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Github className="w-5 h-5 text-black dark:text-white" />
           <h2 className="font-display text-xl sm:text-2xl font-bold text-black dark:text-white">
@@ -81,7 +90,7 @@ export default function DashboardOrchestrator() {
         <div className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-4 rounded-none animate-pulse">
+              <div key={i} className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-4 rounded-none animate-pulse">
                 <CornerCrosses />
                 <div className="h-5 w-5 bg-black/10 dark:bg-white/10 rounded-none mb-3" />
                 <div className="h-6 w-12 bg-black/10 dark:bg-white/10 rounded-none mb-1" />
@@ -89,7 +98,7 @@ export default function DashboardOrchestrator() {
               </div>
             ))}
           </div>
-          <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none">
+          <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none">
             <CornerCrosses />
             <div className="h-[120px] w-full bg-black/5 dark:bg-white/5 rounded-none animate-pulse" />
           </div>
@@ -110,7 +119,7 @@ export default function DashboardOrchestrator() {
           <TopLanguagesList languages={github.top_languages} />
         </div>
       ) : (
-        <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-8 text-center rounded-none">
+        <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-8 text-center rounded-none">
           <CornerCrosses />
           <AlertCircle className="w-6 h-6 text-black/40 dark:text-white/40 mx-auto mb-2" />
           <p className="font-mono text-xs uppercase text-black/70 dark:text-white/70 font-bold">

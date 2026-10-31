@@ -14,7 +14,7 @@ export default function EducationList({ educations }: EducationListProps) {
 
   return (
     <section className="space-y-6">
-      <div className="border-b border-black dark:border-white pb-2 flex items-center justify-between">
+      <div className="border-b border-line pb-2 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <GraduationCap className="w-5 h-5 text-black dark:text-white" />
           <h2 className="font-display text-xl sm:text-2xl font-bold text-black dark:text-white">
@@ -30,11 +30,11 @@ export default function EducationList({ educations }: EducationListProps) {
         {safeEducations.map((edu: any) => (
           <div
             key={edu.id}
-            className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none shadow-none"
+            className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none shadow-none"
           >
             <CornerCrosses />
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-white dark:bg-black border border-black dark:border-white p-2 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-white dark:bg-black border border-line p-2 flex items-center justify-center">
                 <GraduationCap className="w-full h-full text-black dark:text-white" />
               </div>
               <div className="flex-1 space-y-1">
@@ -46,11 +46,11 @@ export default function EducationList({ educations }: EducationListProps) {
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-black dark:text-white uppercase font-bold">
                   {edu.gpa && (
-                    <span className="px-2 py-0.5 border border-black dark:border-white bg-white dark:bg-black rounded-none">
+                    <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                       GPA: {edu.gpa}
                     </span>
                   )}
-                  <span className="px-2 py-0.5 border border-black dark:border-white bg-white dark:bg-black rounded-none">
+                  <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                     {new Date(edu.start_date).getFullYear()} - {edu.end_date ? new Date(edu.end_date).getFullYear() : (t('about.present') || 'Present')}
                   </span>
                 </div>

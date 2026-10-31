@@ -10,9 +10,9 @@ interface MetricCardProps {
 
 export default function MetricCard({ label, value, icon: Icon }: MetricCardProps) {
   return (
-    <div className="relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none shadow-none">
+    <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none shadow-none">
       <CornerCrosses />
-      <div className="w-9 h-9 rounded-none border border-black dark:border-white bg-white dark:bg-black flex items-center justify-center mb-3">
+      <div className="w-9 h-9 rounded-none border border-line bg-white dark:bg-black flex items-center justify-center mb-3">
         <Icon className="w-4 h-4 text-black dark:text-white" />
       </div>
       <h3 className="font-display text-3xl font-bold text-black dark:text-white mb-1">

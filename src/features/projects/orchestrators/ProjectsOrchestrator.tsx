@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useProjectsData } from '../hooks/useProjectsData';
+import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import ProjectCard from '../components/ProjectCard';
 
 export default function ProjectsOrchestrator() {
@@ -9,8 +10,16 @@ export default function ProjectsOrchestrator() {
 
   return (
     <div className="py-6 md:py-10 space-y-10">
+      {/* Telemetry Strip */}
+      <TelemetryHeader
+        systemCode="SYS // ARCHIVE [03]"
+        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        spec={t('telemetry.projects_spec') || 'SPEC: PRODUCTION DEPLOYMENTS'}
+        engine={t('telemetry.projects_engine') || 'REGISTRY CLUSTER ACTIVE'}
+      />
+
       {/* Header */}
-      <div className="border-b border-black dark:border-white pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
+      <div className="border-b border-line pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
         <div className="space-y-1">
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
             [ 03 // PORTFOLIO WORKS ]

@@ -36,7 +36,7 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
 
   return (
     <section className="space-y-6">
-      <div className="border-b border-black dark:border-white pb-2 flex items-center justify-between">
+      <div className="border-b border-line pb-2 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Briefcase className="w-5 h-5 text-black dark:text-white" />
           <h2 className="font-display text-xl sm:text-2xl font-bold text-black dark:text-white">
@@ -68,14 +68,14 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
           return (
             <div
               key={exp.id}
-              className="group relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] rounded-none overflow-hidden shadow-none"
+              className="group relative border border-line bg-[#faf9f7] dark:bg-[#101014] rounded-none overflow-hidden shadow-none"
             >
               <CornerCrosses />
               <div
                 className="p-5 cursor-pointer flex items-start gap-4"
                 onClick={() => setExpandedExp(expandedExp === exp.id ? null : exp.id)}
               >
-                <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-white dark:bg-black border border-black dark:border-white p-2">
+                <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-white dark:bg-black border border-line p-2">
                   {exp.company_logo_url ? (
                     <img
                       src={optimizeCloudinaryUrl(exp.company_logo_url || '')}
@@ -95,13 +95,13 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
                     {companyName}
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-black dark:text-white uppercase font-bold">
-                    <span className="px-2 py-0.5 border border-black dark:border-white bg-white dark:bg-black rounded-none">
+                    <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                       {new Date(startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {isCurrent ? (t('about.present') || 'Present') : (endDate ? new Date(endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : (t('about.present') || 'Present'))}
                     </span>
-                    <span className="px-2 py-0.5 border border-black dark:border-white bg-white dark:bg-black rounded-none">
+                    <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                       {getDuration(startDate, endDate, isCurrent)}
                     </span>
-                    <span className="px-2 py-0.5 border border-black dark:border-white bg-white dark:bg-black rounded-none">
+                    <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                       {empType} • {workType}
                     </span>
                   </div>
@@ -116,16 +116,16 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
 
               {/* Accordion Body */}
               {expandedExp === exp.id && (
-                <div className="border-t border-black dark:border-white animate-fade-in">
+                <div className="border-t border-line animate-fade-in">
                   <div className="p-4 md:p-6 pt-2 space-y-4 md:space-y-6">
-                    <div className="flex overflow-x-auto border-b border-black dark:border-white">
+                    <div className="flex overflow-x-auto border-b border-line">
                       {(['resp', 'learn', 'impact'] as const).map((tab) => (
                         <button
                           key={tab}
                           onClick={() => setActiveTabs({ ...activeTabs, [exp.id]: tab })}
                           className={`px-4 md:px-6 py-3 whitespace-nowrap flex-shrink-0 text-xs md:text-sm font-mono font-bold transition-all relative ${
                             currentTab === tab
-                              ? 'text-black dark:text-white border-b-2 border-black dark:border-white'
+                              ? 'text-black dark:text-white border-b-2 border-line'
                               : 'text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white'
                           }`}
                         >

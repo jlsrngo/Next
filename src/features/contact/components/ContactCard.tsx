@@ -27,7 +27,7 @@ export default function ContactCard({ link, index, isFull = false }: ContactCard
   return (
     <div
       onClick={() => window.open(link.url, '_blank')}
-      className="group relative border border-black dark:border-white bg-[#faf9f7] dark:bg-[#101014] p-6 sm:p-7 overflow-hidden cursor-pointer shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
+      className="group relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 sm:p-7 overflow-hidden cursor-pointer shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
     >
       <CornerCrosses />
 
@@ -45,7 +45,7 @@ export default function ContactCard({ link, index, isFull = false }: ContactCard
 
       <div className="relative z-10 space-y-4">
         {/* Top telemetry status line */}
-        <div className="flex items-center justify-between font-mono text-[10px] text-black dark:text-white border-b border-black dark:border-white pb-2.5 select-none">
+        <div className="flex items-center justify-between font-mono text-[10px] text-black dark:text-white border-b border-line pb-2.5 select-none">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-black dark:bg-white inline-block" />
             <span className="font-bold tracking-wider">{link.platform.toUpperCase()} // DIRECT ROUTE</span>
@@ -69,7 +69,7 @@ export default function ContactCard({ link, index, isFull = false }: ContactCard
 
         {/* Action Button */}
         <div className="pt-2">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider font-bold transition-all group-hover:opacity-85 shadow-none select-none">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider font-bold transition-all group-hover:opacity-85 shadow-none select-none">
             <span>{t('contact.go_to') || 'Go to'} {label}</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </span>

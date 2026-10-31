@@ -55,9 +55,10 @@ export function useDashboardData() {
     }
 
     fetch('/api/github/contributions')
-      .then(r => r.json())
+      .then(r => (r.ok ? r.json() : fetch('/github-contributions.json').then(res => res.json())))
+      .catch(() => fetch('/github-contributions.json').then(res => res.json()))
       .then(data => {
-        if (!data.error) {
+        if (data && !data.error && data.weeks) {
           memoryGithubCache = data;
           try {
             sessionStorage.setItem('portfolio_github_cache', JSON.stringify({ data, timestamp: Date.now() }));
@@ -65,6 +66,7 @@ export function useDashboardData() {
           setGithub(data);
         }
       })
+      .catch(() => {})
       .finally(() => setGhLoading(false));
   }, []);
 

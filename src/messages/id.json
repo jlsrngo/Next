@@ -266,5 +266,23 @@
   "saving": "Menyimpan...",
   "account": "Akun",
   "back": "Kembali",
-  "email": "Email"
+  "email": "Email",
+  "telemetry": {
+    "home_engine": "KERNEL AKTIF v4.2",
+    "home_spec": "SPES: ARSITEKTUR OTONOM",
+    "home_status": "SISTEM UTAMA AKTIF",
+    "about_engine": "INDEKS NEURAL AKTIF",
+    "about_spec": "SPES: PROFIL KOGNITIF",
+    "projects_engine": "KLASTER REGISTRI AKTIF",
+    "projects_spec": "SPES: PENERAPAN PRODUKSI",
+    "dashboard_engine": "ALIRAN EVENT TERSINKRON",
+    "dashboard_spec": "SPES: METRIK WAKTU-NYATA",
+    "achievements_engine": "PROTOKOL SERTIFIKASI VALID",
+    "achievements_spec": "SPES: ATESTASI TERVERIFIKASI",
+    "contact_engine": "JARINGAN SINYAL SIAP",
+    "contact_spec": "SPES: TRANSMISI AMAN"
+  },
+  "footer": {
+    "architecture": "SISTEM // ARSITEKTUR FULLSTACK"
+  }
 }

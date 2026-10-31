@@ -109,7 +109,10 @@ export default function HomeClient({ profile, skills }: HomeClientProps) {
                 <div className="space-y-4">
                     <h1 className="font-display text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-tight text-black dark:text-white whitespace-normal sm:whitespace-nowrap">
                         {t('home.greeting')}{' '}
-                        <span className="font-serif italic font-normal text-black dark:text-white" style={{ fontFamily: '"Instrument Serif", Georgia, serif' }}>
+                        <span
+                            className="font-serif italic font-normal"
+                            style={{ fontFamily: '"Instrument Serif", Georgia, serif', color: '#FFDB58' }}
+                        >
                             {profile?.name || '...'}
                         </span>
                     </h1>

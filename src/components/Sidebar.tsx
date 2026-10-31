@@ -5,7 +5,7 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import Image from 'next/image'
 import { Home, User, Trophy, FolderOpen, BarChart3, Mail, Moon, Sun, Menu, X } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
-import { useTranslations, useLocale } from 'next-intl'
+import { useI18n } from '@/context/I18nContext'
 import { useSession, signOut } from 'next-auth/react'
 import LoginModal from '@/components/LoginModal'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
@@ -33,19 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
     const { isDark, toggle } = useTheme()
     const { data: session } = useSession()
     const isAuthenticated = !!session
-    const t = useTranslations()
-    const locale = useLocale()
+    const { locale, setLocale, t } = useI18n()
     const router = useRouter()
     const pathname = usePathname()
     const [profile, setProfile] = useState<Profile | null>(profileProp ?? null)
     const [mobileOpen, setMobileOpen] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
-    const [displayLocale, setDisplayLocale] = useState(locale)
-    const [isSwitching, setIsSwitching] = useState(false)
-
-    useEffect(() => {
-        setDisplayLocale(locale)
-    }, [locale])
 
     const navItems = [
         { to: '/', icon: Home, label: t('nav.home') },
@@ -128,9 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
         if (lang === locale) return
         localStorage.setItem('portfolio_locale', lang)
         document.cookie = `NEXT_LOCALE=${lang};path=/;max-age=31536000`
-        setDisplayLocale(lang)
-        setIsSwitching(true)
-        router.replace(pathname, { locale: lang })
+        setLocale(lang)
     }
 
     const avatarUrl = optimizeCloudinaryUrl(profile?.avatar_url)
@@ -163,13 +154,13 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                     <div className="flex bg-bg-sunken p-0.5 rounded-none border border-line">
                         <button
                             onClick={() => handleLanguageSwitch('en')}
-                            className={`px-3 py-0.5 rounded-none font-mono text-[10px] uppercase font-bold tracking-wider transition-all duration-150 ${displayLocale === 'en' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'}`}
+                            className={`px-3 py-0.5 rounded-none font-mono text-[10px] uppercase font-bold tracking-wider transition-all duration-150 ${locale === 'en' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'}`}
                         >
                             EN
                         </button>
                         <button
                             onClick={() => handleLanguageSwitch('id')}
-                            className={`px-3 py-0.5 rounded-none font-mono text-[10px] uppercase font-bold tracking-wider transition-all duration-150 ${displayLocale === 'id' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'}`}
+                            className={`px-3 py-0.5 rounded-none font-mono text-[10px] uppercase font-bold tracking-wider transition-all duration-150 ${locale === 'id' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'}`}
                         >
                             ID
                         </button>
@@ -233,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                 </div>
                 <div className="text-center font-mono text-[9px] uppercase tracking-wider text-faint leading-relaxed mt-2">
                     <p suppressHydrationWarning>© {new Date().getFullYear()} {profile?.name || 'Julio Siringoringo'}</p>
-                    <p>ENGINE: RUST · NEXT.JS</p>
+                    <p>{t('footer.architecture') || 'SYSTEM // FULLSTACK ARCHITECTURE'}</p>
                 </div>
             </div>
         </>
@@ -274,37 +265,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
 
             {/* Login Modal — rendered once outside sidebar content to avoid double mount */}
             <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
-
-            {/* Language Switch Loading Overlay — content area only */}
-            {isSwitching && (
-                <div className="fixed top-0 left-0 lg:left-[260px] right-0 bottom-0 z-[25] bg-light-bg dark:bg-dark-bg overflow-hidden animate-fade-in">
-                    <div className="py-12 md:py-20 px-6 lg:px-16 space-y-16 animate-pulse">
-                        <div className="space-y-4">
-                            <div className="h-10 w-64 bg-black/5 dark:bg-white/5 rounded-none" />
-                            <div className="h-4 w-48 bg-black/5 dark:bg-white/5 rounded-none" />
-                            <div className="space-y-2 pt-2">
-                                <div className="h-4 w-full bg-black/5 dark:bg-white/5 rounded-none" />
-                                <div className="h-4 w-5/6 bg-black/5 dark:bg-white/5 rounded-none" />
-                                <div className="h-4 w-3/4 bg-black/5 dark:bg-white/5 rounded-none" />
-                            </div>
-                        </div>
-                        <div className="border-t border-black/5 dark:border-white/5 pt-8 space-y-8">
-                            <div className="space-y-2">
-                                <div className="h-6 w-32 bg-black/5 dark:bg-white/5 rounded-none" />
-                                <div className="h-3 w-48 bg-black/5 dark:bg-white/5 rounded-none" />
-                            </div>
-                            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-x-4 gap-y-6">
-                                {Array.from({ length: 16 }).map((_, i) => (
-                                    <div key={i} className="flex flex-col items-center gap-2">
-                                        <div className="w-10 h-10 bg-black/5 dark:bg-white/5 rounded-none" />
-                                        <div className="h-2 w-8 bg-black/5 dark:bg-white/5 rounded-none" />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </>
     )
 }

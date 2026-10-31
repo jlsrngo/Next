@@ -113,8 +113,13 @@ export default function ProjectsClient({ projects = [], profile }: ProjectsClien
 
                                 {project.tech_stack && (
                                     <div className="flex flex-wrap gap-1.5 pt-1">
-                                        {project.tech_stack.split(',').map((tech, idx) => (
-                                            <TechBadge key={idx} tech={tech.trim()} />
+                                        {(Array.isArray(project.tech_stack)
+                                            ? project.tech_stack
+                                            : typeof project.tech_stack === 'string'
+                                            ? project.tech_stack.split(',')
+                                            : []
+                                        ).map((tech: string, idx: number) => (
+                                            <TechBadge key={idx} tech={String(tech).trim()} />
                                         ))}
                                     </div>
                                 )}

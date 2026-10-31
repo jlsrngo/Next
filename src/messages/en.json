@@ -266,5 +266,23 @@
   "saving": "Saving...",
   "account": "Account",
   "back": "Back",
-  "email": "Email"
+  "email": "Email",
+  "telemetry": {
+    "home_engine": "KERNEL ACTIVE v4.2",
+    "home_spec": "SPEC: AUTONOMOUS ARCHITECTURE",
+    "home_status": "CORE SYSTEM ONLINE",
+    "about_engine": "NEURAL INDEX ONLINE",
+    "about_spec": "SPEC: COGNITIVE PROFILE",
+    "projects_engine": "REGISTRY CLUSTER ACTIVE",
+    "projects_spec": "SPEC: PRODUCTION DEPLOYMENTS",
+    "dashboard_engine": "EVENT STREAM SYNCED",
+    "dashboard_spec": "SPEC: REALTIME METRICS",
+    "achievements_engine": "CERT PROTOCOL VALIDATED",
+    "achievements_spec": "SPEC: VERIFIED ATTESTATION",
+    "contact_engine": "SIGNAL NETWORK READY",
+    "contact_spec": "SPEC: SECURE TRANSMISSION"
+  },
+  "footer": {
+    "architecture": "SYSTEM // FULLSTACK ARCHITECTURE"
+  }
 }
