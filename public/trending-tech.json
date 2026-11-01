@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-01T14:40:12.057Z",
+  "last_crawled_at": "2026-11-01T15:10:15.665Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Norway makes shithouses great again",
-  "metric": "▲ 502 PTS",
+  "metric": "▲ 568 PTS",
   "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
-  "viral_repo": "BehiSecc/awesome-claude-skills",
-  "repo_metric": "★ 10.3k",
-  "repo_desc": "A curated list of Claude Skills.",
-  "repo_spec": "VIRAL REPO // BehiSecc/awesome-claude-skills",
+  "viral_repo": "digoal/blog",
+  "repo_metric": "★ 8.6k",
+  "repo_desc": "AI,Opensource,Database,Business,Finance,Minds. git clone --depth 1 https://github.com/digoal/blog",
+  "repo_spec": "VIRAL REPO // digoal/blog",
   "trending_repos": [
     {
-      "name": "awesome-claude-skills",
-      "full_name": "BehiSecc/awesome-claude-skills",
-      "stars": 10329,
-      "stars_formatted": "★ 10.3k",
-      "language": "Code",
-      "description": "A curated list of Claude Skills.",
-      "url": "https://github.com/BehiSecc/awesome-claude-skills"
+      "name": "blog",
+      "full_name": "digoal/blog",
+      "stars": 8605,
+      "stars_formatted": "★ 8.6k",
+      "language": "HTML",
+      "description": "AI,Opensource,Database,Business,Finance,Minds. git clone --depth 1 https://github.com/digoal/blog",
+      "url": "https://github.com/digoal/blog"
     },
     {
-      "name": "Radicale",
-      "full_name": "Kozea/Radicale",
-      "stars": 5167,
-      "stars_formatted": "★ 5.2k",
-      "language": "Python",
-      "description": "A simple CalDAV (calendar) and CardDAV (contact) server.",
-      "url": "https://github.com/Kozea/Radicale"
+      "name": "ClickHouse",
+      "full_name": "ClickHouse/ClickHouse",
+      "stars": 50701,
+      "stars_formatted": "★ 50.7k",
+      "language": "C++",
+      "description": "ClickHouse® is a real-time analytics database management system",
+      "url": "https://github.com/ClickHouse/ClickHouse"
     },
     {
-      "name": "MessageKit",
-      "full_name": "MessageKit/MessageKit",
-      "stars": 6269,
-      "stars_formatted": "★ 6.3k",
-      "language": "Swift",
-      "description": "A community-driven replacement for JSQMessagesViewController",
-      "url": "https://github.com/MessageKit/MessageKit"
+      "name": "AnyPS5",
+      "full_name": "boykopovar/AnyPS5",
+      "stars": 50298,
+      "stars_formatted": "★ 50.3k",
+      "language": "C++",
+      "description": "Tool for automatic PS5 executables porting to Linux and Windows",
+      "url": "https://github.com/boykopovar/AnyPS5"
     },
     {
-      "name": "Trilium",
-      "full_name": "TriliumNext/Trilium",
-      "stars": 38644,
-      "stars_formatted": "★ 38.6k",
+      "name": "orca",
+      "full_name": "stablyai/orca",
+      "stars": 112191,
+      "stars_formatted": "★ 112.2k",
       "language": "TypeScript",
-      "description": "Build your personal knowledge base with Trilium Notes",
-      "url": "https://github.com/TriliumNext/Trilium"
+      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+      "url": "https://github.com/stablyai/orca"
     },
     {
-      "name": "cloud-hypervisor",
-      "full_name": "cloud-hypervisor/cloud-hypervisor",
-      "stars": 6449,
-      "stars_formatted": "★ 6.4k",
-      "language": "Rust",
-      "description": "A Virtual Machine Monitor for modern Cloud workloads. Features include CPU, memory and device hotplug, support for running Windows and Linux guests, device offload with vhost-user and a minimal compact footprint. Written in Rust with a strong focus on security.",
-      "url": "https://github.com/cloud-hypervisor/cloud-hypervisor"
-    },
-    {
-      "name": "vespa",
-      "full_name": "vespa-engine/vespa",
-      "stars": 7156,
-      "stars_formatted": "★ 7.2k",
-      "language": "Java",
-      "description": "The AI search platform",
-      "url": "https://github.com/vespa-engine/vespa"
-    },
-    {
-      "name": "lwan",
-      "full_name": "lpereira/lwan",
-      "stars": 6044,
-      "stars_formatted": "★ 6.0k",
-      "language": "C",
-      "description": "Experimental, scalable, high performance HTTP server",
-      "url": "https://github.com/lpereira/lwan"
-    },
-    {
-      "name": "plannotator",
-      "full_name": "backnotprop/plannotator",
-      "stars": 9805,
-      "stars_formatted": "★ 9.8k",
+      "name": "openobserve",
+      "full_name": "openobserve/openobserve",
+      "stars": 22650,
+      "stars_formatted": "★ 22.6k",
       "language": "TypeScript",
-      "description": "Annotate and review coding agent plans and code diffs visually, share with your team, send feedback to agents with one click.",
-      "url": "https://github.com/backnotprop/plannotator"
+      "description": "Open source observability platform for logs, metrics, traces, RUM (web, android, ios), Session replay, pipelines, SLO and LLM observability. A sophisticated, simple and highly performant alternative to Datadog, Splunk, and Elasticsearch with 140x lower storage costs and single binary deployment.",
+      "url": "https://github.com/openobserve/openobserve"
     },
     {
-      "name": "FFmpeg",
-      "full_name": "FFmpeg/FFmpeg",
-      "stars": 66206,
-      "stars_formatted": "★ 66.2k",
-      "language": "C",
-      "description": "Mirror of https://git.ffmpeg.org/ffmpeg.git",
-      "url": "https://github.com/FFmpeg/FFmpeg"
-    },
-    {
-      "name": "dify",
-      "full_name": "langgenius/dify",
-      "stars": 160154,
-      "stars_formatted": "★ 160.2k",
+      "name": "deer-flow",
+      "full_name": "bytedance/deer-flow",
+      "stars": 84826,
+      "stars_formatted": "★ 84.8k",
       "language": "Python",
-      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
-      "url": "https://github.com/langgenius/dify"
+      "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+      "url": "https://github.com/bytedance/deer-flow"
+    },
+    {
+      "name": "pytorch",
+      "full_name": "pytorch/pytorch",
+      "stars": 105061,
+      "stars_formatted": "★ 105.1k",
+      "language": "Python",
+      "description": "Tensors and Dynamic neural networks in Python with strong GPU acceleration",
+      "url": "https://github.com/pytorch/pytorch"
+    },
+    {
+      "name": "boxplayer",
+      "full_name": "gaozhangmin/boxplayer",
+      "stars": 7483,
+      "stars_formatted": "★ 7.5k",
+      "language": "TypeScript",
+      "description": "BoxPlayer - 聚合网盘管理+影视聚合 支持 Windows Linux iOS macOS tvOS Android",
+      "url": "https://github.com/gaozhangmin/boxplayer"
+    },
+    {
+      "name": "posthog",
+      "full_name": "PostHog/posthog",
+      "stars": 40567,
+      "stars_formatted": "★ 40.6k",
+      "language": "Python",
+      "description": ":hedgehog: PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
+      "url": "https://github.com/PostHog/posthog"
+    },
+    {
+      "name": "openrig",
+      "full_name": "mvschwarz/openrig",
+      "stars": 8535,
+      "stars_formatted": "★ 8.5k",
+      "language": "TypeScript",
+      "description": "Build your own network of agents from Claude Code, Codex and Pi: persistent teams with roles, shared context and owned work.",
+      "url": "https://github.com/mvschwarz/openrig"
     }
   ]
 }
