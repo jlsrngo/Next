@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-01T13:39:23.444Z",
+  "last_crawled_at": "2026-11-01T14:09:29.028Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Norway makes shithouses great again",
-  "metric": "▲ 368 PTS",
+  "metric": "▲ 435 PTS",
   "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
-  "viral_repo": "emmabostian/developer-portfolios",
-  "repo_metric": "★ 27.5k",
-  "repo_desc": "A list of developer portfolios for your inspiration",
-  "repo_spec": "VIRAL REPO // emmabostian/developer-portfolios",
+  "viral_repo": "LadybirdBrowser/ladybird",
+  "repo_metric": "★ 66.8k",
+  "repo_desc": "Truly independent web browser",
+  "repo_spec": "VIRAL REPO // LadybirdBrowser/ladybird",
   "trending_repos": [
     {
-      "name": "developer-portfolios",
-      "full_name": "emmabostian/developer-portfolios",
-      "stars": 27506,
-      "stars_formatted": "★ 27.5k",
-      "language": "Python",
-      "description": "A list of developer portfolios for your inspiration",
-      "url": "https://github.com/emmabostian/developer-portfolios"
+      "name": "ladybird",
+      "full_name": "LadybirdBrowser/ladybird",
+      "stars": 66787,
+      "stars_formatted": "★ 66.8k",
+      "language": "C++",
+      "description": "Truly independent web browser",
+      "url": "https://github.com/LadybirdBrowser/ladybird"
     },
     {
-      "name": "unsloth",
-      "full_name": "unslothai/unsloth",
-      "stars": 78906,
-      "stars_formatted": "★ 78.9k",
-      "language": "Python",
-      "description": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4.1, MiniMax-H3, Gemma 4, FLUX and more.",
-      "url": "https://github.com/unslothai/unsloth"
-    },
-    {
-      "name": "horizon",
-      "full_name": "horizon-rust/horizon",
-      "stars": 5529,
-      "stars_formatted": "★ 5.5k",
-      "language": "Rust",
-      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-      "url": "https://github.com/horizon-rust/horizon"
+      "name": "cindy",
+      "full_name": "makecindy/cindy",
+      "stars": 8886,
+      "stars_formatted": "★ 8.9k",
+      "language": "TypeScript",
+      "description": "Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。",
+      "url": "https://github.com/makecindy/cindy"
     },
     {
       "name": "openclaw",
       "full_name": "openclaw/openclaw",
-      "stars": 393613,
+      "stars": 393616,
       "stars_formatted": "★ 393.6k",
       "language": "TypeScript",
       "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
       "url": "https://github.com/openclaw/openclaw"
     },
     {
-      "name": "bytebase",
-      "full_name": "bytebase/bytebase",
-      "stars": 14662,
-      "stars_formatted": "★ 14.7k",
+      "name": "Reverse-Engineering",
+      "full_name": "mytechnotalent/Reverse-Engineering",
+      "stars": 15066,
+      "stars_formatted": "★ 15.1k",
+      "language": "Assembly",
+      "description": "A FREE comprehensive reverse engineering tutorial covering x86, x64, 32-bit/64-bit ARM, 8-bit AVR and 32-bit RISC-V architectures.",
+      "url": "https://github.com/mytechnotalent/Reverse-Engineering"
+    },
+    {
+      "name": "Infinity-For-Reddit",
+      "full_name": "Docile-Alligator/Infinity-For-Reddit",
+      "stars": 5539,
+      "stars_formatted": "★ 5.5k",
+      "language": "Java",
+      "description": "A Reddit client for Android",
+      "url": "https://github.com/Docile-Alligator/Infinity-For-Reddit"
+    },
+    {
+      "name": "magpie",
+      "full_name": "yetone/magpie",
+      "stars": 27399,
+      "stars_formatted": "★ 27.4k",
       "language": "Go",
-      "description": "Database governance built for humans and agents — controlling changes and access across every major database.",
-      "url": "https://github.com/bytebase/bytebase"
+      "description": "Every agent's model. One place. Codex on DeepSeek, Claude Code on Kimi, from the menu bar.",
+      "url": "https://github.com/yetone/magpie"
     },
     {
-      "name": "posthog",
-      "full_name": "PostHog/posthog",
-      "stars": 40567,
-      "stars_formatted": "★ 40.6k",
-      "language": "Python",
-      "description": ":hedgehog: PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
-      "url": "https://github.com/PostHog/posthog"
-    },
-    {
-      "name": "yolov3",
-      "full_name": "ultralytics/yolov3",
-      "stars": 10631,
-      "stars_formatted": "★ 10.6k",
-      "language": "Python",
-      "description": "PyTorch implementation of YOLOv3, YOLOv3-SPP, and YOLOv3-tiny for real-time object detection with training, validation, inference, and multi-format export.",
-      "url": "https://github.com/ultralytics/yolov3"
-    },
-    {
-      "name": "orpc",
-      "full_name": "middleapi/orpc",
-      "stars": 5748,
-      "stars_formatted": "★ 5.7k",
+      "name": "activepieces",
+      "full_name": "activepieces/activepieces",
+      "stars": 25317,
+      "stars_formatted": "★ 25.3k",
       "language": "TypeScript",
-      "description": "Typesafe APIs Made Simple 🪄",
-      "url": "https://github.com/middleapi/orpc"
+      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents",
+      "url": "https://github.com/activepieces/activepieces"
     },
     {
-      "name": "ALL-about-RSS",
-      "full_name": "AboutRSS/ALL-about-RSS",
-      "stars": 5941,
-      "stars_formatted": "★ 5.9k",
-      "language": "Python",
-      "description": "A list of RSS related stuff: tools, services, communities and tutorials, etc.",
-      "url": "https://github.com/AboutRSS/ALL-about-RSS"
+      "name": "eliza",
+      "full_name": "elizaOS/eliza",
+      "stars": 19749,
+      "stars_formatted": "★ 19.7k",
+      "language": "TypeScript",
+      "description": "Open source agentic operating system",
+      "url": "https://github.com/elizaOS/eliza"
     },
     {
-      "name": "pdfkit",
-      "full_name": "foliojs/pdfkit",
-      "stars": 10728,
-      "stars_formatted": "★ 10.7k",
-      "language": "JavaScript",
-      "description": "A JavaScript PDF generation library for Node and the browser",
-      "url": "https://github.com/foliojs/pdfkit"
+      "name": "worldmonitor",
+      "full_name": "koala73/worldmonitor",
+      "stars": 89919,
+      "stars_formatted": "★ 89.9k",
+      "language": "TypeScript",
+      "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
+      "url": "https://github.com/koala73/worldmonitor"
+    },
+    {
+      "name": "horizon",
+      "full_name": "horizon-rust/horizon",
+      "stars": 5535,
+      "stars_formatted": "★ 5.5k",
+      "language": "Rust",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "url": "https://github.com/horizon-rust/horizon"
     }
   ]
 }
