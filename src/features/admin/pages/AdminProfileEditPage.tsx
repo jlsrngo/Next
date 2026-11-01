@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, User, Mail, MapPin, Globe, Phone } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { profileService } from '@/services/api';
 
 export default function AdminProfileEditPage() {
@@ -77,7 +78,7 @@ export default function AdminProfileEditPage() {
       setFeedback({ type: 'success', message: 'Profile specification saved successfully! Redirecting...' });
       setTimeout(() => {
         navigate('/admin/profile');
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
       setFeedback({ type: 'error', message: err.message || 'Saving failed' });
       setSubmitting(false);
@@ -149,7 +150,15 @@ export default function AdminProfileEditPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Section 1: Primary Identity */}
+        {/* Section 1: Avatar Image Adjuster Component */}
+        <ImageUploadAdjuster
+          value={avatarUrl}
+          onChange={(newVal) => setAvatarUrl(newVal)}
+          aspectRatio="square"
+          label="FOTO PROFIL / AVATAR"
+        />
+
+        {/* Section 2: Primary Identity */}
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
@@ -180,21 +189,10 @@ export default function AdminProfileEditPage() {
                 className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-faint uppercase font-bold mb-1.5">Avatar Image URL (Cloudinary or Direct)</label>
-              <input
-                type="text"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://res.cloudinary.com/... or /avatar.jpg"
-                className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
-              />
-            </div>
           </div>
         </div>
 
-        {/* Section 2: Narrative Statements */}
+        {/* Section 3: Narrative Statements */}
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2">
@@ -230,7 +228,7 @@ export default function AdminProfileEditPage() {
           </div>
         </div>
 
-        {/* Section 3: Communication & Relays */}
+        {/* Section 4: Communication & Relays */}
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2">
@@ -339,4 +337,3 @@ export default function AdminProfileEditPage() {
     </div>
   );
 }
-

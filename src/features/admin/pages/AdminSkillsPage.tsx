@@ -227,7 +227,7 @@ export default function AdminSkillsPage() {
               <CornerCrosses />
               <div className="flex items-center justify-between mb-3 w-full">
                 <div className="w-8 h-8 flex items-center justify-center border border-line bg-bg">
-                  <TechIcon slug={tech.slug} size={18} />
+                  <TechIcon slug={tech.slug} icon={tech.icon} name={tech.name} color={tech.color} size={18} />
                 </div>
                 {isToggling ? (
                   <Loader2 size={12} className="animate-spin text-ink" />

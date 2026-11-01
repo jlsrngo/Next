@@ -60,7 +60,7 @@ export default function AdminProfilePage() {
             className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
           >
             <Edit3 size={14} />
-            <span>EDIT SPEC PAGE</span>
+            <span>EDIT PROFILE</span>
           </Link>
           <button
             onClick={fetchProfile}
