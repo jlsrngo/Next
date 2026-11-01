@@ -12,3 +12,6 @@ target/
 # Ignore all .md except README.md
 *.md
 !README.md
+.env*
+.neon
+bun.lock

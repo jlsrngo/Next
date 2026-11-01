@@ -21,14 +21,14 @@ export default function SkillIcon({ name, iconSlug, onDelete, showDelete }: Skil
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 z-10 block">
                 {/* Backdrop Card that moves out and reveals our palette color on hover */}
                 <div
-                    className="skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] border border-line opacity-75 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100"
+                    className="skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] border border-black/20 dark:border-white/20 opacity-75 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:border-black/40 dark:group-hover:border-white/40"
                     style={{
                         backgroundColor: accentColor,
                         willChange: 'transform',
                     }}
                 />
                 {/* Surface Card with Icon (sharp square with solid technical border) */}
-                <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-line flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105 shadow-sm">
+                <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-black/20 dark:border-white/20 flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105 shadow-sm group-hover:border-black/40 dark:group-hover:border-white/40">
                     {IconComponent ? (
                         <IconComponent className="w-7 h-7 sm:w-8 sm:h-8 text-black dark:text-white transition-transform duration-300 relative z-20 group-hover:scale-110" />
                     ) : (

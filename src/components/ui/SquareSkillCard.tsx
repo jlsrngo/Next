@@ -18,12 +18,12 @@ export function SquareSkillCard({ name, iconSlug, onDelete, showDelete }: Square
       <div className="relative w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 z-10 block">
         {/* Backdrop Card (Monochrome offset box, no colorful rainbow gradient) */}
         <div
-          className="skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e5e4de] dark:bg-[#222328] border border-line opacity-80 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:bg-[#d8d7cf] dark:group-hover:bg-[#2e2f38]"
+          className="skill-icon-backdrop absolute inset-0 transition-all duration-300 ease-out translate-x-1.5 -translate-y-1.5 rotate-[8deg] bg-[#e5e4de] dark:bg-[#222328] border border-black/20 dark:border-white/20 opacity-80 group-hover:translate-x-3.5 group-hover:-translate-y-3.5 group-hover:rotate-[16deg] group-hover:opacity-100 group-hover:bg-[#d8d7cf] dark:group-hover:bg-[#2e2f38] group-hover:border-black/40 dark:group-hover:border-white/40"
           style={{ willChange: 'transform' }}
         />
 
         {/* Surface Card with Icon (Solid white/black square with 1px solid border) */}
-        <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-line flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105 shadow-sm">
+        <div className="skill-icon-surface absolute inset-0 bg-white dark:bg-[#16171b] border border-black/20 dark:border-white/20 flex items-center justify-center transition-all duration-300 z-10 group-hover:scale-105 shadow-sm group-hover:border-black/40 dark:group-hover:border-white/40">
           {IconComponent ? (
             <IconComponent className="w-7 h-7 sm:w-8 sm:h-8 text-black dark:text-white transition-transform duration-300 relative z-20 group-hover:scale-110" />
           ) : (
