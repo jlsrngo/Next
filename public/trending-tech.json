@@ -1,59 +1,50 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-01T12:38:47.410Z",
+  "last_crawled_at": "2026-11-01T13:09:19.298Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Norway makes shithouses great again",
-  "metric": "▲ 230 PTS",
+  "metric": "▲ 290 PTS",
   "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
-  "viral_repo": "uutils/coreutils",
-  "repo_metric": "★ 24.3k",
-  "repo_desc": "Cross-platform Rust rewrite of the GNU coreutils",
-  "repo_spec": "VIRAL REPO // uutils/coreutils",
+  "viral_repo": "elsa-workflows/elsa-core",
+  "repo_metric": "★ 7.9k",
+  "repo_desc": "The Workflow Engine for .NET",
+  "repo_spec": "VIRAL REPO // elsa-workflows/elsa-core",
   "trending_repos": [
     {
-      "name": "coreutils",
-      "full_name": "uutils/coreutils",
-      "stars": 24316,
-      "stars_formatted": "★ 24.3k",
-      "language": "Rust",
-      "description": "Cross-platform Rust rewrite of the GNU coreutils",
-      "url": "https://github.com/uutils/coreutils"
+      "name": "elsa-core",
+      "full_name": "elsa-workflows/elsa-core",
+      "stars": 7922,
+      "stars_formatted": "★ 7.9k",
+      "language": "C#",
+      "description": "The Workflow Engine for .NET",
+      "url": "https://github.com/elsa-workflows/elsa-core"
     },
     {
-      "name": "horizon",
-      "full_name": "horizon-rust/horizon",
-      "stars": 5520,
-      "stars_formatted": "★ 5.5k",
-      "language": "Rust",
-      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-      "url": "https://github.com/horizon-rust/horizon"
-    },
-    {
-      "name": "oh-my-claudecode",
-      "full_name": "Yeachan-Heo/oh-my-claudecode",
-      "stars": 40478,
-      "stars_formatted": "★ 40.5k",
+      "name": "orca",
+      "full_name": "stablyai/orca",
+      "stars": 112105,
+      "stars_formatted": "★ 112.1k",
       "language": "TypeScript",
-      "description": "Teams-first Multi-agent orchestration for Claude Code",
-      "url": "https://github.com/Yeachan-Heo/oh-my-claudecode"
+      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+      "url": "https://github.com/stablyai/orca"
     },
     {
-      "name": "openclaw",
-      "full_name": "openclaw/openclaw",
-      "stars": 393611,
-      "stars_formatted": "★ 393.6k",
-      "language": "TypeScript",
-      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
-      "url": "https://github.com/openclaw/openclaw"
+      "name": "website",
+      "full_name": "kubernetes/website",
+      "stars": 5417,
+      "stars_formatted": "★ 5.4k",
+      "language": "HTML",
+      "description": "Kubernetes website and documentation repo: ",
+      "url": "https://github.com/kubernetes/website"
     },
     {
-      "name": "vespa",
-      "full_name": "vespa-engine/vespa",
-      "stars": 7156,
-      "stars_formatted": "★ 7.2k",
-      "language": "Java",
-      "description": "The AI search platform",
-      "url": "https://github.com/vespa-engine/vespa"
+      "name": "nixpkgs",
+      "full_name": "NixOS/nixpkgs",
+      "stars": 26668,
+      "stars_formatted": "★ 26.7k",
+      "language": "Nix",
+      "description": "Nix Packages collection & NixOS",
+      "url": "https://github.com/NixOS/nixpkgs"
     },
     {
       "name": "framework",
@@ -65,40 +56,49 @@
       "url": "https://github.com/flarum/framework"
     },
     {
-      "name": "psutil",
-      "full_name": "giampaolo/psutil",
-      "stars": 11313,
-      "stars_formatted": "★ 11.3k",
-      "language": "Python",
-      "description": "Cross-platform lib for process and system monitoring in Python",
-      "url": "https://github.com/giampaolo/psutil"
-    },
-    {
-      "name": "cindy",
-      "full_name": "makecindy/cindy",
-      "stars": 8877,
-      "stars_formatted": "★ 8.9k",
+      "name": "qwen-code",
+      "full_name": "QwenLM/qwen-code",
+      "stars": 28855,
+      "stars_formatted": "★ 28.9k",
       "language": "TypeScript",
-      "description": "Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。",
-      "url": "https://github.com/makecindy/cindy"
+      "description": "An open-source AI coding agent that lives in your terminal.",
+      "url": "https://github.com/QwenLM/qwen-code"
     },
     {
-      "name": "orca",
-      "full_name": "stablyai/orca",
-      "stars": 112090,
-      "stars_formatted": "★ 112.1k",
+      "name": "lance",
+      "full_name": "lance-format/lance",
+      "stars": 7240,
+      "stars_formatted": "★ 7.2k",
+      "language": "Rust",
+      "description": "Open Lakehouse Format for Multimodal AI. Convert from Parquet in 2 lines of code for 100x faster random access, vector index, and data versioning. Compatible with Pandas, DuckDB, Polars, Pyarrow, and PyTorch with more integrations coming..",
+      "url": "https://github.com/lance-format/lance"
+    },
+    {
+      "name": "t3code",
+      "full_name": "pingdotgg/t3code",
+      "stars": 36677,
+      "stars_formatted": "★ 36.7k",
       "language": "TypeScript",
-      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
-      "url": "https://github.com/stablyai/orca"
+      "description": "",
+      "url": "https://github.com/pingdotgg/t3code"
     },
     {
-      "name": "CodeIgniter4",
-      "full_name": "codeigniter4/CodeIgniter4",
-      "stars": 5998,
-      "stars_formatted": "★ 6.0k",
-      "language": "PHP",
-      "description": "Open Source PHP Framework (originally from EllisLab)",
-      "url": "https://github.com/codeigniter4/CodeIgniter4"
+      "name": "openclaw",
+      "full_name": "openclaw/openclaw",
+      "stars": 393610,
+      "stars_formatted": "★ 393.6k",
+      "language": "TypeScript",
+      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+      "url": "https://github.com/openclaw/openclaw"
+    },
+    {
+      "name": "worldmonitor",
+      "full_name": "koala73/worldmonitor",
+      "stars": 89916,
+      "stars_formatted": "★ 89.9k",
+      "language": "TypeScript",
+      "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
+      "url": "https://github.com/koala73/worldmonitor"
     }
   ]
 }

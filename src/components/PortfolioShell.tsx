@@ -20,9 +20,8 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
     return (
       <div
         data-theme-style={isMonochrome ? 'monochrome' : undefined}
-        className={`min-h-screen w-full bg-bg text-ink antialiased overflow-x-hidden ${
-          isMonochrome ? 'theme-monochrome' : ''
-        }`}
+        className={`min-h-screen w-full bg-bg text-ink antialiased overflow-x-hidden ${isMonochrome ? 'theme-monochrome' : ''
+          }`}
       >
         {children}
       </div>
@@ -32,9 +31,8 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
   return (
     <div
       data-theme-style={isMonochrome ? 'monochrome' : undefined}
-      className={`h-screen w-full overflow-hidden bg-bg text-ink transition-colors duration-200 blueprint-grid flex justify-center ${
-        isMonochrome ? 'theme-monochrome' : ''
-      }`}
+      className={`h-screen w-full overflow-hidden bg-bg text-ink transition-colors duration-200 blueprint-grid flex justify-center ${isMonochrome ? 'theme-monochrome' : ''
+        }`}
     >
       {/* Centered Workstation: Sidebar + Content + Ruler together */}
       <div className="flex h-full w-full max-w-[1280px] xl:max-w-[1340px] border-x border-black/20 dark:border-white/20 bg-bg relative">
