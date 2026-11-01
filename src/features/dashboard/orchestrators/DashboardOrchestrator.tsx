@@ -29,10 +29,11 @@ export default function DashboardOrchestrator() {
     <div className="py-6 md:py-10 space-y-10">
       {/* Telemetry Strip */}
       <TelemetryHeader
-        systemCode="SYS // TELEMETRY [04]"
+        systemCode="SYS // TELEMETRY [05]"
         coordinates="LAT: 0.7893° S · LON: 113.9213° E"
         spec={t('telemetry.dashboard_spec') || 'SPEC: REALTIME METRICS'}
-        engine={t('telemetry.dashboard_engine') || 'EVENT STREAM SYNCED'}
+        engine="RUST AXUM · TOKIO DAEMON"
+        liveFeed="status"
       />
 
       {/* Header */}

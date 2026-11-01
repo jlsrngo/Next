@@ -19,7 +19,7 @@ export default function QuickSpecsHud({ profile }: QuickSpecsHudProps) {
           className="font-mono text-xs font-bold block"
           style={{ color: PALETTE.deepCyan }}
         >
-          Full-Stack & Systems
+          {profile?.headline || profile?.focus || 'Full-Stack & Systems'}
         </span>
       </div>
 
@@ -32,7 +32,7 @@ export default function QuickSpecsHud({ profile }: QuickSpecsHudProps) {
           className="font-mono text-xs font-bold block"
           style={{ color: PALETTE.softCoral }}
         >
-          High-Concurrency SPA
+          {profile?.runtime || 'Rust Axum 0.7 · React 18'}
         </span>
       </div>
 

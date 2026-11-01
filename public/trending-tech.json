@@ -1,0 +1,104 @@
+{
+  "status": "LIVE_SYNC",
+  "last_crawled_at": "2026-11-01T12:38:47.410Z",
+  "source": "GitHub Search API & HackerNews Live Wire",
+  "headline": "Norway makes shithouses great again",
+  "metric": "▲ 230 PTS",
+  "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
+  "viral_repo": "uutils/coreutils",
+  "repo_metric": "★ 24.3k",
+  "repo_desc": "Cross-platform Rust rewrite of the GNU coreutils",
+  "repo_spec": "VIRAL REPO // uutils/coreutils",
+  "trending_repos": [
+    {
+      "name": "coreutils",
+      "full_name": "uutils/coreutils",
+      "stars": 24316,
+      "stars_formatted": "★ 24.3k",
+      "language": "Rust",
+      "description": "Cross-platform Rust rewrite of the GNU coreutils",
+      "url": "https://github.com/uutils/coreutils"
+    },
+    {
+      "name": "horizon",
+      "full_name": "horizon-rust/horizon",
+      "stars": 5520,
+      "stars_formatted": "★ 5.5k",
+      "language": "Rust",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "url": "https://github.com/horizon-rust/horizon"
+    },
+    {
+      "name": "oh-my-claudecode",
+      "full_name": "Yeachan-Heo/oh-my-claudecode",
+      "stars": 40478,
+      "stars_formatted": "★ 40.5k",
+      "language": "TypeScript",
+      "description": "Teams-first Multi-agent orchestration for Claude Code",
+      "url": "https://github.com/Yeachan-Heo/oh-my-claudecode"
+    },
+    {
+      "name": "openclaw",
+      "full_name": "openclaw/openclaw",
+      "stars": 393611,
+      "stars_formatted": "★ 393.6k",
+      "language": "TypeScript",
+      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
+      "url": "https://github.com/openclaw/openclaw"
+    },
+    {
+      "name": "vespa",
+      "full_name": "vespa-engine/vespa",
+      "stars": 7156,
+      "stars_formatted": "★ 7.2k",
+      "language": "Java",
+      "description": "The AI search platform",
+      "url": "https://github.com/vespa-engine/vespa"
+    },
+    {
+      "name": "framework",
+      "full_name": "flarum/framework",
+      "stars": 6766,
+      "stars_formatted": "★ 6.8k",
+      "language": "PHP",
+      "description": "Simple forum software for building great communities.",
+      "url": "https://github.com/flarum/framework"
+    },
+    {
+      "name": "psutil",
+      "full_name": "giampaolo/psutil",
+      "stars": 11313,
+      "stars_formatted": "★ 11.3k",
+      "language": "Python",
+      "description": "Cross-platform lib for process and system monitoring in Python",
+      "url": "https://github.com/giampaolo/psutil"
+    },
+    {
+      "name": "cindy",
+      "full_name": "makecindy/cindy",
+      "stars": 8877,
+      "stars_formatted": "★ 8.9k",
+      "language": "TypeScript",
+      "description": "Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。",
+      "url": "https://github.com/makecindy/cindy"
+    },
+    {
+      "name": "orca",
+      "full_name": "stablyai/orca",
+      "stars": 112090,
+      "stars_formatted": "★ 112.1k",
+      "language": "TypeScript",
+      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+      "url": "https://github.com/stablyai/orca"
+    },
+    {
+      "name": "CodeIgniter4",
+      "full_name": "codeigniter4/CodeIgniter4",
+      "stars": 5998,
+      "stars_formatted": "★ 6.0k",
+      "language": "PHP",
+      "description": "Open Source PHP Framework (originally from EllisLab)",
+      "url": "https://github.com/codeigniter4/CodeIgniter4"
+    }
+  ]
+}

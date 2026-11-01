@@ -72,7 +72,10 @@ async fn main() {
         .route("/api/profile", get(profile_handler))
         .route("/api/projects", get(projects_handler))
         .route("/api/skills", get(skills_handler))
+        .route("/api/achievements", get(achievements_handler))
+        .route("/api/social-links", get(social_links_handler))
         .route("/api/about", get(about_handler))
+        .route("/api/trending", get(trending_handler))
         .route("/api/github/contributions", get(github_contributions_handler))
         .layer(cors)
         .with_state(state);
@@ -84,6 +87,16 @@ async fn main() {
 
     let addr = SocketAddr::from(([127, 0, 0, 1], port));
     println!(">>> [Rust Axum Engine] Running on http://{}", addr);
+
+    tokio::spawn(async {
+        let _ = tokio::process::Command::new("node").arg("scripts/sync-github.cjs").output().await;
+        let _ = tokio::process::Command::new("node").arg("scripts/sync-trending.cjs").output().await;
+        loop {
+            tokio::time::sleep(tokio::time::Duration::from_secs(1800)).await;
+            let _ = tokio::process::Command::new("node").arg("scripts/sync-github.cjs").output().await;
+            let _ = tokio::process::Command::new("node").arg("scripts/sync-trending.cjs").output().await;
+        }
+    });
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
@@ -217,7 +230,9 @@ async fn profile_handler(
                     "name": full_name,
                     "fullName": full_name,
                     "username": "jlsrngo",
-                    "headline": headline.unwrap_or_else(|| "Full Stack Developer".to_string()),
+                    "headline": headline.clone().unwrap_or_else(|| "Full Stack Developer".to_string()),
+                    "focus": headline.unwrap_or_else(|| "Full-Stack & Systems".to_string()),
+                    "runtime": "Rust Axum 0.7 · React 18 · Tokio Native".to_string(),
                     "bio_home": bio_home.unwrap_or_default(),
                     "bio_about": bio_about.unwrap_or_default(),
                     "location": location.unwrap_or_else(|| "Indonesia".to_string()),
@@ -455,4 +470,124 @@ async fn github_contributions_handler() -> impl IntoResponse {
             Json(json!({ "error": "failed to parse contributions json" })),
         ),
     }
+}
+async fn achievements_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let query_result = sqlx::query(
+            "SELECT id, title, description, issuer, date::text as date, image_url, category, credential_id, credential_url, featured, \"order\" FROM achievements ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        if let Ok(rows) = query_result {
+            let mut list = Vec::new();
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let title: String = r.try_get("title").unwrap_or_default();
+                let description: String = r.try_get("description").unwrap_or_default();
+                let issuer: Option<String> = r.try_get("issuer").ok();
+                let date: String = r.try_get("date").unwrap_or_default();
+                let image_url: Option<String> = r.try_get("image_url").ok();
+                let category: Option<String> = r.try_get("category").ok();
+                let credential_id: Option<String> = r.try_get("credential_id").ok();
+                let credential_url: Option<String> = r.try_get("credential_url").ok();
+                let featured: bool = r.try_get("featured").unwrap_or(false);
+                let order: i32 = r.try_get("order").unwrap_or(0);
+
+                list.push(json!({
+                    "id": id,
+                    "title": title,
+                    "description": description,
+                    "issuer": issuer.unwrap_or_default(),
+                    "date": date,
+                    "image_url": image_url,
+                    "category": category.unwrap_or_else(|| "Certification".to_string()),
+                    "credential_id": credential_id,
+                    "credential_url": credential_url,
+                    "is_featured": featured,
+                    "featured": featured,
+                    "order": order,
+                    "order_index": order
+                }));
+            }
+            return (StatusCode::OK, Json(json!(list)));
+        }
+    }
+
+    if let Some(snap) = get_snapshot() {
+        if let Some(achievements) = snap.get("achievements") {
+            return (StatusCode::OK, Json(achievements.clone()));
+        }
+    }
+
+    (StatusCode::OK, Json(json!([])))
+}
+
+async fn social_links_handler(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Some(pool) = &state.pool {
+        let query_result = sqlx::query(
+            "SELECT id, platform, title, description, url, is_featured, \"order\" FROM social_links ORDER BY \"order\" ASC"
+        )
+        .fetch_all(pool)
+        .await;
+
+        if let Ok(rows) = query_result {
+            let mut list = Vec::new();
+            for r in rows {
+                let id: String = r.try_get("id").unwrap_or_default();
+                let platform: String = r.try_get("platform").unwrap_or_default();
+                let title: String = r.try_get("title").unwrap_or_default();
+                let description: Option<String> = r.try_get("description").ok();
+                let url: String = r.try_get("url").unwrap_or_default();
+                let is_featured: bool = r.try_get("is_featured").unwrap_or(false);
+
+                let default_desc = match platform.to_lowercase().as_str() {
+                    "github" => "Explore open-source repositories, Rust microservices, and web experiments.".to_string(),
+                    "linkedin" => "Connect for professional opportunities, engineering collaborations, and partnerships.".to_string(),
+                    "twitter" => "Follow tech thoughts, developer updates, and engineering insights.".to_string(),
+                    _ => "Official social and contact channel.".to_string(),
+                };
+
+                list.push(json!({
+                    "id": id,
+                    "platform": platform,
+                    "title": title,
+                    "description": description.unwrap_or(default_desc),
+                    "url": url,
+                    "is_featured": is_featured
+                }));
+            }
+            return (StatusCode::OK, Json(json!(list)));
+        }
+    }
+
+    if let Some(snap) = get_snapshot() {
+        if let Some(links) = snap.get("socialLinks") {
+            return (StatusCode::OK, Json(links.clone()));
+        }
+    }
+
+    (StatusCode::OK, Json(json!([])))
+}
+
+async fn trending_handler(State(_state): State<Arc<AppState>>) -> impl IntoResponse {
+    if let Ok(content) = std::fs::read_to_string("public/trending-tech.json") {
+        if let Ok(val) = serde_json::from_str::<Value>(&content) {
+            return (StatusCode::OK, Json(val));
+        }
+    }
+
+    (
+        StatusCode::OK,
+        Json(json!({
+            "status": "LIVE_SYNC",
+            "source": "GitHub Search API",
+            "headline": "Autonomous AI & Rust Systems Architecture",
+            "metric": "▲ 240 PTS",
+            "spec": "TECH WIRE // LIVE: Autonomous AI & Rust Systems Architecture",
+            "viral_repo": "openclaw/openclaw",
+            "repo_metric": "★ 393.6k",
+            "repo_spec": "VIRAL REPO // openclaw/openclaw"
+        })),
+    )
 }

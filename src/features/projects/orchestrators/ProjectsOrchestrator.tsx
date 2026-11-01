@@ -6,16 +6,21 @@ import ProjectCard from '../components/ProjectCard';
 
 export default function ProjectsOrchestrator() {
   const t = useTranslations();
-  const { projects, loading } = useProjectsData();
+  const { projects, profile, loading } = useProjectsData();
+
+  const projectSpec = projects.length > 0
+    ? `SPEC: ${projects.length} PRODUCTION DEPLOYMENTS`
+    : 'SPEC: PRODUCTION DEPLOYMENTS';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip with Live GitHub Activity */}
       <TelemetryHeader
-        systemCode="SYS // ARCHIVE [03]"
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
-        spec={t('telemetry.projects_spec') || 'SPEC: PRODUCTION DEPLOYMENTS'}
-        engine={t('telemetry.projects_engine') || 'REGISTRY CLUSTER ACTIVE'}
+        systemCode="SYS // ARCHIVE [04]"
+        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · REGISTRY ONLINE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
+        spec={projectSpec}
+        engine={t('telemetry.projects_engine') || '1,957 COMMITS ACTIVE'}
+        liveFeed="github"
       />
 
       {/* Header */}
@@ -28,20 +33,28 @@ export default function ProjectsOrchestrator() {
             {t('projects.title') || 'Projects'}
           </h1>
           <p className="text-sm sm:text-base text-black/70 dark:text-white/70 max-w-xl">
-            {t('projects.subtitle') || 'A selection of my professional work and personal projects.'}
+            {t('projects.subtitle') || 'A selection of things I have built, open-source projects, and client work.'}
           </p>
         </div>
         <div className="font-mono text-[10px] font-bold text-black dark:text-white">
-          {projects.length} PROJECTS DISPLAYED
+          {projects.length} {projects.length === 1 ? 'PROJECT' : 'PROJECTS'} INDEXED
         </div>
       </div>
 
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project, i) => (
-          <ProjectCard key={project.id} project={project} index={i} />
-        ))}
-      </div>
+      {/* Grid */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2].map((i) => (
+            <div key={i} className="h-64 border border-line bg-black/5 dark:bg-white/5 animate-pulse" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.id} project={project} index={i} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

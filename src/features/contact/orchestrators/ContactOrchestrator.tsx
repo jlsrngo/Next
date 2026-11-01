@@ -3,60 +3,55 @@ import { useTranslations } from 'next-intl';
 import { useContactData } from '../hooks/useContactData';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import ContactCard from '../components/ContactCard';
-import CornerCrosses from '@/components/ui/CornerCrosses';
 
 export default function ContactOrchestrator() {
   const t = useTranslations();
-  const { socialLinks } = useContactData();
+  const { socialLinks, profile, loading } = useContactData();
 
-  const featuredLinks = socialLinks.filter(l => l.is_featured);
-  const otherLinks = socialLinks.filter(l => !l.is_featured);
+  const channelSpec = socialLinks.length > 0
+    ? `SPEC: ${socialLinks.length} SECURE CHANNELS ACTIVE`
+    : 'SPEC: SECURE TRANSMISSION';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip (Dynamic from DB) */}
       <TelemetryHeader
         systemCode="SYS // RELAY [06]"
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
-        spec={t('telemetry.contact_spec') || 'SPEC: SECURE TRANSMISSION'}
+        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · RELAY ONLINE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
+        spec={channelSpec}
         engine={t('telemetry.contact_engine') || 'SIGNAL NETWORK READY'}
       />
 
       {/* Top Header */}
-      <div className="border-b border-line pb-4 animate-fade-in">
-        <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
-          [ 06 // TRANSMISSION & NETWORK ]
+      <div className="border-b border-line pb-4 animate-fade-in flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
+            [ 06 // TRANSMISSION & NETWORK ]
+          </div>
+          <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white">
+            {t('contact.title') || 'Contact'}
+          </h1>
+          <p className="text-sm sm:text-base text-black/70 dark:text-white/70 max-w-xl">
+            {t('contact.subtitle') || 'Feel free to reach out for collaborations, questions, or just to say hi.'}
+          </p>
         </div>
-        <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white">
-          {t('contact.title') || 'Contact'}
-        </h1>
-        <p className="text-sm sm:text-base text-black/70 dark:text-white/70 mt-1">
-          {t('contact.find_me') || 'Find me on social media and professional networks.'}
-        </p>
+        <div className="font-mono text-[10px] font-bold text-black dark:text-white">
+          {socialLinks.length} {socialLinks.length === 1 ? 'CHANNEL' : 'CHANNELS'} INDEXED
+        </div>
       </div>
 
-      {/* Featured Direct Cards */}
-      <div className="space-y-5">
-        {featuredLinks.map((link, i) => (
-          <ContactCard key={link.id} link={link} index={i} isFull />
-        ))}
-      </div>
-
-      {/* Other Channels Grid */}
-      {otherLinks.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {otherLinks.map((link, i) => (
-            <ContactCard key={link.id} link={link} index={featuredLinks.length + i} />
+      {/* Grid */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-28 border border-line bg-black/5 dark:bg-white/5 animate-pulse" />
           ))}
         </div>
-      )}
-
-      {socialLinks.length === 0 && (
-        <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-10 text-center">
-          <CornerCrosses />
-          <p className="font-mono text-xs uppercase font-bold text-black/70 dark:text-white/70">
-            {t('common.no_data') || 'No contact channels available.'}
-          </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {socialLinks.map((link, i) => (
+            <ContactCard key={link.id} link={link} index={i} />
+          ))}
         </div>
       )}
     </div>

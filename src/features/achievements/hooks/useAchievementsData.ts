@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { profileService } from '@/services/api';
+import { profileService, achievementsService } from '@/services/api';
 
 export interface AchievementItem {
   id: number | string;
@@ -15,44 +15,20 @@ export interface AchievementItem {
   order_index?: number;
 }
 
-const DEFAULT_ACHIEVEMENTS: AchievementItem[] = [
-  {
-    id: 1,
-    title: 'Full-Stack Engineering Excellence',
-    issuer: 'Independent Systems',
-    category: 'Certification',
-    date: '2024-05-15',
-    description: 'Mastery in building high-performance Swiss technical web applications with Rust and modern frontend stacks.',
-    credential_id: 'CERT-AC-2024-001',
-    credential_url: 'https://juliosiringoringo.space',
-    image_url: null,
-    is_featured: true,
-    order_index: 0,
-  },
-  {
-    id: 2,
-    title: 'Rust High-Performance Architecture',
-    issuer: 'Rust Foundation Community',
-    category: 'Award',
-    date: '2024-08-20',
-    description: 'Recognition for building sub-millisecond asynchronous API microservices with Axum and Tokio.',
-    credential_id: 'RUST-AXUM-2024-99',
-    credential_url: undefined,
-    image_url: null,
-    is_featured: true,
-    order_index: 1,
-  },
-];
-
 export function useAchievementsData() {
-  const [achievements, setAchievements] = useState<AchievementItem[]>(DEFAULT_ACHIEVEMENTS);
+  const [achievements, setAchievements] = useState<AchievementItem[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    profileService.getProfile()
-      .then(data => setProfile(data))
-      .catch(() => {})
+    Promise.all([
+      achievementsService.getAchievements().catch(() => []),
+      profileService.getProfile().catch(() => null),
+    ])
+      .then(([achievementsData, profileData]) => {
+        setAchievements(achievementsData || []);
+        setProfile(profileData);
+      })
       .finally(() => setLoading(false));
   }, []);
 

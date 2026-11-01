@@ -13,12 +13,13 @@ export default function AboutOrchestrator() {
 
   return (
     <div className="py-6 md:py-10 space-y-10">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip with Live Tech News Feed */}
       <TelemetryHeader
         systemCode="SYS // DOSSIER [02]"
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · VERIFIED NODE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
         spec={t('telemetry.about_spec') || 'SPEC: COGNITIVE PROFILE'}
         engine={t('telemetry.about_engine') || 'NEURAL INDEX ONLINE'}
+        liveFeed="news"
       />
 
       {/* Header with Technical Line */}
@@ -34,7 +35,7 @@ export default function AboutOrchestrator() {
         </p>
       </div>
 
-      {/* Quick Specs HUD Grid */}
+      {/* Quick Specs HUD Grid (100% Dynamic from DB) */}
       <QuickSpecsHud profile={profile} />
 
       {/* Biography & Signature Section */}

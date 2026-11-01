@@ -101,11 +101,11 @@
   .skill-icon-surface,
   .skill-icon-backdrop {
     border-radius: 0px !important;
-    border: 1px solid rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--line);
   }
   .dark .skill-icon-surface,
   .dark .skill-icon-backdrop {
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--line);
   }
 
   *::-webkit-scrollbar {
@@ -558,7 +558,7 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
 .dark .theme-monochrome .group:hover,
 .dark[data-theme-style="monochrome"] .group:hover,
 .dark [data-theme-style="monochrome"] .group:hover {
-  border-color: #3f3f46 !important;
+  border-color: var(--line-strong) !important;
 }
 
 /* Flat monochrome skill icons: maintain tilted background card effect with flat monochrome styling & subtle gray border */
@@ -567,7 +567,7 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
   display: block !important;
   background-image: none !important;
   background-color: #e4e4e7 !important;
-  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+  border: 1px solid var(--line) !important;
 }
 
 .dark.theme-monochrome .skill-icon-backdrop,
@@ -577,13 +577,13 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
   display: block !important;
   background-image: none !important;
   background-color: #18181b !important;
-  border: 1px solid #27272a !important;
+  border: 1px solid var(--line) !important;
 }
 
 .theme-monochrome .skill-icon-surface,
 [data-theme-style="monochrome"] .skill-icon-surface {
   background-color: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  border: 1px solid var(--line) !important;
 }
 
 .dark.theme-monochrome .skill-icon-surface,
@@ -591,32 +591,32 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
 .dark .theme-monochrome .skill-icon-surface,
 .dark [data-theme-style="monochrome"] .skill-icon-surface {
   background-color: #0c0c0e !important;
-  border: 1px solid #27272a !important;
+  border: 1px solid var(--line) !important;
 }
 
 /* Keep subtle border on hover without harsh white outline */
 .theme-monochrome .group:hover .skill-icon-backdrop,
 [data-theme-style="monochrome"] .group:hover .skill-icon-backdrop {
-  border-color: rgba(0, 0, 0, 0.35) !important;
+  border-color: var(--line-strong) !important;
 }
 
 .dark.theme-monochrome .group:hover .skill-icon-backdrop,
 .dark[data-theme-style="monochrome"] .group:hover .skill-icon-backdrop,
 .dark .theme-monochrome .group:hover .skill-icon-backdrop,
 .dark [data-theme-style="monochrome"] .group:hover .skill-icon-backdrop {
-  border-color: #3f3f46 !important;
+  border-color: var(--line-strong) !important;
 }
 
 .theme-monochrome .group:hover .skill-icon-surface,
 [data-theme-style="monochrome"] .group:hover .skill-icon-surface {
-  border-color: rgba(0, 0, 0, 0.45) !important;
+  border-color: var(--line-strong) !important;
 }
 
 .dark.theme-monochrome .group:hover .skill-icon-surface,
 .dark[data-theme-style="monochrome"] .group:hover .skill-icon-surface,
 .dark .theme-monochrome .group:hover .skill-icon-surface,
 .dark [data-theme-style="monochrome"] .group:hover .skill-icon-surface {
-  border-color: #3f3f46 !important;
+  border-color: var(--line-strong) !important;
 }
 
 /* Flat badges & tags */
@@ -624,7 +624,7 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
 [data-theme-style="monochrome"] .bg-accent\/10 {
   background-color: #f4f4f5 !important;
   color: #09090b !important;
-  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  border: 1px solid var(--line) !important;
 }
 
 .dark.theme-monochrome .bg-accent\/10,
@@ -633,7 +633,7 @@ html:not(.dark)[data-theme-style="monochrome"] .bg-\[var\(--accent\)\] * {
 .dark [data-theme-style="monochrome"] .bg-accent\/10 {
   background-color: #18181b !important;
   color: #d4d4d8 !important;
-  border: 1px solid #27272a !important;
+  border: 1px solid var(--line) !important;
 }
 
 /* Sidebar in monochrome flat */
@@ -642,7 +642,7 @@ html:not(.dark) [data-theme-style="monochrome"] aside,
 html:not(.dark).theme-monochrome aside,
 html:not(.dark)[data-theme-style="monochrome"] aside {
   background-color: #fafafa !important;
-  border-color: rgba(0, 0, 0, 0.45) !important;
+  border-color: var(--line-strong) !important;
 }
 
 .dark.theme-monochrome aside,
@@ -773,7 +773,7 @@ svg.lucide {
 .dark .theme-monochrome .border-slate-700,
 .dark[data-theme-style="monochrome"] .border-slate-700,
 .dark [data-theme-style="monochrome"] .border-slate-700 {
-  border-color: #3f3f46 !important;
+  border-color: var(--line-strong) !important;
 }
 
 /* Hover borders */
@@ -781,7 +781,7 @@ svg.lucide {
 .dark .theme-monochrome .dark\:hover\:border-slate-700:hover,
 .dark[data-theme-style="monochrome"] .dark\:hover\:border-slate-700:hover,
 .dark [data-theme-style="monochrome"] .dark\:hover\:border-slate-700:hover {
-  border-color: #3f3f46 !important;
+  border-color: var(--line-strong) !important;
 }
 
 /* Overview stat icon containers & badges in dark monochrome */
@@ -790,7 +790,7 @@ svg.lucide {
 .dark[data-theme-style="monochrome"] [class*="dark:bg-"][class*="/10"],
 .dark [data-theme-style="monochrome"] [class*="dark:bg-"][class*="/10"] {
   background-color: #18181b !important;
-  border: 1px solid #27272a !important;
+  border: 1px solid var(--line) !important;
 }
 
 /* Colored stat icon text into crisp light zinc */

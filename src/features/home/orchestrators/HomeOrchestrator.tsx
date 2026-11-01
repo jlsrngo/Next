@@ -12,12 +12,13 @@ export default function HomeOrchestrator() {
 
   return (
     <div className="py-6 md:py-10 space-y-10 relative">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip with Live Realtime Clock & Coordinates */}
       <TelemetryHeader
         sysId="01"
         spec={t('telemetry.home_spec') || 'SPEC: AUTONOMOUS ARCHITECTURE'}
         engine={t('telemetry.home_engine') || 'KERNEL ACTIVE v4.2'}
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        coordinates={profile?.location ? `LAT: 0.7893° S · LON: 113.9213° E · ${profile.location.toUpperCase()}` : 'LAT: 0.7893° S · LON: 113.9213° E'}
+        liveTime={true}
       />
 
       {/* Hero Card */}

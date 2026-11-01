@@ -4,6 +4,8 @@ export interface Profile {
   fullName?: string;
   username?: string | null;
   headline?: string | null;
+  focus?: string | null;
+  runtime?: string | null;
   bio_home?: string | null;
   bio_about?: string | null;
   location?: string | null;

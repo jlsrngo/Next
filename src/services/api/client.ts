@@ -67,6 +67,15 @@ export async function apiClient<T>(endpoint: string, options?: RequestInit): Pro
         } as T;
       }
       if (endpoint.includes('dashboard')) return db.stats as T;
+      if (endpoint.includes('trending')) {
+        return {
+          status: 'SNAPSHOT',
+          source: 'Tech Radar',
+          headline: 'High-Performance Systems with Rust & Axum',
+          metric: 'SYS // NOMINAL',
+          spec: 'TECH WIRE // ACTIVE PIPELINE',
+        } as T;
+      }
     }
   } catch {}
 

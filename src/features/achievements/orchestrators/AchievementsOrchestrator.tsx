@@ -7,17 +7,22 @@ import AchievementDetailModal from '@/components/AchievementDetailModal';
 
 export default function AchievementsOrchestrator() {
   const t = useTranslations();
-  const { achievements } = useAchievementsData();
+  const { achievements, profile, loading } = useAchievementsData();
   const [selected, setSelected] = useState<AchievementItem | null>(null);
+
+  const certProtocol = achievements.length > 0
+    ? `CERT PROTOCOL: ${achievements.length} ATTESTED`
+    : 'CERT PROTOCOL VALIDATED';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip with Live Viral GitHub Repo Wire */}
       <TelemetryHeader
-        systemCode="SYS // CREDENTIAL [05]"
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
+        systemCode="SYS // CREDENTIAL [03]"
+        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · VERIFIED PROTOCOL` : 'LAT: 0.7893° S · LON: 113.9213° E'}
         spec={t('telemetry.achievements_spec') || 'SPEC: VERIFIED ATTESTATION'}
-        engine={t('telemetry.achievements_engine') || 'CERT PROTOCOL VALIDATED'}
+        engine={certProtocol}
+        liveFeed="viral-repo"
       />
 
       {/* Header */}
@@ -34,21 +39,29 @@ export default function AchievementsOrchestrator() {
           </p>
         </div>
         <div className="font-mono text-[10px] font-bold text-black dark:text-white">
-          {achievements.length} AWARDS INDEXED
+          {achievements.length} {achievements.length === 1 ? 'AWARD' : 'AWARDS'} INDEXED
         </div>
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {achievements.map((item, i) => (
-          <AchievementCard
-            key={item.id}
-            item={item}
-            index={i}
-            onSelect={setSelected}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2].map((i) => (
+            <div key={i} className="h-44 border border-line bg-black/5 dark:bg-white/5 animate-pulse" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {achievements.map((item, i) => (
+            <AchievementCard
+              key={item.id}
+              item={item}
+              index={i}
+              onSelect={setSelected}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Modal */}
       {selected && (

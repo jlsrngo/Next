@@ -4,3 +4,6 @@ export * from './skillsService';
 export * from './aboutService';
 export * from './projectsService';
 export * from './dashboardService';
+export * from './achievementsService';
+export * from './socialLinksService';
+export * from './telemetryService';
