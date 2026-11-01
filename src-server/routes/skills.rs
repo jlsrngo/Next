@@ -114,3 +114,4 @@ pub async fn delete_skill_handler(
     }
     (StatusCode::OK, Json(json!({ "success": true })))
 }
+

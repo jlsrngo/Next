@@ -132,3 +132,4 @@ pub async fn delete_education_handler(
     }
     (StatusCode::OK, Json(json!({ "success": true, "deleted": id })))
 }
+

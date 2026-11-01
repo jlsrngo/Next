@@ -123,3 +123,4 @@ pub async fn trending_handler(State(_state): State<SharedState>) -> impl IntoRes
         })),
     )
 }
+

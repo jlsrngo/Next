@@ -80,3 +80,4 @@ pub async fn github_contributions_handler() -> impl IntoResponse {
         })),
     )
 }
+

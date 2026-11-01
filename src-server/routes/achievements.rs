@@ -131,3 +131,4 @@ pub async fn delete_achievement_handler(
     }
     (StatusCode::OK, Json(json!({ "success": true, "deleted": id })))
 }
+

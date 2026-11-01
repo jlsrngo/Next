@@ -124,3 +124,4 @@ pub async fn delete_experience_handler(
     }
     (StatusCode::OK, Json(json!({ "success": true, "deleted": id })))
 }
+

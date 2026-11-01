@@ -115,3 +115,4 @@ pub async fn update_profile_handler(
 
     (StatusCode::OK, Json(json!({ "success": true, "message": "Profile updated successfully" })))
 }
+

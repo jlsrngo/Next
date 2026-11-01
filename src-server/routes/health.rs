@@ -29,3 +29,4 @@ pub async fn stats_handler(State(state): State<SharedState>) -> impl IntoRespons
         })),
     )
 }
+

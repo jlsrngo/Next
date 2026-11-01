@@ -56,6 +56,13 @@ export default function AdminProjectsPage() {
     fetchProjects();
   }, []);
 
+  const getTechArray = (p: Project): string[] => {
+    const val = p.techStack ?? p.tech_stack;
+    if (!val) return [];
+    if (Array.isArray(val)) return val;
+    return String(val).split(',').map((s) => s.trim()).filter(Boolean);
+  };
+
   const openCreateModal = () => {
     setEditingProject(null);
     setFormTitle('');
@@ -72,9 +79,9 @@ export default function AdminProjectsPage() {
     setEditingProject(p);
     setFormTitle(p.title || '');
     setFormDescription(p.description || '');
-    setFormTechStack((p.techStack || []).join(', '));
-    setFormLiveUrl(p.liveUrl || '');
-    setFormGithubUrl(p.githubUrl || '');
+    setFormTechStack(getTechArray(p).join(', '));
+    setFormLiveUrl(p.liveUrl ?? p.live_url ?? '');
+    setFormGithubUrl(p.githubUrl ?? p.github_url ?? '');
     setFormFeatured(Boolean(p.featured));
     setFormOrder(p.order ?? 0);
     setIsModalOpen(true);
@@ -157,10 +164,11 @@ export default function AdminProjectsPage() {
   };
 
   const filtered = projects.filter((p) => {
+    const techList = getTechArray(p);
     const matchesSearch =
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       (p.description && p.description.toLowerCase().includes(search.toLowerCase())) ||
-      (p.techStack && p.techStack.some((t) => t.toLowerCase().includes(search.toLowerCase())));
+      techList.some((t: string) => t.toLowerCase().includes(search.toLowerCase()));
     if (!matchesSearch) return false;
     if (filterFeatured === 'featured') return p.featured;
     if (filterFeatured === 'normal') return !p.featured;
@@ -299,93 +307,99 @@ export default function AdminProjectsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
-                {filtered.map((proj, idx) => (
-                  <tr key={proj.id} className="hover:bg-bg-sunken/60 transition-colors">
-                    <td className="py-3 px-4 text-faint align-top font-bold">
-                      {String(proj.order ?? idx + 1).padStart(2, '0')}
-                    </td>
-                    <td className="py-3 px-4 align-top max-w-sm">
-                      <div className="font-bold text-ink text-sm flex items-center gap-2">
-                        <span>{proj.title}</span>
-                        {proj.featured && (
-                          <span className="border border-line bg-bg px-1.5 py-0.5 text-[9px] uppercase font-bold text-ink">
-                            ★ FEATURED
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-faint text-xs mt-1 line-clamp-2 font-sans">{proj.description}</p>
-                    </td>
-                    <td className="py-3 px-4 align-top">
-                      <div className="flex flex-wrap gap-1 max-w-xs">
-                        {proj.techStack?.map((t) => (
-                          <span
-                            key={t}
-                            className="border border-line bg-bg px-1.5 py-0.5 text-[10px] uppercase text-ink"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 align-top">
-                      <span
-                        className={`inline-block px-2 py-0.5 text-[10px] uppercase font-bold border ${
-                          proj.featured
-                            ? 'border-line bg-invert-bg text-invert-fg'
-                            : 'border-line bg-bg text-faint'
-                        }`}
-                      >
-                        {proj.featured ? 'PRIORITY' : 'INDEXED'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 align-top text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        {proj.githubUrl && (
-                          <a
-                            href={proj.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-                            title="View GitHub"
-                          >
-                            <Github size={13} />
-                          </a>
-                        )}
-                        {proj.liveUrl && (
-                          <a
-                            href={proj.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-                            title="View Live"
-                          >
-                            <ExternalLink size={13} />
-                          </a>
-                        )}
-                        <button
-                          onClick={() => openEditModal(proj)}
-                          className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-1 text-ink transition-all font-mono text-[10px] uppercase font-bold"
-                          title="Edit Project"
-                        >
-                          <Edit3 size={11} />
-                          <span>EDIT</span>
-                        </button>
-                        <button
-                          onClick={() => handleDelete(proj.id, proj.title)}
-                          disabled={deletingId === proj.id}
-                          className="p-1.5 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all"
-                          title="Delete Project"
-                        >
-                          {deletingId === proj.id ? (
-                            <Loader2 size={13} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={13} />
+                {filtered.map((proj, idx) => {
+                  const techList = getTechArray(proj);
+                  const github = proj.githubUrl ?? proj.github_url;
+                  const live = proj.liveUrl ?? proj.live_url;
+
+                  return (
+                    <tr key={proj.id} className="hover:bg-bg-sunken/60 transition-colors">
+                      <td className="py-3 px-4 text-faint align-top font-bold">
+                        {String(proj.order ?? idx + 1).padStart(2, '0')}
+                      </td>
+                      <td className="py-3 px-4 align-top max-w-sm">
+                        <div className="font-bold text-ink text-sm flex items-center gap-2">
+                          <span>{proj.title}</span>
+                          {proj.featured && (
+                            <span className="border border-line bg-bg px-1.5 py-0.5 text-[9px] uppercase font-bold text-ink">
+                              ★ FEATURED
+                            </span>
                           )}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        </div>
+                        <p className="text-faint text-xs mt-1 line-clamp-2 font-sans">{proj.description}</p>
+                      </td>
+                      <td className="py-3 px-4 align-top">
+                        <div className="flex flex-wrap gap-1 max-w-xs">
+                          {techList.map((t: string) => (
+                            <span
+                              key={t}
+                              className="border border-line bg-bg px-1.5 py-0.5 text-[10px] uppercase text-ink"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 align-top">
+                        <span
+                          className={`inline-block px-2 py-0.5 text-[10px] uppercase font-bold border ${
+                            proj.featured
+                              ? 'border-line bg-invert-bg text-invert-fg'
+                              : 'border-line bg-bg text-faint'
+                          }`}
+                        >
+                          {proj.featured ? 'PRIORITY' : 'INDEXED'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 align-top text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {github && (
+                            <a
+                              href={github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
+                              title="View GitHub"
+                            >
+                              <Github size={13} />
+                            </a>
+                          )}
+                          {live && (
+                            <a
+                              href={live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
+                              title="View Live"
+                            >
+                              <ExternalLink size={13} />
+                            </a>
+                          )}
+                          <button
+                            onClick={() => openEditModal(proj)}
+                            className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-1 text-ink transition-all font-mono text-[10px] uppercase font-bold"
+                            title="Edit Project"
+                          >
+                            <Edit3 size={11} />
+                            <span>EDIT</span>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(String(proj.id), proj.title)}
+                            disabled={deletingId === proj.id}
+                            className="p-1.5 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all"
+                            title="Delete Project"
+                          >
+                            {deletingId === proj.id ? (
+                              <Loader2 size={13} className="animate-spin" />
+                            ) : (
+                              <Trash2 size={13} />
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

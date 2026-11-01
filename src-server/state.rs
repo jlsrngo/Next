@@ -30,3 +30,4 @@ pub fn get_snapshot() -> Option<Value> {
     }
     None
 }
+
