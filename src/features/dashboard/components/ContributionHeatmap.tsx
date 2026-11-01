@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/context/ThemeContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
-import { HEATMAP_PALETTE, getHeatmapCellColor, HEATMAP_LEGEND_LEVELS } from '@/constants/palette';
+import { getHeatmapCellColor, HEATMAP_LEGEND_LEVELS } from '@/constants/palette';
 import type { GitHubData } from '../hooks/useDashboardData';
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -127,12 +127,12 @@ export default function ContributionHeatmap({ github, weeks }: ContributionHeatm
       <div className="flex items-center justify-between mt-4 pt-3 border-t border-line text-[10px] font-mono text-black/60 dark:text-white/60">
         <span>LESS</span>
         <div className="flex items-center gap-1">
-          {HEATMAP_LEGEND_LEVELS.map((lvl) => (
+          {HEATMAP_LEGEND_LEVELS.map((color, idx) => (
             <div
-              key={lvl}
-              className="w-[10px] h-[10px] border border-black/15"
+              key={idx}
+              className={`w-[10px] h-[10px] ${!color ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10' : 'border border-black/15'}`}
               style={{
-                backgroundColor: lvl === 0 ? undefined : (isMono ? '#101014' : HEATMAP_PALETTE[lvl]),
+                backgroundColor: !color ? undefined : (isMono ? (idx === 4 ? '#ffffff' : '#32343d') : color),
               }}
             />
           ))}

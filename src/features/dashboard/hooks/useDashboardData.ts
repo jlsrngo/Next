@@ -18,6 +18,7 @@ export interface GitHubData {
   weeks: ContributionDay[][];
   top_languages: { name: string; color: string; count: number }[];
   username: string;
+  updated_at?: string;
 }
 
 let memoryGithubCache: GitHubData | null = null;
