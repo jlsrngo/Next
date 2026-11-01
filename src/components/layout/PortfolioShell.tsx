@@ -41,12 +41,12 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
         <SidebarWrapper profile={profile} />
         <main
           ref={mainRef}
-          className="flex-1 h-screen overflow-y-auto relative scroll-smooth px-6 sm:px-10 py-6 sm:py-10 pr-16 md:pr-20"
+          className="flex-1 h-screen overflow-y-auto relative scroll-smooth px-4 sm:px-8 md:px-10 pt-16 sm:pt-20 md:pt-4 pb-12 md:pb-16 md:pr-20"
         >
-          <div className="w-full">{children}</div>
+          <div className="w-full max-w-4xl lg:max-w-5xl mx-auto">{children}</div>
         </main>
 
-        {/* Technical Coordinate Scroll Ruler - Pinned to right edge of main */}
+        {/* Technical Coordinate Scroll Ruler - Pinned to right edge of main on md+ screens */}
         <TechnicalRuler scrollContainerRef={mainRef} />
       </div>
     </div>
