@@ -201,7 +201,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
 
                         {isAuthenticated ? (
                             <Link
-                                href="/dashboard"
+                                href="/admin"
                                 className="relative w-8 h-8 rounded-none border border-line overflow-hidden hover:border-ink transition-colors group flex items-center justify-center bg-bg-sunken"
                                 title="Dashboard"
                             >
