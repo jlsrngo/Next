@@ -5,3 +5,4 @@ Setiap kali asisten selesai melakukan modifikasi, perbaikan kode, atau fitur bar
 2. **Auto-Commit**: Lakukan staging dan commit semua file yang berubah dengan pesan commit yang jelas dan deskriptif (format conventional commits: `feat`, `fix`, `refactor`, `docs`, dll.).
 3. **Auto-Push**: Selalu langsung dorong (push) perubahan ke repositori remote (`git push origin main`).
 4. **Transparent Response**: Sertakan hash commit atau tautan GitHub commit di akhir respon kepada user.
+

@@ -58,125 +58,110 @@ function getPageTitle(pathname: string, t: (key: string) => string): string {
   const page = segments[segments.length - 1]
   const parent = segments.length > 2 ? segments[segments.length - 2] : ''
 
-  const titleMap: Record<string, string> = {
-    profile: 'admin.profile',
-    skills: 'admin.skills',
-    projects: 'admin.projects',
-    experiences: 'admin.experiences',
-    education: 'admin.education',
-    achievements: 'admin.achievements',
-    'social-links': 'admin.social_links',
-    changelog: 'admin.changelog',
-    theme: 'admin.theme',
-    account: 'admin.account',
+  if (segments.length === 2) {
+    const key = `admin.${page}`
+    const translated = t(key)
+    return translated !== key ? translated : page.charAt(0).toUpperCase() + page.slice(1)
   }
 
-  if (titleMap[page]) return t(titleMap[page])
-  if (page === 'new') return `${t('admin.new_item')} ${parent.charAt(0).toUpperCase() + parent.slice(1).replace(/-/g, ' ')}`
-  if (page === 'edit') return `${t('admin.edit_item')} ${parent.charAt(0).toUpperCase() + parent.slice(1).replace(/-/g, ' ')}`
-  return page.charAt(0).toUpperCase() + page.slice(1).replace(/-/g, ' ')
+  if (page === 'new') {
+    const parentKey = `admin.${parent}`
+    const parentName = t(parentKey) !== parentKey ? t(parentKey) : parent
+    return `${t('admin.add_new')} ${parentName}`
+  }
+
+  if (segments[segments.length - 1] === 'edit' || segments[segments.length - 2] === 'edit') {
+    const mainSection = segments[1]
+    const sectionKey = `admin.${mainSection}`
+    const sectionName = t(sectionKey) !== sectionKey ? t(sectionKey) : mainSection
+    return `${t('admin.edit')} ${sectionName}`
+  }
+
+  return page.charAt(0).toUpperCase() + page.slice(1)
 }
 
-export default function DashboardShell({
-  children,
-  email,
-  profileName,
-  profileAvatar,
-  profileAccent,
-}: {
+interface DashboardShellProps {
   children: React.ReactNode
   email?: string | null
   profileName?: string | null
   profileAvatar?: string | null
   profileAccent?: string | null
-}) {
+}
+
+export default function DashboardShell({
+  children,
+  email,
+  profileName: initialName,
+  profileAvatar: initialAvatar,
+  profileAccent: initialAccent,
+}: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const { isDark, toggle } = useTheme()
   const { data: session, status } = useSession()
-  const router = useRouter()
+  const [latestVersion, setLatestVersion] = useState<{ version: string } | null>(null)
 
-  const latestVersion = getLatestVersion()
+  const [fullName, setFullName] = useState<string | null>(initialName ?? null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(initialAvatar ?? null)
 
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(
-    profileAvatar ? optimizeCloudinaryUrl(profileAvatar) : null
-  )
-  const [fullName, setFullName] = useState<string>(profileName || '')
-  const [locale, setLocale] = useState<'en' | 'id'>('en')
-
-  const t = useMemo(() => {
-    const messages = locale === 'id' ? id : en
-    return (key: string): string => {
-      const parts = key.split('.')
-      let val: any = messages
-      for (const p of parts) {
-        val = val?.[p]
-      }
-      return typeof val === 'string' ? val : key
-    }
-  }, [locale])
+  const [locale, setLocale] = useState<string>('en')
 
   useEffect(() => {
-    const saved = localStorage.getItem('portfolio_locale') as 'en' | 'id' | null
-    if (saved === 'en' || saved === 'id') {
-      setLocale(saved)
-      document.cookie = `locale=${saved};path=/;max-age=31536000`
-    }
+    const saved = localStorage.getItem('portfolio_locale')
+    if (saved) setLocale(saved)
+  }, [])
 
-    const applyTheme = () => {
-      const savedColor = localStorage.getItem('accent_color')
-      const savedStyle = localStorage.getItem('portfolio_theme_style')
-      const isMono = savedStyle === 'monochrome' || savedColor === '#000000' || savedColor === 'monochrome' || profileAccent === '#000000' || profileAccent === 'monochrome'
+  const messages = useMemo(() => (locale === 'id' ? id : en), [locale])
 
-      if (isMono) {
-        document.documentElement.classList.add('theme-monochrome')
-        document.documentElement.setAttribute('data-theme-style', 'monochrome')
-        document.documentElement.style.setProperty('--accent', isDark ? '#ffffff' : '#09090b')
+  const t = (key: string): string => {
+    const keys = key.split('.')
+    let current: any = messages
+    for (const k of keys) {
+      if (current && typeof current === 'object' && k in current) {
+        current = current[k]
       } else {
-        document.documentElement.classList.remove('theme-monochrome')
-        document.documentElement.removeAttribute('data-theme-style')
-        const color = savedColor || profileAccent || '#00c896'
-        document.documentElement.style.setProperty('--accent', color)
+        return key
       }
     }
+    return typeof current === 'string' ? current : key
+  }
 
-    applyTheme()
+  useEffect(() => {
+    getLatestVersion()
+      .then((ver) => setLatestVersion(ver))
+      .catch(() => {})
+  }, [])
 
-    const onLocaleChanged = () => {
-      const saved = localStorage.getItem('portfolio_locale') as 'en' | 'id' | null
-      if (saved === 'en' || saved === 'id') {
-        setLocale(saved)
-        document.cookie = `locale=${saved};path=/;max-age=31536000`
-      }
-    }
+  useEffect(() => {
+    fetch('/api/profile')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          setFullName(data.fullName || data.name || null)
+          setAvatarUrl(optimizeCloudinaryUrl(data.avatarUrl || data.avatar_url))
+        }
+      })
+      .catch(() => {})
+  }, [pathname])
 
-    const onThemeStyleChanged = () => {
-      applyTheme()
-    }
-
-    window.addEventListener('locale-changed', onLocaleChanged)
-    window.addEventListener('theme-style-changed', onThemeStyleChanged)
-    return () => {
-      window.removeEventListener('locale-changed', onLocaleChanged)
-      window.removeEventListener('theme-style-changed', onThemeStyleChanged)
-    }
-  }, [profileAccent, isDark])
-
-  // Inactivity auto-logout (5 min) + browser close logout via sendBeacon
+  // Inactivity auto-logout (30 minutes)
+  const isSigningOut = useRef(false)
   useEffect(() => {
     if (status !== 'authenticated') return
 
-    const INACTIVITY_LIMIT = 5 * 60 * 1000 // 5 minutes
-    let timer: ReturnType<typeof setTimeout>
+    let timer: NodeJS.Timeout
     let broadcastChannel: BroadcastChannel | null = null
 
     const doSignOut = () => {
+      if (isSigningOut.current) return
+      isSigningOut.current = true
       signOut({ callbackUrl: '/id' })
     }
 
     const resetTimer = () => {
       clearTimeout(timer)
-      timer = setTimeout(doSignOut, INACTIVITY_LIMIT)
+      timer = setTimeout(doSignOut, 30 * 60 * 1000)
     }
 
     let lastReset = 0
@@ -192,7 +177,6 @@ export default function DashboardShell({
     activityEvents.forEach((e) => window.addEventListener(e, throttledReset, { passive: true }))
     resetTimer()
 
-    // Browser close: sendBeacon fires even during page unload
     const handleBeforeUnload = () => {
       try {
         broadcastChannel?.postMessage('logout')
@@ -201,7 +185,6 @@ export default function DashboardShell({
       } catch {}
     }
 
-    // Listen for logout signals from other tabs
     try {
       broadcastChannel = new BroadcastChannel('auth')
       broadcastChannel.onmessage = (ev) => {
@@ -228,51 +211,57 @@ export default function DashboardShell({
 
   if (status === 'loading') {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-[#09090b]">
-        <Loader2 className="h-8 w-8 animate-spin text-[var(--accent)]" />
+      <div className="flex h-screen items-center justify-center bg-bg text-ink">
+        <Loader2 className="h-8 w-8 animate-spin text-ink" />
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#09090b]">
+    <div className="flex h-screen overflow-hidden bg-bg text-ink font-sans blueprint-grid select-none">
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Swiss Brutalist Admin Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-white dark:bg-[#09090b] transition-transform duration-150 ease-in-out lg:translate-x-0 lg:static lg:z-auto border-r border-slate-200 dark:border-[#27272a] ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-bg-raised border-r border-line transition-transform duration-150 ease-in-out lg:translate-x-0 lg:static lg:z-auto ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Logo */}
-        <div className="flex h-16 items-center gap-3 px-5 border-b border-slate-200 dark:border-[#27272a] shrink-0">
-          <img src="/icon.svg" alt="Logo" className="h-8 w-8 object-contain dark:brightness-0 dark:invert" />
+        {/* Header HUD / Logo */}
+        <div className="flex h-16 items-center gap-3 px-5 border-b border-line shrink-0 bg-bg-raised">
+          <div className="w-8 h-8 border border-line bg-bg flex items-center justify-center font-mono font-bold text-xs">
+            SYS
+          </div>
           <div className="flex-1 min-w-0">
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">Portfolio <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-normal">v{latestVersion?.version || '1.0.0'}</span></span>
-            <span className="block text-[11px] text-slate-500 dark:text-zinc-400">{t('admin.panel_title')}</span>
+            <span className="text-sm font-display font-bold tracking-tight text-ink block truncate">
+              CONTROL PANEL
+            </span>
+            <span className="font-mono text-[9px] uppercase tracking-widest text-faint block">
+              v{latestVersion?.version || '1.0.0'} // DAEMON
+            </span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="rounded-none p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white lg:hidden"
+            className="p-1 border border-line text-ink hover:bg-bg-sunken lg:hidden"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
-          <ul className="space-y-0.5">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4 no-scrollbar">
+          <ul className="space-y-1">
             {navItems.map((item, idx) => {
               if ('divider' in item) {
                 return (
-                  <li key={idx} className="pt-4 pb-2">
-                    <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-zinc-500 font-mono">
-                      {idx === 1 ? t('admin.content') : t('admin.settings')}
+                  <li key={idx} className="pt-3 pb-1 border-b border-line/40">
+                    <span className="px-3 text-[9px] font-mono font-bold uppercase tracking-widest text-faint">
+                      {idx === 1 ? '[ 01 // CONTENT MATRICES ]' : '[ 02 // CONFIGURATION ]'}
                     </span>
                   </li>
                 )
@@ -284,15 +273,15 @@ export default function DashboardShell({
                   <Link
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium transition-all ${
+                    className={`flex items-center gap-2.5 px-3 py-2 text-xs font-mono tracking-wider uppercase transition-all border ${
                       active
-                        ? 'bg-invert-bg text-invert-fg'
-                        : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white'
+                        ? 'bg-invert-bg text-invert-fg border-line font-bold'
+                        : 'text-ink/80 hover:text-ink hover:bg-bg-sunken border-transparent hover:border-line'
                     }`}
                   >
-                    <Icon size={18} />
-                    {t(item.labelKey)}
-                    {active && <ChevronRight size={14} className="ml-auto" />}
+                    <Icon size={14} className={active ? 'text-invert-fg' : 'text-ink'} />
+                    <span className="truncate">{t(item.labelKey)}</span>
+                    {active && <ChevronRight size={12} className="ml-auto" />}
                   </Link>
                 </li>
               )
@@ -300,64 +289,82 @@ export default function DashboardShell({
           </ul>
         </nav>
 
-        {/* Bottom */}
-        <div className="border-t border-slate-200 dark:border-[#27272a] px-3 py-3 space-y-1 shrink-0">
+        {/* Bottom Actions */}
+        <div className="border-t border-line p-3 space-y-2 shrink-0 bg-bg-raised">
           <Link
             href={`/${locale}`}
-            className="flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-[#18181b] hover:text-slate-900 dark:hover:text-white transition-all"
+            className="flex items-center justify-between border border-line px-3 py-2 text-xs font-mono uppercase tracking-wider text-ink hover:bg-bg-sunken transition-all"
           >
-            <ExternalLink size={18} />
-            {t('admin.view_site')}
+            <span className="flex items-center gap-2">
+              <ExternalLink size={13} />
+              {t('admin.view_site')}
+            </span>
+            <span className="text-[10px] text-faint">→</span>
           </Link>
           <a
             href="/api/auth/signout"
-            className="flex items-center gap-3 rounded-none px-3 py-2.5 text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+            className="flex items-center justify-between border border-line/60 px-3 py-2 text-xs font-mono uppercase tracking-wider text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-all"
           >
-            <LogOut size={18} />
-            {t('admin.sign_out')}
+            <span className="flex items-center gap-2">
+              <LogOut size={13} />
+              {t('admin.sign_out')}
+            </span>
+            <span className="text-[10px]">✕</span>
           </a>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-        {/* Header */}
-        <header className="flex h-14 items-center justify-between border-b border-slate-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] px-6 shrink-0">
+      {/* Main Admin Viewport */}
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0 bg-bg">
+        {/* Top Telemetry Header */}
+        <header className="flex h-14 items-center justify-between border-b border-line bg-bg-raised px-4 sm:px-6 shrink-0 z-20">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="rounded-none p-2 text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white lg:hidden"
+              className="p-1.5 border border-line text-ink hover:bg-bg-sunken lg:hidden"
             >
-              <Menu size={20} />
+              <Menu size={18} />
             </button>
-            <h1 className="text-base font-semibold text-slate-900 dark:text-white">{pageTitle}</h1>
+            <div className="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase">
+              <span className="w-2 h-2 bg-black dark:bg-white inline-block animate-pulse" />
+              <h1 className="font-bold text-ink">{pageTitle}</h1>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-3 font-mono text-[10px]">
+            {/* Theme Toggle */}
             <button
               onClick={toggle}
-              className="rounded-none p-2 text-slate-500 hover:bg-slate-100 dark:text-zinc-400 dark:hover:bg-[#18181b] dark:hover:text-white transition"
+              className="p-1.5 border border-line hover:border-line-strong text-ink hover:bg-bg-sunken transition-colors"
               title={isDark ? t('admin.switch_to_light') : t('admin.switch_to_dark')}
             >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
             </button>
-            <div className="h-5 w-px bg-slate-200 dark:bg-[#27272a]" />
-            <div className="flex h-8 w-8 items-center justify-center rounded-none bg-slate-100 dark:bg-[#18181b] overflow-hidden border border-slate-200 dark:border-[#27272a]">
-              {avatarUrl ? (
-                <Image src={avatarUrl} alt="Avatar" width={32} height={32} unoptimized className="h-full w-full object-cover" />
-              ) : (
-                <User size={14} className="text-slate-500 dark:text-zinc-400" />
-              )}
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-medium text-slate-900 dark:text-white">{fullName || session?.user?.email?.split('@')[0] || 'Admin'}</p>
-              <p className="text-[10px] text-slate-400 dark:text-zinc-500">{session?.user?.email}</p>
+
+            <div className="h-4 w-px bg-line" />
+
+            {/* Admin Identity Badge */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 border border-line bg-bg-sunken overflow-hidden flex items-center justify-center">
+                {avatarUrl ? (
+                  <Image src={avatarUrl} alt="Avatar" width={28} height={28} unoptimized className="h-full w-full object-cover" />
+                ) : (
+                  <User size={13} className="text-ink" />
+                )}
+              </div>
+              <div className="hidden sm:block text-right">
+                <p className="font-mono text-xs font-bold text-ink leading-none">{fullName || session?.user?.email?.split('@')[0] || 'Admin'}</p>
+                <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{session?.user?.email}</p>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          {children}
+        {/* Page Content Body with Swiss Brutalist Layout */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 select-text">
+          <div className="max-w-6xl mx-auto w-full">
+            {children}
+          </div>
         </main>
       </div>
     </div>
