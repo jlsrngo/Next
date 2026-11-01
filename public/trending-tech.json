@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-01T14:09:29.028Z",
+  "last_crawled_at": "2026-11-01T14:40:12.057Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Norway makes shithouses great again",
-  "metric": "▲ 435 PTS",
+  "metric": "▲ 502 PTS",
   "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
-  "viral_repo": "LadybirdBrowser/ladybird",
-  "repo_metric": "★ 66.8k",
-  "repo_desc": "Truly independent web browser",
-  "repo_spec": "VIRAL REPO // LadybirdBrowser/ladybird",
+  "viral_repo": "BehiSecc/awesome-claude-skills",
+  "repo_metric": "★ 10.3k",
+  "repo_desc": "A curated list of Claude Skills.",
+  "repo_spec": "VIRAL REPO // BehiSecc/awesome-claude-skills",
   "trending_repos": [
     {
-      "name": "ladybird",
-      "full_name": "LadybirdBrowser/ladybird",
-      "stars": 66787,
-      "stars_formatted": "★ 66.8k",
-      "language": "C++",
-      "description": "Truly independent web browser",
-      "url": "https://github.com/LadybirdBrowser/ladybird"
+      "name": "awesome-claude-skills",
+      "full_name": "BehiSecc/awesome-claude-skills",
+      "stars": 10329,
+      "stars_formatted": "★ 10.3k",
+      "language": "Code",
+      "description": "A curated list of Claude Skills.",
+      "url": "https://github.com/BehiSecc/awesome-claude-skills"
     },
     {
-      "name": "cindy",
-      "full_name": "makecindy/cindy",
-      "stars": 8886,
-      "stars_formatted": "★ 8.9k",
+      "name": "Radicale",
+      "full_name": "Kozea/Radicale",
+      "stars": 5167,
+      "stars_formatted": "★ 5.2k",
+      "language": "Python",
+      "description": "A simple CalDAV (calendar) and CardDAV (contact) server.",
+      "url": "https://github.com/Kozea/Radicale"
+    },
+    {
+      "name": "MessageKit",
+      "full_name": "MessageKit/MessageKit",
+      "stars": 6269,
+      "stars_formatted": "★ 6.3k",
+      "language": "Swift",
+      "description": "A community-driven replacement for JSQMessagesViewController",
+      "url": "https://github.com/MessageKit/MessageKit"
+    },
+    {
+      "name": "Trilium",
+      "full_name": "TriliumNext/Trilium",
+      "stars": 38644,
+      "stars_formatted": "★ 38.6k",
       "language": "TypeScript",
-      "description": "Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。",
-      "url": "https://github.com/makecindy/cindy"
+      "description": "Build your personal knowledge base with Trilium Notes",
+      "url": "https://github.com/TriliumNext/Trilium"
     },
     {
-      "name": "openclaw",
-      "full_name": "openclaw/openclaw",
-      "stars": 393616,
-      "stars_formatted": "★ 393.6k",
-      "language": "TypeScript",
-      "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
-      "url": "https://github.com/openclaw/openclaw"
-    },
-    {
-      "name": "Reverse-Engineering",
-      "full_name": "mytechnotalent/Reverse-Engineering",
-      "stars": 15066,
-      "stars_formatted": "★ 15.1k",
-      "language": "Assembly",
-      "description": "A FREE comprehensive reverse engineering tutorial covering x86, x64, 32-bit/64-bit ARM, 8-bit AVR and 32-bit RISC-V architectures.",
-      "url": "https://github.com/mytechnotalent/Reverse-Engineering"
-    },
-    {
-      "name": "Infinity-For-Reddit",
-      "full_name": "Docile-Alligator/Infinity-For-Reddit",
-      "stars": 5539,
-      "stars_formatted": "★ 5.5k",
-      "language": "Java",
-      "description": "A Reddit client for Android",
-      "url": "https://github.com/Docile-Alligator/Infinity-For-Reddit"
-    },
-    {
-      "name": "magpie",
-      "full_name": "yetone/magpie",
-      "stars": 27399,
-      "stars_formatted": "★ 27.4k",
-      "language": "Go",
-      "description": "Every agent's model. One place. Codex on DeepSeek, Claude Code on Kimi, from the menu bar.",
-      "url": "https://github.com/yetone/magpie"
-    },
-    {
-      "name": "activepieces",
-      "full_name": "activepieces/activepieces",
-      "stars": 25317,
-      "stars_formatted": "★ 25.3k",
-      "language": "TypeScript",
-      "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents",
-      "url": "https://github.com/activepieces/activepieces"
-    },
-    {
-      "name": "eliza",
-      "full_name": "elizaOS/eliza",
-      "stars": 19749,
-      "stars_formatted": "★ 19.7k",
-      "language": "TypeScript",
-      "description": "Open source agentic operating system",
-      "url": "https://github.com/elizaOS/eliza"
-    },
-    {
-      "name": "worldmonitor",
-      "full_name": "koala73/worldmonitor",
-      "stars": 89919,
-      "stars_formatted": "★ 89.9k",
-      "language": "TypeScript",
-      "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
-      "url": "https://github.com/koala73/worldmonitor"
-    },
-    {
-      "name": "horizon",
-      "full_name": "horizon-rust/horizon",
-      "stars": 5535,
-      "stars_formatted": "★ 5.5k",
+      "name": "cloud-hypervisor",
+      "full_name": "cloud-hypervisor/cloud-hypervisor",
+      "stars": 6449,
+      "stars_formatted": "★ 6.4k",
       "language": "Rust",
-      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-      "url": "https://github.com/horizon-rust/horizon"
+      "description": "A Virtual Machine Monitor for modern Cloud workloads. Features include CPU, memory and device hotplug, support for running Windows and Linux guests, device offload with vhost-user and a minimal compact footprint. Written in Rust with a strong focus on security.",
+      "url": "https://github.com/cloud-hypervisor/cloud-hypervisor"
+    },
+    {
+      "name": "vespa",
+      "full_name": "vespa-engine/vespa",
+      "stars": 7156,
+      "stars_formatted": "★ 7.2k",
+      "language": "Java",
+      "description": "The AI search platform",
+      "url": "https://github.com/vespa-engine/vespa"
+    },
+    {
+      "name": "lwan",
+      "full_name": "lpereira/lwan",
+      "stars": 6044,
+      "stars_formatted": "★ 6.0k",
+      "language": "C",
+      "description": "Experimental, scalable, high performance HTTP server",
+      "url": "https://github.com/lpereira/lwan"
+    },
+    {
+      "name": "plannotator",
+      "full_name": "backnotprop/plannotator",
+      "stars": 9805,
+      "stars_formatted": "★ 9.8k",
+      "language": "TypeScript",
+      "description": "Annotate and review coding agent plans and code diffs visually, share with your team, send feedback to agents with one click.",
+      "url": "https://github.com/backnotprop/plannotator"
+    },
+    {
+      "name": "FFmpeg",
+      "full_name": "FFmpeg/FFmpeg",
+      "stars": 66206,
+      "stars_formatted": "★ 66.2k",
+      "language": "C",
+      "description": "Mirror of https://git.ffmpeg.org/ffmpeg.git",
+      "url": "https://github.com/FFmpeg/FFmpeg"
+    },
+    {
+      "name": "dify",
+      "full_name": "langgenius/dify",
+      "stars": 160154,
+      "stars_formatted": "★ 160.2k",
+      "language": "Python",
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+      "url": "https://github.com/langgenius/dify"
     }
   ]
 }
