@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
-import { useSession, signOut } from '@/lib/next-auth-shim'
 import {
   LayoutDashboard,
   User,
@@ -15,7 +14,6 @@ import {
   Trophy,
   Link2,
   ExternalLink,
-  LogOut,
   Menu,
   X,
   ChevronRight,
@@ -36,23 +34,23 @@ type NavItem =
   | { href: string; labelKey: string; icon: any }
 
 const navItems: NavItem[] = [
-  { href: '/dashboard', labelKey: 'admin.overview', icon: LayoutDashboard },
+  { href: '/admin', labelKey: 'admin.overview', icon: LayoutDashboard },
   { divider: true },
-  { href: '/dashboard/profile', labelKey: 'admin.profile', icon: User },
-  { href: '/dashboard/skills', labelKey: 'admin.skills', icon: Code },
-  { href: '/dashboard/projects', labelKey: 'admin.projects', icon: FolderOpen },
-  { href: '/dashboard/experiences', labelKey: 'admin.experiences', icon: Briefcase },
-  { href: '/dashboard/education', labelKey: 'admin.education', icon: GraduationCap },
-  { href: '/dashboard/achievements', labelKey: 'admin.achievements', icon: Trophy },
-  { href: '/dashboard/social-links', labelKey: 'admin.social_links', icon: Link2 },
+  { href: '/admin/profile', labelKey: 'admin.profile', icon: User },
+  { href: '/admin/skills', labelKey: 'admin.skills', icon: Code },
+  { href: '/admin/projects', labelKey: 'admin.projects', icon: FolderOpen },
+  { href: '/admin/experiences', labelKey: 'admin.experiences', icon: Briefcase },
+  { href: '/admin/education', labelKey: 'admin.education', icon: GraduationCap },
+  { href: '/admin/achievements', labelKey: 'admin.achievements', icon: Trophy },
+  { href: '/admin/social-links', labelKey: 'admin.social_links', icon: Link2 },
   { divider: true },
-  { href: '/dashboard/theme', labelKey: 'admin.theme', icon: Palette },
-  { href: '/dashboard/account', labelKey: 'admin.account', icon: Settings },
-  { href: '/dashboard/changelog', labelKey: 'admin.changelog', icon: Tag },
+  { href: '/admin/theme', labelKey: 'admin.theme', icon: Palette },
+  { href: '/admin/account', labelKey: 'admin.account', icon: Settings },
+  { href: '/admin/changelog', labelKey: 'admin.changelog', icon: Tag },
 ]
 
 function getPageTitle(pathname: string, t: (key: string) => string): string {
-  if (pathname === '/dashboard') return t('admin.overview')
+  if (pathname === '/admin' || pathname === '/dashboard') return t('admin.overview')
   const segments = pathname.split('/').filter(Boolean)
   const page = segments[segments.length - 1]
   const parent = segments.length > 2 ? segments[segments.length - 2] : ''
@@ -98,7 +96,6 @@ export default function DashboardShell({
   const pathname = usePathname()
   const router = useRouter()
   const { isDark, toggle } = useTheme()
-  const { data: session, status } = useSession() as any
   const [latestVersion, setLatestVersion] = useState<ChangelogEntry | null>(null)
 
   const [fullName, setFullName] = useState<string | null>(initialName ?? null)
@@ -145,77 +142,12 @@ export default function DashboardShell({
       .catch(() => {})
   }, [pathname])
 
-  // Inactivity auto-logout (30 minutes)
-  const isSigningOut = useRef(false)
-  useEffect(() => {
-    if (status !== 'authenticated') return
-
-    let timer: NodeJS.Timeout
-    let broadcastChannel: BroadcastChannel | null = null
-
-    const doSignOut = () => {
-      if (isSigningOut.current) return
-      isSigningOut.current = true
-      signOut()
-    }
-
-    const resetTimer = () => {
-      clearTimeout(timer)
-      timer = setTimeout(doSignOut, 30 * 60 * 1000)
-    }
-
-    let lastReset = 0
-    const throttledReset = () => {
-      const now = Date.now()
-      if (now - lastReset > 30000) {
-        lastReset = now
-        resetTimer()
-      }
-    }
-
-    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart']
-    activityEvents.forEach((e) => window.addEventListener(e, throttledReset, { passive: true }))
-    resetTimer()
-
-    const handleBeforeUnload = () => {
-      try {
-        broadcastChannel?.postMessage('logout')
-        const blob = new Blob([], { type: 'text/plain' })
-        navigator.sendBeacon('/api/auth/signout', blob)
-      } catch {}
-    }
-
-    try {
-      broadcastChannel = new BroadcastChannel('auth')
-      broadcastChannel.onmessage = (ev) => {
-        if (ev.data === 'logout') doSignOut()
-      }
-    } catch {}
-
-    window.addEventListener('beforeunload', handleBeforeUnload)
-
-    return () => {
-      clearTimeout(timer)
-      activityEvents.forEach((e) => window.removeEventListener(e, throttledReset))
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-      broadcastChannel?.close()
-    }
-  }, [status])
-
   function isActive(href: string) {
-    if (href === '/dashboard') return pathname === '/dashboard'
-    return pathname.startsWith(href) && href !== '/dashboard'
+    if (href === '/admin') return pathname === '/admin' || pathname === '/dashboard'
+    return pathname.startsWith(href)
   }
 
   const pageTitle = getPageTitle(pathname, t)
-
-  if (status === 'loading') {
-    return (
-      <div className="flex h-screen items-center justify-center bg-bg text-ink">
-        <Loader2 className="h-8 w-8 animate-spin text-ink" />
-      </div>
-    )
-  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-bg text-ink font-sans blueprint-grid select-none">
@@ -289,28 +221,18 @@ export default function DashboardShell({
           </ul>
         </nav>
 
-        {/* Bottom Actions */}
-        <div className="border-t border-line p-3 space-y-2 shrink-0 bg-bg-raised">
+        {/* Bottom Actions: Directly Return to Public Site (No 404 signout) */}
+        <div className="border-t border-line p-3 shrink-0 bg-bg-raised">
           <Link
-            href={`/${locale}`}
-            className="flex items-center justify-between border border-line px-3 py-2 text-xs font-mono uppercase tracking-wider text-ink hover:bg-bg-sunken transition-all"
+            href="/"
+            className="flex items-center justify-between border border-line px-3 py-2.5 text-xs font-mono uppercase tracking-wider text-ink hover:bg-bg-sunken hover:border-line-strong transition-all"
           >
-            <span className="flex items-center gap-2">
-              <ExternalLink size={13} />
-              {t('admin.view_site')}
+            <span className="flex items-center gap-2 font-bold">
+              <ExternalLink size={14} />
+              <span>{t('admin.view_site') || 'BACK TO PUBLIC SITE'}</span>
             </span>
-            <span className="text-[10px] text-faint">→</span>
+            <span className="font-bold text-xs">→</span>
           </Link>
-          <a
-            href="/api/auth/signout"
-            className="flex items-center justify-between border border-line/60 px-3 py-2 text-xs font-mono uppercase tracking-wider text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-all"
-          >
-            <span className="flex items-center gap-2">
-              <LogOut size={13} />
-              {t('admin.sign_out')}
-            </span>
-            <span className="text-[10px]">✕</span>
-          </a>
         </div>
       </aside>
 
@@ -353,8 +275,8 @@ export default function DashboardShell({
                 )}
               </div>
               <div className="hidden sm:block text-right">
-                <p className="font-mono text-xs font-bold text-ink leading-none">{fullName || session?.user?.email?.split('@')[0] || 'Admin'}</p>
-                <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{email || session?.user?.email || 'admin@root'}</p>
+                <p className="font-mono text-xs font-bold text-ink leading-none">{fullName || 'Julio Siringoringo'}</p>
+                <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{email || 'admin@portfolio.com'}</p>
               </div>
             </div>
           </div>
