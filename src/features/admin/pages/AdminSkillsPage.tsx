@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Code,
   Search,
   RefreshCw,
   Plus,
-  Trash2,
   CheckCircle2,
   X,
   Loader2,
@@ -23,13 +23,6 @@ export default function AdminSkillsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-
-  // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newSkillName, setNewSkillName] = useState('');
-  const [newSkillCategory, setNewSkillCategory] = useState('Frontend');
-  const [newSkillIcon, setNewSkillIcon] = useState('');
-  const [submitting, setSubmitting] = useState(false);
 
   const fetchSkills = async () => {
     setLoading(true);
@@ -88,35 +81,6 @@ export default function AdminSkillsPage() {
     }
   };
 
-  const handleAddCustom = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newSkillName.trim()) return;
-    setSubmitting(true);
-
-    try {
-      const res = await fetch('/api/skills', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newSkillName.trim(),
-          category: newSkillCategory,
-          iconName: newSkillIcon.trim() || newSkillName.toLowerCase().trim(),
-          proficiency: 85,
-        }),
-      });
-      if (!res.ok) throw new Error('Creation failed');
-      setFeedback({ type: 'success', message: `Custom skill "${newSkillName}" registered.` });
-      setIsModalOpen(false);
-      setNewSkillName('');
-      setNewSkillIcon('');
-      await fetchSkills();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Creation failed.' });
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const filteredTech = useMemo(() => {
     return techList.filter((t) => {
       const matchSearch =
@@ -138,7 +102,7 @@ export default function AdminSkillsPage() {
             [ 01 // TECHNICAL CAPABILITY & ENGINE MATRIX ]
           </div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            SKILLS // <span className="font-mono text-faint font-normal">CRUD MATRIX</span>
+            SKILLS // <span className="font-mono text-faint font-normal">TAXONOMY</span>
           </h1>
           <p className="text-xs text-faint mt-1 font-mono">
             Interactive skill registry. Click any skill card to toggle database state, or register custom technologies.
@@ -146,13 +110,13 @@ export default function AdminSkillsPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setIsModalOpen(true)}
+          <Link
+            to="/admin/skills/new"
             className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
           >
             <Plus size={14} />
             <span>+ ADD CUSTOM SKILL</span>
-          </button>
+          </Link>
           <button
             onClick={fetchSkills}
             className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
@@ -294,88 +258,6 @@ export default function AdminSkillsPage() {
           );
         })}
       </div>
-
-      {/* Custom Skill Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-md border border-line bg-bg text-ink p-6 shadow-2xl blueprint-grid">
-            <CornerCrosses />
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-              <div>
-                <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-                  [ CUSTOM REGISTRATION ]
-                </div>
-                <h3 className="font-display text-xl font-bold uppercase">ADD NEW SKILL</h3>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 border border-line hover:bg-bg-sunken text-ink transition-all"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <form onSubmit={handleAddCustom} className="space-y-4 font-mono text-xs">
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Technology Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Apache Kafka"
-                  value={newSkillName}
-                  onChange={(e) => setNewSkillName(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Category *</label>
-                <select
-                  value={newSkillCategory}
-                  onChange={(e) => setNewSkillCategory(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                >
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Icon Identifier (Slug)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. apachekafka (SimpleIcons slug)"
-                  value={newSkillIcon}
-                  onChange={(e) => setNewSkillIcon(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div className="border-t border-line pt-4 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink"
-                >
-                  CANCEL
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold flex items-center gap-1.5"
-                >
-                  {submitting && <Loader2 size={13} className="animate-spin" />}
-                  <span>ADD TO REGISTRY</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

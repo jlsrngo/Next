@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   User,
   Mail,
@@ -7,11 +8,7 @@ import {
   Globe,
   ExternalLink,
   RefreshCw,
-  CheckCircle2,
   Edit3,
-  X,
-  Loader2,
-  AlertTriangle,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { profileService } from '@/services/api';
@@ -20,21 +17,6 @@ import { optimizeCloudinaryUrl } from '@/utils/cloudinary';
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-
-  // Form state
-  const [fullName, setFullName] = useState('');
-  const [headline, setHeadline] = useState('');
-  const [bioHome, setBioHome] = useState('');
-  const [bioAbout, setBioAbout] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [location, setLocation] = useState('');
-  const [website, setWebsite] = useState('');
-  const [githubUrl, setGithubUrl] = useState('');
-  const [linkedinUrl, setLinkedinUrl] = useState('');
 
   const fetchProfile = async () => {
     setLoading(true);
@@ -51,51 +33,6 @@ export default function AdminProfilePage() {
   useEffect(() => {
     fetchProfile();
   }, []);
-
-  const openEditModal = () => {
-    setFullName(profile?.fullName || profile?.name || '');
-    setHeadline(profile?.headline || '');
-    setBioHome(profile?.bioHome || profile?.bio_home || '');
-    setBioAbout(profile?.bioAbout || profile?.bio_about || '');
-    setEmail(profile?.email || '');
-    setPhone(profile?.phone || '');
-    setLocation(profile?.location || '');
-    setWebsite(profile?.website || '');
-    setGithubUrl(profile?.githubUrl || profile?.github_url || '');
-    setLinkedinUrl(profile?.linkedinUrl || profile?.linkedin_url || '');
-    setIsModalOpen(true);
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const res = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName,
-          headline,
-          bioHome,
-          bioAbout,
-          email,
-          phone,
-          location,
-          website,
-          githubUrl,
-          linkedinUrl,
-        }),
-      });
-      if (!res.ok) throw new Error('Failed to update profile');
-      setFeedback({ type: 'success', message: 'Profile specification updated successfully.' });
-      setIsModalOpen(false);
-      await fetchProfile();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Update failed.' });
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const name = profile?.fullName || profile?.name || 'Julio Siringoringo';
   const displayHeadline = profile?.headline || 'Full Stack Engineer & Distributed Systems';
@@ -118,13 +55,13 @@ export default function AdminProfilePage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={openEditModal}
+          <Link
+            to="/admin/profile/edit"
             className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
           >
             <Edit3 size={14} />
-            <span>EDIT SPEC</span>
-          </button>
+            <span>EDIT SPEC PAGE</span>
+          </Link>
           <button
             onClick={fetchProfile}
             className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
@@ -134,28 +71,6 @@ export default function AdminProfilePage() {
           </button>
         </div>
       </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
 
       {/* Main Dossier Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -194,6 +109,15 @@ export default function AdminProfilePage() {
               <span>DATABASE:</span>
               <span className="font-bold text-ink">NEON POSTGRESQL</span>
             </div>
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-line">
+            <Link
+              to="/admin/profile/edit"
+              className="w-full block text-center border border-line bg-bg hover:bg-bg-sunken py-2 font-mono text-xs uppercase font-bold text-ink transition-all"
+            >
+              MODIFY IDENTITY SPEC →
+            </Link>
           </div>
         </div>
 
@@ -270,154 +194,6 @@ export default function AdminProfilePage() {
           </div>
         </div>
       </div>
-
-      {/* Edit Profile Spec Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-2xl border border-line bg-bg text-ink p-6 shadow-2xl blueprint-grid max-h-[90vh] overflow-y-auto">
-            <CornerCrosses />
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-              <div>
-                <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-                  [ OPERATOR DOSSIER CONFIGURATION ]
-                </div>
-                <h3 className="font-display text-xl font-bold uppercase">EDIT PROFILE SPECIFICATION</h3>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 border border-line hover:bg-bg-sunken text-ink transition-all"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSave} className="space-y-4 font-mono text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Professional Headline</label>
-                  <input
-                    type="text"
-                    value={headline}
-                    onChange={(e) => setHeadline(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Home Synopsis (Hero Bio)</label>
-                <textarea
-                  rows={2}
-                  value={bioHome}
-                  onChange={(e) => setBioHome(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-sans text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">About Dossier (Engineering Bio)</label>
-                <textarea
-                  rows={4}
-                  value={bioAbout}
-                  onChange={(e) => setBioAbout(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-sans text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Phone</label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Geographic Location</label>
-                  <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Website URL</label>
-                  <input
-                    type="text"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">GitHub URL</label>
-                  <input
-                    type="text"
-                    value={githubUrl}
-                    onChange={(e) => setGithubUrl(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">LinkedIn URL</label>
-                  <input
-                    type="text"
-                    value={linkedinUrl}
-                    onChange={(e) => setLinkedinUrl(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-              </div>
-
-              <div className="border-t border-line pt-4 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink"
-                >
-                  CANCEL
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold flex items-center gap-1.5"
-                >
-                  {submitting && <Loader2 size={13} className="animate-spin" />}
-                  <span>SAVE SPEC</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

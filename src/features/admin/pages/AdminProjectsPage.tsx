@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   FolderOpen,
   ExternalLink,
@@ -6,13 +7,12 @@ import {
   Plus,
   RefreshCw,
   Search,
-  Star,
   Trash2,
   Edit3,
   CheckCircle2,
   X,
-  AlertTriangle,
   Loader2,
+  AlertTriangle,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { projectsService } from '@/services/api';
@@ -24,21 +24,7 @@ export default function AdminProjectsPage() {
   const [search, setSearch] = useState('');
   const [filterFeatured, setFilterFeatured] = useState<'all' | 'featured' | 'normal'>('all');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-
-  // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  // Form Fields
-  const [formTitle, setFormTitle] = useState('');
-  const [formDescription, setFormDescription] = useState('');
-  const [formTechStack, setFormTechStack] = useState('');
-  const [formLiveUrl, setFormLiveUrl] = useState('');
-  const [formGithubUrl, setFormGithubUrl] = useState('');
-  const [formFeatured, setFormFeatured] = useState(false);
-  const [formOrder, setFormOrder] = useState<number>(0);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -61,86 +47,6 @@ export default function AdminProjectsPage() {
     if (!val) return [];
     if (Array.isArray(val)) return val;
     return String(val).split(',').map((s) => s.trim()).filter(Boolean);
-  };
-
-  const openCreateModal = () => {
-    setEditingProject(null);
-    setFormTitle('');
-    setFormDescription('');
-    setFormTechStack('');
-    setFormLiveUrl('');
-    setFormGithubUrl('');
-    setFormFeatured(false);
-    setFormOrder(projects.length + 1);
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (p: Project) => {
-    setEditingProject(p);
-    setFormTitle(p.title || '');
-    setFormDescription(p.description || '');
-    setFormTechStack(getTechArray(p).join(', '));
-    setFormLiveUrl(p.liveUrl ?? p.live_url ?? '');
-    setFormGithubUrl(p.githubUrl ?? p.github_url ?? '');
-    setFormFeatured(Boolean(p.featured));
-    setFormOrder(p.order ?? 0);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEditingProject(null);
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formTitle.trim()) {
-      setFeedback({ type: 'error', message: 'Project title is mandatory.' });
-      return;
-    }
-
-    setSubmitting(true);
-    const techStack = formTechStack
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    const payload = {
-      title: formTitle.trim(),
-      description: formDescription.trim(),
-      techStack,
-      liveUrl: formLiveUrl.trim() || null,
-      githubUrl: formGithubUrl.trim() || null,
-      featured: formFeatured,
-      order: Number(formOrder) || 0,
-    };
-
-    try {
-      if (editingProject) {
-        const res = await fetch(`/api/projects/${editingProject.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Update failed');
-        setFeedback({ type: 'success', message: `Project "${formTitle}" updated successfully.` });
-      } else {
-        const res = await fetch('/api/projects', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Creation failed');
-        setFeedback({ type: 'success', message: `Project "${formTitle}" registered successfully.` });
-      }
-
-      closeModal();
-      await fetchProjects();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed.' });
-    } finally {
-      setSubmitting(false);
-    }
   };
 
   const handleDelete = async (id: string, title: string) => {
@@ -184,7 +90,7 @@ export default function AdminProjectsPage() {
             [ 02 // REPOSITORY ARCHIVE & WORK MATRIX ]
           </div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            PROJECTS // <span className="font-mono text-faint font-normal">CRUD WORKBENCH</span>
+            PROJECTS // <span className="font-mono text-faint font-normal">REGISTRY</span>
           </h1>
           <p className="text-xs text-faint mt-1 font-mono">
             Direct inventory management for showcased repositories, engineering deployments, and case studies.
@@ -192,13 +98,13 @@ export default function AdminProjectsPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={openCreateModal}
+          <Link
+            to="/admin/projects/new"
             className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
           >
             <Plus size={14} />
             <span>+ ADD PROJECT</span>
-          </button>
+          </Link>
           <button
             onClick={fetchProjects}
             className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
@@ -285,13 +191,13 @@ export default function AdminProjectsPage() {
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
           <FolderOpen size={32} className="mx-auto mb-2 text-faint" />
           <div className="mb-4">NO PROJECTS FOUND IN REGISTRY.</div>
-          <button
-            onClick={openCreateModal}
+          <Link
+            to="/admin/projects/new"
             className="inline-flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg px-4 py-2 font-mono text-xs uppercase font-bold"
           >
             <Plus size={14} />
             <span>CREATE FIRST PROJECT</span>
-          </button>
+          </Link>
         </div>
       ) : (
         <div className="border border-line bg-bg-raised overflow-hidden">
@@ -303,7 +209,7 @@ export default function AdminProjectsPage() {
                   <th className="py-2.5 px-4 font-bold">PROJECT & DESCRIPTION</th>
                   <th className="py-2.5 px-4 font-bold">TECH STACK</th>
                   <th className="py-2.5 px-4 font-bold">STATUS</th>
-                  <th className="py-2.5 px-4 font-bold text-right">CRUD ACTIONS</th>
+                  <th className="py-2.5 px-4 font-bold text-right">ACTIONS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
@@ -375,21 +281,21 @@ export default function AdminProjectsPage() {
                               <ExternalLink size={13} />
                             </a>
                           )}
-                          <button
-                            onClick={() => openEditModal(proj)}
-                            className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-1 text-ink transition-all font-mono text-[10px] uppercase font-bold"
-                            title="Edit Project"
+                          <Link
+                            to={`/admin/projects/${proj.id}/edit`}
+                            className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2.5 py-1 text-ink transition-all font-mono text-[10px] uppercase font-bold"
+                            title="Edit Project Specification"
                           >
                             <Edit3 size={11} />
                             <span>EDIT</span>
-                          </button>
+                          </Link>
                           <button
                             onClick={() => handleDelete(String(proj.id), proj.title)}
-                            disabled={deletingId === proj.id}
+                            disabled={deletingId === String(proj.id)}
                             className="p-1.5 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all"
                             title="Delete Project"
                           >
-                            {deletingId === proj.id ? (
+                            {deletingId === String(proj.id) ? (
                               <Loader2 size={13} className="animate-spin" />
                             ) : (
                               <Trash2 size={13} />
@@ -402,137 +308,6 @@ export default function AdminProjectsPage() {
                 })}
               </tbody>
             </table>
-          </div>
-        </div>
-      )}
-
-      {/* CRUD Modal Dialog (Swiss Brutalist) */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-xl border border-line bg-bg text-ink p-6 shadow-2xl blueprint-grid">
-            <CornerCrosses />
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-              <div>
-                <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-                  {editingProject ? '[ EDIT EXISTING RECORD ]' : '[ CREATE NEW RECORD ]'}
-                </div>
-                <h3 className="font-display text-xl font-bold uppercase">
-                  {editingProject ? 'UPDATE PROJECT' : 'NEW PROJECT SPEC'}
-                </h3>
-              </div>
-              <button
-                onClick={closeModal}
-                className="p-1 border border-line hover:bg-bg-sunken text-ink transition-all"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSave} className="space-y-4 font-mono text-xs">
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Project Title *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Arunaki Desktop Agent"
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">Description *</label>
-                <textarea
-                  rows={3}
-                  required
-                  placeholder="Comprehensive description of engineering capabilities and architecture..."
-                  value={formDescription}
-                  onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-sans text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div>
-                <label className="block text-faint uppercase font-bold mb-1">
-                  Tech Stack (Comma-separated)
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Rust, Axum, React, TypeScript, Docker"
-                  value={formTechStack}
-                  onChange={(e) => setFormTechStack(e.target.value)}
-                  className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">Live URL (Optional)</label>
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={formLiveUrl}
-                    onChange={(e) => setFormLiveUrl(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-                <div>
-                  <label className="block text-faint uppercase font-bold mb-1">GitHub URL (Optional)</label>
-                  <input
-                    type="url"
-                    placeholder="https://github.com/..."
-                    value={formGithubUrl}
-                    onChange={(e) => setFormGithubUrl(e.target.value)}
-                    className="w-full border border-line bg-bg-raised p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="flex items-center gap-2 border border-line bg-bg-raised p-2">
-                  <input
-                    type="checkbox"
-                    id="featuredCheckbox"
-                    checked={formFeatured}
-                    onChange={(e) => setFormFeatured(e.target.checked)}
-                    className="w-4 h-4 accent-ink cursor-pointer"
-                  />
-                  <label htmlFor="featuredCheckbox" className="text-ink font-bold uppercase cursor-pointer text-[11px]">
-                    Featured Priority
-                  </label>
-                </div>
-
-                <div className="flex items-center gap-2 border border-line bg-bg-raised p-2">
-                  <label className="text-faint uppercase font-bold text-[10px]">Order:</label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={formOrder}
-                    onChange={(e) => setFormOrder(Number(e.target.value))}
-                    className="w-16 border border-line bg-bg px-2 py-0.5 text-ink font-bold text-xs"
-                  />
-                </div>
-              </div>
-
-              <div className="border-t border-line pt-4 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink"
-                >
-                  CANCEL
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold flex items-center gap-1.5"
-                >
-                  {submitting && <Loader2 size={13} className="animate-spin" />}
-                  <span>{editingProject ? 'SAVE CHANGES' : 'CREATE PROJECT'}</span>
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
