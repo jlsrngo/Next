@@ -133,3 +133,4 @@ async function crawl() {
 crawl().catch((e) => {
   console.error('[Crawler] Fatal error:', e);
 });
+

@@ -9,16 +9,29 @@ import EducationList from '../components/EducationList';
 
 export default function AboutOrchestrator() {
   const t = useTranslations();
-  const { profile, experiences, educations, loading } = useAboutData();
+  const { profile, experiences, educations } = useAboutData();
+
+  // Dynamic context from DB: Work status + dossier verification
+  const dynamicStatus = profile?.work_status
+    ? `STATUS: ${profile.work_status.toUpperCase()} · VERIFIED DOSSIER`
+    : 'WORKFORCE ONLINE · VERIFIED DOSSIER';
+
+  const dynamicSpec = profile?.focus
+    ? `SPEC: ${profile.focus.toUpperCase()}`
+    : 'SPEC: COGNITIVE PROFILE';
+
+  const dynamicEngine = profile?.runtime
+    ? profile.runtime.toUpperCase()
+    : 'NEURAL INDEX ONLINE';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
       {/* Telemetry Strip with Live Tech News Feed */}
       <TelemetryHeader
         systemCode="SYS // DOSSIER [02]"
-        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · VERIFIED NODE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
-        spec={t('telemetry.about_spec') || 'SPEC: COGNITIVE PROFILE'}
-        engine={t('telemetry.about_engine') || 'NEURAL INDEX ONLINE'}
+        coordinates={dynamicStatus}
+        spec={dynamicSpec}
+        engine={dynamicEngine}
         liveFeed="news"
       />
 

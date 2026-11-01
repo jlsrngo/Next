@@ -25,14 +25,16 @@ export default function DashboardOrchestrator() {
     { label: t('dashboard.followers') || 'Followers', value: github.followers, icon: Users },
   ] : [];
 
+  const dynamicSpec = `SPEC: ${stats?.total_projects || 0} REPOS · ${stats?.total_achievements || 0} AWARDS`;
+
   return (
     <div className="py-6 md:py-10 space-y-10">
-      {/* Telemetry Strip */}
+      {/* Telemetry Strip with Tokio Daemon & Database Metrics */}
       <TelemetryHeader
         systemCode="SYS // TELEMETRY [05]"
-        coordinates="LAT: 0.7893° S · LON: 113.9213° E"
-        spec={t('telemetry.dashboard_spec') || 'SPEC: REALTIME METRICS'}
-        engine="RUST AXUM · TOKIO DAEMON"
+        coordinates="NODE: TOKIO NATIVE DAEMON · 0ms COLD START"
+        spec={dynamicSpec}
+        engine="RUST AXUM 0.7 · TOKIO DAEMON"
         liveFeed="status"
       />
 
@@ -49,84 +51,52 @@ export default function DashboardOrchestrator() {
         </p>
       </div>
 
-      {/* Portfolio Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {loading ? (
-          [1, 2, 3].map((i) => (
-            <div key={i} className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-5 rounded-none animate-pulse">
-              <CornerCrosses />
-              <div className="h-9 w-9 bg-black/10 dark:bg-white/10 rounded-none mb-3" />
-              <div className="h-7 w-16 bg-black/10 dark:bg-white/10 rounded-none mb-2" />
-              <div className="h-3 w-24 bg-black/10 dark:bg-white/10 rounded-none" />
+      {/* Database Metrics Grid */}
+      <div className="space-y-3">
+        <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70">
+          [ 01 // SYSTEM & DATABASE TELEMETRY ]
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {statCards.map((stat, i) => (
+            <MetricCard key={i} stat={stat} loading={loading} />
+          ))}
+        </div>
+      </div>
+
+      {/* GitHub Section */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70">
+            [ 02 // GITHUB TELEMETRY ]
+          </div>
+          {github?.updated_at && (
+            <div className="font-mono text-[10px] text-black/70 dark:text-white/70">
+              SYNCED: {new Date(github.updated_at).toLocaleDateString()}
             </div>
-          ))
-        ) : (
-          statCards.map((card) => (
-            <MetricCard key={card.label} label={card.label} value={card.value} icon={card.icon} />
-          ))
-        )}
-      </div>
-
-      {/* GitHub Section Header */}
-      <div className="border-b border-line pb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <Github className="w-5 h-5 text-black dark:text-white" />
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-black dark:text-white">
-            {t('dashboard.github_activity') || 'GitHub Activity'}
-          </h2>
+          )}
         </div>
-        {github && (
-          <a
-            href={`https://github.com/${github.username}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-[11px] font-bold text-black dark:text-white hover:underline uppercase"
-          >
-            @{github.username}
-          </a>
-        )}
-      </div>
 
-      {ghLoading ? (
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {ghLoading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-4 rounded-none animate-pulse">
-                <CornerCrosses />
-                <div className="h-5 w-5 bg-black/10 dark:bg-white/10 rounded-none mb-3" />
-                <div className="h-6 w-12 bg-black/10 dark:bg-white/10 rounded-none mb-1" />
-                <div className="h-3 w-20 bg-black/10 dark:bg-white/10 rounded-none" />
-              </div>
+              <div key={i} className="h-24 border border-line bg-black/5 dark:bg-white/5 animate-pulse" />
             ))}
           </div>
-          <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none">
-            <CornerCrosses />
-            <div className="h-[120px] w-full bg-black/5 dark:bg-white/5 rounded-none animate-pulse" />
-          </div>
-        </div>
-      ) : github ? (
-        <div className="space-y-6">
-          {/* GitHub Quick Metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {ghStatCards.map((card) => (
-              <MetricCard key={card.label} label={card.label} value={card.value.toLocaleString()} icon={card.icon} />
+        ) : ghStatCards.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {ghStatCards.map((stat, i) => (
+              <MetricCard key={i} stat={stat} loading={false} />
             ))}
           </div>
+        ) : null}
+      </div>
 
-          {/* Contribution Heatmap using Palette */}
-          <ContributionHeatmap github={github} />
+      {/* Contribution Heatmap */}
+      {github && <ContributionHeatmap weeks={github.contribution_calendar} />}
 
-          {/* Top Languages mapped to Sepidy Palette */}
-          <TopLanguagesList languages={github.top_languages} />
-        </div>
-      ) : (
-        <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-8 text-center rounded-none">
-          <CornerCrosses />
-          <AlertCircle className="w-6 h-6 text-black/40 dark:text-white/40 mx-auto mb-2" />
-          <p className="font-mono text-xs uppercase text-black/70 dark:text-white/70 font-bold">
-            {t('dashboard.github_error') || 'Failed to load GitHub activity'}
-          </p>
-        </div>
+      {/* Top Languages */}
+      {github?.top_languages && github.top_languages.length > 0 && (
+        <TopLanguagesList languages={github.top_languages} />
       )}
     </div>
   );

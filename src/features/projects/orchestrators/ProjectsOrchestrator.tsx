@@ -6,20 +6,20 @@ import ProjectCard from '../components/ProjectCard';
 
 export default function ProjectsOrchestrator() {
   const t = useTranslations();
-  const { projects, profile, loading } = useProjectsData();
+  const { projects, loading } = useProjectsData();
 
-  const projectSpec = projects.length > 0
-    ? `SPEC: ${projects.length} PRODUCTION DEPLOYMENTS`
-    : 'SPEC: PRODUCTION DEPLOYMENTS';
+  // Dynamic Repository Status from Neon DB
+  const dynamicRepository = `REPOSITORY: ${projects.length} PRODUCTION APPS DEPLOYED`;
+  const dynamicSpec = `SPEC: ${projects.length} PRODUCTION DEPLOYMENTS`;
 
   return (
     <div className="py-6 md:py-10 space-y-10">
       {/* Telemetry Strip with Live GitHub Activity */}
       <TelemetryHeader
         systemCode="SYS // ARCHIVE [04]"
-        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · REGISTRY ONLINE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
-        spec={projectSpec}
-        engine={t('telemetry.projects_engine') || '1,957 COMMITS ACTIVE'}
+        coordinates={dynamicRepository}
+        spec={dynamicSpec}
+        engine="1,957 COMMITS ACTIVE"
         liveFeed="github"
       />
 

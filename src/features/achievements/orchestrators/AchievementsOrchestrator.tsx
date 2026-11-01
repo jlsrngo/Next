@@ -7,21 +7,20 @@ import AchievementDetailModal from '@/components/AchievementDetailModal';
 
 export default function AchievementsOrchestrator() {
   const t = useTranslations();
-  const { achievements, profile, loading } = useAchievementsData();
+  const { achievements, loading } = useAchievementsData();
   const [selected, setSelected] = useState<AchievementItem | null>(null);
 
-  const certProtocol = achievements.length > 0
-    ? `CERT PROTOCOL: ${achievements.length} ATTESTED`
-    : 'CERT PROTOCOL VALIDATED';
+  // Dynamic Registry Status from Neon DB
+  const dynamicRegistry = `REGISTRY: ${achievements.length} ATTESTED AWARDS · VERIFIED`;
 
   return (
     <div className="py-6 md:py-10 space-y-10">
       {/* Telemetry Strip with Live Viral GitHub Repo Wire */}
       <TelemetryHeader
         systemCode="SYS // CREDENTIAL [03]"
-        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · VERIFIED PROTOCOL` : 'LAT: 0.7893° S · LON: 113.9213° E'}
-        spec={t('telemetry.achievements_spec') || 'SPEC: VERIFIED ATTESTATION'}
-        engine={certProtocol}
+        coordinates={dynamicRegistry}
+        spec="SPEC: VERIFIED ATTESTATION"
+        engine={`CERT PROTOCOL: ${achievements.length} ATTESTED`}
         liveFeed="viral-repo"
       />
 
@@ -63,11 +62,10 @@ export default function AchievementsOrchestrator() {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Detail Modal */}
       {selected && (
         <AchievementDetailModal
-          isOpen={!!selected}
-          achievement={selected as any}
+          item={selected}
           onClose={() => setSelected(null)}
         />
       )}

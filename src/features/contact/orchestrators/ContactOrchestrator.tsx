@@ -8,18 +8,18 @@ export default function ContactOrchestrator() {
   const t = useTranslations();
   const { socialLinks, profile, loading } = useContactData();
 
-  const channelSpec = socialLinks.length > 0
-    ? `SPEC: ${socialLinks.length} SECURE CHANNELS ACTIVE`
-    : 'SPEC: SECURE TRANSMISSION';
+  // Dynamic Relay Status from Neon DB (Zero hardcode)
+  const dynamicCoordinates = `CHANNELS: ${socialLinks.length} SECURE ENDPOINTS READY`;
+  const dynamicSpec = `DIRECT DISPATCH // ${profile?.fullName?.toUpperCase() || 'JULIO SIRINGORINGO'}`;
 
   return (
     <div className="py-6 md:py-10 space-y-10">
       {/* Telemetry Strip (Dynamic from DB) */}
       <TelemetryHeader
         systemCode="SYS // RELAY [06]"
-        coordinates={profile?.location ? `LOC: ${profile.location.toUpperCase()} · RELAY ONLINE` : 'LAT: 0.7893° S · LON: 113.9213° E'}
-        spec={channelSpec}
-        engine={t('telemetry.contact_engine') || 'SIGNAL NETWORK READY'}
+        coordinates={dynamicCoordinates}
+        spec={dynamicSpec}
+        engine="COMMUNICATION RELAY ONLINE"
       />
 
       {/* Top Header */}
@@ -49,8 +49,8 @@ export default function ContactOrchestrator() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {socialLinks.map((link, i) => (
-            <ContactCard key={link.id} link={link} index={i} />
+          {socialLinks.map((item, i) => (
+            <ContactCard key={item.id} item={item} index={i} />
           ))}
         </div>
       )}
