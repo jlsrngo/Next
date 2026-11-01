@@ -50,7 +50,7 @@ export default function ContactOrchestrator() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {socialLinks.map((item, i) => (
-            <ContactCard key={item.id} item={item} index={i} />
+            <ContactCard key={item.id} link={item} index={i} />
           ))}
         </div>
       )}

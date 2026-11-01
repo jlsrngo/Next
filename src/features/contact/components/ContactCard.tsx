@@ -14,19 +14,27 @@ const PLATFORM_SVG: Record<string, string> = {
 const platformLabel = (p: string) => p.charAt(0).toUpperCase() + p.slice(1);
 
 interface ContactCardProps {
-  link: SocialLink;
+  link?: SocialLink;
+  item?: SocialLink;
   index: number;
   isFull?: boolean;
 }
 
-export default function ContactCard({ link, index, isFull = false }: ContactCardProps) {
+export default function ContactCard({ link, item, index, isFull = false }: ContactCardProps) {
   const t = useTranslations();
-  const svgPath = PLATFORM_SVG[link.platform.toLowerCase()] || PLATFORM_SVG.website;
-  const label = platformLabel(link.platform);
+  const actualLink = link || item;
+
+  if (!actualLink || !actualLink.platform) {
+    return null;
+  }
+
+  const platformKey = actualLink.platform.toLowerCase();
+  const svgPath = PLATFORM_SVG[platformKey] || PLATFORM_SVG.website;
+  const label = platformLabel(actualLink.platform);
 
   return (
     <div
-      onClick={() => window.open(link.url, '_blank')}
+      onClick={() => window.open(actualLink.url, '_blank')}
       className="group relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 sm:p-7 overflow-hidden cursor-pointer shadow-none transition-all hover:bg-[#f2f1ed] dark:hover:bg-[#16171d]"
     >
       <CornerCrosses />
@@ -48,7 +56,7 @@ export default function ContactCard({ link, index, isFull = false }: ContactCard
         <div className="flex items-center justify-between font-mono text-[10px] text-black dark:text-white border-b border-line pb-2.5 select-none">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-black dark:bg-white inline-block" />
-            <span className="font-bold tracking-wider">{link.platform.toUpperCase()} // DIRECT ROUTE</span>
+            <span className="font-bold tracking-wider">{actualLink.platform.toUpperCase()} // DIRECT ROUTE</span>
           </div>
           <span className="font-mono text-[9px] tracking-widest font-bold">
             CHAN. 0{index + 1}
@@ -58,20 +66,18 @@ export default function ContactCard({ link, index, isFull = false }: ContactCard
         {/* Content */}
         <div className="space-y-1.5 pr-12">
           <h2 className="text-xl sm:text-2xl font-display font-bold text-black dark:text-white">
-            {link.title}
+            {actualLink.username || label}
           </h2>
-          {link.description && (
-            <p className="font-sans text-xs sm:text-sm text-black/80 dark:text-white/80 leading-relaxed max-w-xl">
-              {link.description}
-            </p>
-          )}
+          <p className="text-xs sm:text-sm text-black/70 dark:text-white/70 line-clamp-2">
+            {actualLink.url}
+          </p>
         </div>
 
-        {/* Action Button */}
-        <div className="pt-2">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider font-bold transition-all group-hover:opacity-85 shadow-none select-none">
-            <span>{t('contact.go_to') || 'Go to'} {label}</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+        {/* Footer meta info */}
+        <div className="pt-2 flex items-center justify-between font-mono text-[10px] text-black/60 dark:text-white/60">
+          <span>SIGNAL: ACTIVE</span>
+          <span className="flex items-center gap-1 group-hover:text-black dark:group-hover:text-white transition-colors">
+            TRANSMIT <ExternalLink className="w-3 h-3" />
           </span>
         </div>
       </div>
