@@ -92,7 +92,7 @@ export default function DashboardOrchestrator() {
       </div>
 
       {/* Contribution Heatmap */}
-      {github && <ContributionHeatmap weeks={github.contribution_calendar} />}
+      {github && <ContributionHeatmap github={github} />}
 
       {/* Top Languages */}
       {github?.top_languages && github.top_languages.length > 0 && (

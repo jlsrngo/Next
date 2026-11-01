@@ -7,26 +7,25 @@ import type { GitHubData } from '../hooks/useDashboardData';
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const MONO_LEVEL_CLASSES = [
-  'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10',
-  'bg-[#d0cfc8] dark:bg-[#32343d]',
-  'bg-[#9d9c94] dark:bg-[#606370]',
-  'bg-[#52514c] dark:bg-[#9a9db0]',
-  'bg-[#101014] dark:bg-[#ffffff]',
-];
+interface ContributionHeatmapProps {
+  github?: GitHubData | any | null;
+  weeks?: any;
+}
 
-export default function ContributionHeatmap({ github }: { github: GitHubData }) {
+export default function ContributionHeatmap({ github, weeks }: ContributionHeatmapProps) {
   const t = useTranslations();
   const { themeStyle } = useTheme();
   const isMono = themeStyle === 'monochrome';
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
 
+  const rawWeeks = (github && Array.isArray(github.weeks)) ? github.weeks : (Array.isArray(weeks) ? weeks : null);
+
   const monthPositions = useMemo(() => {
-    if (!github?.weeks) return [];
+    if (!rawWeeks || rawWeeks.length === 0) return [];
     const positions: { label: string; col: number }[] = [];
     let lastMonth = -1;
-    github.weeks.forEach((week, weekIndex) => {
-      if (week.length > 0) {
+    rawWeeks.forEach((week: any[], weekIndex: number) => {
+      if (week && week.length > 0 && week[0]?.date) {
         const month = new Date(week[0].date).getMonth();
         if (month !== lastMonth) {
           positions.push({ label: MONTH_LABELS[month], col: weekIndex });
@@ -35,7 +34,11 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
       }
     });
     return positions;
-  }, [github]);
+  }, [rawWeeks]);
+
+  if (!rawWeeks || rawWeeks.length === 0) {
+    return null;
+  }
 
   const handleCellHover = (e: React.MouseEvent, day: { date: string; count: number }) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
@@ -53,10 +56,13 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
   return (
     <div className="relative border border-line bg-[#faf9f7] dark:bg-[#101014] p-6 rounded-none shadow-none">
       <CornerCrosses />
-      <div className="flex items-center justify-between mb-4 border-b border-line pb-3">
+      <div className="flex items-center justify-between mb-4 border-b border-line pb-2">
         <h3 className="font-mono text-[11px] font-bold uppercase tracking-wider text-black dark:text-white">
-          {github.total_contributions.toLocaleString()} {t('dashboard.contributions_last_year') || 'contributions in the last year'}
+          {t('dashboard.contribution_heatmap') || 'Contribution Matrix'}
         </h3>
+        <span className="font-mono text-[10px] text-black/60 dark:text-white/60">
+          52 WEEKS ACTIVITY
+        </span>
       </div>
 
       <div className="overflow-x-auto pb-2">
@@ -89,9 +95,9 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
 
             {/* Weeks columns */}
             <div className="flex gap-[2px]">
-              {github.weeks.map((week, wi) => (
+              {rawWeeks.map((week: any[], wi: number) => (
                 <div key={wi} className="flex flex-col gap-[2px]">
-                  {week.map((day, di) => {
+                  {week.map((day: any, di: number) => {
                     const level = Math.min(Math.max(day.level ?? 0, 0), 4);
                     const isEmpty = level === 0;
                     const cellBg = !isEmpty ? getHeatmapCellColor(day.date, level) : undefined;
@@ -114,34 +120,31 @@ export default function ContributionHeatmap({ github }: { github: GitHubData }) 
               ))}
             </div>
           </div>
-
-          {/* Legend */}
-          <div className="flex items-center justify-end gap-1.5 mt-4 pt-3 border-t border-line">
-            <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 mr-1">
-              {t('dashboard.less') || 'Less'}
-            </span>
-            {[0, 1, 2, 3, 4].map((level) => (
-              <div
-                key={level}
-                className={`w-[11px] h-[11px] rounded-none ${
-                  level === 0
-                    ? 'bg-[#e9e8e4] dark:bg-[#1b1c21] border border-black/10 dark:border-white/10'
-                    : 'border border-black/15'
-                }`}
-                style={level > 0 ? { backgroundColor: HEATMAP_LEGEND_LEVELS[level] } : undefined}
-              />
-            ))}
-            <span className="font-mono text-[10px] uppercase font-bold text-black/60 dark:text-white/60 ml-1">
-              {t('dashboard.more') || 'More'}
-            </span>
-          </div>
         </div>
       </div>
 
+      {/* Legend */}
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-line text-[10px] font-mono text-black/60 dark:text-white/60">
+        <span>LESS</span>
+        <div className="flex items-center gap-1">
+          {HEATMAP_LEGEND_LEVELS.map((lvl) => (
+            <div
+              key={lvl}
+              className="w-[10px] h-[10px] border border-black/15"
+              style={{
+                backgroundColor: lvl === 0 ? undefined : (isMono ? '#101014' : HEATMAP_PALETTE[lvl]),
+              }}
+            />
+          ))}
+        </div>
+        <span>MORE</span>
+      </div>
+
+      {/* Tooltip */}
       {tooltip && (
         <div
-          className="fixed z-50 px-3 py-1.5 rounded-none border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[11px] uppercase tracking-wider shadow-lg pointer-events-none whitespace-nowrap"
-          style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -100%)' }}
+          className="fixed z-50 px-2 py-1 bg-black dark:bg-white text-white dark:text-black font-mono text-[9px] pointer-events-none transform -translate-x-1/2 -translate-y-full"
+          style={{ left: tooltip.x, top: tooltip.y }}
         >
           {tooltip.text}
         </div>

@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-01T13:09:19.298Z",
+  "last_crawled_at": "2026-11-01T13:39:23.444Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Norway makes shithouses great again",
-  "metric": "▲ 290 PTS",
+  "metric": "▲ 368 PTS",
   "spec": "TECH WIRE // LIVE: Norway makes shithouses great again",
-  "viral_repo": "elsa-workflows/elsa-core",
-  "repo_metric": "★ 7.9k",
-  "repo_desc": "The Workflow Engine for .NET",
-  "repo_spec": "VIRAL REPO // elsa-workflows/elsa-core",
+  "viral_repo": "emmabostian/developer-portfolios",
+  "repo_metric": "★ 27.5k",
+  "repo_desc": "A list of developer portfolios for your inspiration",
+  "repo_spec": "VIRAL REPO // emmabostian/developer-portfolios",
   "trending_repos": [
     {
-      "name": "elsa-core",
-      "full_name": "elsa-workflows/elsa-core",
-      "stars": 7922,
-      "stars_formatted": "★ 7.9k",
-      "language": "C#",
-      "description": "The Workflow Engine for .NET",
-      "url": "https://github.com/elsa-workflows/elsa-core"
+      "name": "developer-portfolios",
+      "full_name": "emmabostian/developer-portfolios",
+      "stars": 27506,
+      "stars_formatted": "★ 27.5k",
+      "language": "Python",
+      "description": "A list of developer portfolios for your inspiration",
+      "url": "https://github.com/emmabostian/developer-portfolios"
     },
     {
-      "name": "orca",
-      "full_name": "stablyai/orca",
-      "stars": 112105,
-      "stars_formatted": "★ 112.1k",
-      "language": "TypeScript",
-      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
-      "url": "https://github.com/stablyai/orca"
+      "name": "unsloth",
+      "full_name": "unslothai/unsloth",
+      "stars": 78906,
+      "stars_formatted": "★ 78.9k",
+      "language": "Python",
+      "description": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4.1, MiniMax-H3, Gemma 4, FLUX and more.",
+      "url": "https://github.com/unslothai/unsloth"
     },
     {
-      "name": "website",
-      "full_name": "kubernetes/website",
-      "stars": 5417,
-      "stars_formatted": "★ 5.4k",
-      "language": "HTML",
-      "description": "Kubernetes website and documentation repo: ",
-      "url": "https://github.com/kubernetes/website"
-    },
-    {
-      "name": "nixpkgs",
-      "full_name": "NixOS/nixpkgs",
-      "stars": 26668,
-      "stars_formatted": "★ 26.7k",
-      "language": "Nix",
-      "description": "Nix Packages collection & NixOS",
-      "url": "https://github.com/NixOS/nixpkgs"
-    },
-    {
-      "name": "framework",
-      "full_name": "flarum/framework",
-      "stars": 6766,
-      "stars_formatted": "★ 6.8k",
-      "language": "PHP",
-      "description": "Simple forum software for building great communities.",
-      "url": "https://github.com/flarum/framework"
-    },
-    {
-      "name": "qwen-code",
-      "full_name": "QwenLM/qwen-code",
-      "stars": 28855,
-      "stars_formatted": "★ 28.9k",
-      "language": "TypeScript",
-      "description": "An open-source AI coding agent that lives in your terminal.",
-      "url": "https://github.com/QwenLM/qwen-code"
-    },
-    {
-      "name": "lance",
-      "full_name": "lance-format/lance",
-      "stars": 7240,
-      "stars_formatted": "★ 7.2k",
+      "name": "horizon",
+      "full_name": "horizon-rust/horizon",
+      "stars": 5529,
+      "stars_formatted": "★ 5.5k",
       "language": "Rust",
-      "description": "Open Lakehouse Format for Multimodal AI. Convert from Parquet in 2 lines of code for 100x faster random access, vector index, and data versioning. Compatible with Pandas, DuckDB, Polars, Pyarrow, and PyTorch with more integrations coming..",
-      "url": "https://github.com/lance-format/lance"
-    },
-    {
-      "name": "t3code",
-      "full_name": "pingdotgg/t3code",
-      "stars": 36677,
-      "stars_formatted": "★ 36.7k",
-      "language": "TypeScript",
-      "description": "",
-      "url": "https://github.com/pingdotgg/t3code"
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "url": "https://github.com/horizon-rust/horizon"
     },
     {
       "name": "openclaw",
       "full_name": "openclaw/openclaw",
-      "stars": 393610,
+      "stars": 393613,
       "stars_formatted": "★ 393.6k",
       "language": "TypeScript",
       "description": "The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 ",
       "url": "https://github.com/openclaw/openclaw"
     },
     {
-      "name": "worldmonitor",
-      "full_name": "koala73/worldmonitor",
-      "stars": 89916,
-      "stars_formatted": "★ 89.9k",
+      "name": "bytebase",
+      "full_name": "bytebase/bytebase",
+      "stars": 14662,
+      "stars_formatted": "★ 14.7k",
+      "language": "Go",
+      "description": "Database governance built for humans and agents — controlling changes and access across every major database.",
+      "url": "https://github.com/bytebase/bytebase"
+    },
+    {
+      "name": "posthog",
+      "full_name": "PostHog/posthog",
+      "stars": 40567,
+      "stars_formatted": "★ 40.6k",
+      "language": "Python",
+      "description": ":hedgehog: PostHog is the leading platform for building self-driving products. Our developer tools – AI observability, analytics, session replay, flags, experiments, error tracking, logs, and more – capture all the context agents need to diagnose problems, uncover opportunities, and ship fixes. Steer it all from Slack, web, desktop, or the MCP.",
+      "url": "https://github.com/PostHog/posthog"
+    },
+    {
+      "name": "yolov3",
+      "full_name": "ultralytics/yolov3",
+      "stars": 10631,
+      "stars_formatted": "★ 10.6k",
+      "language": "Python",
+      "description": "PyTorch implementation of YOLOv3, YOLOv3-SPP, and YOLOv3-tiny for real-time object detection with training, validation, inference, and multi-format export.",
+      "url": "https://github.com/ultralytics/yolov3"
+    },
+    {
+      "name": "orpc",
+      "full_name": "middleapi/orpc",
+      "stars": 5748,
+      "stars_formatted": "★ 5.7k",
       "language": "TypeScript",
-      "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
-      "url": "https://github.com/koala73/worldmonitor"
+      "description": "Typesafe APIs Made Simple 🪄",
+      "url": "https://github.com/middleapi/orpc"
+    },
+    {
+      "name": "ALL-about-RSS",
+      "full_name": "AboutRSS/ALL-about-RSS",
+      "stars": 5941,
+      "stars_formatted": "★ 5.9k",
+      "language": "Python",
+      "description": "A list of RSS related stuff: tools, services, communities and tutorials, etc.",
+      "url": "https://github.com/AboutRSS/ALL-about-RSS"
+    },
+    {
+      "name": "pdfkit",
+      "full_name": "foliojs/pdfkit",
+      "stars": 10728,
+      "stars_formatted": "★ 10.7k",
+      "language": "JavaScript",
+      "description": "A JavaScript PDF generation library for Node and the browser",
+      "url": "https://github.com/foliojs/pdfkit"
     }
   ]
 }
