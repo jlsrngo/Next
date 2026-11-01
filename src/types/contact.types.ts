@@ -5,4 +5,5 @@ export interface SocialLink {
   description: string | null;
   url: string;
   is_featured: boolean;
+  username?: string | null;
 }

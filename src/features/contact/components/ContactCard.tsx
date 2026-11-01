@@ -66,7 +66,7 @@ export default function ContactCard({ link, item, index, isFull = false }: Conta
         {/* Content */}
         <div className="space-y-1.5 pr-12">
           <h2 className="text-xl sm:text-2xl font-display font-bold text-black dark:text-white">
-            {actualLink.username || label}
+            {actualLink.title || actualLink.username || label}
           </h2>
           <p className="text-xs sm:text-sm text-black/70 dark:text-white/70 line-clamp-2">
             {actualLink.url}

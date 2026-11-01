@@ -65,7 +65,8 @@ export default function AchievementsOrchestrator() {
       {/* Detail Modal */}
       {selected && (
         <AchievementDetailModal
-          item={selected}
+          isOpen={true}
+          achievement={selected as any}
           onClose={() => setSelected(null)}
         />
       )}
