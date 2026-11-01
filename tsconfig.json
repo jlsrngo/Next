@@ -24,6 +24,18 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "next-auth/react": [
+        "./src/lib/next-auth-shim.tsx"
+      ],
+      "next/link": [
+        "./src/lib/next-shims.tsx"
+      ],
+      "next/image": [
+        "./src/lib/next-shims.tsx"
+      ],
+      "next/navigation": [
+        "./src/lib/next-navigation-shim.ts"
       ]
     },
     "target": "ES2017"

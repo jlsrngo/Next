@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, signOut } from '@/lib/next-auth-shim'
 import {
   LayoutDashboard,
   User,
@@ -28,7 +27,7 @@ import {
   Tag,
 } from 'lucide-react'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
-import { getLatestVersion } from '@/lib/changelog'
+import { getLatestVersion, type ChangelogEntry } from '@/lib/changelog'
 import en from '@/messages/en.json'
 import id from '@/messages/id.json'
 
@@ -99,8 +98,8 @@ export default function DashboardShell({
   const pathname = usePathname()
   const router = useRouter()
   const { isDark, toggle } = useTheme()
-  const { data: session, status } = useSession()
-  const [latestVersion, setLatestVersion] = useState<{ version: string } | null>(null)
+  const { data: session, status } = useSession() as any
+  const [latestVersion, setLatestVersion] = useState<ChangelogEntry | null>(null)
 
   const [fullName, setFullName] = useState<string | null>(initialName ?? null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initialAvatar ?? null)
@@ -128,9 +127,10 @@ export default function DashboardShell({
   }
 
   useEffect(() => {
-    getLatestVersion()
-      .then((ver) => setLatestVersion(ver))
-      .catch(() => {})
+    const ver = getLatestVersion()
+    if (ver) {
+      setLatestVersion(ver)
+    }
   }, [])
 
   useEffect(() => {
@@ -156,7 +156,7 @@ export default function DashboardShell({
     const doSignOut = () => {
       if (isSigningOut.current) return
       isSigningOut.current = true
-      signOut({ callbackUrl: '/id' })
+      signOut()
     }
 
     const resetTimer = () => {
@@ -347,14 +347,14 @@ export default function DashboardShell({
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 border border-line bg-bg-sunken overflow-hidden flex items-center justify-center">
                 {avatarUrl ? (
-                  <Image src={avatarUrl} alt="Avatar" width={28} height={28} unoptimized className="h-full w-full object-cover" />
+                  <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
                 ) : (
                   <User size={13} className="text-ink" />
                 )}
               </div>
               <div className="hidden sm:block text-right">
                 <p className="font-mono text-xs font-bold text-ink leading-none">{fullName || session?.user?.email?.split('@')[0] || 'Admin'}</p>
-                <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{session?.user?.email}</p>
+                <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{email || session?.user?.email || 'admin@root'}</p>
               </div>
             </div>
           </div>
