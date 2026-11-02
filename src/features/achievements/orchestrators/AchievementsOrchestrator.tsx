@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import { useAchievementsData, type AchievementItem } from '../hooks/useAchievementsData';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import AchievementCard from '../components/AchievementCard';
@@ -7,11 +7,20 @@ import AchievementDetailModal from '@/components/AchievementDetailModal';
 
 export default function AchievementsOrchestrator() {
   const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
   const { achievements, loading } = useAchievementsData();
   const [selected, setSelected] = useState<AchievementItem | null>(null);
 
   // Dynamic Registry Status from Neon DB
-  const dynamicRegistry = `REGISTRY: ${achievements.length} ATTESTED AWARDS · VERIFIED`;
+  const dynamicRegistry = isId
+    ? `REGISTRI: ${achievements.length} ENTRI`
+    : `REGISTRY: ${achievements.length} ENTRIES`;
+
+  const dynamicSpec = isId ? 'SPES: TERVERIFIKASI' : 'SPEC: VERIFIED';
+  const dynamicEngine = isId
+    ? `${achievements.length} TERVALIDASI`
+    : `${achievements.length} ATTESTED`;
 
   return (
     <div className="py-6 md:py-10 space-y-10">
@@ -19,8 +28,8 @@ export default function AchievementsOrchestrator() {
       <TelemetryHeader
         systemCode="SYS // CREDENTIAL [03]"
         coordinates={dynamicRegistry}
-        spec="SPEC: VERIFIED ATTESTATION"
-        engine={`CERT PROTOCOL: ${achievements.length} ATTESTED`}
+        spec={dynamicSpec}
+        engine={dynamicEngine}
         liveFeed="viral-repo"
       />
 
@@ -28,7 +37,7 @@ export default function AchievementsOrchestrator() {
       <div className="border-b border-line pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
         <div className="space-y-1">
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
-            [ 05 // CREDENTIALS & AWARDS ]
+            {t('achievements.credentials_awards_tag') || (isId ? '[ 05 // KREDENSIAL ]' : '[ 05 // CREDENTIALS ]')}
           </div>
           <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white flex items-center gap-3">
             {t('achievements.title') || 'Achievements'}
@@ -38,7 +47,7 @@ export default function AchievementsOrchestrator() {
           </p>
         </div>
         <div className="font-mono text-[10px] font-bold text-black dark:text-white">
-          {achievements.length} {achievements.length === 1 ? 'AWARD' : 'AWARDS'} INDEXED
+          {achievements.length} {t('achievements.awards_indexed') || 'AWARDS INDEXED'}
         </div>
       </div>
 

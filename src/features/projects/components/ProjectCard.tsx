@@ -77,7 +77,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:opacity-85"
             >
-              <span>Live Demo</span>
+              <span>{t('projects.view_live') || 'Live Demo'}</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
@@ -89,7 +89,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white dark:bg-black text-black dark:text-white font-mono text-[10px] uppercase tracking-wider font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5"
             >
               <Github className="w-3 h-3" />
-              <span>Code</span>
+              <span>{t('projects.view_code') || 'Code'}</span>
             </a>
           )}
         </div>

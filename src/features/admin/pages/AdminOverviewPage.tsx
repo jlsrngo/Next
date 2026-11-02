@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Code, FolderOpen, Trophy, Briefcase, GraduationCap, Link2, ArrowUpRight, TrendingUp, User } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import {
   profileService,
   skillsService,
@@ -13,6 +14,10 @@ import {
 import type { Profile } from '@/types/profile.types';
 
 export default function AdminOverviewPage() {
+  const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
+
   const [profile, setProfile] = useState<Profile | null>(null);
   const [counts, setCounts] = useState({
     skills: 0,
@@ -50,19 +55,19 @@ export default function AdminOverviewPage() {
   const total = counts.skills + counts.projects + counts.achievements + counts.socialLinks + counts.experiences + counts.education;
 
   const stats = [
-    { label: 'Skills Matrix', count: counts.skills, icon: Code, href: '/admin/skills', id: '01' },
-    { label: 'Projects Archive', count: counts.projects, icon: FolderOpen, href: '/admin/projects', id: '02' },
-    { label: 'Work Experiences', count: counts.experiences, icon: Briefcase, href: '/admin/experiences', id: '03' },
-    { label: 'Academic Dossier', count: counts.education, icon: GraduationCap, href: '/admin/education', id: '04' },
-    { label: 'Achievements Index', count: counts.achievements, icon: Trophy, href: '/admin/achievements', id: '05' },
-    { label: 'Relay Channels', count: counts.socialLinks, icon: Link2, href: '/admin/social-links', id: '06' },
+    { label: isId ? 'Matriks Keahlian' : 'Skills Matrix', count: counts.skills, icon: Code, href: '/admin/skills', id: '01' },
+    { label: isId ? 'Arsip Proyek' : 'Projects Archive', count: counts.projects, icon: FolderOpen, href: '/admin/projects', id: '02' },
+    { label: isId ? 'Pengalaman Kerja' : 'Work Experiences', count: counts.experiences, icon: Briefcase, href: '/admin/experiences', id: '03' },
+    { label: isId ? 'Dosir Akademik' : 'Academic Dossier', count: counts.education, icon: GraduationCap, href: '/admin/education', id: '04' },
+    { label: isId ? 'Indeks Penghargaan' : 'Achievements Index', count: counts.achievements, icon: Trophy, href: '/admin/achievements', id: '05' },
+    { label: isId ? 'Saluran Komunikasi' : 'Relay Channels', count: counts.socialLinks, icon: Link2, href: '/admin/social-links', id: '06' },
   ];
 
   const shortcuts = [
-    { label: 'Edit Profile Spec', href: '/admin/profile', icon: User },
-    { label: 'Manage Skills Matrix', href: '/admin/skills', icon: Code },
-    { label: 'Manage Projects', href: '/admin/projects', icon: FolderOpen },
-    { label: 'Manage Social Channels', href: '/admin/social-links', icon: Link2 },
+    { label: isId ? 'Edit Spesifikasi Profil' : 'Edit Profile Spec', href: '/admin/profile', icon: User },
+    { label: isId ? 'Kelola Matriks Keahlian' : 'Manage Skills Matrix', href: '/admin/skills', icon: Code },
+    { label: isId ? 'Kelola Proyek' : 'Manage Projects', href: '/admin/projects', icon: FolderOpen },
+    { label: isId ? 'Kelola Saluran Sosial' : 'Manage Social Channels', href: '/admin/social-links', icon: Link2 },
   ];
 
   return (
@@ -71,27 +76,31 @@ export default function AdminOverviewPage() {
       <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-            [ 00 // WORKSTATION CONTROL & OVERVIEW ]
+            {isId ? '[ 00 // KONTROL & RINGKASAN WORKSTATION ]' : '[ 00 // WORKSTATION CONTROL & OVERVIEW ]'}
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-ink">
-            SESSION // <span className="font-mono uppercase font-bold">{name}</span>
+            {isId ? 'SESI' : 'SESSION'} // <span className="font-mono uppercase font-bold">{name}</span>
           </h1>
           <p className="text-sm text-faint mt-1 font-mono">
-            Direct database administration workstation for PostgreSQL & content matrices.
+            {isId
+              ? 'Workstation administrasi database langsung untuk PostgreSQL & matriks konten.'
+              : 'Direct database administration workstation for PostgreSQL & content matrices.'}
           </p>
         </div>
 
         <div className="flex items-center gap-2 border border-line bg-bg-raised px-4 py-2 font-mono text-xs">
           <TrendingUp size={14} className="text-ink" />
           <span className="font-bold text-ink">{loading ? '...' : total}</span>
-          <span className="text-[10px] uppercase text-faint tracking-wider">TOTAL RECORDS SYNCED</span>
+          <span className="text-[10px] uppercase text-faint tracking-wider">
+            {isId ? 'TOTAL REKOR TERSINKRON' : 'TOTAL RECORDS SYNCED'}
+          </span>
         </div>
       </div>
 
       {/* Stats Grid in Swiss Brutalist Cards */}
       <div className="space-y-3">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-          [ METRIC REGISTRIES ]
+          {isId ? '[ REGISTRI METRIK ]' : '[ METRIC REGISTRIES ]'}
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {stats.map((stat) => {
@@ -118,7 +127,7 @@ export default function AdminOverviewPage() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-line/50 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-faint group-hover:text-ink transition-colors">
-                  <span>MANAGE REGISTRY</span>
+                  <span>{isId ? 'KELOLA REGISTRI' : 'MANAGE REGISTRY'}</span>
                   <ArrowUpRight size={12} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </Link>
@@ -130,7 +139,7 @@ export default function AdminOverviewPage() {
       {/* Quick Action Shortcuts */}
       <div className="space-y-3">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-          [ RAPID DATA DISPATCH ]
+          {isId ? '[ PENGIRIMAN DATA CEPAT ]' : '[ RAPID DATA DISPATCH ]'}
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {shortcuts.map((item) => {

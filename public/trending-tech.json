@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-02T03:25:48.955Z",
+  "last_crawled_at": "2026-11-02T03:55:58.455Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "metric": "▲ 1011 PTS",
+  "metric": "▲ 1040 PTS",
   "spec": "TECH WIRE // LIVE: Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "viral_repo": "astral-sh/uv",
-  "repo_metric": "★ 91.4k",
-  "repo_desc": "An extremely fast Python package and project manager, written in Rust.",
-  "repo_spec": "VIRAL REPO // astral-sh/uv",
+  "viral_repo": "cloud-custodian/cloud-custodian",
+  "repo_metric": "★ 6.1k",
+  "repo_desc": "Rules engine for cloud security, cost optimization, and governance, DSL in yaml for policies to query, filter, and take actions on resources",
+  "repo_spec": "VIRAL REPO // cloud-custodian/cloud-custodian",
   "trending_repos": [
     {
-      "name": "uv",
-      "full_name": "astral-sh/uv",
-      "stars": 91442,
-      "stars_formatted": "★ 91.4k",
-      "language": "Rust",
-      "description": "An extremely fast Python package and project manager, written in Rust.",
-      "url": "https://github.com/astral-sh/uv"
-    },
-    {
-      "name": "opencode",
-      "full_name": "anomalyco/opencode",
-      "stars": 223884,
-      "stars_formatted": "★ 223.9k",
-      "language": "TypeScript",
-      "description": "The open source coding agent.",
-      "url": "https://github.com/anomalyco/opencode"
-    },
-    {
-      "name": "dux-shell",
-      "full_name": "duxlabs-dev/dux-shell",
-      "stars": 8738,
-      "stars_formatted": "★ 8.7k",
-      "language": "QML",
-      "description": "Desktop shell for wayland compositors built with Quickshell & GO, optimized for niri, hyprland, sway, MangoWC, labwc, and MiracleWM.",
-      "url": "https://github.com/duxlabs-dev/dux-shell"
-    },
-    {
-      "name": "fluxer",
-      "full_name": "fluxerapp/fluxer",
-      "stars": 10745,
-      "stars_formatted": "★ 10.7k",
-      "language": "TypeScript",
-      "description": "A free and open source instant messaging and VoIP chat app built for friends, groups, and communities.",
-      "url": "https://github.com/fluxerapp/fluxer"
-    },
-    {
-      "name": "aerial-tv",
-      "full_name": "pengchujin/aerial-tv",
-      "stars": 8730,
-      "stars_formatted": "★ 8.7k",
-      "language": "Kotlin",
-      "description": "给国产电视的一块干净桌面：参照 tvOS 设计的开源 Android TV 桌面，没有广告，开机自动接管。A tvOS-style launcher for Xiaomi, TCL and other China-market TVs.",
-      "url": "https://github.com/pengchujin/aerial-tv"
-    },
-    {
-      "name": "edk2",
-      "full_name": "tianocore/edk2",
-      "stars": 6379,
-      "stars_formatted": "★ 6.4k",
-      "language": "C",
-      "description": "EDK II",
-      "url": "https://github.com/tianocore/edk2"
-    },
-    {
-      "name": "ccusage",
-      "full_name": "ccusage/ccusage",
-      "stars": 19288,
-      "stars_formatted": "★ 19.3k",
-      "language": "Rust",
-      "description": "npx ccusage",
-      "url": "https://github.com/ccusage/ccusage"
-    },
-    {
-      "name": "skillhub",
-      "full_name": "iflytek/skillhub",
-      "stars": 5352,
-      "stars_formatted": "★ 5.4k",
-      "language": "Java",
-      "description": "Self-hosted, open-source agent skill registry for enterprises. Publish & version skill packages, govern with RBAC and audit logs, deploy   on-premise with Docker or Kubernetes.",
-      "url": "https://github.com/iflytek/skillhub"
-    },
-    {
-      "name": "orca",
-      "full_name": "stablyai/orca",
-      "stars": 112694,
-      "stars_formatted": "★ 112.7k",
-      "language": "TypeScript",
-      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
-      "url": "https://github.com/stablyai/orca"
-    },
-    {
-      "name": "gpustack",
-      "full_name": "gpustack/gpustack",
-      "stars": 5942,
-      "stars_formatted": "★ 5.9k",
+      "name": "cloud-custodian",
+      "full_name": "cloud-custodian/cloud-custodian",
+      "stars": 6099,
+      "stars_formatted": "★ 6.1k",
       "language": "Python",
-      "description": "A GPU cluster manager for high-performance AI model serving (vLLM, SGLang) and on-demand SSH-accessible GPU instances.",
-      "url": "https://github.com/gpustack/gpustack"
+      "description": "Rules engine for cloud security, cost optimization, and governance, DSL in yaml for policies to query, filter, and take actions on resources",
+      "url": "https://github.com/cloud-custodian/cloud-custodian"
+    },
+    {
+      "name": "atuin",
+      "full_name": "atuinsh/atuin",
+      "stars": 32173,
+      "stars_formatted": "★ 32.2k",
+      "language": "Rust",
+      "description": "✨ Making your shell magical",
+      "url": "https://github.com/atuinsh/atuin"
+    },
+    {
+      "name": "oh-my-hermes",
+      "full_name": "rlaope/oh-my-hermes",
+      "stars": 5014,
+      "stars_formatted": "★ 5.0k",
+      "language": "Python",
+      "description": "⚚ The coding harness with Hermes Agent wired into IDE.",
+      "url": "https://github.com/rlaope/oh-my-hermes"
+    },
+    {
+      "name": "horizon",
+      "full_name": "horizon-rust/horizon",
+      "stars": 5713,
+      "stars_formatted": "★ 5.7k",
+      "language": "Rust",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "url": "https://github.com/horizon-rust/horizon"
+    },
+    {
+      "name": "Specs",
+      "full_name": "CocoaPods/Specs",
+      "stars": 6818,
+      "stars_formatted": "★ 6.8k",
+      "language": "Code",
+      "description": "The CocoaPods Master Repo",
+      "url": "https://github.com/CocoaPods/Specs"
+    },
+    {
+      "name": "codon",
+      "full_name": "exaloop/codon",
+      "stars": 16865,
+      "stars_formatted": "★ 16.9k",
+      "language": "Python",
+      "description": "A high-performance, zero-overhead, extensible Python compiler with built-in NumPy support",
+      "url": "https://github.com/exaloop/codon"
+    },
+    {
+      "name": "eslint-plugin-react",
+      "full_name": "jsx-eslint/eslint-plugin-react",
+      "stars": 9292,
+      "stars_formatted": "★ 9.3k",
+      "language": "JavaScript",
+      "description": "React-specific linting rules for ESLint",
+      "url": "https://github.com/jsx-eslint/eslint-plugin-react"
+    },
+    {
+      "name": "freebsd-src",
+      "full_name": "freebsd/freebsd-src",
+      "stars": 9420,
+      "stars_formatted": "★ 9.4k",
+      "language": "C",
+      "description": "The FreeBSD src tree publish-only repository. Experimenting with 'simple' pull requests....",
+      "url": "https://github.com/freebsd/freebsd-src"
+    },
+    {
+      "name": "LMCache",
+      "full_name": "LMCache/LMCache",
+      "stars": 12256,
+      "stars_formatted": "★ 12.3k",
+      "language": "Python",
+      "description": "LMCache: Supercharge Your LLM with the Fastest KV Cache Layer",
+      "url": "https://github.com/LMCache/LMCache"
+    },
+    {
+      "name": "agentscope",
+      "full_name": "agentscope-ai/agentscope",
+      "stars": 35155,
+      "stars_formatted": "★ 35.2k",
+      "language": "Python",
+      "description": "Build and run agents you can see, understand and trust.",
+      "url": "https://github.com/agentscope-ai/agentscope"
     }
   ]
 }

@@ -32,14 +32,14 @@ export default function TechArsenalSection({ skills }: TechArsenalSectionProps) 
       <div className="border-b border-line pb-3 flex items-end justify-between">
         <div>
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
-            [ 02 // TECH ARSENAL ]
+            {t('home.tech_arsenal_tag') || '[ 02 // TECH ARSENAL ]'}
           </div>
           <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-black dark:text-white flex items-center gap-2">
             {t('home.skills_title') || 'Skills'}
           </h2>
         </div>
         <div className="text-right hidden sm:block font-mono text-[10px] text-black dark:text-white font-bold">
-          <span className="font-bold">{skills.length}</span> TECHNOLOGIES INDEXED
+          <span className="font-bold">{skills.length}</span> {t('home.technologies_indexed') || 'TECHNOLOGIES INDEXED'}
         </div>
       </div>
 
@@ -53,10 +53,12 @@ export default function TechArsenalSection({ skills }: TechArsenalSectionProps) 
             <div className="font-mono text-[10px] mb-5 border-b border-line pb-2.5 flex items-center justify-between text-black dark:text-white select-none">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-black dark:bg-white" />
-                <span className="font-bold tracking-wider">{group.category.toUpperCase()}</span>
+                <span className="font-bold tracking-wider">
+                  {(t(`home.categories.${group.category}`) || group.category).toUpperCase()}
+                </span>
               </span>
               <span className="font-mono text-[9px] tracking-widest font-bold">
-                FIG. 02.{groupIdx + 1} // {String(group.items.length).padStart(2, '0')} ITEMS
+                FIG. 02.{groupIdx + 1} // {String(group.items.length).padStart(2, '0')} {t('home.items') || 'ITEMS'}
               </span>
             </div>
             <div className="flex flex-wrap gap-4 sm:gap-6 items-center">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHomeData } from '../hooks/useHomeData';
+import { useLocale, useTranslations } from '@/context/I18nContext';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import SectionDivider from '@/components/ui/SectionDivider';
 import HeroOverviewCard from '../components/HeroOverviewCard';
@@ -7,17 +8,21 @@ import TechArsenalSection from '../components/TechArsenalSection';
 
 export default function HomeOrchestrator() {
   const { profile, skills } = useHomeData();
+  const locale = useLocale();
+  const t = useTranslations();
+
+  const specLabel = locale === 'id' ? 'SPES' : 'SPEC';
 
   // Dynamic SPEC & KERNEL from Neon PostgreSQL Database & System Runtime (Zero Hardcode)
   const dynamicSpec = profile?.focus
-    ? `SPEC: ${profile.focus.toUpperCase()}`
+    ? `${specLabel}: ${profile.focus.toUpperCase()}`
     : profile?.headline
-    ? `SPEC: ${profile.headline.toUpperCase()}`
-    : 'SPEC: FULL STACK SYSTEMS';
+    ? `${specLabel}: ${profile.headline.toUpperCase()}`
+    : `${specLabel}: ${locale === 'id' ? 'SISTEM FULL STACK' : 'FULL STACK SYSTEMS'}`;
 
   const dynamicKernel = profile?.runtime
     ? profile.runtime.toUpperCase()
-    : 'RUST AXUM 0.7 · REACT 18 · TOKIO NATIVE';
+    : 'RUST AXUM';
 
   const dynamicCoordinates = 'LAT: 0.7893° S · LON: 113.9213° E';
 
@@ -36,7 +41,7 @@ export default function HomeOrchestrator() {
       <HeroOverviewCard profile={profile} />
 
       {/* Technical Divider */}
-      <SectionDivider label="SEC.02 // ARSENAL MATRIX" />
+      <SectionDivider label={locale === 'id' ? 'BAG.02 // MATRIKS ARSENAL' : 'SEC.02 // ARSENAL MATRIX'} />
 
       {/* Skills Matrix */}
       <TechArsenalSection skills={skills} />

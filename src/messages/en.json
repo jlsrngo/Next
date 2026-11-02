@@ -33,6 +33,12 @@
     "skills_subtitle": "Technologies I work with",
     "add_skill": "Add Skill",
     "delete_skill_confirm": "Delete this skill?",
+    "explore_projects": "Explore Projects",
+    "get_in_touch": "Get in Touch",
+    "overview_tag": "[ 01 // OVERVIEW ]",
+    "tech_arsenal_tag": "[ 02 // TECH ARSENAL ]",
+    "technologies_indexed": "TECHNOLOGIES INDEXED",
+    "items": "ITEMS",
     "categories": {
       "Languages": "Languages",
       "Frontend": "Frontend",
@@ -59,6 +65,32 @@
     "present": "Present",
     "delete_exp_confirm": "Delete this experience?",
     "delete_edu_confirm": "Delete this education?",
+    "positions_logged": "POSITIONS LOGGED",
+    "records_logged": "RECORDS LOGGED",
+    "biography_philosophy": "BIOGRAPHY & PHILOSOPHY",
+    "author": "AUTHOR",
+    "year_unit": "yr",
+    "years_unit": "yrs",
+    "month_unit": "mo",
+    "months_unit": "mos",
+    "employment_types": {
+      "Full-time": "Full-time",
+      "Part-time": "Part-time",
+      "Contract": "Contract",
+      "Freelance": "Freelance",
+      "Internship": "Internship"
+    },
+    "work_types": {
+      "Remote": "Remote",
+      "Hybrid": "Hybrid",
+      "On-site": "On-site"
+    },
+    "specs": {
+      "focus": "SPEC 01 // FOCUS",
+      "runtime": "SPEC 02 // RUNTIME",
+      "location": "SPEC 03 // LOCATION",
+      "status": "SPEC 04 // STATUS"
+    },
     "tabs": {
       "responsibilities": "Responsibilities",
       "learned": "What I Learned",
@@ -71,8 +103,12 @@
     "add_project": "Add Project",
     "featured_tag": "Featured",
     "view_live": "Live Demo",
-    "view_code": "View Code",
-    "delete_confirm_title": "Delete Project?"
+    "view_code": "Code",
+    "delete_confirm_title": "Delete Project?",
+    "repositories_indexed": "REPOSITORIES INDEXED",
+    "repository_tag": "[ 04 // REPOSITORY ]",
+    "production_apps_deployed": "PRODUCTION APPS DEPLOYED",
+    "production_deployments": "PRODUCTION DEPLOYMENTS"
   },
   "achievements": {
     "title": "Achievements",
@@ -88,8 +124,11 @@
     "type_label": "Type",
     "credential_url_btn": "Credential URL",
     "close_details_btn": "Close Details",
-      "click_to_view": "Click button to view",
-      "download_image": "Download Image",
+    "click_to_view": "Click button to view",
+    "download_image": "Download Image",
+    "awards_indexed": "AWARDS INDEXED",
+    "award_indexed": "AWARD INDEXED",
+    "credentials_awards_tag": "[ 05 // CREDENTIALS ]",
     "fields": {
       "title": "Title",
       "description": "Description",
@@ -117,7 +156,13 @@
     "add_social": "Add Social",
     "go_to": "Go to",
     "delete_confirm_title": "Delete Social Link?",
-    "delete_confirm_msg": "This social link will be permanently deleted."
+    "delete_confirm_msg": "This social link will be permanently deleted.",
+    "channels_indexed": "CHANNELS INDEXED",
+    "channel_indexed": "CHANNEL INDEXED",
+    "transmission_tag": "[ 06 // TRANSMISSION ]",
+    "direct_route": "DIRECT ROUTE",
+    "signal_active": "SIGNAL: ACTIVE",
+    "transmit": "TRANSMIT"
   },
   "profile": {
     "edit_title": "Edit Profile",
@@ -167,7 +212,13 @@
     "contribution": "contribution",
     "contributions_plural": "contributions",
     "on": "on",
-    "github_error": "Failed to load GitHub data."
+    "github_error": "Failed to load GitHub data.",
+    "metrics_activity_tag": "[ 04 // METRICS ]",
+    "system_telemetry_tag": "[ 01 // SYSTEM TELEMETRY ]",
+    "github_telemetry_tag": "[ 02 // GITHUB TELEMETRY ]",
+    "synced": "SYNCED",
+    "activity_52_weeks": "52 WEEKS ACTIVITY",
+    "contribution_matrix": "Contribution Matrix"
   },
   "admin": {
     "panel_title": "Admin Panel",

@@ -26,45 +26,60 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     return 'en'
   })
 
+  useEffect(() => {
+    const onLocaleChanged = () => {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('portfolio_locale') as Locale
+        if (stored === 'en' || stored === 'id') {
+          setLocaleState(stored)
+        }
+      }
+    }
+    window.addEventListener('locale-changed', onLocaleChanged)
+    window.addEventListener('storage', onLocaleChanged)
+    return () => {
+      window.removeEventListener('locale-changed', onLocaleChanged)
+      window.removeEventListener('storage', onLocaleChanged)
+    }
+  }, [])
+
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale)
     if (typeof window !== 'undefined') {
       localStorage.setItem('portfolio_locale', newLocale)
+      document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`
+      window.dispatchEvent(new Event('locale-changed'))
     }
   }
 
-  const t = (path: string, values?: Record<string, string | number>): string => {
+  const resolveValue = (dict: any, path: string): string | null => {
     const keys = path.split('.')
-    let current: any = messages[locale]
+    let current: any = dict
     for (const k of keys) {
       if (current && typeof current === 'object' && k in current) {
         current = current[k]
       } else {
-        // Fallback to en
-        let fallback: any = messages.en
-        for (const fk of keys) {
-          if (fallback && typeof fallback === 'object' && fk in fallback) {
-            fallback = fallback[fk]
-          } else {
-            fallback = null
-            break
-          }
-        }
-        if (typeof fallback === 'string') current = fallback
-        else return path
-        break
+        return null
       }
     }
+    return typeof current === 'string' ? current : null
+  }
 
-    if (typeof current === 'string') {
+  const t = (path: string, values?: Record<string, string | number>): string => {
+    let raw = resolveValue(messages[locale], path)
+    if (raw === null && locale !== 'en') {
+      raw = resolveValue(messages.en, path)
+    }
+
+    if (raw !== null) {
       if (values) {
-        let text = current
+        let text = raw
         for (const [key, val] of Object.entries(values)) {
           text = text.replace(new RegExp(`{${key}}`, 'g'), String(val))
         }
         return text
       }
-      return current
+      return raw
     }
 
     return path
@@ -77,9 +92,15 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export const useTranslations = () => {
+export const useTranslations = (namespace?: string) => {
   const { t } = useContext(I18nContext)
-  return t
+  if (!namespace) return t
+  return (key: string, values?: Record<string, string | number>) => {
+    const prefixed = `${namespace}.${key}`
+    const result = t(prefixed, values)
+    if (result !== prefixed) return result
+    return t(key, values)
+  }
 }
 
 export const useLocale = () => {

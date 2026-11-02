@@ -1,21 +1,29 @@
 import React from 'react';
 import { Tag, CheckCircle2, Clock } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import { changelog } from '@/lib/changelog';
+import { formatDate } from '@/lib/localize';
 
 export default function AdminChangelogPage() {
+  const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
+
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <div className="border-b border-line pb-5">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-          [ 09 // RELEASE PROTOCOLS & SYSTEM AUDIT LOG ]
+          {isId ? '[ 09 // PROTOKOL RILIS & LOG AUDIT SISTEM ]' : '[ 09 // RELEASE PROTOCOLS & SYSTEM AUDIT LOG ]'}
         </div>
         <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-          CHANGELOG // <span className="font-mono text-faint font-normal">VERSION LEDGER</span>
+          {isId ? 'CATATAN RILIS //' : 'CHANGELOG //'} <span className="font-mono text-faint font-normal">{isId ? 'BUKU BESAR VERSI' : 'VERSION LEDGER'}</span>
         </h1>
         <p className="text-xs text-faint mt-1 font-mono">
-          Historical iteration records, kernel refactors, and architectural optimizations.
+          {isId
+            ? 'Rekor iterasi historis, refaktor kernel, dan optimasi arsitektural.'
+            : 'Historical iteration records, kernel refactors, and architectural optimizations.'}
         </p>
       </div>
 
@@ -36,7 +44,9 @@ export default function AdminChangelogPage() {
                         : 'border-line bg-bg text-faint'
                     }`}
                   >
-                    {entry.status === 'released' ? 'RELEASED' : 'PLANNED'}
+                    {entry.status === 'released'
+                      ? (isId ? 'DIRILIS' : 'RELEASED')
+                      : (isId ? 'DIRENCANAKAN' : 'PLANNED')}
                   </span>
                 </div>
                 <h3 className="font-display text-lg font-bold text-ink mt-2">{entry.title}</h3>
@@ -45,7 +55,7 @@ export default function AdminChangelogPage() {
               {entry.date && (
                 <div className="font-mono text-xs text-faint flex items-center gap-1.5">
                   <Clock size={13} />
-                  <span>{entry.date}</span>
+                  <span>{formatDate(entry.date, locale)}</span>
                 </div>
               )}
             </div>

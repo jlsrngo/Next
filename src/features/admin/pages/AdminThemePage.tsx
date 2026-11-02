@@ -1,10 +1,12 @@
 import React from 'react';
-import { Palette, Sun, Moon, Check, Monitor } from 'lucide-react';
+import { Palette, Sun, Moon, Check, Monitor, Globe } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { useTheme } from '@/context/ThemeContext';
+import { useI18n } from '@/context/I18nContext';
 
 export default function AdminThemePage() {
   const { isDark, toggle } = useTheme();
+  const { locale, setLocale, t } = useI18n();
 
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
@@ -107,6 +109,51 @@ export default function AdminThemePage() {
                 <span className="font-bold">var(--ink)</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Global Language Selector */}
+        <div className="border border-line bg-bg-raised p-6 relative md:col-span-2">
+          <CornerCrosses />
+          <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-2">
+            [ {t('admin.language') || 'LANGUAGE CONFIGURATION'} ]
+          </div>
+          <p className="font-mono text-xs text-faint mb-4">
+            {t('admin.language_desc') || 'Select the active system locale for both Admin Workstation and Public interfaces.'}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button
+              onClick={() => setLocale('en')}
+              className={`border p-4 text-left transition-all ${
+                locale === 'en'
+                  ? 'border-line-strong bg-bg font-bold shadow-xs'
+                  : 'border-line bg-bg-raised text-faint hover:text-ink'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <Globe size={18} className={locale === 'en' ? 'text-ink' : 'text-faint'} />
+                {locale === 'en' && <Check size={16} />}
+              </div>
+              <div className="font-mono text-xs uppercase font-bold text-ink">ENGLISH [EN]</div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">International standard specification</div>
+            </button>
+
+            <button
+              onClick={() => setLocale('id')}
+              className={`border p-4 text-left transition-all ${
+                locale === 'id'
+                  ? 'border-line-strong bg-bg font-bold shadow-xs'
+                  : 'border-line bg-bg-raised text-faint hover:text-ink'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <Globe size={18} className={locale === 'id' ? 'text-ink' : 'text-faint'} />
+                {locale === 'id' && <Check size={16} />}
+              </div>
+              <div className="font-mono text-xs uppercase font-bold text-ink">INDONESIAN [ID]</div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">Bahasa Indonesia terlokalisasi penuh</div>
+            </button>
           </div>
         </div>
       </div>

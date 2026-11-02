@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2, User, Mail, MapPin, Globe, Phone, Save } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import { profileService } from '@/services/api';
 import type { Profile } from '@/types/profile.types';
 import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
@@ -10,6 +11,9 @@ import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/Admi
 
 export default function AdminProfileEditPage() {
   const navigate = useNavigate();
+  const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
@@ -88,7 +92,7 @@ export default function AdminProfileEditPage() {
     return (
       <div className="border border-line bg-bg-raised p-16 text-center font-mono text-xs text-faint">
         <Loader2 size={24} className="animate-spin mx-auto mb-3 text-ink" />
-        <div>RETRIEVING OPERATOR SPECIFICATION FROM DATABASE...</div>
+        <div>{isId ? 'MEMUAT SPESIFIKASI OPERATOR DARI DATABASE...' : 'RETRIEVING OPERATOR SPECIFICATION FROM DATABASE...'}</div>
       </div>
     );
   }
@@ -98,12 +102,12 @@ export default function AdminProfileEditPage() {
       {/* Header HUD */}
       <AdminFormHeaderHUD
         returnTo="/admin/profile"
-        returnLabel="RETURN TO PROFILE SPEC"
-        systemCode="[ 00 // OPERATOR DOSSIER CONFIGURATION ]"
-        title="EDIT PROFILE //"
-        titleHighlight="SPECIFICATION"
+        returnLabel={isId ? 'KEMBALI KE SPESIFIKASI PROFIL' : 'RETURN TO PROFILE SPEC'}
+        systemCode={isId ? '[ 00 // KONFIGURASI DOSIR OPERATOR ]' : '[ 00 // OPERATOR DOSSIER CONFIGURATION ]'}
+        title={isId ? 'EDIT PROFIL //' : 'EDIT PROFILE //'}
+        titleHighlight={isId ? 'SPESIFIKASI' : 'SPECIFICATION'}
         discardTo="/admin/profile"
-        submitLabel="SAVE DOSSIER"
+        submitLabel={isId ? 'SIMPAN DOSIR' : 'SAVE DOSSIER'}
         isSubmitting={submitting}
         onSubmit={handleSubmit}
       />
@@ -125,12 +129,12 @@ export default function AdminProfileEditPage() {
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <User size={13} />
-            <span>[ 01 // PRIMARY IDENTITY REGISTRY ]</span>
+            <span>{isId ? '[ 01 // REGISTRI IDENTITAS UTAMA ]' : '[ 01 // PRIMARY IDENTITY REGISTRY ]'}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
             <div>
-              <label className="block text-faint uppercase font-bold mb-1.5">Full Operator Name *</label>
+              <label className="block text-faint uppercase font-bold mb-1.5">{isId ? 'Nama Lengkap Operator *' : 'Full Operator Name *'}</label>
               <input
                 type="text"
                 required
@@ -142,12 +146,12 @@ export default function AdminProfileEditPage() {
             </div>
 
             <div>
-              <label className="block text-faint uppercase font-bold mb-1.5">Professional Headline / Role</label>
+              <label className="block text-faint uppercase font-bold mb-1.5">{isId ? 'Headline / Peran Profesional' : 'Professional Headline / Role'}</label>
               <input
                 type="text"
                 value={headline}
                 onChange={(e) => setHeadline(e.target.value)}
-                placeholder="e.g. Full Stack Developer & Systems Engineer"
+                placeholder={isId ? 'contoh: Pengembang Web Full-Stack & Rekayasa Sistem' : 'e.g. Full Stack Developer & Systems Engineer'}
                 className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
@@ -158,32 +162,32 @@ export default function AdminProfileEditPage() {
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2">
-            [ 02 // NARRATIVE STATEMENTS & SYNOPSIS ]
+            {isId ? '[ 02 // PERNYATAAN NARASI & SINOPSIS ]' : '[ 02 // NARRATIVE STATEMENTS & SYNOPSIS ]'}
           </div>
 
           <div className="space-y-5 font-mono text-xs">
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Home Synopsis (Hero statement visible on portfolio landing)
+                {isId ? 'Sinopsis Utama (Pernyataan hero terlihat di halaman muka portofolio)' : 'Home Synopsis (Hero statement visible on portfolio landing)'}
               </label>
               <textarea
                 rows={3}
                 value={bioHome}
                 onChange={(e) => setBioHome(e.target.value)}
-                placeholder="Brief high-impact introduction for the home page hero..."
+                placeholder={isId ? 'Pengenalan singkat berbobot untuk landing page...' : 'Brief high-impact introduction for the home page hero...'}
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
 
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                About Dossier (Comprehensive background & engineering trajectory)
+                {isId ? 'Dosir Lengkap (Latar belakang komprehensif & trajektori rekayasa)' : 'About Dossier (Comprehensive background & engineering trajectory)'}
               </label>
               <textarea
                 rows={6}
                 value={bioAbout}
                 onChange={(e) => setBioAbout(e.target.value)}
-                placeholder="Detailed technical story, architectural philosophies, and journey..."
+                placeholder={isId ? 'Kisah teknis terperinci, filosofi arsitektur, dan perjalanan...' : 'Detailed technical story, architectural philosophies, and journey...'}
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
@@ -194,14 +198,14 @@ export default function AdminProfileEditPage() {
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2">
-            [ 03 // TRANSMISSION ENDPOINTS & CHANNELS ]
+            {isId ? '[ 03 // TITIK TRANSMISI & SALURAN ]' : '[ 03 // TRANSMISSION ENDPOINTS & CHANNELS ]'}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5 flex items-center gap-1.5">
                 <Mail size={12} />
-                <span>Primary Email Endpoint</span>
+                <span>{isId ? 'Titik Akhir Email Utama' : 'Primary Email Endpoint'}</span>
               </label>
               <input
                 type="email"
@@ -215,7 +219,7 @@ export default function AdminProfileEditPage() {
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5 flex items-center gap-1.5">
                 <Phone size={12} />
-                <span>Telephone / Relay Contact</span>
+                <span>{isId ? 'Kontak Telepon / Relay' : 'Telephone / Relay Contact'}</span>
               </label>
               <input
                 type="text"
@@ -229,7 +233,7 @@ export default function AdminProfileEditPage() {
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5 flex items-center gap-1.5">
                 <MapPin size={12} />
-                <span>Geographic Base</span>
+                <span>{isId ? 'Basis Geografis' : 'Geographic Base'}</span>
               </label>
               <input
                 type="text"
@@ -243,7 +247,7 @@ export default function AdminProfileEditPage() {
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5 flex items-center gap-1.5">
                 <Globe size={12} />
-                <span>Public Domain URL</span>
+                <span>{isId ? 'URL Domain Publik' : 'Public Domain URL'}</span>
               </label>
               <input
                 type="text"

@@ -33,6 +33,12 @@
     "skills_subtitle": "Teknologi yang saya gunakan",
     "add_skill": "Tambah Keahlian",
     "delete_skill_confirm": "Hapus keahlian ini?",
+    "explore_projects": "Jelajahi Proyek",
+    "get_in_touch": "Hubungi Saya",
+    "overview_tag": "[ 01 // RINGKASAN ]",
+    "tech_arsenal_tag": "[ 02 // ARSENAL TEKNOLOGI ]",
+    "technologies_indexed": "TEKNOLOGI TERCATAT",
+    "items": "ITEM",
     "categories": {
       "Languages": "Bahasa Pemrograman",
       "Frontend": "Frontend",
@@ -59,6 +65,32 @@
     "present": "Sekarang",
     "delete_exp_confirm": "Hapus pengalaman kerja ini?",
     "delete_edu_confirm": "Hapus pendidikan ini?",
+    "positions_logged": "POSISI TERCATAT",
+    "records_logged": "RIWAYAT TERCATAT",
+    "biography_philosophy": "BIOGRAFI & FILOSOFI",
+    "author": "PENULIS",
+    "year_unit": "thn",
+    "years_unit": "thn",
+    "month_unit": "bln",
+    "months_unit": "bln",
+    "employment_types": {
+      "Full-time": "Purnawaktu",
+      "Part-time": "Paruh Waktu",
+      "Contract": "Kontrak",
+      "Freelance": "Lepas",
+      "Internship": "Magang"
+    },
+    "work_types": {
+      "Remote": "Jarak Jauh",
+      "Hybrid": "Hibrida",
+      "On-site": "Di Tempat"
+    },
+    "specs": {
+      "focus": "SPES 01 // FOKUS",
+      "runtime": "SPES 02 // RUNTIME",
+      "location": "SPES 03 // LOKASI",
+      "status": "SPES 04 // STATUS"
+    },
     "tabs": {
       "responsibilities": "Tanggung Jawab",
       "learned": "Dipelajari",
@@ -72,7 +104,11 @@
     "featured_tag": "Unggulan",
     "view_live": "Demo",
     "view_code": "Kode",
-    "delete_confirm_title": "Hapus Proyek?"
+    "delete_confirm_title": "Hapus Proyek?",
+    "repositories_indexed": "REPOSITORI TERCATAT",
+    "repository_tag": "[ 04 // REPOSITORI ]",
+    "production_apps_deployed": "APLIKASI PRODUKSI DITERAPKAN",
+    "production_deployments": "PENERAPAN PRODUKSI"
   },
   "achievements": {
     "title": "Pencapaian",
@@ -88,8 +124,11 @@
     "type_label": "Tipe",
     "credential_url_btn": "URL Kredensial",
     "close_details_btn": "Tutup Detail",
-      "click_to_view": "Klik tombol untuk melihat",
-      "download_image": "Unduh Gambar",
+    "click_to_view": "Klik tombol untuk melihat",
+    "download_image": "Unduh Gambar",
+    "awards_indexed": "PENGHARGAAN TERCATAT",
+    "award_indexed": "PENGHARGAAN TERCATAT",
+    "credentials_awards_tag": "[ 05 // KREDENSIAL ]",
     "fields": {
       "title": "Judul",
       "description": "Deskripsi",
@@ -117,7 +156,13 @@
     "add_social": "Tambah Sosial",
     "go_to": "Pergi ke",
     "delete_confirm_title": "Hapus Social Link?",
-    "delete_confirm_msg": "Social link ini akan dihapus permanen."
+    "delete_confirm_msg": "Social link ini akan dihapus permanen.",
+    "channels_indexed": "SALURAN TERCATAT",
+    "channel_indexed": "SALURAN TERCATAT",
+    "transmission_tag": "[ 06 // TRANSMISI ]",
+    "direct_route": "RUTE LANGSUNG",
+    "signal_active": "SINYAL: AKTIF",
+    "transmit": "TRANSMISI"
   },
   "profile": {
     "edit_title": "Edit Profil",
@@ -167,7 +212,13 @@
     "contribution": "kontribusi",
     "contributions_plural": "kontribusi",
     "on": "pada",
-    "github_error": "Gagal memuat data GitHub."
+    "github_error": "Gagal memuat data GitHub.",
+    "metrics_activity_tag": "[ 04 // METRIK ]",
+    "system_telemetry_tag": "[ 01 // TELEMETRI SISTEM ]",
+    "github_telemetry_tag": "[ 02 // TELEMETRI GITHUB ]",
+    "synced": "TERSINKRON",
+    "activity_52_weeks": "AKTIVITAS 52 MINGGU",
+    "contribution_matrix": "Matriks Kontribusi"
   },
   "admin": {
     "panel_title": "Panel Admin",

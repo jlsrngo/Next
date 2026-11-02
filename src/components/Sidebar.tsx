@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import Image from 'next/image'
 import { Home, User, Trophy, FolderOpen, BarChart3, Mail, Moon, Sun, Menu, X } from 'lucide-react'
@@ -9,6 +9,7 @@ import { useI18n } from '@/context/I18nContext'
 import { useSession, signOut } from 'next-auth/react'
 import LoginModal from '@/components/LoginModal'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
+import { localizeProfile } from '@/lib/localize'
 
 interface Profile {
     id: number
@@ -36,9 +37,11 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
     const { locale, setLocale, t } = useI18n()
     const router = useRouter()
     const pathname = usePathname()
-    const [profile, setProfile] = useState<Profile | null>(profileProp ?? null)
+    const [rawProfile, setRawProfile] = useState<Profile | null>(profileProp ?? null)
     const [mobileOpen, setMobileOpen] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
+
+    const profile = useMemo(() => localizeProfile(rawProfile, locale), [rawProfile, locale]);
 
     const navItems = [
         { to: '/', icon: Home, label: t('nav.home') },
@@ -53,14 +56,14 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
         fetch('/api/profile')
             .then((res) => (res.ok ? res.json() : null))
             .then((data) => {
-                if (data) setProfile(data)
+                if (data) setRawProfile(data)
             })
             .catch(() => {})
     }
 
     useEffect(() => {
         if (profileProp) {
-            setProfile(profileProp)
+            setRawProfile(profileProp)
             return
         }
         fetchProfile()
@@ -194,7 +197,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                         <button
                             onClick={toggle}
                             className="p-2 rounded-none border border-line hover:border-line-strong text-ink hover:bg-bg-sunken transition-colors"
-                            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                            title={isDark ? (t('admin.switch_to_light') || 'Switch to Light Mode') : (t('admin.switch_to_dark') || 'Switch to Dark Mode')}
                         >
                             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </button>
@@ -203,7 +206,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                             <Link
                                 href="/admin"
                                 className="relative w-8 h-8 rounded-none border border-line overflow-hidden hover:border-ink transition-colors group flex items-center justify-center bg-bg-sunken"
-                                title="Dashboard"
+                                title={t('admin.overview') || 'Dashboard'}
                             >
                                 {avatarUrl ? (
                                     <Image src={avatarUrl} alt="User" width={32} height={32} unoptimized className="w-full h-full object-cover" />
@@ -215,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                             <button
                                 onClick={() => setShowLogin(true)}
                                 className="p-2 rounded-none border border-line hover:border-line-strong text-ink hover:bg-bg-sunken transition-colors"
-                                title="Login"
+                                title={t('common.sign_in') || 'Login'}
                             >
                                 <User className="w-4 h-4" />
                             </button>

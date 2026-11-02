@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Calendar, ShieldCheck, FileText, ChevronRight, Download } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from '@/context/I18nContext'
+import { formatDate } from '@/lib/localize'
 
 interface Achievement {
   id: string
@@ -26,6 +27,7 @@ interface AchievementDetailModalProps {
 
 export default function AchievementDetailModal({ isOpen, onClose, achievement }: AchievementDetailModalProps) {
   const t = useTranslations()
+  const locale = useLocale()
   const [mounted, setMounted] = useState(false)
   const [visible, setVisible] = useState(false)
 
@@ -98,7 +100,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
           <div className="flex-1">
             <div className="mb-1.5">
               <div className="inline-flex px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-ink bg-bg-sunken border border-line rounded-none font-mono">
-                {achievement.category}
+                {t(`modal.categories.${achievement.category}`) || achievement.category}
               </div>
             </div>
 
@@ -119,7 +121,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
               {achievement.credential_id && (
                 <div className="mb-2">
                   <div className="text-[9px] mb-px tracking-wider text-muted font-bold uppercase font-mono">
-                    Credential ID
+                    {t('achievements.form.credentialId') || 'Credential ID'}
                   </div>
                   <p className="text-xs font-mono font-bold text-ink break-all">
                     {achievement.credential_id}
@@ -134,7 +136,7 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
                   </div>
                   <p className="text-xs font-bold flex items-center gap-2 text-ink">
                     <Calendar className="w-3.5 h-3.5 text-accent" />
-                    {new Date(achievement.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}
+                    {formatDate(achievement.date, locale, { year: 'numeric', month: 'long' })}
                   </p>
                 </div>
               )}

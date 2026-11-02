@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/context/I18nContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { getLanguageColor } from '@/constants/palette';
 

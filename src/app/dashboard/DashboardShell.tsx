@@ -24,8 +24,7 @@ import {
 } from 'lucide-react'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
 import { getLatestVersion, type ChangelogEntry } from '@/lib/changelog'
-import en from '@/messages/en.json'
-import id from '@/messages/id.json'
+import { useI18n } from '@/context/I18nContext'
 
 type NavItem =
   | { divider: true }
@@ -100,33 +99,13 @@ export default function DashboardShell({
   const [fullName, setFullName] = useState<string | null>(initialName ?? null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initialAvatar ?? null)
 
-  const [locale, setLocale] = useState<string>('en')
+  const { locale, setLocale, t } = useI18n()
 
   useEffect(() => {
     if (mainRef.current) {
       mainRef.current.scrollTop = 0
     }
   }, [pathname])
-
-  useEffect(() => {
-    const saved = localStorage.getItem('portfolio_locale')
-    if (saved) setLocale(saved)
-  }, [])
-
-  const messages = useMemo(() => (locale === 'id' ? id : en), [locale])
-
-  const t = (key: string): string => {
-    const keys = key.split('.')
-    let current: any = messages
-    for (const k of keys) {
-      if (current && typeof current === 'object' && k in current) {
-        current = current[k]
-      } else {
-        return key
-      }
-    }
-    return typeof current === 'string' ? current : key
-  }
 
   useEffect(() => {
     const ver = getLatestVersion()
@@ -176,7 +155,7 @@ export default function DashboardShell({
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-sm font-display font-bold tracking-tight text-ink block truncate">
-              CONTROL PANEL
+              {t('admin.panel_title') || 'CONTROL PANEL'}
             </span>
             <span className="font-mono text-[9px] uppercase tracking-widest text-faint block">
               v{latestVersion?.version || '1.0.0'} // DAEMON
@@ -198,7 +177,9 @@ export default function DashboardShell({
                 return (
                   <li key={idx} className="pt-3 pb-1 border-b border-line/40">
                     <span className="px-3 text-[9px] font-mono font-bold uppercase tracking-widest text-faint">
-                      {idx === 1 ? '[ 01 // CONTENT MATRICES ]' : '[ 02 // CONFIGURATION ]'}
+                      {idx === 1
+                        ? (locale === 'id' ? '[ 01 // MATRIKS KONTEN ]' : '[ 01 // CONTENT MATRICES ]')
+                        : (locale === 'id' ? '[ 02 // KONFIGURASI ]' : '[ 02 // CONFIGURATION ]')}
                     </span>
                   </li>
                 )
@@ -234,7 +215,7 @@ export default function DashboardShell({
           >
             <span className="flex items-center gap-2 font-bold">
               <ExternalLink size={14} />
-              <span>{t('admin.view_site') || 'BACK TO PUBLIC SITE'}</span>
+              <span>{t('admin.view_site') || (locale === 'id' ? 'KEMBALI KE SITUS PUBLIK' : 'BACK TO PUBLIC SITE')}</span>
             </span>
             <span className="font-bold text-xs">→</span>
           </Link>
@@ -259,6 +240,30 @@ export default function DashboardShell({
           </div>
 
           <div className="flex items-center gap-3 font-mono text-[10px]">
+            {/* Language Selector */}
+            <div className="flex items-center border border-line bg-bg">
+              <button
+                type="button"
+                onClick={() => setLocale('en')}
+                className={`px-2 py-1 font-mono text-[9px] font-bold tracking-wider transition-all ${
+                  locale === 'en' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'
+                }`}
+                title="Switch to English"
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLocale('id')}
+                className={`px-2 py-1 font-mono text-[9px] font-bold tracking-wider transition-all ${
+                  locale === 'id' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'
+                }`}
+                title="Ganti ke Bahasa Indonesia"
+              >
+                ID
+              </button>
+            </div>
+
             {/* Theme Toggle */}
             <button
               onClick={toggle}

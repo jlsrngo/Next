@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { profileService, skillsService } from '@/services/api';
+import { useLocale } from '@/context/I18nContext';
+import { localizeProfile } from '@/lib/localize';
 import type { Profile, Skill } from '@/types';
 
 export function useHomeData() {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const locale = useLocale();
+  const [rawProfile, setRawProfile] = useState<Profile | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -16,7 +19,7 @@ export function useHomeData() {
         profileService.getProfile().catch(() => null),
         skillsService.getSkills().catch(() => []),
       ]);
-      setProfile(profileData);
+      setRawProfile(profileData);
       setSkills(skillsData || []);
     } catch (err: any) {
       setError(err);
@@ -28,6 +31,10 @@ export function useHomeData() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const profile = useMemo(() => {
+    return localizeProfile(rawProfile, locale);
+  }, [rawProfile, locale]);
 
   return { profile, skills, loading, error, refetch: loadData };
 }

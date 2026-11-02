@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraduationCap } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/context/I18nContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import type { Education } from '@/types';
 
@@ -22,7 +22,7 @@ export default function EducationList({ educations }: EducationListProps) {
           </h2>
         </div>
         <span className="font-mono text-[10px] font-bold text-black/70 dark:text-white/70">
-          {safeEducations.length} RECORDS LOGGED
+          {safeEducations.length} {t('about.records_logged') || 'RECORDS LOGGED'}
         </span>
       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import type { SocialLink } from '@/types';
 
@@ -56,7 +56,7 @@ export default function ContactCard({ link, item, index, isFull = false }: Conta
         <div className="flex items-center justify-between font-mono text-[10px] text-black dark:text-white border-b border-line pb-2.5 select-none">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-black dark:bg-white inline-block" />
-            <span className="font-bold tracking-wider">{actualLink.platform.toUpperCase()} // DIRECT ROUTE</span>
+            <span className="font-bold tracking-wider">{actualLink.platform.toUpperCase()} // {t('contact.direct_route') || 'DIRECT ROUTE'}</span>
           </div>
           <span className="font-mono text-[9px] tracking-widest font-bold">
             CHAN. 0{index + 1}
@@ -75,9 +75,9 @@ export default function ContactCard({ link, item, index, isFull = false }: Conta
 
         {/* Footer meta info */}
         <div className="pt-2 flex items-center justify-between font-mono text-[10px] text-black/60 dark:text-white/60">
-          <span>SIGNAL: ACTIVE</span>
+          <span>{t('contact.signal_active') || 'SIGNAL: ACTIVE'}</span>
           <span className="flex items-center gap-1 group-hover:text-black dark:group-hover:text-white transition-colors">
-            TRANSMIT <ExternalLink className="w-3 h-3" />
+            {t('contact.transmit') || 'TRANSMIT'} <ExternalLink className="w-3 h-3" />
           </span>
         </div>
       </div>

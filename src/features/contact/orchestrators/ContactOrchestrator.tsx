@@ -1,16 +1,25 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import { useContactData } from '../hooks/useContactData';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import ContactCard from '../components/ContactCard';
 
 export default function ContactOrchestrator() {
   const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
   const { socialLinks, profile, loading } = useContactData();
 
   // Dynamic Relay Status from Neon DB (Zero hardcode)
-  const dynamicCoordinates = `CHANNELS: ${socialLinks.length} SECURE ENDPOINTS READY`;
-  const dynamicSpec = `DIRECT DISPATCH // ${profile?.fullName?.toUpperCase() || 'JULIO SIRINGORINGO'}`;
+  const dynamicCoordinates = isId
+    ? `SALURAN: ${socialLinks.length} RELAY`
+    : `CHANNELS: ${socialLinks.length} RELAYS`;
+
+  const dynamicSpec = isId
+    ? 'RELAY // LANGSUNG'
+    : 'RELAY // DIRECT';
+
+  const dynamicEngine = isId ? 'RELAY AKTIF' : 'RELAY ONLINE';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
@@ -19,14 +28,14 @@ export default function ContactOrchestrator() {
         systemCode="SYS // RELAY [06]"
         coordinates={dynamicCoordinates}
         spec={dynamicSpec}
-        engine="COMMUNICATION RELAY ONLINE"
+        engine={dynamicEngine}
       />
 
       {/* Top Header */}
       <div className="border-b border-line pb-4 animate-fade-in flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
-            [ 06 // TRANSMISSION & NETWORK ]
+            {t('contact.transmission_tag') || (isId ? '[ 06 // TRANSMISI ]' : '[ 06 // TRANSMISSION ]')}
           </div>
           <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white">
             {t('contact.title') || 'Contact'}
@@ -36,7 +45,7 @@ export default function ContactOrchestrator() {
           </p>
         </div>
         <div className="font-mono text-[10px] font-bold text-black dark:text-white">
-          {socialLinks.length} {socialLinks.length === 1 ? 'CHANNEL' : 'CHANNELS'} INDEXED
+          {socialLinks.length} {t('contact.channels_indexed') || 'CHANNELS INDEXED'}
         </div>
       </div>
 

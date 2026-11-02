@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cpu, Radio, Clock, ShieldCheck, Flame, GitBranch, Activity } from 'lucide-react';
+import { useLocale } from '@/context/I18nContext';
 import { telemetryService, type TrendingTech } from '@/services/api';
 
 interface TelemetryHeaderProps {
@@ -16,11 +17,15 @@ export function TelemetryHeader({
   sysId,
   systemCode,
   coordinates = 'LAT: 0.7893° S · LON: 113.9213° E',
-  spec = 'SPEC: INDEPENDENT ENGINEERING',
-  engine = 'KERNEL ACTIVE v4.2',
+  spec,
+  engine,
   liveTime = false,
   liveFeed = 'none',
 }: TelemetryHeaderProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
+  const resolvedSpec = spec || (isId ? 'SPES: MANDIRI' : 'SPEC: INDEPENDENT');
+  const resolvedEngine = engine || 'KERNEL v4.2';
   const code = systemCode || (sysId ? `SYS // CORE [${sysId}]` : 'SYS // CORE [01]');
   const [timeStr, setTimeStr] = useState<string>('');
   const [trending, setTrending] = useState<TrendingTech | null>(null);
@@ -32,7 +37,7 @@ export function TelemetryHeader({
     const updateTime = () => {
       const now = new Date();
       setTimeStr(
-        now.toLocaleTimeString('en-US', {
+        now.toLocaleTimeString(isId ? 'id-ID' : 'en-US', {
           hour12: false,
           hour: '2-digit',
           minute: '2-digit',
@@ -44,7 +49,7 @@ export function TelemetryHeader({
     updateTime();
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
-  }, [liveTime]);
+  }, [liveTime, isId]);
 
   // Live trending wire (Tech News & Live GitHub Repositories)
   useEffect(() => {
@@ -72,8 +77,8 @@ export function TelemetryHeader({
   const displayedCoordinates = timeStr ? `${coordinates} · ${timeStr}` : coordinates;
 
   // Compute live telemetry content
-  let liveSpec = spec;
-  let liveEngine = engine;
+  let liveSpec = resolvedSpec;
+  let liveEngine = resolvedEngine;
   let LiveIcon = Cpu;
   let isPulsing = false;
 
@@ -101,13 +106,13 @@ export function TelemetryHeader({
   } else if (liveFeed === 'github') {
     LiveIcon = GitBranch;
     isPulsing = true;
-    liveSpec = spec || 'GITHUB // LIVE CONTRIBUTIONS SYNCED';
-    liveEngine = engine || 'ACTIVE 1,957 COMMITS';
+    liveSpec = spec || (isId ? 'GITHUB // KONTRIBUSI AKTIF' : 'GITHUB // ACTIVE SYNC');
+    liveEngine = engine || (isId ? '1.957 KOMIT' : '1,957 COMMITS');
   } else if (liveFeed === 'status') {
     LiveIcon = Activity;
     isPulsing = true;
-    liveSpec = spec || 'SYSTEM CLUSTER // ALL NODES NOMINAL';
-    liveEngine = engine || 'RUST AXUM · TOKIO DAEMON';
+    liveSpec = spec || (isId ? 'SISTEM // SIMPUL NOMINAL' : 'SYSTEM // NODES NOMINAL');
+    liveEngine = engine || 'RUST AXUM';
   } else if (liveTime) {
     LiveIcon = Clock;
   }

@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Briefcase, ChevronDown, Building } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary';
+import { formatDuration, formatDate } from '@/lib/localize';
 import type { Experience } from '@/types';
 
 interface ExperienceListProps {
@@ -11,28 +12,11 @@ interface ExperienceListProps {
 
 export default function ExperienceList({ experiences }: ExperienceListProps) {
   const t = useTranslations();
+  const locale = useLocale();
   const [expandedExp, setExpandedExp] = useState<number | null>(null);
   const [activeTabs, setActiveTabs] = useState<Record<number, 'resp' | 'learn' | 'impact'>>({});
-  const nowRef = useRef<Date>(new Date());
 
   const safeExperiences = Array.isArray(experiences) ? experiences : [];
-
-  const getDuration = (start: string | null | undefined, end: string | null | undefined, isCurrent: boolean) => {
-    if (!start) return '1 yr';
-    const startDate = new Date(start);
-    if (isNaN(startDate.getTime())) return '1 yr';
-    const endDate = isCurrent ? nowRef.current : (end ? new Date(end) : nowRef.current);
-    const validEndDate = isNaN(endDate.getTime()) ? nowRef.current : endDate;
-    const diffYears = validEndDate.getFullYear() - startDate.getFullYear();
-    const diffMonths = validEndDate.getMonth() - startDate.getMonth();
-    const totalMonths = Math.max(diffYears * 12 + diffMonths, 1);
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-    let duration = '';
-    if (years > 0) duration += `${years} yr `;
-    if (months > 0) duration += `${months} mos`;
-    return duration.trim() || '1 mo';
-  };
 
   return (
     <section className="space-y-6">
@@ -44,7 +28,7 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
           </h2>
         </div>
         <span className="font-mono text-[10px] font-bold text-black/70 dark:text-white/70">
-          {safeExperiences.length} POSITIONS LOGGED
+          {safeExperiences.length} {t('about.positions_logged') || 'POSITIONS LOGGED'}
         </span>
       </div>
 
@@ -96,10 +80,10 @@ export default function ExperienceList({ experiences }: ExperienceListProps) {
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px] text-black dark:text-white uppercase font-bold">
                     <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
-                      {new Date(startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {isCurrent ? (t('about.present') || 'Present') : (endDate ? new Date(endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : (t('about.present') || 'Present'))}
+                      {formatDate(startDate, locale, { year: 'numeric', month: 'short' })} - {isCurrent ? (t('about.present') || 'Present') : (endDate ? formatDate(endDate, locale, { year: 'numeric', month: 'short' }) : (t('about.present') || 'Present'))}
                     </span>
                     <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
-                      {getDuration(startDate, endDate, isCurrent)}
+                      {formatDuration(startDate, endDate, isCurrent, locale)}
                     </span>
                     <span className="px-2 py-0.5 border border-line bg-white dark:bg-black rounded-none">
                       {empType} • {workType}

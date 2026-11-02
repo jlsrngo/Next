@@ -1,16 +1,25 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import { useProjectsData } from '../hooks/useProjectsData';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
 import ProjectCard from '../components/ProjectCard';
 
 export default function ProjectsOrchestrator() {
   const t = useTranslations();
+  const locale = useLocale();
+  const isId = locale === 'id';
   const { projects, loading } = useProjectsData();
 
   // Dynamic Repository Status from Neon DB
-  const dynamicRepository = `REPOSITORY: ${projects.length} PRODUCTION APPS DEPLOYED`;
-  const dynamicSpec = `SPEC: ${projects.length} PRODUCTION DEPLOYMENTS`;
+  const dynamicRepository = isId
+    ? `REPOSITORI: ${projects.length} PROYEK`
+    : `REPOSITORY: ${projects.length} PROJECTS`;
+
+  const dynamicSpec = isId
+    ? `SPES: ${projects.length} DEPLOY`
+    : `SPEC: ${projects.length} DEPLOYS`;
+
+  const dynamicEngine = isId ? '1.957 KOMIT' : '1,957 COMMITS';
 
   return (
     <div className="py-6 md:py-10 space-y-10">
@@ -19,7 +28,7 @@ export default function ProjectsOrchestrator() {
         systemCode="SYS // ARCHIVE [04]"
         coordinates={dynamicRepository}
         spec={dynamicSpec}
-        engine="1,957 COMMITS ACTIVE"
+        engine={dynamicEngine}
         liveFeed="github"
       />
 
@@ -27,7 +36,7 @@ export default function ProjectsOrchestrator() {
       <div className="border-b border-line pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 animate-fade-in">
         <div className="space-y-1">
           <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-black/70 dark:text-white/70 mb-1">
-            [ 03 // PORTFOLIO WORKS ]
+            {isId ? '[ 03 // KARYA PORTOFOLIO ]' : '[ 03 // PORTFOLIO WORKS ]'}
           </div>
           <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-black dark:text-white flex items-center gap-3">
             {t('projects.title') || 'Projects'}
@@ -37,7 +46,7 @@ export default function ProjectsOrchestrator() {
           </p>
         </div>
         <div className="font-mono text-[10px] font-bold text-black dark:text-white">
-          {projects.length} {projects.length === 1 ? 'PROJECT' : 'PROJECTS'} INDEXED
+          {projects.length} {t('projects.repositories_indexed') || 'REPOSITORIES INDEXED'}
         </div>
       </div>
 

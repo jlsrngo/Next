@@ -1,8 +1,9 @@
 import React from 'react';
 import { Award, Calendar, ShieldCheck } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from '@/context/I18nContext';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { PALETTE } from '@/constants/palette';
+import { formatDate } from '@/lib/localize';
 import type { AchievementItem } from '../hooks/useAchievementsData';
 
 interface AchievementCardProps {
@@ -13,8 +14,11 @@ interface AchievementCardProps {
 
 export default function AchievementCard({ item, index, onSelect }: AchievementCardProps) {
   const t = useTranslations();
+  const locale = useLocale();
   const isPdf = item.image_url?.toLowerCase().endsWith('.pdf');
   const hasImage = !!item.image_url;
+
+  const categoryLabel = t(`modal.categories.${item.category}`) || item.category;
 
   return (
     <div
@@ -29,7 +33,7 @@ export default function AchievementCard({ item, index, onSelect }: AchievementCa
           className="px-2 py-0.5 rounded-none bg-black dark:bg-[#121316] border font-mono text-[9px] uppercase font-bold tracking-wider inline-block"
           style={{ borderColor: `${PALETTE.canaryYellow}80`, color: PALETTE.canaryYellow }}
         >
-          {item.category}
+          {categoryLabel}
         </span>
       </div>
 
@@ -77,7 +81,7 @@ export default function AchievementCard({ item, index, onSelect }: AchievementCa
         <div className="flex items-center justify-between pt-2 border-t border-line font-mono text-[10px] text-black/60 dark:text-white/60 uppercase font-bold">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-black dark:text-white" />
-            <span>{item.date ? new Date(item.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'N/A'}</span>
+            <span>{item.date ? formatDate(item.date, locale, { year: 'numeric', month: 'short' }) : 'N/A'}</span>
           </div>
         </div>
       </div>

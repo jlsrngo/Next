@@ -20,8 +20,8 @@ export default function HeroOverviewCard({ profile }: HeroOverviewCardProps) {
       <div className="flex items-center justify-between font-mono text-[10px] text-black dark:text-white border-b border-line pb-3 select-none">
         <div className="flex items-center gap-2">
           <span className="inline-block w-2.5 h-2.5 bg-black dark:bg-white" />
-          <span className="font-bold tracking-wider">[ 01 // OVERVIEW ]</span>
-          <span className="hidden sm:inline font-semibold">· FULLSTACK & SYSTEMS ARCHITECTURE</span>
+          <span className="font-bold tracking-wider">{t('home.overview_tag') || '[ 01 // OVERVIEW ]'}</span>
+          <span className="hidden sm:inline font-semibold">· {profile?.headline ? profile.headline.toUpperCase() : 'FULLSTACK & SYSTEMS ARCHITECTURE'}</span>
         </div>
         <span className="tracking-widest font-bold">FIG. 01.A // 2026</span>
       </div>
@@ -67,14 +67,14 @@ export default function HeroOverviewCard({ profile }: HeroOverviewCardProps) {
           to="/projects"
           className="inline-flex items-center gap-2 px-5 py-2.5 border border-line bg-black dark:bg-white text-white dark:text-black font-mono text-xs uppercase tracking-wider font-bold transition-all hover:opacity-85 shadow-none"
         >
-          <span>Explore Projects</span>
+          <span>{t('home.explore_projects') || 'Explore Projects'}</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
         </Link>
         <Link
           to="/contact"
           className="inline-flex items-center gap-2 px-5 py-2.5 border border-line bg-white dark:bg-black text-black dark:text-white font-mono text-xs uppercase tracking-wider font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5 shadow-none"
         >
-          <span>Get in Touch</span>
+          <span>{t('home.get_in_touch') || 'Get in Touch'}</span>
           <span className="font-mono text-[10px]">[→]</span>
         </Link>
       </div>
