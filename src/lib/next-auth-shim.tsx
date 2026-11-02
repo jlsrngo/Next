@@ -15,6 +15,44 @@ export interface SignInResponse {
   url: string | null
 }
 
+export const getAdminCredentials = (): { email: string; password?: string } => {
+  if (typeof window === 'undefined') return { email: 'admin@portfolio.com', password: 'admin123' }
+  try {
+    const raw = localStorage.getItem('portfolio_admin_credentials')
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      return {
+        email: parsed.email || 'admin@portfolio.com',
+        password: parsed.password || 'admin123',
+      }
+    }
+  } catch {}
+  return { email: 'admin@portfolio.com', password: 'admin123' }
+}
+
+export const updateAdminCredentials = (
+  email: string,
+  newPassword?: string
+): boolean => {
+  if (typeof window === 'undefined') return false
+  try {
+    const current = getAdminCredentials()
+    const updated = {
+      email: email.trim(),
+      password: newPassword && newPassword.trim() ? newPassword.trim() : current.password,
+    }
+    localStorage.setItem('portfolio_admin_credentials', JSON.stringify(updated))
+    sessionStorage.setItem(
+      'portfolio_admin_user',
+      JSON.stringify({ email: updated.email, role: 'admin' })
+    )
+    window.dispatchEvent(new Event('storage'))
+    return true
+  } catch {
+    return false
+  }
+}
+
 export const signIn = async (
   provider?: string,
   options?: SignInOptions
@@ -23,9 +61,30 @@ export const signIn = async (
     return { error: 'Missing email or password', status: 400, ok: false, url: null }
   }
 
-  // Default credentials check
+  const custom = getAdminCredentials()
+  const inputEmail = options.email.trim().toLowerCase()
+  const customEmail = custom.email.trim().toLowerCase()
+
+  // Match custom updated credentials
   if (
-    options.email.toLowerCase() === 'admin@portfolio.com' &&
+    inputEmail === customEmail &&
+    options.password === custom.password
+  ) {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('portfolio_admin_auth', 'true')
+      sessionStorage.setItem(
+        'portfolio_admin_user',
+        JSON.stringify({ email: custom.email, role: 'admin' })
+      )
+      localStorage.removeItem('portfolio_admin_auth')
+      localStorage.removeItem('portfolio_admin_user')
+    }
+    return { error: null, status: 200, ok: true, url: '/admin' }
+  }
+
+  // Default credentials fallback if unchanged
+  if (
+    inputEmail === 'admin@portfolio.com' &&
     options.password === 'admin123'
   ) {
     if (typeof window !== 'undefined') {
@@ -34,22 +93,6 @@ export const signIn = async (
         'portfolio_admin_user',
         JSON.stringify({ email: options.email, role: 'admin' })
       )
-      // Cleanup legacy persistent auth
-      localStorage.removeItem('portfolio_admin_auth')
-      localStorage.removeItem('portfolio_admin_user')
-    }
-    return { error: null, status: 200, ok: true, url: '/admin' }
-  }
-
-  // Allow login if matching any valid test admin
-  if (options.password === 'admin123' || options.password.length >= 6) {
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('portfolio_admin_auth', 'true')
-      sessionStorage.setItem(
-        'portfolio_admin_user',
-        JSON.stringify({ email: options.email, role: 'admin' })
-      )
-      // Cleanup legacy persistent auth
       localStorage.removeItem('portfolio_admin_auth')
       localStorage.removeItem('portfolio_admin_user')
     }

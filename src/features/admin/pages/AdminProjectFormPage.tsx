@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, FolderOpen, Star } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { useLocale } from '@/context/I18nContext';
 import { projectsService } from '@/services/api';
 import type { Project } from '@/types/project.types';
@@ -22,6 +23,7 @@ export default function AdminProjectFormPage() {
   // Form Fields
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [techStackStr, setTechStackStr] = useState('');
   const [liveUrl, setLiveUrl] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
@@ -37,6 +39,7 @@ export default function AdminProjectFormPage() {
           if (found) {
             setTitle(found.title || '');
             setDescription(found.description || '');
+            setImageUrl(found.imageUrl || found.image_url || '');
             const stack = found.techStack || found.tech_stack || [];
             setTechStackStr(Array.isArray(stack) ? stack.join(', ') : String(stack));
             setLiveUrl(found.liveUrl || found.live_url || '');
@@ -68,6 +71,8 @@ export default function AdminProjectFormPage() {
     const payload = {
       title: title.trim(),
       description: description.trim(),
+      imageUrl: imageUrl.trim() || null,
+      image_url: imageUrl.trim() || null,
       techStack,
       liveUrl: liveUrl.trim() || null,
       githubUrl: githubUrl.trim() || null,
@@ -138,6 +143,14 @@ export default function AdminProjectFormPage() {
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Section 0: Project Thumbnail Media Adjuster */}
+        <ImageUploadAdjuster
+          value={imageUrl}
+          onChange={(newVal) => setImageUrl(newVal)}
+          aspectRatio="video"
+          label={isId ? 'THUMBNAIL PROYEK // MEDIA PREVIEW' : 'PROJECT THUMBNAIL // MEDIA PREVIEW'}
+        />
+
         {/* Main Details Card */}
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />

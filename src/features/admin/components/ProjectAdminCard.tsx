@@ -24,6 +24,7 @@ function ProjectAdminCardComponent({
   const isId = locale === 'id';
   const github = project.githubUrl ?? project.github_url;
   const live = project.liveUrl ?? project.live_url;
+  const image = project.imageUrl ?? project.image_url;
   const ordStr = String(project.order ?? index).padStart(2, '0');
 
   return (
@@ -33,49 +34,56 @@ function ProjectAdminCardComponent({
     >
       <CornerCrosses />
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        {/* Info Section */}
-        <div className="flex-1 min-w-0 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[10px] font-bold text-faint tracking-wider">
-              [{ordStr}]
-            </span>
-            <h3 className="font-display text-base font-bold text-ink uppercase tracking-tight">
-              {project.title}
-            </h3>
-            {project.featured && (
-              <span className="border border-line bg-bg px-2 py-0.5 text-[9px] uppercase font-bold font-mono text-ink">
-                ★ {isId ? 'UNGGULAN' : 'FEATURED'}
-              </span>
-            )}
-            <span
-              className={`inline-block px-2 py-0.5 text-[9px] uppercase font-bold font-mono border ${
-                project.featured
-                  ? 'border-line bg-invert-bg text-invert-fg'
-                  : 'border-line bg-bg text-faint'
-              }`}
-            >
-              {project.featured ? (isId ? 'PRIORITAS' : 'PRIORITY') : (isId ? 'TERINDEKS' : 'INDEXED')}
-            </span>
-          </div>
-
-          {project.description && (
-            <p className="text-faint text-xs leading-relaxed font-sans line-clamp-2">
-              {project.description}
-            </p>
-          )}
-
-          {techList.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {techList.map((t) => (
-                <span
-                  key={t}
-                  className="border border-line bg-bg px-2 py-0.5 font-mono text-[10px] uppercase text-ink"
-                >
-                  {t}
-                </span>
-              ))}
+        {/* Info & Media Section */}
+        <div className="flex items-start gap-4 flex-1 min-w-0">
+          {image && (
+            <div className="w-20 h-14 sm:w-28 sm:h-16 shrink-0 border border-line bg-bg-sunken overflow-hidden">
+              <img src={image} alt={project.title} className="w-full h-full object-cover" />
             </div>
           )}
+          <div className="flex-1 min-w-0 space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[10px] font-bold text-faint tracking-wider">
+                [{ordStr}]
+              </span>
+              <h3 className="font-display text-base font-bold text-ink uppercase tracking-tight">
+                {project.title}
+              </h3>
+              {project.featured && (
+                <span className="border border-line bg-bg px-2 py-0.5 text-[9px] uppercase font-bold font-mono text-ink">
+                  ★ {isId ? 'UNGGULAN' : 'FEATURED'}
+                </span>
+              )}
+              <span
+                className={`inline-block px-2 py-0.5 text-[9px] uppercase font-bold font-mono border ${
+                  project.featured
+                    ? 'border-line bg-invert-bg text-invert-fg'
+                    : 'border-line bg-bg text-faint'
+                }`}
+              >
+                {project.featured ? (isId ? 'PRIORITAS' : 'PRIORITY') : (isId ? 'TERINDEKS' : 'INDEXED')}
+              </span>
+            </div>
+
+            {project.description && (
+              <p className="text-faint text-xs leading-relaxed font-sans line-clamp-2">
+                {project.description}
+              </p>
+            )}
+
+            {techList.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {techList.map((t) => (
+                  <span
+                    key={t}
+                    className="border border-line bg-bg px-2 py-0.5 font-mono text-[10px] uppercase text-ink"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Action Buttons */}
