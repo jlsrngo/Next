@@ -11,7 +11,7 @@ use crate::state::{generate_id, SharedState};
 pub async fn experiences_handler(State(state): State<SharedState>) -> impl IntoResponse {
     if let Some(pool) = &state.pool {
         let query_result = sqlx::query(
-            "SELECT id, company, position, location, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM work_experiences ORDER BY \"order\" ASC"
+            "SELECT id, company, position, company_logo_url, location, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM work_experiences ORDER BY \"order\" ASC"
         )
         .fetch_all(pool)
         .await;
@@ -22,6 +22,7 @@ pub async fn experiences_handler(State(state): State<SharedState>) -> impl IntoR
                 let id: String = r.try_get("id").unwrap_or_default();
                 let company: String = r.try_get("company").unwrap_or_default();
                 let position: String = r.try_get("position").unwrap_or_default();
+                let company_logo_url: Option<String> = r.try_get("company_logo_url").ok();
                 let location: Option<String> = r.try_get("location").ok();
                 let start_date: Option<String> = r.try_get("start_date").ok();
                 let end_date: Option<String> = r.try_get("end_date").ok();
@@ -33,6 +34,8 @@ pub async fn experiences_handler(State(state): State<SharedState>) -> impl IntoR
                     "id": id,
                     "company": company,
                     "position": position,
+                    "companyLogoUrl": company_logo_url,
+                    "company_logo_url": company_logo_url,
                     "location": location.unwrap_or_else(|| "Indonesia".to_string()),
                     "startDate": start_date,
                     "endDate": end_date,
@@ -54,6 +57,7 @@ pub async fn create_experience_handler(
     let id = generate_id("exp");
     let company = payload.get("company").and_then(|v| v.as_str()).unwrap_or("Company");
     let position = payload.get("position").and_then(|v| v.as_str()).unwrap_or("Engineer");
+    let company_logo_url = payload.get("companyLogoUrl").or_else(|| payload.get("company_logo_url")).and_then(|v| v.as_str());
     let location = payload.get("location").and_then(|v| v.as_str()).unwrap_or("Remote");
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
     let current = payload.get("current").and_then(|v| v.as_bool()).unwrap_or(false);
@@ -62,13 +66,14 @@ pub async fn create_experience_handler(
     if let Some(pool) = &state.pool {
         let _ = sqlx::query(
             r#"
-            INSERT INTO work_experiences (id, company, position, location, start_date, end_date, current, description, responsibilities, "order", created_at, updated_at)
-            VALUES ($1, $2, $3, $4, NOW(), NULL, $5, $6, '[]'::json, $7, NOW(), NOW())
+            INSERT INTO work_experiences (id, company, position, company_logo_url, location, start_date, end_date, current, description, responsibilities, "order", created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5, NOW(), NULL, $6, $7, '[]'::json, $8, NOW(), NOW())
             "#
         )
         .bind(&id)
         .bind(company)
         .bind(position)
+        .bind(company_logo_url)
         .bind(location)
         .bind(current)
         .bind(description)
@@ -87,6 +92,7 @@ pub async fn update_experience_handler(
 ) -> impl IntoResponse {
     let company = payload.get("company").and_then(|v| v.as_str()).unwrap_or("Company");
     let position = payload.get("position").and_then(|v| v.as_str()).unwrap_or("Engineer");
+    let company_logo_url = payload.get("companyLogoUrl").or_else(|| payload.get("company_logo_url")).and_then(|v| v.as_str());
     let location = payload.get("location").and_then(|v| v.as_str()).unwrap_or("Remote");
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
     let current = payload.get("current").and_then(|v| v.as_bool()).unwrap_or(false);
@@ -96,13 +102,14 @@ pub async fn update_experience_handler(
         let _ = sqlx::query(
             r#"
             UPDATE work_experiences
-            SET company = $1, position = $2, location = $3, current = $4,
-                description = $5, "order" = $6, updated_at = NOW()
-            WHERE id = $7
+            SET company = $1, position = $2, company_logo_url = $3, location = $4, current = $5,
+                description = $6, "order" = $7, updated_at = NOW()
+            WHERE id = $8
             "#
         )
         .bind(company)
         .bind(position)
+        .bind(company_logo_url)
         .bind(location)
         .bind(current)
         .bind(description)

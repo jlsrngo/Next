@@ -8,6 +8,8 @@ export interface AchievementItemRecord {
   id: string | number;
   title: string;
   issuer: string;
+  imageUrl?: string;
+  image_url?: string;
   issueDate?: string;
   issue_date?: string;
   description?: string;
@@ -37,6 +39,7 @@ function AchievementAdminCardComponent({
   const isId = locale === 'id';
   const regNumber = String(item.order ?? index + 1).padStart(2, '0');
   const year = item.issueDate ? new Date(item.issueDate).getFullYear() : null;
+  const image = item.imageUrl || item.image_url;
 
   return (
     <article
@@ -46,9 +49,16 @@ function AchievementAdminCardComponent({
       <CornerCrosses />
       <div>
         <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-[9px] uppercase tracking-widest text-faint">
-            {isId ? 'REG //' : 'REG //'} #{regNumber}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-faint">
+              {isId ? 'REG //' : 'REG //'} #{regNumber}
+            </span>
+            {item.category && (
+              <span className="border border-line bg-bg px-1.5 py-0.2 font-mono text-[9px] uppercase font-bold text-faint">
+                {item.category}
+              </span>
+            )}
+          </div>
           {item.featured && (
             <span className="border border-line bg-bg px-2 py-0.5 font-mono text-[9px] uppercase font-bold text-ink">
               ★ {isId ? 'UNGGULAN' : 'NOTABLE'}
@@ -56,10 +66,19 @@ function AchievementAdminCardComponent({
           )}
         </div>
 
-        <h3 className="font-display text-base font-bold text-ink">{item.title}</h3>
-        <div className="font-mono text-xs text-faint mt-1 flex items-center gap-2">
-          <span className="font-bold text-ink">{item.issuer}</span>
-          {year && <span>• {year}</span>}
+        <div className="flex items-start gap-3">
+          {image && (
+            <div className="w-16 h-12 border border-line bg-bg-sunken shrink-0 overflow-hidden">
+              <img src={image} alt={item.title} className="w-full h-full object-cover" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display text-base font-bold text-ink leading-snug">{item.title}</h3>
+            <div className="font-mono text-xs text-faint mt-1 flex items-center gap-2">
+              <span className="font-bold text-ink">{item.issuer}</span>
+              {year && <span>• {year}</span>}
+            </div>
+          </div>
         </div>
 
         {item.description && (

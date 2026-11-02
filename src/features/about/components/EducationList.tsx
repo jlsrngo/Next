@@ -35,7 +35,15 @@ export default function EducationList({ educations }: EducationListProps) {
             <CornerCrosses />
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-none overflow-hidden flex-shrink-0 bg-white dark:bg-black border border-line p-2 flex items-center justify-center">
-                <GraduationCap className="w-full h-full text-black dark:text-white" />
+                {edu.institution_logo_url || edu.institutionLogoUrl ? (
+                  <img
+                    src={edu.institution_logo_url || edu.institutionLogoUrl}
+                    alt={edu.institution_name || edu.institution}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <GraduationCap className="w-full h-full text-black dark:text-white" />
+                )}
               </div>
               <div className="flex-1 space-y-1">
                 <h3 className="font-display font-bold text-base md:text-lg leading-tight text-black dark:text-white">

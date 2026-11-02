@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, Briefcase } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { useLocale } from '@/context/I18nContext';
 import { aboutService } from '@/services/api';
 import type { ExperienceItemRecord } from '../components/ExperienceAdminCard';
@@ -22,6 +23,7 @@ export default function AdminExperienceFormPage() {
   // Form Fields
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
+  const [companyLogoUrl, setCompanyLogoUrl] = useState('');
   const [location, setLocation] = useState('Remote');
   const [description, setDescription] = useState('');
   const [current, setCurrent] = useState(false);
@@ -37,6 +39,7 @@ export default function AdminExperienceFormPage() {
           if (found) {
             setCompany(found.company || found.company_name || '');
             setPosition(found.position || '');
+            setCompanyLogoUrl(found.companyLogoUrl || found.company_logo_url || '');
             setLocation(found.location || (isId ? 'Jarak Jauh' : 'Remote'));
             setDescription(found.description || '');
             setCurrent(Boolean(found.current || found.is_current));
@@ -64,6 +67,8 @@ export default function AdminExperienceFormPage() {
     const payload = {
       company: company.trim(),
       position: position.trim(),
+      companyLogoUrl: companyLogoUrl.trim() || null,
+      company_logo_url: companyLogoUrl.trim() || null,
       location: location.trim(),
       description: description.trim(),
       current,
@@ -139,6 +144,14 @@ export default function AdminExperienceFormPage() {
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Company Logo Adjuster */}
+        <ImageUploadAdjuster
+          value={companyLogoUrl}
+          onChange={(newVal) => setCompanyLogoUrl(newVal)}
+          aspectRatio="square"
+          label={isId ? 'LOGO PERUSAHAAN / ORGANISASI' : 'COMPANY / ORGANIZATION LOGO'}
+        />
+
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">

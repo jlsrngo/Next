@@ -100,7 +100,11 @@ export default function AchievementDetailModal({ isOpen, onClose, achievement }:
           <div className="flex-1">
             <div className="mb-1.5">
               <div className="inline-flex px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-ink bg-bg-sunken border border-line rounded-none font-mono">
-                {t(`modal.categories.${achievement.category}`) || achievement.category}
+                {(() => {
+                  const key = `modal.categories.${achievement.category}`;
+                  const res = t(key);
+                  return res !== key ? res : (achievement.category || (locale === 'id' ? 'Sertifikasi' : 'Certification'));
+                })()}
               </div>
             </div>
 

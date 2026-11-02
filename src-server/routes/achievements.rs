@@ -11,7 +11,7 @@ use crate::state::{generate_id, get_snapshot, SharedState};
 pub async fn achievements_handler(State(state): State<SharedState>) -> impl IntoResponse {
     if let Some(pool) = &state.pool {
         let query_result = sqlx::query(
-            "SELECT id, title, description, issuer, date::text as date_str, credential_url, featured, \"order\" FROM achievements ORDER BY \"order\" ASC"
+            "SELECT id, title, description, issuer, date::text as date_str, image_url, category, credential_url, featured, \"order\" FROM achievements ORDER BY \"order\" ASC"
         )
         .fetch_all(pool)
         .await;
@@ -24,6 +24,8 @@ pub async fn achievements_handler(State(state): State<SharedState>) -> impl Into
                 let description: String = r.try_get("description").unwrap_or_default();
                 let issuer: Option<String> = r.try_get("issuer").ok();
                 let date_str: Option<String> = r.try_get("date_str").ok();
+                let image_url: Option<String> = r.try_get("image_url").ok();
+                let category: Option<String> = r.try_get("category").ok();
                 let credential_url: Option<String> = r.try_get("credential_url").ok();
                 let featured: bool = r.try_get("featured").unwrap_or(false);
                 let order: i32 = r.try_get("order").unwrap_or(0);
@@ -35,6 +37,9 @@ pub async fn achievements_handler(State(state): State<SharedState>) -> impl Into
                     "issuer": issuer.unwrap_or_default(),
                     "issueDate": date_str,
                     "date": date_str,
+                    "imageUrl": image_url,
+                    "image_url": image_url,
+                    "category": category.unwrap_or_else(|| "Certification".to_string()),
                     "credentialUrl": credential_url,
                     "credential_url": credential_url,
                     "featured": featured,
@@ -62,6 +67,8 @@ pub async fn create_achievement_handler(
     let title = payload.get("title").and_then(|v| v.as_str()).unwrap_or("Untitled Award");
     let issuer = payload.get("issuer").and_then(|v| v.as_str()).unwrap_or("Institution");
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
+    let image_url = payload.get("imageUrl").or_else(|| payload.get("image_url")).and_then(|v| v.as_str());
+    let category = payload.get("category").and_then(|v| v.as_str()).unwrap_or("Certification");
     let credential_url = payload.get("credentialUrl").or_else(|| payload.get("credential_url")).and_then(|v| v.as_str());
     let featured = payload.get("featured").and_then(|v| v.as_bool()).unwrap_or(false);
     let order = payload.get("order").and_then(|v| v.as_i64()).unwrap_or(0) as i32;
@@ -69,14 +76,16 @@ pub async fn create_achievement_handler(
     if let Some(pool) = &state.pool {
         let _ = sqlx::query(
             r#"
-            INSERT INTO achievements (id, title, description, issuer, date, credential_url, featured, "order", created_at, updated_at)
-            VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7, NOW(), NOW())
+            INSERT INTO achievements (id, title, description, issuer, date, image_url, category, credential_url, featured, "order", created_at, updated_at)
+            VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7, $8, $9, NOW(), NOW())
             "#
         )
         .bind(&id)
         .bind(title)
         .bind(description)
         .bind(issuer)
+        .bind(image_url)
+        .bind(category)
         .bind(credential_url)
         .bind(featured)
         .bind(order)
@@ -95,6 +104,8 @@ pub async fn update_achievement_handler(
     let title = payload.get("title").and_then(|v| v.as_str()).unwrap_or("Untitled Award");
     let issuer = payload.get("issuer").and_then(|v| v.as_str()).unwrap_or("Institution");
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
+    let image_url = payload.get("imageUrl").or_else(|| payload.get("image_url")).and_then(|v| v.as_str());
+    let category = payload.get("category").and_then(|v| v.as_str()).unwrap_or("Certification");
     let credential_url = payload.get("credentialUrl").or_else(|| payload.get("credential_url")).and_then(|v| v.as_str());
     let featured = payload.get("featured").and_then(|v| v.as_bool()).unwrap_or(false);
     let order = payload.get("order").and_then(|v| v.as_i64()).unwrap_or(0) as i32;
@@ -103,14 +114,16 @@ pub async fn update_achievement_handler(
         let _ = sqlx::query(
             r#"
             UPDATE achievements
-            SET title = $1, description = $2, issuer = $3, credential_url = $4,
-                featured = $5, "order" = $6, updated_at = NOW()
-            WHERE id = $7
+            SET title = $1, description = $2, issuer = $3, image_url = $4, category = $5,
+                credential_url = $6, featured = $7, "order" = $8, updated_at = NOW()
+            WHERE id = $9
             "#
         )
         .bind(title)
         .bind(description)
         .bind(issuer)
+        .bind(image_url)
+        .bind(category)
         .bind(credential_url)
         .bind(featured)
         .bind(order)

@@ -18,7 +18,9 @@ export default function AchievementCard({ item, index, onSelect }: AchievementCa
   const isPdf = item.image_url?.toLowerCase().endsWith('.pdf');
   const hasImage = !!item.image_url;
 
-  const categoryLabel = t(`modal.categories.${item.category}`) || item.category;
+  const catKey = `modal.categories.${item.category}`;
+  const resolved = t(catKey);
+  const categoryLabel = resolved !== catKey ? resolved : (item.category || (locale === 'id' ? 'Sertifikasi' : 'Certification'));
 
   return (
     <div

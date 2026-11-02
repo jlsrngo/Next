@@ -8,6 +8,8 @@ export interface EducationItemRecord {
   id: string | number;
   degree: string;
   institution: string;
+  institutionLogoUrl?: string;
+  institution_logo_url?: string;
   fieldOfStudy?: string;
   field_of_study?: string;
   grade?: string;
@@ -39,6 +41,7 @@ function EducationAdminCardComponent({
   const isId = locale === 'id';
   const degreeNumber = String(item.order ?? index + 1).padStart(2, '0');
   const field = item.fieldOfStudy || item.field_of_study;
+  const logo = item.institutionLogoUrl || item.institution_logo_url;
 
   return (
     <article
@@ -58,10 +61,19 @@ function EducationAdminCardComponent({
           )}
         </div>
 
-        <h3 className="font-display text-lg font-bold text-ink">{item.degree}</h3>
-        {field && <div className="font-mono text-xs font-bold text-ink/80 mt-1">{field}</div>}
-        <div className="font-mono text-xs text-faint mt-0.5">
-          {item.institution} • {item.location || 'Indonesia'}
+        <div className="flex items-start gap-3">
+          {logo && (
+            <div className="w-12 h-12 border border-line bg-bg-sunken p-1 shrink-0 overflow-hidden flex items-center justify-center">
+              <img src={logo} alt={item.institution} className="w-full h-full object-contain" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display text-lg font-bold text-ink">{item.degree}</h3>
+            {field && <div className="font-mono text-xs font-bold text-ink/80 mt-1">{field}</div>}
+            <div className="font-mono text-xs text-faint mt-0.5">
+              {item.institution} • {item.location || 'Indonesia'}
+            </div>
+          </div>
         </div>
 
         {item.description && (

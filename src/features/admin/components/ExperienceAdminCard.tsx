@@ -9,6 +9,8 @@ export interface ExperienceItemRecord {
   position: string;
   company?: string;
   company_name?: string;
+  companyLogoUrl?: string;
+  company_logo_url?: string;
   location?: string;
   startDate?: string;
   start_date?: string;
@@ -37,6 +39,7 @@ function ExperienceAdminCardComponent({
   const isId = locale === 'id';
   const roleNumber = String(item.order ?? index + 1).padStart(2, '0');
   const companyName = item.company || item.company_name || (isId ? 'Organisasi' : 'Organization');
+  const logo = item.companyLogoUrl || item.company_logo_url;
 
   return (
     <article
@@ -44,14 +47,21 @@ function ExperienceAdminCardComponent({
       aria-label={`Role: ${item.position} at ${companyName}`}
     >
       <CornerCrosses />
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-line/60 pb-3 mb-4">
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-faint">
-            {isId ? 'PERAN //' : 'ROLE //'} #{roleNumber}
-          </div>
-          <h3 className="font-display text-lg font-bold text-ink mt-0.5">{item.position}</h3>
-          <div className="font-mono text-xs text-faint font-bold text-ink/80">
-            {companyName} • {item.location || (isId ? 'Jarak Jauh' : 'Remote')}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line/60 pb-3 mb-4">
+        <div className="flex items-center gap-3">
+          {logo && (
+            <div className="w-12 h-12 border border-line bg-bg-sunken p-1 shrink-0 overflow-hidden flex items-center justify-center">
+              <img src={logo} alt={companyName} className="w-full h-full object-contain" />
+            </div>
+          )}
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-faint">
+              {isId ? 'PERAN //' : 'ROLE //'} #{roleNumber}
+            </div>
+            <h3 className="font-display text-lg font-bold text-ink mt-0.5">{item.position}</h3>
+            <div className="font-mono text-xs text-faint font-bold text-ink/80">
+              {companyName} • {item.location || (isId ? 'Jarak Jauh' : 'Remote')}
+            </div>
           </div>
         </div>
 

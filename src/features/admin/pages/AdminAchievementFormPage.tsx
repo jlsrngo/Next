@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, Trophy, Star } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { useLocale } from '@/context/I18nContext';
 import { achievementsService } from '@/services/api';
 import type { AchievementItemRecord } from '../components/AchievementAdminCard';
@@ -22,6 +23,8 @@ export default function AdminAchievementFormPage() {
   // Form Fields
   const [title, setTitle] = useState('');
   const [issuer, setIssuer] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [category, setCategory] = useState('Certification');
   const [description, setDescription] = useState('');
   const [credentialUrl, setCredentialUrl] = useState('');
   const [featured, setFeatured] = useState(false);
@@ -37,8 +40,10 @@ export default function AdminAchievementFormPage() {
           if (found) {
             setTitle(found.title || '');
             setIssuer(found.issuer || '');
+            setImageUrl(found.imageUrl || found.image_url || '');
+            setCategory(found.category || 'Certification');
             setDescription(found.description || '');
-            setCredentialUrl(found.credentialUrl || '');
+            setCredentialUrl(found.credentialUrl || found.credential_url || '');
             setFeatured(Boolean(found.featured));
             setOrder(found.order ?? 0);
           } else {
@@ -67,8 +72,12 @@ export default function AdminAchievementFormPage() {
     const payload = {
       title: title.trim(),
       issuer: issuer.trim(),
+      imageUrl: imageUrl.trim() || null,
+      image_url: imageUrl.trim() || null,
+      category: category.trim() || 'Certification',
       description: description.trim(),
       credentialUrl: credentialUrl.trim() || undefined,
+      credential_url: credentialUrl.trim() || undefined,
       featured,
       order: Number(order) || 0,
     };
@@ -142,6 +151,14 @@ export default function AdminAchievementFormPage() {
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Certificate / Award Media Adjuster */}
+        <ImageUploadAdjuster
+          value={imageUrl}
+          onChange={(newVal) => setImageUrl(newVal)}
+          aspectRatio="video"
+          label={isId ? 'BERKAS SERTIFIKAT / FOTO PENGHARGAAN' : 'CERTIFICATE FILE / AWARD IMAGE'}
+        />
+
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
@@ -150,8 +167,8 @@ export default function AdminAchievementFormPage() {
           </div>
 
           <div className="space-y-5 font-mono text-xs">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="sm:col-span-2">
                 <label className="block text-faint uppercase font-bold mb-1.5">
                   {isId ? 'Judul Pencapaian *' : 'Achievement Title *'}
                 </label>
@@ -167,6 +184,27 @@ export default function AdminAchievementFormPage() {
 
               <div>
                 <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Kategori *' : 'Category *'}
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
+                >
+                  <option value="Certification">{isId ? 'Sertifikasi (Certification)' : 'Certification'}</option>
+                  <option value="Certificate">{isId ? 'Sertifikat (Certificate)' : 'Certificate'}</option>
+                  <option value="Award">{isId ? 'Penghargaan (Award)' : 'Award'}</option>
+                  <option value="Recognition">{isId ? 'Pengakuan (Recognition)' : 'Recognition'}</option>
+                  <option value="Competition">{isId ? 'Kompetisi (Competition)' : 'Competition'}</option>
+                  <option value="Course">{isId ? 'Kursus (Course)' : 'Course'}</option>
+                  <option value="Other">{isId ? 'Lainnya (Other)' : 'Other'}</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">
                   {isId ? 'Organisasi / Lembaga Penerbit *' : 'Issuing Organization *'}
                 </label>
                 <input
@@ -175,6 +213,18 @@ export default function AdminAchievementFormPage() {
                   value={issuer}
                   onChange={(e) => setIssuer(e.target.value)}
                   placeholder={isId ? 'cth. Kementerian Kominfo / Google' : 'e.g. Kementerian Kominfo / Google'}
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Indeks Urutan' : 'Sort Order'}
+                </label>
+                <input
+                  type="number"
+                  value={order}
+                  onChange={(e) => setOrder(Number(e.target.value))}
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>

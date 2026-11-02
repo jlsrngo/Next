@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, GraduationCap, MapPin } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { useLocale } from '@/context/I18nContext';
 import { aboutService } from '@/services/api';
 import type { EducationItemRecord } from '../components/EducationAdminCard';
@@ -22,6 +23,7 @@ export default function AdminEducationFormPage() {
   // Form Fields
   const [institution, setInstitution] = useState('');
   const [degree, setDegree] = useState('');
+  const [institutionLogoUrl, setInstitutionLogoUrl] = useState('');
   const [fieldOfStudy, setFieldOfStudy] = useState('');
   const [grade, setGrade] = useState('');
   const [location, setLocation] = useState('Indonesia');
@@ -39,6 +41,7 @@ export default function AdminEducationFormPage() {
           if (found) {
             setInstitution(found.institution || '');
             setDegree(found.degree || '');
+            setInstitutionLogoUrl(found.institutionLogoUrl || found.institution_logo_url || '');
             setFieldOfStudy(found.fieldOfStudy || found.field_of_study || '');
             setGrade(found.grade || '');
             setLocation(found.location || 'Indonesia');
@@ -68,6 +71,8 @@ export default function AdminEducationFormPage() {
     const payload = {
       institution: institution.trim(),
       degree: degree.trim(),
+      institutionLogoUrl: institutionLogoUrl.trim() || null,
+      institution_logo_url: institutionLogoUrl.trim() || null,
       fieldOfStudy: fieldOfStudy.trim(),
       grade: grade.trim(),
       location: location.trim(),
@@ -145,6 +150,14 @@ export default function AdminEducationFormPage() {
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Institution Logo Adjuster */}
+        <ImageUploadAdjuster
+          value={institutionLogoUrl}
+          onChange={(newVal) => setInstitutionLogoUrl(newVal)}
+          aspectRatio="square"
+          label={isId ? 'LOGO INSTITUSI PENDIDIKAN' : 'EDUCATIONAL INSTITUTION LOGO'}
+        />
+
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">

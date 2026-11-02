@@ -186,10 +186,20 @@
     "type_placeholder": "e.g. Course, Project",
     "categories": {
       "Certificate": "Certificate",
+      "certificate": "Certificate",
+      "Certification": "Certification",
+      "certification": "Certification",
+      "CERTIFICATION": "Certification",
       "Award": "Award",
+      "award": "Award",
       "Recognition": "Recognition",
+      "recognition": "Recognition",
       "Competition": "Competition",
-      "Other": "Other"
+      "competition": "Competition",
+      "Course": "Course",
+      "course": "Course",
+      "Other": "Other",
+      "other": "Other"
     }
   },
   "dashboard": {

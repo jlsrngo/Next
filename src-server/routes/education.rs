@@ -11,7 +11,7 @@ use crate::state::{generate_id, SharedState};
 pub async fn education_handler(State(state): State<SharedState>) -> impl IntoResponse {
     if let Some(pool) = &state.pool {
         let query_result = sqlx::query(
-            "SELECT id, institution, degree, field_of_study, location, gpa, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM educations ORDER BY \"order\" ASC"
+            "SELECT id, institution, degree, institution_logo_url, field_of_study, location, gpa, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM educations ORDER BY \"order\" ASC"
         )
         .fetch_all(pool)
         .await;
@@ -22,6 +22,7 @@ pub async fn education_handler(State(state): State<SharedState>) -> impl IntoRes
                 let id: String = r.try_get("id").unwrap_or_default();
                 let institution: String = r.try_get("institution").unwrap_or_default();
                 let degree: String = r.try_get("degree").unwrap_or_default();
+                let institution_logo_url: Option<String> = r.try_get("institution_logo_url").ok();
                 let field: Option<String> = r.try_get("field_of_study").ok();
                 let location: Option<String> = r.try_get("location").ok();
                 let gpa: Option<String> = r.try_get("gpa").ok();
@@ -35,6 +36,8 @@ pub async fn education_handler(State(state): State<SharedState>) -> impl IntoRes
                     "id": id,
                     "institution": institution,
                     "degree": degree,
+                    "institutionLogoUrl": institution_logo_url,
+                    "institution_logo_url": institution_logo_url,
                     "fieldOfStudy": field,
                     "location": location,
                     "grade": gpa,
@@ -58,6 +61,7 @@ pub async fn create_education_handler(
     let id = generate_id("edu");
     let institution = payload.get("institution").and_then(|v| v.as_str()).unwrap_or("University");
     let degree = payload.get("degree").and_then(|v| v.as_str()).unwrap_or("Degree");
+    let institution_logo_url = payload.get("institutionLogoUrl").or_else(|| payload.get("institution_logo_url")).and_then(|v| v.as_str());
     let field = payload.get("fieldOfStudy").or_else(|| payload.get("field_of_study")).and_then(|v| v.as_str()).unwrap_or("Computer Science");
     let gpa = payload.get("grade").or_else(|| payload.get("gpa")).and_then(|v| v.as_str());
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
@@ -67,13 +71,14 @@ pub async fn create_education_handler(
     if let Some(pool) = &state.pool {
         let _ = sqlx::query(
             r#"
-            INSERT INTO educations (id, institution, degree, field_of_study, gpa, start_date, end_date, current, description, "order")
-            VALUES ($1, $2, $3, $4, $5, NOW(), NULL, $6, $7, $8)
+            INSERT INTO educations (id, institution, degree, institution_logo_url, field_of_study, gpa, start_date, end_date, current, description, "order")
+            VALUES ($1, $2, $3, $4, $5, $6, NOW(), NULL, $7, $8, $9)
             "#
         )
         .bind(&id)
         .bind(institution)
         .bind(degree)
+        .bind(institution_logo_url)
         .bind(field)
         .bind(gpa)
         .bind(current)
@@ -93,6 +98,7 @@ pub async fn update_education_handler(
 ) -> impl IntoResponse {
     let institution = payload.get("institution").and_then(|v| v.as_str()).unwrap_or("University");
     let degree = payload.get("degree").and_then(|v| v.as_str()).unwrap_or("Degree");
+    let institution_logo_url = payload.get("institutionLogoUrl").or_else(|| payload.get("institution_logo_url")).and_then(|v| v.as_str());
     let field = payload.get("fieldOfStudy").or_else(|| payload.get("field_of_study")).and_then(|v| v.as_str()).unwrap_or("Computer Science");
     let gpa = payload.get("grade").or_else(|| payload.get("gpa")).and_then(|v| v.as_str());
     let description = payload.get("description").and_then(|v| v.as_str()).unwrap_or("");
@@ -103,13 +109,14 @@ pub async fn update_education_handler(
         let _ = sqlx::query(
             r#"
             UPDATE educations
-            SET institution = $1, degree = $2, field_of_study = $3, gpa = $4,
-                current = $5, description = $6, "order" = $7
-            WHERE id = $8
+            SET institution = $1, degree = $2, institution_logo_url = $3, field_of_study = $4,
+                gpa = $5, current = $6, description = $7, "order" = $8
+            WHERE id = $9
             "#
         )
         .bind(institution)
         .bind(degree)
+        .bind(institution_logo_url)
         .bind(field)
         .bind(gpa)
         .bind(current)

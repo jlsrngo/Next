@@ -5,13 +5,13 @@ use crate::state::{get_snapshot, SharedState};
 pub async fn about_handler(State(state): State<SharedState>) -> impl IntoResponse {
     if let Some(pool) = &state.pool {
         let exp_rows = sqlx::query(
-            "SELECT id, company, position, location, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM work_experiences ORDER BY \"order\" ASC"
+            "SELECT id, company, position, company_logo_url, location, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM work_experiences ORDER BY \"order\" ASC"
         )
         .fetch_all(pool)
         .await;
 
         let edu_rows = sqlx::query(
-            "SELECT id, institution, degree, field_of_study, location, gpa, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM educations ORDER BY \"order\" ASC"
+            "SELECT id, institution, degree, institution_logo_url, field_of_study, location, gpa, start_date::text as start_date, end_date::text as end_date, current, description, \"order\" FROM educations ORDER BY \"order\" ASC"
         )
         .fetch_all(pool)
         .await;
@@ -23,6 +23,7 @@ pub async fn about_handler(State(state): State<SharedState>) -> impl IntoRespons
                 let id: String = r.try_get("id").unwrap_or_default();
                 let company: String = r.try_get("company").unwrap_or_default();
                 let position: String = r.try_get("position").unwrap_or_default();
+                let company_logo_url: Option<String> = r.try_get("company_logo_url").ok();
                 let location: Option<String> = r.try_get("location").ok();
                 let start_date: Option<String> = r.try_get("start_date").ok();
                 let end_date: Option<String> = r.try_get("end_date").ok();
@@ -33,6 +34,8 @@ pub async fn about_handler(State(state): State<SharedState>) -> impl IntoRespons
                     "id": id,
                     "company_name": company,
                     "company": company,
+                    "company_logo_url": company_logo_url,
+                    "companyLogoUrl": company_logo_url,
                     "position": position,
                     "location": location.unwrap_or_else(|| "Indonesia".to_string()),
                     "start_date": start_date.clone().unwrap_or_else(|| "2023-01-01".to_string()),
@@ -53,6 +56,7 @@ pub async fn about_handler(State(state): State<SharedState>) -> impl IntoRespons
                 let id: String = r.try_get("id").unwrap_or_default();
                 let institution: String = r.try_get("institution").unwrap_or_default();
                 let degree: String = r.try_get("degree").unwrap_or_default();
+                let institution_logo_url: Option<String> = r.try_get("institution_logo_url").ok();
                 let field: Option<String> = r.try_get("field_of_study").ok();
                 let location: Option<String> = r.try_get("location").ok();
                 let gpa: Option<String> = r.try_get("gpa").ok();
@@ -65,6 +69,8 @@ pub async fn about_handler(State(state): State<SharedState>) -> impl IntoRespons
                     "id": id,
                     "institution": institution,
                     "degree": degree,
+                    "institution_logo_url": institution_logo_url,
+                    "institutionLogoUrl": institution_logo_url,
                     "field_of_study": field,
                     "fieldOfStudy": field,
                     "location": location.unwrap_or_else(|| "Indonesia".to_string()),
