@@ -29,11 +29,14 @@ export const signIn = async (
     options.password === 'admin123'
   ) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('portfolio_admin_auth', 'true')
-      localStorage.setItem(
+      sessionStorage.setItem('portfolio_admin_auth', 'true')
+      sessionStorage.setItem(
         'portfolio_admin_user',
         JSON.stringify({ email: options.email, role: 'admin' })
       )
+      // Cleanup legacy persistent auth
+      localStorage.removeItem('portfolio_admin_auth')
+      localStorage.removeItem('portfolio_admin_user')
     }
     return { error: null, status: 200, ok: true, url: '/admin' }
   }
@@ -41,11 +44,14 @@ export const signIn = async (
   // Allow login if matching any valid test admin
   if (options.password === 'admin123' || options.password.length >= 6) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('portfolio_admin_auth', 'true')
-      localStorage.setItem(
+      sessionStorage.setItem('portfolio_admin_auth', 'true')
+      sessionStorage.setItem(
         'portfolio_admin_user',
         JSON.stringify({ email: options.email, role: 'admin' })
       )
+      // Cleanup legacy persistent auth
+      localStorage.removeItem('portfolio_admin_auth')
+      localStorage.removeItem('portfolio_admin_user')
     }
     return { error: null, status: 200, ok: true, url: '/admin' }
   }
@@ -55,6 +61,8 @@ export const signIn = async (
 
 export const signOut = (options?: { callbackUrl?: string }) => {
   if (typeof window !== 'undefined') {
+    sessionStorage.removeItem('portfolio_admin_auth')
+    sessionStorage.removeItem('portfolio_admin_user')
     localStorage.removeItem('portfolio_admin_auth')
     localStorage.removeItem('portfolio_admin_user')
     if (options?.callbackUrl) {
@@ -68,7 +76,12 @@ export const signOut = (options?: { callbackUrl?: string }) => {
 export const useSession = () => {
   const [isAuth, setIsAuth] = React.useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('portfolio_admin_auth') === 'true'
+      // Clean up any legacy localStorage session to enforce tab-close auto logout
+      if (localStorage.getItem('portfolio_admin_auth')) {
+        localStorage.removeItem('portfolio_admin_auth')
+        localStorage.removeItem('portfolio_admin_user')
+      }
+      return sessionStorage.getItem('portfolio_admin_auth') === 'true'
     }
     return false
   })
@@ -76,7 +89,7 @@ export const useSession = () => {
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const handleStorage = () => {
-        setIsAuth(localStorage.getItem('portfolio_admin_auth') === 'true')
+        setIsAuth(sessionStorage.getItem('portfolio_admin_auth') === 'true')
       }
       window.addEventListener('storage', handleStorage)
       return () => window.removeEventListener('storage', handleStorage)
@@ -86,7 +99,7 @@ export const useSession = () => {
   if (isAuth) {
     let email = 'admin@portfolio.com'
     try {
-      const stored = localStorage.getItem('portfolio_admin_user')
+      const stored = sessionStorage.getItem('portfolio_admin_user')
       if (stored) {
         const u = JSON.parse(stored)
         if (u.email) email = u.email

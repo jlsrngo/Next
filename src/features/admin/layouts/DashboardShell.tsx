@@ -20,11 +20,13 @@ import {
   Palette,
   Settings,
   Tag,
+  LogOut,
   type LucideIcon,
 } from 'lucide-react'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
 import { getLatestVersion, type ChangelogEntry } from '@/lib/changelog'
 import { useI18n } from '@/context/I18nContext'
+import { signOut } from 'next-auth/react'
 
 type NavItem =
   | { divider: true }
@@ -238,13 +240,13 @@ export default function DashboardShell({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 font-mono text-[10px]">
-            {/* Language Selector */}
-            <div className="flex items-center border border-line bg-bg">
+          <div className="flex items-center gap-2.5 font-mono text-[10px]">
+            {/* Language Selector (Height matched to theme & avatar) */}
+            <div className="flex h-7 items-stretch border border-line bg-bg overflow-hidden">
               <button
                 type="button"
                 onClick={() => setLocale('en')}
-                className={`px-2 py-1 font-mono text-[9px] font-bold tracking-wider transition-all ${
+                className={`px-2.5 h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-wider transition-all ${
                   locale === 'en' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'
                 }`}
                 title="Switch to English"
@@ -254,7 +256,7 @@ export default function DashboardShell({
               <button
                 type="button"
                 onClick={() => setLocale('id')}
-                className={`px-2 py-1 font-mono text-[9px] font-bold tracking-wider transition-all ${
+                className={`px-2.5 h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-wider transition-all border-l border-line ${
                   locale === 'id' ? 'bg-invert-bg text-invert-fg' : 'text-faint hover:text-ink'
                 }`}
                 title="Ganti ke Bahasa Indonesia"
@@ -266,7 +268,7 @@ export default function DashboardShell({
             {/* Theme Toggle */}
             <button
               onClick={toggle}
-              className="p-1.5 border border-line hover:border-line-strong text-ink hover:bg-bg-sunken transition-colors"
+              className="w-7 h-7 flex items-center justify-center border border-line hover:border-line-strong text-ink hover:bg-bg-sunken transition-colors"
               title={isDark ? t('admin.switch_to_light') : t('admin.switch_to_dark')}
             >
               {isDark ? <Sun size={14} /> : <Moon size={14} />}
@@ -288,6 +290,15 @@ export default function DashboardShell({
                 <p className="font-mono text-[9px] text-faint tracking-wider mt-0.5">{email || 'admin@portfolio.com'}</p>
               </div>
             </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="w-7 h-7 flex items-center justify-center border border-line hover:border-red-500 text-faint hover:text-red-500 hover:bg-bg-sunken transition-colors"
+              title={locale === 'id' ? 'Keluar / Logout' : 'Sign Out'}
+            >
+              <LogOut size={13} />
+            </button>
           </div>
         </header>
 

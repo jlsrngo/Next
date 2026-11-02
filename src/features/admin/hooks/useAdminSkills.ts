@@ -20,8 +20,8 @@ export function useAdminSkills() {
   const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
-  const fetchSkills = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
+  const fetchSkills = useCallback(async (signal?: AbortSignal, silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const data = await skillsService.getSkills();
       if (signal?.aborted) return;
@@ -30,7 +30,7 @@ export function useAdminSkills() {
       if (signal?.aborted) return;
       console.error('[AdminSkills] Fetch error:', err);
     } finally {
-      if (!signal?.aborted) {
+      if (!signal?.aborted && !silent) {
         setLoading(false);
       }
     }
@@ -51,12 +51,34 @@ export function useAdminSkills() {
   const toggleSkill = useCallback(
     async (tech: (typeof techList)[0]) => {
       const isActive = activeSlugs.has(tech.slug);
-      setTogglingSlug(tech.slug);
+      const prevSkills = [...dbSkills];
+
+      // Optimistic update: instant UI reflection (0ms delay)
+      if (isActive) {
+        setDbSkills((prev) =>
+          prev.filter(
+            (s) => (s.iconName || s.icon || s.name?.toLowerCase()) !== tech.slug
+          )
+        );
+      } else {
+        const category = getCategoryForSlug(tech.slug);
+        setDbSkills((prev) => [
+          ...prev,
+          {
+            name: tech.name,
+            category,
+            iconName: tech.slug,
+            icon: tech.slug,
+            proficiency: 85,
+            featured: false,
+          },
+        ]);
+      }
 
       try {
         if (isActive) {
           await skillsService.deleteSkill(tech.slug);
-          setFeedback({ type: 'success', message: `${tech.name} deactivated from registry.` });
+          setFeedback({ type: 'success', message: `${tech.name} deactivated.` });
         } else {
           const category = getCategoryForSlug(tech.slug);
           await skillsService.createSkill({
@@ -66,17 +88,18 @@ export function useAdminSkills() {
             proficiency: 85,
             featured: false,
           });
-          setFeedback({ type: 'success', message: `${tech.name} activated in PostgreSQL.` });
+          setFeedback({ type: 'success', message: `${tech.name} activated.` });
         }
-        await fetchSkills();
+        // Silent background sync without triggering full-screen loading spinner
+        await fetchSkills(undefined, true);
       } catch (err: unknown) {
+        // Rollback to previous state on failure
+        setDbSkills(prevSkills);
         const message = err instanceof Error ? err.message : 'Toggle failed.';
         setFeedback({ type: 'error', message });
-      } finally {
-        setTogglingSlug(null);
       }
     },
-    [activeSlugs, fetchSkills]
+    [activeSlugs, dbSkills, fetchSkills]
   );
 
   const filteredTech = useMemo(() => {

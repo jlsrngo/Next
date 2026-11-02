@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, X, RotateCw, ZoomIn, ZoomOut, Check, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Upload, X, RotateCw, ZoomIn, ZoomOut, Image as ImageIcon, Link as LinkIcon, Move, RotateCcw } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 
 interface ImageUploadAdjusterProps {
@@ -19,10 +19,20 @@ export default function ImageUploadAdjuster({
   const [rawImageSrc, setRawImageSrc] = useState<string | null>(value || null);
   const [zoom, setZoom] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
-  const [isAdjusting, setIsAdjusting] = useState<boolean>(false);
+  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [urlInput, setUrlInput] = useState<string>(value?.startsWith('http') ? value : '');
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef({ x: 0, y: 0 });
+  const currentPanRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    currentPanRef.current = pan;
+  }, [pan]);
 
   useEffect(() => {
     if (value && !rawImageSrc) {
@@ -31,30 +41,14 @@ export default function ImageUploadAdjuster({
         setUrlInput(value);
       }
     }
-  }, [value]);
+  }, [value, rawImageSrc]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('Hanya file gambar (JPEG, PNG, WebP) yang diizinkan.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
-      setRawImageSrc(result);
-      setZoom(1);
-      setRotation(0);
-      setIsAdjusting(true);
-      applyAdjustment(result, 1, 0);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const applyAdjustment = (imageSrc: string, zoomLevel: number, rotationDegree: number) => {
+  const applyAdjustment = (
+    imageSrc: string,
+    zoomLevel: number,
+    rotationDegree: number,
+    panOffset: { x: number; y: number } = currentPanRef.current
+  ) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
@@ -70,8 +64,14 @@ export default function ImageUploadAdjuster({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
 
-      // Pindahkan origin ke tengah canvas untuk rotasi dan zoom
-      ctx.translate(canvas.width / 2, canvas.height / 2);
+      // Hitung scaling dari frame preview ke ukuran canvas target
+      const frameWidth = frameRef.current ? frameRef.current.clientWidth : 176;
+      const scaleRatio = canvas.width / (frameWidth || 1);
+
+      ctx.translate(
+        canvas.width / 2 + panOffset.x * scaleRatio,
+        canvas.height / 2 + panOffset.y * scaleRatio
+      );
       ctx.rotate((rotationDegree * Math.PI) / 180);
       ctx.scale(zoomLevel, zoomLevel);
 
@@ -92,18 +92,88 @@ export default function ImageUploadAdjuster({
       ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
       ctx.restore();
 
-      // Kompresi hasil ke webp atau jpeg berkualitas tinggi dengan ukuran ringan
       const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
       onChange(compressedDataUrl);
     };
     img.src = imageSrc;
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Hanya file gambar (JPEG, PNG, WebP) yang diizinkan.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setRawImageSrc(result);
+      setZoom(1);
+      setRotation(0);
+      setPan({ x: 0, y: 0 });
+      applyAdjustment(result, 1, 0, { x: 0, y: 0 });
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleZoomChange = (newZoom: number) => {
-    const clamped = Math.max(1, Math.min(3, newZoom));
+    const clamped = Math.max(1, Math.min(4, +newZoom.toFixed(2)));
     setZoom(clamped);
     if (rawImageSrc) {
-      applyAdjustment(rawImageSrc, clamped, rotation);
+      applyAdjustment(rawImageSrc, clamped, rotation, pan);
+    }
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!rawImageSrc) return;
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.15 : -0.15;
+    handleZoomChange(zoom + delta);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!rawImageSrc) return;
+    isDraggingRef.current = true;
+    startPosRef.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current || !rawImageSrc) return;
+    const newX = e.clientX - startPosRef.current.x;
+    const newY = e.clientY - startPosRef.current.y;
+    const newPan = { x: Math.round(newX), y: Math.round(newY) };
+    setPan(newPan);
+  };
+
+  const handleMouseUp = () => {
+    if (isDraggingRef.current && rawImageSrc) {
+      isDraggingRef.current = false;
+      applyAdjustment(rawImageSrc, zoom, rotation, pan);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!rawImageSrc || e.touches.length === 0) return;
+    isDraggingRef.current = true;
+    const touch = e.touches[0];
+    startPosRef.current = { x: touch.clientX - pan.x, y: touch.clientY - pan.y };
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDraggingRef.current || !rawImageSrc || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const newX = touch.clientX - startPosRef.current.x;
+    const newY = touch.clientY - startPosRef.current.y;
+    setPan({ x: Math.round(newX), y: Math.round(newY) });
+  };
+
+  const handleTouchEnd = () => {
+    if (isDraggingRef.current && rawImageSrc) {
+      isDraggingRef.current = false;
+      applyAdjustment(rawImageSrc, zoom, rotation, pan);
     }
   };
 
@@ -111,14 +181,25 @@ export default function ImageUploadAdjuster({
     const newRot = (rotation + 90) % 360;
     setRotation(newRot);
     if (rawImageSrc) {
-      applyAdjustment(rawImageSrc, zoom, newRot);
+      applyAdjustment(rawImageSrc, zoom, newRot, pan);
+    }
+  };
+
+  const handleReset = () => {
+    setZoom(1);
+    setRotation(0);
+    setPan({ x: 0, y: 0 });
+    if (rawImageSrc) {
+      applyAdjustment(rawImageSrc, 1, 0, { x: 0, y: 0 });
     }
   };
 
   const handleRemove = () => {
     setRawImageSrc(null);
     setUrlInput('');
-    setIsAdjusting(false);
+    setZoom(1);
+    setRotation(0);
+    setPan({ x: 0, y: 0 });
     onChange('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -126,8 +207,10 @@ export default function ImageUploadAdjuster({
   const handleUrlSubmit = () => {
     if (!urlInput.trim()) return;
     setRawImageSrc(urlInput.trim());
+    setZoom(1);
+    setRotation(0);
+    setPan({ x: 0, y: 0 });
     onChange(urlInput.trim());
-    setIsAdjusting(false);
   };
 
   const frameClasses =
@@ -180,14 +263,37 @@ export default function ImageUploadAdjuster({
         {/* Left: Image Canvas Frame */}
         <div className="shrink-0 flex flex-col items-center gap-2">
           <div
-            className={`relative border-2 border-dashed border-line bg-bg-raised overflow-hidden flex items-center justify-center ${frameClasses}`}
+            ref={frameRef}
+            onWheel={handleWheel}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className={`relative border-2 border-dashed border-line bg-bg-raised overflow-hidden flex items-center justify-center select-none ${
+              rawImageSrc ? 'cursor-grab active:cursor-grabbing' : ''
+            } ${frameClasses}`}
+            title={rawImageSrc ? 'Scroll untuk Zoom · Geser/Drag untuk Panning' : undefined}
           >
-            {value ? (
-              <img
-                src={value}
-                alt="Preview"
-                className="w-full h-full object-cover transition-transform duration-100"
-              />
+            {rawImageSrc ? (
+              <div className="w-full h-full relative overflow-hidden flex items-center justify-center pointer-events-none">
+                <img
+                  src={rawImageSrc}
+                  alt="Preview"
+                  style={{
+                    transform: `translate(${pan.x}px, ${pan.y}px) rotate(${rotation}deg) scale(${zoom})`,
+                    transformOrigin: 'center center',
+                  }}
+                  className="w-full h-full object-cover transition-transform duration-75"
+                  draggable={false}
+                />
+                <div className="absolute bottom-1 right-1 bg-black/75 text-white text-[8px] font-mono px-1.5 py-0.5 tracking-wider uppercase pointer-events-none flex items-center gap-1">
+                  <Move size={8} />
+                  <span>{zoom.toFixed(1)}x · GESER / SCROLL</span>
+                </div>
+              </div>
             ) : (
               <div className="text-center p-4">
                 <ImageIcon size={32} className="mx-auto text-faint mb-2" />
@@ -196,7 +302,7 @@ export default function ImageUploadAdjuster({
             )}
           </div>
 
-          {value && (
+          {rawImageSrc && (
             <button
               type="button"
               onClick={handleRemove}
@@ -226,27 +332,38 @@ export default function ImageUploadAdjuster({
                   className="inline-flex items-center gap-2 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold cursor-pointer transition-all shadow-xs"
                 >
                   <Upload size={14} />
-                  <span>{value ? 'PILIH FOTO LAIN / GANTI GAMBAR' : 'PILIH FOTO DARI KOMPUTER'}</span>
+                  <span>{rawImageSrc ? 'PILIH FOTO LAIN / GANTI GAMBAR' : 'PILIH FOTO DARI KOMPUTER'}</span>
                 </label>
                 <span className="text-[10px] text-faint block mt-1.5">
-                  Mendukung PNG, JPEG, WebP. Gambar otomatis disesuaikan dan dioptimasi.
+                  Mendukung PNG, JPEG, WebP. Scroll mouse di dalam foto untuk zoom, seret untuk geser posisi.
                 </span>
               </div>
 
               {rawImageSrc && (
                 <div className="border border-line bg-bg-raised p-4 space-y-3">
-                  <div className="flex items-center justify-between border-b border-line pb-2">
+                  <div className="flex items-center justify-between border-b border-line pb-2 flex-wrap gap-2">
                     <span className="text-[10px] uppercase font-bold text-faint">
                       [ PENYESUAIAN & CROP GAMBAR ]
                     </span>
-                    <button
-                      type="button"
-                      onClick={handleRotate}
-                      className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-0.5 text-[10px] text-ink uppercase"
-                    >
-                      <RotateCw size={11} />
-                      <span>ROTATE 90° ({rotation}°)</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-0.5 text-[10px] text-ink uppercase"
+                        title="Reset zoom & posisi"
+                      >
+                        <RotateCcw size={11} />
+                        <span>RESET</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleRotate}
+                        className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-0.5 text-[10px] text-ink uppercase"
+                      >
+                        <RotateCw size={11} />
+                        <span>ROTATE 90° ({rotation}°)</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Zoom Slider */}
@@ -269,7 +386,7 @@ export default function ImageUploadAdjuster({
                       <input
                         type="range"
                         min="1"
-                        max="3"
+                        max="4"
                         step="0.05"
                         value={zoom}
                         onChange={(e) => handleZoomChange(parseFloat(e.target.value))}
@@ -278,7 +395,7 @@ export default function ImageUploadAdjuster({
                       <button
                         type="button"
                         onClick={() => handleZoomChange(zoom + 0.2)}
-                        disabled={zoom >= 3}
+                        disabled={zoom >= 4}
                         className="p-1 border border-line bg-bg text-ink disabled:opacity-30"
                       >
                         <ZoomIn size={12} />
@@ -290,28 +407,25 @@ export default function ImageUploadAdjuster({
             </div>
           ) : (
             <div className="space-y-3">
-              <label className="block text-faint uppercase font-bold text-[10px]">
-                PASTE DIRECT IMAGE URL (HTTPS):
+              <label className="text-[10px] uppercase font-bold text-faint block">
+                PASTE DIRECT IMAGE URL:
               </label>
               <div className="flex gap-2">
                 <input
                   type="url"
-                  placeholder="https://res.cloudinary.com/... or /avatar.jpg"
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
-                  className="flex-1 border border-line bg-bg p-2 text-ink font-mono text-xs focus:outline-none focus:border-line-strong"
+                  placeholder="https://images.unsplash.com/photo-..."
+                  className="flex-1 border border-line bg-bg px-3 py-2 text-xs font-mono text-ink placeholder:text-faint focus:outline-hidden focus:border-line-strong"
                 />
                 <button
                   type="button"
                   onClick={handleUrlSubmit}
-                  className="border border-line bg-invert-bg text-invert-fg px-4 py-2 font-bold uppercase"
+                  className="border border-line bg-invert-bg text-invert-fg px-4 py-2 font-mono text-xs uppercase font-bold hover:opacity-90 transition-all shrink-0"
                 >
-                  APPLY
+                  LOAD URL
                 </button>
               </div>
-              <span className="text-[10px] text-faint block">
-                Jika memiliki URL Cloudinary atau CDN publik, tempelkan di atas.
-              </span>
             </div>
           )}
         </div>
@@ -319,4 +433,3 @@ export default function ImageUploadAdjuster({
     </div>
   );
 }
-
