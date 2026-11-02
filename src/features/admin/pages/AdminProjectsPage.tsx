@@ -1,88 +1,106 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  FolderOpen,
-  ExternalLink,
-  Github,
-  Plus,
-  RefreshCw,
-  Search,
-  Trash2,
-  Edit3,
-  CheckCircle2,
-  X,
-  Loader2,
-  AlertTriangle,
-} from 'lucide-react';
-import CornerCrosses from '@/components/ui/CornerCrosses';
+import { FolderOpen, Plus, RefreshCw, Search } from 'lucide-react';
 import { projectsService } from '@/services/api';
 import type { Project } from '@/types/project.types';
+import ProjectAdminCard from '../components/ProjectAdminCard';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
+
+type FilterType = 'all' | 'featured' | 'normal';
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [filterFeatured, setFilterFeatured] = useState<'all' | 'featured' | 'normal'>('all');
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [filterFeatured, setFilterFeatured] = useState<FilterType>('all');
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     try {
       const data = await projectsService.getProjects();
+      if (signal?.aborted) return;
       setProjects(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      const message = err instanceof Error ? err.message : 'Failed to synchronize projects';
+      console.error('[AdminProjects] Fetch error:', message);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    fetchProjects();
   }, []);
 
-  const getTechArray = (p: Project): string[] => {
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchProjects(controller.signal);
+    return () => controller.abort();
+  }, [fetchProjects]);
+
+  const getTechArray = useCallback((p: Project): string[] => {
     const val = p.techStack ?? p.tech_stack;
     if (!val) return [];
     if (Array.isArray(val)) return val;
-    return String(val).split(',').map((s) => s.trim()).filter(Boolean);
-  };
+    return String(val)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`CONFIRMATION: Permanently delete project "${title}"?`)) {
-      return;
-    }
+  const handleDelete = useCallback(
+    async (id: string | number, title: string) => {
+      if (!window.confirm(`CONFIRMATION: Permanently delete project "${title}"?`)) {
+        return;
+      }
 
-    setDeletingId(id);
-    try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) throw new Error('Deletion failed');
-      setFeedback({ type: 'success', message: `Project "${title}" deleted from registry.` });
-      await fetchProjects();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Deletion failed.' });
-    } finally {
-      setDeletingId(null);
-    }
-  };
+      setDeletingId(id);
+      try {
+        const res = await fetch(`/api/projects/${id}`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Deletion request rejected by server');
+        setFeedback({ type: 'success', message: `Project "${title}" deleted from registry.` });
+        await fetchProjects();
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Deletion failed';
+        setFeedback({ type: 'error', message });
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [fetchProjects]
+  );
 
-  const filtered = projects.filter((p) => {
-    const techList = getTechArray(p);
-    const matchesSearch =
-      p.title.toLowerCase().includes(search.toLowerCase()) ||
-      (p.description && p.description.toLowerCase().includes(search.toLowerCase())) ||
-      techList.some((t: string) => t.toLowerCase().includes(search.toLowerCase()));
-    if (!matchesSearch) return false;
-    if (filterFeatured === 'featured') return p.featured;
-    if (filterFeatured === 'normal') return !p.featured;
-    return true;
-  });
+  const counts = useMemo(
+    () => ({
+      all: projects.length,
+      featured: projects.filter((p) => p.featured).length,
+      normal: projects.filter((p) => !p.featured).length,
+    }),
+    [projects]
+  );
+
+  const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return projects.filter((p) => {
+      const techList = getTechArray(p);
+      const matchesSearch =
+        !query ||
+        p.title.toLowerCase().includes(query) ||
+        (p.description && p.description.toLowerCase().includes(query)) ||
+        techList.some((t) => t.toLowerCase().includes(query));
+
+      if (!matchesSearch) return false;
+      if (filterFeatured === 'featured') return p.featured;
+      if (filterFeatured === 'normal') return !p.featured;
+      return true;
+    });
+  }, [projects, search, filterFeatured, getTechArray]);
 
   return (
-    <div className="space-y-6 animate-fade-in text-ink">
+    <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -106,7 +124,8 @@ export default function AdminProjectsPage() {
             <span>ADD PROJECT</span>
           </Link>
           <button
-            onClick={fetchProjects}
+            type="button"
+            onClick={() => fetchProjects()}
             className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
             title="Refresh database records"
           >
@@ -116,27 +135,8 @@ export default function AdminProjectsPage() {
         </div>
       </div>
 
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner Component */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border border-line bg-bg-raised p-3">
@@ -154,34 +154,43 @@ export default function AdminProjectsPage() {
         <div className="flex items-center gap-2">
           <div className="flex border border-line bg-bg font-mono text-xs">
             <button
+              type="button"
               onClick={() => setFilterFeatured('all')}
               className={`px-3 py-1.5 uppercase transition-all ${
-                filterFeatured === 'all' ? 'bg-invert-bg text-invert-fg font-bold' : 'text-faint hover:text-ink'
+                filterFeatured === 'all'
+                  ? 'bg-invert-bg text-invert-fg font-bold'
+                  : 'text-faint hover:text-ink'
               }`}
             >
-              ALL ({projects.length})
+              ALL ({counts.all})
             </button>
             <button
+              type="button"
               onClick={() => setFilterFeatured('featured')}
               className={`px-3 py-1.5 uppercase transition-all border-l border-line ${
-                filterFeatured === 'featured' ? 'bg-invert-bg text-invert-fg font-bold' : 'text-faint hover:text-ink'
+                filterFeatured === 'featured'
+                  ? 'bg-invert-bg text-invert-fg font-bold'
+                  : 'text-faint hover:text-ink'
               }`}
             >
-              FEATURED ({projects.filter((p) => p.featured).length})
+              FEATURED ({counts.featured})
             </button>
             <button
+              type="button"
               onClick={() => setFilterFeatured('normal')}
               className={`px-3 py-1.5 uppercase transition-all border-l border-line ${
-                filterFeatured === 'normal' ? 'bg-invert-bg text-invert-fg font-bold' : 'text-faint hover:text-ink'
+                filterFeatured === 'normal'
+                  ? 'bg-invert-bg text-invert-fg font-bold'
+                  : 'text-faint hover:text-ink'
               }`}
             >
-              NORMAL ({projects.filter((p) => !p.featured).length})
+              NORMAL ({counts.normal})
             </button>
           </div>
         </div>
       </div>
 
-      {/* Projects Table */}
+      {/* Projects Display: Separated Swiss Brutalist Cards */}
       {loading ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
           <RefreshCw size={24} className="animate-spin mx-auto mb-3 text-ink" />
@@ -200,115 +209,17 @@ export default function AdminProjectsPage() {
           </Link>
         </div>
       ) : (
-        <div className="border border-line bg-bg-raised overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-line bg-bg-sunken text-faint text-[10px] uppercase tracking-wider">
-                  <th className="py-2.5 px-4 font-bold">ORD</th>
-                  <th className="py-2.5 px-4 font-bold">PROJECT & DESCRIPTION</th>
-                  <th className="py-2.5 px-4 font-bold">TECH STACK</th>
-                  <th className="py-2.5 px-4 font-bold">STATUS</th>
-                  <th className="py-2.5 px-4 font-bold text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {filtered.map((proj, idx) => {
-                  const techList = getTechArray(proj);
-                  const github = proj.githubUrl ?? proj.github_url;
-                  const live = proj.liveUrl ?? proj.live_url;
-
-                  return (
-                    <tr key={proj.id} className="hover:bg-bg-sunken/60 transition-colors">
-                      <td className="py-3 px-4 text-faint align-top font-bold">
-                        {String(proj.order ?? idx + 1).padStart(2, '0')}
-                      </td>
-                      <td className="py-3 px-4 align-top max-w-sm">
-                        <div className="font-bold text-ink text-sm flex items-center gap-2">
-                          <span>{proj.title}</span>
-                          {proj.featured && (
-                            <span className="border border-line bg-bg px-1.5 py-0.5 text-[9px] uppercase font-bold text-ink">
-                              ★ FEATURED
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-faint text-xs mt-1 line-clamp-2 font-sans">{proj.description}</p>
-                      </td>
-                      <td className="py-3 px-4 align-top">
-                        <div className="flex flex-wrap gap-1 max-w-xs">
-                          {techList.map((t: string) => (
-                            <span
-                              key={t}
-                              className="border border-line bg-bg px-1.5 py-0.5 text-[10px] uppercase text-ink"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 align-top">
-                        <span
-                          className={`inline-block px-2 py-0.5 text-[10px] uppercase font-bold border ${
-                            proj.featured
-                              ? 'border-line bg-invert-bg text-invert-fg'
-                              : 'border-line bg-bg text-faint'
-                          }`}
-                        >
-                          {proj.featured ? 'PRIORITY' : 'INDEXED'}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 align-top text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {github && (
-                            <a
-                              href={github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-                              title="View GitHub"
-                            >
-                              <Github size={13} />
-                            </a>
-                          )}
-                          {live && (
-                            <a
-                              href={live}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1.5 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-                              title="View Live"
-                            >
-                              <ExternalLink size={13} />
-                            </a>
-                          )}
-                          <Link
-                            to={`/admin/projects/${proj.id}/edit`}
-                            className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2.5 py-1 text-ink transition-all font-mono text-[10px] uppercase font-bold"
-                            title="Edit Project Specification"
-                          >
-                            <Edit3 size={11} />
-                            <span>EDIT</span>
-                          </Link>
-                          <button
-                            onClick={() => handleDelete(String(proj.id), proj.title)}
-                            disabled={deletingId === String(proj.id)}
-                            className="p-1.5 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all"
-                            title="Delete Project"
-                          >
-                            {deletingId === String(proj.id) ? (
-                              <Loader2 size={13} className="animate-spin" />
-                            ) : (
-                              <Trash2 size={13} />
-                            )}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+        <div className="space-y-4">
+          {filtered.map((proj, idx) => (
+            <ProjectAdminCard
+              key={proj.id}
+              project={proj}
+              index={idx}
+              techList={getTechArray(proj)}
+              isDeleting={deletingId === proj.id}
+              onDelete={handleDelete}
+            />
+          ))}
         </div>
       )}
     </div>
