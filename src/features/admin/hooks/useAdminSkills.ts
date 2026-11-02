@@ -7,8 +7,8 @@ import type { AdminFeedbackState } from '../components/AdminFeedbackBanner';
 export interface SkillRecord {
   id?: string | number;
   name?: string;
-  iconName?: string;
-  icon?: string;
+  iconName?: string | null;
+  icon?: string | null;
   category?: string;
 }
 

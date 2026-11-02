@@ -34,7 +34,7 @@ export default function AdminEducationFormPage() {
       aboutService
         .getAboutData()
         .then((data) => {
-          const list = Array.isArray(data?.educations) ? (data.educations as EducationItemRecord[]) : [];
+          const list = Array.isArray(data?.educations) ? (data.educations as unknown as EducationItemRecord[]) : [];
           const found = list.find((item) => String(item.id) === String(id));
           if (found) {
             setInstitution(found.institution || '');

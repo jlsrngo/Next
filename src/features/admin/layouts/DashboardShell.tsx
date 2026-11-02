@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '@/context/ThemeContext'
 import TechnicalRuler from '@/components/TechnicalRuler'
@@ -17,10 +17,10 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  Loader2,
   Palette,
   Settings,
   Tag,
+  type LucideIcon,
 } from 'lucide-react'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
 import { getLatestVersion, type ChangelogEntry } from '@/lib/changelog'
@@ -28,7 +28,7 @@ import { useI18n } from '@/context/I18nContext'
 
 type NavItem =
   | { divider: true }
-  | { href: string; labelKey: string; icon: React.ComponentType<{ size?: number; className?: string }> }
+  | { href: string; labelKey: string; icon: LucideIcon }
 
 const navItems: NavItem[] = [
   { href: '/admin', labelKey: 'admin.overview', icon: LayoutDashboard },
@@ -87,7 +87,6 @@ export default function DashboardShell({
   email,
   profileName: initialName,
   profileAvatar: initialAvatar,
-  profileAccent: initialAccent,
 }: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
@@ -189,7 +188,7 @@ export default function DashboardShell({
               return (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    to={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-2.5 px-3 py-2 text-xs font-mono tracking-wider uppercase transition-all border ${
                       active
@@ -210,7 +209,7 @@ export default function DashboardShell({
         {/* Bottom Actions: Directly Return to Public Site (No 404 signout) */}
         <div className="border-t border-line p-3 shrink-0 bg-bg-raised">
           <Link
-            href="/"
+            to="/"
             className="flex items-center justify-between border border-line px-3 py-2.5 text-xs font-mono uppercase tracking-wider text-ink hover:bg-bg-sunken hover:border-line-strong transition-all"
           >
             <span className="flex items-center gap-2 font-bold">
@@ -224,7 +223,7 @@ export default function DashboardShell({
 
       {/* Main Admin Viewport */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0 bg-bg">
-        {/* Top Telemetry Header - Same h-16 as sidebar header so border-b connects continuously */}
+        {/* Top Telemetry Header */}
         <header className="flex h-16 items-center justify-between border-b border-line bg-bg-raised px-4 sm:px-6 shrink-0 z-20">
           <div className="flex items-center gap-3">
             <button

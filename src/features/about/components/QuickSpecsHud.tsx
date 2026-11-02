@@ -35,7 +35,7 @@ export default function QuickSpecsHud({ profile }: QuickSpecsHudProps) {
         </span>
         <span
           className="font-mono text-xs font-bold block"
-          style={{ color: PALETTE.softCoral }}
+          style={{ color: PALETTE.coralRed }}
         >
           {profile?.runtime || 'Rust Axum 0.7 · React 18'}
         </span>
@@ -48,7 +48,7 @@ export default function QuickSpecsHud({ profile }: QuickSpecsHudProps) {
         </span>
         <span
           className="font-mono text-xs font-bold block"
-          style={{ color: PALETTE.calmTeal }}
+          style={{ color: PALETTE.forestSage }}
         >
           {profile?.location || 'Indonesia'}
         </span>

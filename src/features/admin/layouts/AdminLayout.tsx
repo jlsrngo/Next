@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import DashboardShell from '@/app/dashboard/DashboardShell';
+import DashboardShell from './DashboardShell';
 import { profileService } from '@/services/api';
 
 export default function AdminLayout() {

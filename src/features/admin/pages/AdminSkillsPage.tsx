@@ -4,7 +4,7 @@ import { Plus, RefreshCw, Search, Loader2, Code } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { TechIcon } from '@/components/TechIcon';
 import { useLocale } from '@/context/I18nContext';
-import { CATEGORIES } from '@/lib/techCategories';
+import { CATEGORIES, getCategoryForSlug } from '@/lib/techCategories';
 import useAdminSkills from '../hooks/useAdminSkills';
 import AdminFeedbackBanner from '../components/AdminFeedbackBanner';
 import AdminPageHeaderHUD from '../components/AdminPageHeaderHUD';
@@ -187,7 +187,10 @@ export default function AdminSkillsPage() {
                     {tech.name}
                   </div>
                   <div className="font-mono text-[9px] text-faint tracking-wider uppercase">
-                    {isId ? CATEGORY_MAP_ID[tech.category] || tech.category : tech.category}
+                    {(() => {
+                      const cat = getCategoryForSlug(tech.slug);
+                      return isId ? CATEGORY_MAP_ID[cat] || cat : cat;
+                    })()}
                   </div>
                 </div>
               </button>

@@ -1,12 +1,9 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { User, Eye, EyeOff, Lock, X } from 'lucide-react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/context/I18nContext';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -19,7 +16,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const t = useTranslations();
-    const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     useEffect(() => { setMounted(true); }, []);

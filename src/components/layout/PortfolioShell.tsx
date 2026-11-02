@@ -1,8 +1,6 @@
-'use client'
-
 import { useRef } from 'react'
-import { usePathname } from 'next/navigation'
-import SidebarWrapper from '@/components/SidebarWrapper'
+import { useLocation } from 'react-router-dom'
+import Sidebar from '@/components/Sidebar'
 import TechnicalRuler from '@/components/TechnicalRuler'
 
 interface PortfolioShellProps {
@@ -12,7 +10,7 @@ interface PortfolioShellProps {
 }
 
 export default function PortfolioShell({ profile, isMonochrome, children }: PortfolioShellProps) {
-  const pathname = usePathname()
+  const { pathname } = useLocation()
   const isArunaki = pathname?.includes('/arunaki')
   const mainRef = useRef<HTMLElement>(null)
 
@@ -38,7 +36,7 @@ export default function PortfolioShell({ profile, isMonochrome, children }: Port
     >
       {/* Centered Workstation: Sidebar + Content + Ruler together */}
       <div className="flex h-full w-full max-w-[1280px] xl:max-w-[1340px] border-x border-black/20 dark:border-white/20 bg-bg relative">
-        <SidebarWrapper profile={profile} />
+        <Sidebar profile={profile} />
         <main
           ref={mainRef}
           className="flex-1 h-screen overflow-y-auto relative scroll-smooth px-4 sm:px-8 md:px-10 pt-16 sm:pt-20 md:pt-4 pb-12 md:pb-16 md:pr-20"

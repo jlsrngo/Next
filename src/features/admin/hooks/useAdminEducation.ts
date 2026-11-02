@@ -17,7 +17,7 @@ export function useAdminEducation() {
     try {
       const data = await aboutService.getAboutData();
       if (signal?.aborted) return;
-      setEducation(Array.isArray(data?.educations) ? (data.educations as EducationItemRecord[]) : []);
+      setEducation(Array.isArray(data?.educations) ? (data.educations as unknown as EducationItemRecord[]) : []);
     } catch (err: unknown) {
       if (signal?.aborted) return;
       console.error('[AdminEducation] Fetch error:', err);

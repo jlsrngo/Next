@@ -1,12 +1,11 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
-import Image from 'next/image'
+import { Link, useLocation } from 'react-router-dom'
 import { Home, User, Trophy, FolderOpen, BarChart3, Mail, Moon, Sun, Menu, X } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
 import { useI18n } from '@/context/I18nContext'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import LoginModal from '@/components/LoginModal'
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary'
 import { localizeProfile } from '@/lib/localize'
@@ -35,8 +34,8 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
     const { data: session } = useSession()
     const isAuthenticated = !!session
     const { locale, setLocale, t } = useI18n()
-    const router = useRouter()
-    const pathname = usePathname()
+    const location = useLocation()
+    const pathname = location.pathname
     const [rawProfile, setRawProfile] = useState<Profile | null>(profileProp ?? null)
     const [mobileOpen, setMobileOpen] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
@@ -70,13 +69,9 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
     }, [profileProp])
 
     useEffect(() => {
-        // Only apply saved locale on very first visit (no locale in URL yet)
-        const hasLocaleInUrl = /^\/(en|id)(\/|$)/.test(window.location.pathname)
-        if (!hasLocaleInUrl) {
-            const savedLocale = localStorage.getItem('portfolio_locale')
-            if (savedLocale && (savedLocale === 'en' || savedLocale === 'id')) {
-                router.push(pathname, { locale: savedLocale as 'en' | 'id' })
-            }
+        const savedLocale = localStorage.getItem('portfolio_locale')
+        if (savedLocale && (savedLocale === 'en' || savedLocale === 'id')) {
+            setLocale(savedLocale as 'en' | 'id')
         }
     }, [])
 
@@ -176,8 +171,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
                 {navItems.map((item) => (
                     <Link
                         key={item.to}
-                        href={item.to}
-                        prefetch={true}
+                        to={item.to}
                         onClick={() => setMobileOpen(false)}
                         className={`flex items-center gap-3 px-3.5 py-2.5 rounded-none font-mono text-[11px] uppercase tracking-[0.12em] font-bold border transition-colors duration-150 ${isActive(item.to)
                             ? 'bg-invert-bg text-invert-fg border-transparent shadow-none'
@@ -204,12 +198,12 @@ const Sidebar: React.FC<SidebarProps> = ({ profile: profileProp }) => {
 
                         {isAuthenticated ? (
                             <Link
-                                href="/admin"
+                                to="/admin"
                                 className="relative w-8 h-8 rounded-none border border-line overflow-hidden hover:border-ink transition-colors group flex items-center justify-center bg-bg-sunken"
                                 title={t('admin.overview') || 'Dashboard'}
                             >
                                 {avatarUrl ? (
-                                    <Image src={avatarUrl} alt="User" width={32} height={32} unoptimized className="w-full h-full object-cover" />
+                                    <img src={avatarUrl} alt="User" className="w-full h-full object-cover" />
                                 ) : (
                                     <User className="w-4 h-4 text-ink" />
                                 )}
