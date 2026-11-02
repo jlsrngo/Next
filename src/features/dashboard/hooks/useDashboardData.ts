@@ -58,11 +58,11 @@ export function useDashboardData() {
 
     // Fetch live contributions dataset from backend API
     fetch('/api/github/contributions')
-      .then(r => {
+      .then((r) => {
         if (!r.ok) throw new Error('API failed');
         return r.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data && data.weeks) {
           memoryGithubCache = data;
           try {
@@ -71,18 +71,50 @@ export function useDashboardData() {
           setGithub(data);
         }
       })
-      .catch(() => {
-        // Fallback to static file if API fails
-        return fetch('/github-contributions.json')
-          .then(r => r.json())
-          .then(data => {
-            if (data && data.weeks) {
-              memoryGithubCache = data;
-              setGithub(data);
+      .catch(async () => {
+        // Fallback when backend daemon is not present (e.g. Vercel)
+        try {
+          const [baseRes, liveRes] = await Promise.allSettled([
+            fetch('/github-contributions.json').then((r) => r.json()),
+            fetch('https://github-contributions-api.jogruber.de/v4/jlsrngo?y=last').then((r) => r.json()),
+          ]);
+
+          const baseData = baseRes.status === 'fulfilled' ? baseRes.value : null;
+          const liveContribs = liveRes.status === 'fulfilled' ? liveRes.value?.contributions : null;
+
+          if (baseData && Array.isArray(baseData.weeks)) {
+            if (Array.isArray(liveContribs) && liveContribs.length > 0) {
+              const liveMap = new Map<string, { count: number; level: number }>();
+              for (const c of liveContribs) {
+                liveMap.set(c.date, { count: c.count, level: c.level });
+              }
+
+              let addedDelta = 0;
+              baseData.weeks = baseData.weeks.map((week: ContributionDay[]) =>
+                week.map((day: ContributionDay) => {
+                  const live = liveMap.get(day.date);
+                  if (live && live.count > day.count) {
+                    addedDelta += live.count - day.count;
+                    return { ...day, count: live.count, level: live.level };
+                  }
+                  return day;
+                })
+              );
+
+              if (addedDelta > 0) {
+                baseData.total_contributions = (baseData.total_contributions || 0) + addedDelta;
+                baseData.total_commits = (baseData.total_commits || 0) + addedDelta;
+              }
             }
-          });
+
+            memoryGithubCache = baseData;
+            try {
+              sessionStorage.setItem('portfolio_github_cache_v3', JSON.stringify({ data: baseData, timestamp: Date.now() }));
+            } catch {}
+            setGithub(baseData);
+          }
+        } catch {}
       })
-      .catch(() => {})
       .finally(() => setGhLoading(false));
   }, []);
 

@@ -16,5 +16,4 @@ target/
 .env*
 .neon
 bun.lock
-public/github-contributions.json
 public/trending-tech.json
