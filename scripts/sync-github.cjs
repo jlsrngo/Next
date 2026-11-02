@@ -1,5 +1,28 @@
 const fs = require('fs');
 
+// Auto-load .env if not present in process.env
+if (fs.existsSync('.env')) {
+  try {
+    const envLines = fs.readFileSync('.env', 'utf8').split(/\r?\n/);
+    for (const line of envLines) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const eq = trimmed.indexOf('=');
+        if (eq > 0) {
+          const k = trimmed.slice(0, eq).trim();
+          let v = trimmed.slice(eq + 1).trim();
+          if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+            v = v.slice(1, -1);
+          }
+          if (!process.env[k]) {
+            process.env[k] = v;
+          }
+        }
+      }
+    }
+  } catch {}
+}
+
 async function syncGithub() {
   const username = process.env.GITHUB_USERNAME || 'jlsrngo';
   const token = process.env.GITHUB_TOKEN || '';

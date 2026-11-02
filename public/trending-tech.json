@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-02T02:10:22.454Z",
+  "last_crawled_at": "2026-11-02T02:25:40.432Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "metric": "▲ 938 PTS",
+  "metric": "▲ 962 PTS",
   "spec": "TECH WIRE // LIVE: Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "viral_repo": "horizon-rust/horizon",
-  "repo_metric": "★ 5.7k",
-  "repo_desc": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-  "repo_spec": "VIRAL REPO // horizon-rust/horizon",
+  "viral_repo": "Effect-TS/effect",
+  "repo_metric": "★ 17.5k",
+  "repo_desc": "Build production-ready applications in TypeScript",
+  "repo_spec": "VIRAL REPO // Effect-TS/effect",
   "trending_repos": [
     {
-      "name": "horizon",
-      "full_name": "horizon-rust/horizon",
-      "stars": 5699,
-      "stars_formatted": "★ 5.7k",
-      "language": "Rust",
-      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-      "url": "https://github.com/horizon-rust/horizon"
-    },
-    {
-      "name": "pytorch",
-      "full_name": "pytorch/pytorch",
-      "stars": 105070,
-      "stars_formatted": "★ 105.1k",
-      "language": "Python",
-      "description": "Tensors and Dynamic neural networks in Python with strong GPU acceleration",
-      "url": "https://github.com/pytorch/pytorch"
-    },
-    {
-      "name": "tuios",
-      "full_name": "Gaurav-Gosain/tuios",
-      "stars": 6275,
-      "stars_formatted": "★ 6.3k",
-      "language": "Go",
-      "description": "A terminal window manager that knows what your agents are doing. Tiling panes, workspaces, sessions that survive restarts, and one Inbox for every coding agent. Official only at tuios.dev and this repo. tuios has no X/Twitter account.",
-      "url": "https://github.com/Gaurav-Gosain/tuios"
-    },
-    {
-      "name": "awesome-quant",
-      "full_name": "thuquant/awesome-quant",
-      "stars": 5704,
-      "stars_formatted": "★ 5.7k",
-      "language": "Code",
-      "description": "中国的Quant相关资源索引",
-      "url": "https://github.com/thuquant/awesome-quant"
-    },
-    {
-      "name": "termux-packages",
-      "full_name": "termux/termux-packages",
-      "stars": 17284,
-      "stars_formatted": "★ 17.3k",
-      "language": "Shell",
-      "description": "A package build system for Termux.",
-      "url": "https://github.com/termux/termux-packages"
-    },
-    {
-      "name": "perry",
-      "full_name": "PerryTS/perry",
-      "stars": 5068,
-      "stars_formatted": "★ 5.1k",
-      "language": "Rust",
-      "description": "A native TypeScript/JavaScript compiler written in Rust. Compiles TypeScript/JavaScript directly to executables using SWC and LLVM.",
-      "url": "https://github.com/PerryTS/perry"
-    },
-    {
-      "name": "t3code",
-      "full_name": "pingdotgg/t3code",
-      "stars": 38188,
-      "stars_formatted": "★ 38.2k",
+      "name": "effect",
+      "full_name": "Effect-TS/effect",
+      "stars": 17456,
+      "stars_formatted": "★ 17.5k",
       "language": "TypeScript",
-      "description": "",
-      "url": "https://github.com/pingdotgg/t3code"
+      "description": "Build production-ready applications in TypeScript",
+      "url": "https://github.com/Effect-TS/effect"
     },
     {
-      "name": "router",
-      "full_name": "weave-os/router",
-      "stars": 5604,
-      "stars_formatted": "★ 5.6k",
-      "language": "Go",
-      "description": "Model router for agentic systems. Routes every prompt to the right model in <50ms. Cut costs 40-70% with just an endpoint change.",
-      "url": "https://github.com/weave-os/router"
+      "name": "openrig",
+      "full_name": "mvschwarz/openrig",
+      "stars": 8546,
+      "stars_formatted": "★ 8.5k",
+      "language": "TypeScript",
+      "description": "Build your own network of agents from Claude Code, Codex and Pi: persistent teams with roles, shared context and owned work.",
+      "url": "https://github.com/mvschwarz/openrig"
     },
     {
-      "name": "MacNativeGames",
-      "full_name": "ly05010419/MacNativeGames",
-      "stars": 6780,
+      "name": "winget-pkgs",
+      "full_name": "microsoft/winget-pkgs",
+      "stars": 11274,
+      "stars_formatted": "★ 11.3k",
+      "language": "Code",
+      "description": "The Microsoft community Windows Package Manager manifest repository",
+      "url": "https://github.com/microsoft/winget-pkgs"
+    },
+    {
+      "name": "shadowrocket-rules",
+      "full_name": "deezertidal/shadowrocket-rules",
+      "stars": 6784,
       "stars_formatted": "★ 6.8k",
-      "language": "C",
-      "description": "Play your own Tears of the Kingdom and Breath of the Wild natively on Apple silicon Mac, iPhone and iPad. Not an emulator: the game's ARM64 code runs directly, NVN rebuilt on Metal. Bring your own game.",
-      "url": "https://github.com/ly05010419/MacNativeGames"
+      "language": "JavaScript",
+      "description": "小火箭 shadowrocket 配置文件 模块 脚本 module sgmodule 图文教程 规则 分流 破解 解锁",
+      "url": "https://github.com/deezertidal/shadowrocket-rules"
     },
     {
-      "name": "Pixiv-Shaft",
-      "full_name": "CeuiLiSA/Pixiv-Shaft",
-      "stars": 8213,
-      "stars_formatted": "★ 8.2k",
-      "language": "Kotlin",
-      "description": "Pixiv第三方Android客户端",
-      "url": "https://github.com/CeuiLiSA/Pixiv-Shaft"
+      "name": "beads",
+      "full_name": "gastownhall/beads",
+      "stars": 28401,
+      "stars_formatted": "★ 28.4k",
+      "language": "Go",
+      "description": "Beads - A memory upgrade for your coding agent",
+      "url": "https://github.com/gastownhall/beads"
+    },
+    {
+      "name": "TensorRT-LLM",
+      "full_name": "NVIDIA/TensorRT-LLM",
+      "stars": 14987,
+      "stars_formatted": "★ 15.0k",
+      "language": "Python",
+      "description": "TensorRT LLM provides users with an easy-to-use Python API to define Large Language Models (LLMs) and supports state-of-the-art optimizations to perform inference efficiently on NVIDIA GPUs. TensorRT LLM also contains components to create Python and C++ runtimes that orchestrate the inference execution in a performant way.",
+      "url": "https://github.com/NVIDIA/TensorRT-LLM"
+    },
+    {
+      "name": "models.dev",
+      "full_name": "anomalyco/models.dev",
+      "stars": 7470,
+      "stars_formatted": "★ 7.5k",
+      "language": "TypeScript",
+      "description": "An open-source database of AI models.",
+      "url": "https://github.com/anomalyco/models.dev"
+    },
+    {
+      "name": "openwork",
+      "full_name": "different-ai/openwork",
+      "stars": 24362,
+      "stars_formatted": "★ 24.4k",
+      "language": "TypeScript",
+      "description": "The open-source alternative to Claude Cowork (powered by opencode)",
+      "url": "https://github.com/different-ai/openwork"
+    },
+    {
+      "name": "orca",
+      "full_name": "stablyai/orca",
+      "stars": 112638,
+      "stars_formatted": "★ 112.6k",
+      "language": "TypeScript",
+      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+      "url": "https://github.com/stablyai/orca"
+    },
+    {
+      "name": "awesome-mac",
+      "full_name": "jaywcjlove/awesome-mac",
+      "stars": 117553,
+      "stars_formatted": "★ 117.6k",
+      "language": "Swift",
+      "description": " This project is dedicated to collecting high-quality macOS software and organizing them systematically by different categories for easy search and use.",
+      "url": "https://github.com/jaywcjlove/awesome-mac"
     }
   ]
 }
