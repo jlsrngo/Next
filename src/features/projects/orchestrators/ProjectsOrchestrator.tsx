@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from '@/context/I18nContext';
 import { useProjectsData } from '../hooks/useProjectsData';
 import TelemetryHeader from '@/components/ui/TelemetryHeader';
@@ -10,6 +10,29 @@ export default function ProjectsOrchestrator() {
   const isId = locale === 'id';
   const { projects, loading } = useProjectsData();
 
+  const [contributionsCount, setContributionsCount] = useState<number>(() => {
+    try {
+      const cached = sessionStorage.getItem('portfolio_github_cache_v3');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        return parsed?.data?.total_contributions || parsed?.data?.total_commits || 1993;
+      }
+    } catch {}
+    return 1993;
+  });
+
+  useEffect(() => {
+    fetch('/api/github/contributions')
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .catch(() => fetch('/github-contributions.json').then((r) => r.json()))
+      .then((data) => {
+        if (data?.total_contributions || data?.total_commits) {
+          setContributionsCount(data.total_contributions || data.total_commits);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // Dynamic Repository Status from Neon DB
   const dynamicRepository = isId
     ? `REPOSITORI: ${projects.length} PROYEK`
@@ -19,7 +42,8 @@ export default function ProjectsOrchestrator() {
     ? `SPES: ${projects.length} DEPLOY`
     : `SPEC: ${projects.length} DEPLOYS`;
 
-  const dynamicEngine = isId ? '1.957 KOMIT' : '1,957 COMMITS';
+  const formattedCount = contributionsCount.toLocaleString(isId ? 'id-ID' : 'en-US');
+  const dynamicEngine = isId ? `${formattedCount} KONTRIBUSI` : `${formattedCount} CONTRIBUTIONS`;
 
   return (
     <div className="py-6 md:py-10 space-y-10">

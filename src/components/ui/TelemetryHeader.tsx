@@ -107,7 +107,7 @@ export function TelemetryHeader({
     LiveIcon = GitBranch;
     isPulsing = true;
     liveSpec = spec || (isId ? 'GITHUB // KONTRIBUSI AKTIF' : 'GITHUB // ACTIVE SYNC');
-    liveEngine = engine || (isId ? '1.957 KOMIT' : '1,957 COMMITS');
+    liveEngine = engine || (isId ? '1.993 KONTRIBUSI' : '1,993 CONTRIBUTIONS');
   } else if (liveFeed === 'status') {
     LiveIcon = Activity;
     isPulsing = true;
