@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, GraduationCap, MapPin } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2, GraduationCap, MapPin } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { aboutService } from '@/services/api';
+import type { EducationItemRecord } from '../components/EducationAdminCard';
+import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminEducationFormPage() {
   const navigate = useNavigate();
@@ -10,7 +14,7 @@ export default function AdminEducationFormPage() {
 
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form Fields
   const [institution, setInstitution] = useState('');
@@ -24,16 +28,16 @@ export default function AdminEducationFormPage() {
 
   useEffect(() => {
     if (isEditing && id) {
-      fetch('/api/about')
-        .then((r) => r.json())
+      aboutService
+        .getAboutData()
         .then((data) => {
-          const list = Array.isArray(data.education) ? data.education : [];
-          const found = list.find((item: any) => String(item.id) === String(id));
+          const list = Array.isArray(data?.educations) ? (data.educations as EducationItemRecord[]) : [];
+          const found = list.find((item) => String(item.id) === String(id));
           if (found) {
             setInstitution(found.institution || '');
             setDegree(found.degree || '');
             setFieldOfStudy(found.fieldOfStudy || found.field_of_study || 'Computer Science');
-            setGrade(found.grade || found.gpa || '');
+            setGrade(found.grade || '');
             setLocation(found.location || 'Indonesia');
             setDescription(found.description || '');
             setCurrent(Boolean(found.current || found.is_current));
@@ -68,28 +72,19 @@ export default function AdminEducationFormPage() {
 
     try {
       if (isEditing && id) {
-        const res = await fetch(`/api/education/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Update failed');
+        await aboutService.updateEducation(id, payload);
         setFeedback({ type: 'success', message: `Education at "${institution}" updated successfully! Redirecting...` });
       } else {
-        const res = await fetch('/api/education', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Creation failed');
+        await aboutService.createEducation(payload);
         setFeedback({ type: 'success', message: `Education at "${institution}" recorded successfully! Redirecting...` });
       }
 
       setTimeout(() => {
         navigate('/admin/education');
       }, 1000);
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed';
+      setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
   };
@@ -106,57 +101,20 @@ export default function AdminEducationFormPage() {
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/admin/education"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-ink transition-colors mb-2"
-          >
-            <ArrowLeft size={13} />
-            <span>RETURN TO EDUCATION DOSSIER</span>
-          </Link>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-            {isEditing ? '[ 04 // EDIT ACADEMIC QUALIFICATION ]' : '[ 04 // NEW ACADEMIC QUALIFICATION ]'}
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            {isEditing ? 'EDIT EDUCATION //' : 'NEW EDUCATION //'} <span className="font-mono text-faint font-normal">DOSSIER</span>
-          </h1>
-        </div>
+      <AdminFormHeaderHUD
+        returnTo="/admin/education"
+        returnLabel="RETURN TO EDUCATION DOSSIER"
+        systemCode={isEditing ? '[ 04 // EDIT ACADEMIC QUALIFICATION ]' : '[ 04 // NEW ACADEMIC QUALIFICATION ]'}
+        title={isEditing ? 'EDIT EDUCATION //' : 'NEW EDUCATION //'}
+        titleHighlight="DOSSIER"
+        discardTo="/admin/education"
+        submitLabel={isEditing ? 'SAVE CHANGES' : 'CONFIRM DEGREE'}
+        isSubmitting={submitting}
+        onSubmit={handleSubmit}
+      />
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin/education"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            {submitting ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            <span>{isEditing ? 'SAVE CHANGES' : 'CONFIRM DEGREE'}</span>
-          </button>
-        </div>
-      </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center gap-2 transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          ) : (
-            <AlertTriangle size={15} className="text-red-500 shrink-0" />
-          )}
-          <span>{feedback.message}</span>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="border border-line bg-bg-raised p-6 relative">
@@ -280,25 +238,16 @@ export default function AdminEducationFormPage() {
           </div>
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="border border-line bg-bg-raised p-4 flex items-center justify-between">
-          <Link
-            to="/admin/education"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD CHANGES
-          </Link>
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            <span>{isEditing ? 'SAVE DEGREE RECORD' : 'CONFIRM DEGREE'}</span>
+            {submitting ? 'COMMITTING TO NEON...' : isEditing ? 'UPDATE DOSSIER' : 'REGISTER RECORD'}
           </button>
         </div>
       </form>
     </div>
   );
 }
-

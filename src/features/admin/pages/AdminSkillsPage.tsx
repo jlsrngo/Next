@@ -1,142 +1,61 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Code, Search, RefreshCw, Plus, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
-import { skillsService } from '@/services/api';
-import { techList } from '@/lib/techList';
-import { CATEGORIES, getCategoryForSlug, filterByCategory } from '@/lib/techCategories';
+import { CATEGORIES } from '@/lib/techCategories';
 import { TechIcon } from '@/components/TechIcon';
-import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
-
-interface SkillRecord {
-  id?: string | number;
-  name?: string;
-  iconName?: string;
-  icon?: string;
-  category?: string;
-}
+import useAdminSkills from '../hooks/useAdminSkills';
+import AdminFeedbackBanner from '../components/AdminFeedbackBanner';
+import AdminPageHeaderHUD from '../components/AdminPageHeaderHUD';
 
 export default function AdminSkillsPage() {
-  const [dbSkills, setDbSkills] = useState<SkillRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
-  const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
-
-  const fetchSkills = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
-    try {
-      const data = await skillsService.getSkills();
-      if (signal?.aborted) return;
-      setDbSkills(Array.isArray(data) ? data : []);
-    } catch (err: unknown) {
-      if (signal?.aborted) return;
-      console.error('[AdminSkills] Fetch error:', err);
-    } finally {
-      if (!signal?.aborted) {
-        setLoading(false);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchSkills(controller.signal);
-    return () => controller.abort();
-  }, [fetchSkills]);
-
-  const activeSlugs = useMemo(() => {
-    return new Set(
-      dbSkills.map((s) => s.iconName || s.icon || s.name?.toLowerCase()).filter(Boolean)
-    );
-  }, [dbSkills]);
-
-  const toggleSkill = async (tech: (typeof techList)[0]) => {
-    const isActive = activeSlugs.has(tech.slug);
-    setTogglingSlug(tech.slug);
-
-    try {
-      if (isActive) {
-        const res = await fetch(`/api/skills?iconName=${encodeURIComponent(tech.slug)}`, {
-          method: 'DELETE',
-        });
-        if (!res.ok) throw new Error('Failed to deactivate skill');
-        setFeedback({ type: 'success', message: `${tech.name} deactivated from registry.` });
-      } else {
-        const category = getCategoryForSlug(tech.slug);
-        const res = await fetch('/api/skills', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: tech.name,
-            category,
-            iconName: tech.slug,
-            proficiency: 85,
-            featured: false,
-          }),
-        });
-        if (!res.ok) throw new Error('Failed to activate skill');
-        setFeedback({ type: 'success', message: `${tech.name} activated in PostgreSQL.` });
-      }
-      await fetchSkills();
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Toggle failed.';
-      setFeedback({ type: 'error', message });
-    } finally {
-      setTogglingSlug(null);
-    }
-  };
-
-  const filteredTech = useMemo(() => {
-    return techList.filter((t) => {
-      const matchSearch =
-        t.name.toLowerCase().includes(search.toLowerCase()) ||
-        t.slug.toLowerCase().includes(search.toLowerCase());
-      if (!matchSearch) return false;
-      if (selectedCategory === 'ALL') return true;
-      if (selectedCategory === 'ACTIVE') return activeSlugs.has(t.slug);
-      return filterByCategory(t.slug, selectedCategory);
-    });
-  }, [search, selectedCategory, activeSlugs]);
+  const {
+    loading,
+    search,
+    setSearch,
+    selectedCategory,
+    setSelectedCategory,
+    togglingSlug,
+    feedback,
+    setFeedback,
+    activeSlugs,
+    filteredTech,
+    fetchSkills,
+    toggleSkill,
+  } = useAdminSkills();
 
   return (
-    <div className="space-y-6 animate-fade-in text-ink">
+    <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-            [ 01 // TECHNICAL CAPABILITY & ENGINE MATRIX ]
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            SKILLS // <span className="font-mono text-faint font-normal">TAXONOMY</span>
-          </h1>
-          <p className="text-xs text-faint mt-1 font-mono">
-            Interactive skill registry. Click any skill card to toggle database state, or register custom technologies.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <Link
-            to="/admin/skills/new"
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            <Plus size={14} />
-            <span>ADD CUSTOM SKILL</span>
-          </Link>
-          <button
-            onClick={fetchSkills}
-            className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
-          >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>SYNC</span>
-          </button>
-          <div className="border border-line bg-bg-raised px-3 py-2 font-mono text-xs">
-            <span className="text-faint text-[10px] uppercase mr-2">ACTIVE</span>
-            <span className="font-bold">{activeSlugs.size}</span>
-          </div>
-        </div>
-      </div>
+      <AdminPageHeaderHUD
+        systemCode="[ 01 // TECHNICAL CAPABILITY & ENGINE MATRIX ]"
+        title="SKILLS //"
+        titleHighlight="TAXONOMY"
+        description="Interactive skill registry. Click any skill card to toggle database state, or register custom technologies."
+        actions={
+          <>
+            <Link
+              to="/admin/skills/new"
+              className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            >
+              <Plus size={14} />
+              <span>ADD CUSTOM SKILL</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => fetchSkills()}
+              className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
+            >
+              <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+              <span>SYNC</span>
+            </button>
+            <div className="border border-line bg-bg-raised px-3 py-2 font-mono text-xs">
+              <span className="text-faint text-[10px] uppercase mr-2">ACTIVE</span>
+              <span className="font-bold">{activeSlugs.size}</span>
+            </div>
+          </>
+        }
+      />
 
       {/* Dismissible Feedback Banner */}
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
@@ -148,44 +67,50 @@ export default function AdminSkillsPage() {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
             <input
               type="text"
-              placeholder="Search technologies by name or identifier..."
+              placeholder="Search technology by name or slug..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-bg border border-line pl-9 pr-3 py-1.5 font-mono text-xs text-ink placeholder:text-faint focus:outline-none focus:border-line-strong transition-all"
             />
           </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('ALL')}
+              className={`px-3 py-1.5 font-mono text-xs uppercase transition-all border ${
+                selectedCategory === 'ALL'
+                  ? 'border-line bg-invert-bg text-invert-fg font-bold'
+                  : 'border-line bg-bg text-faint hover:text-ink'
+              }`}
+            >
+              ALL ({filteredTech.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('ACTIVE')}
+              className={`px-3 py-1.5 font-mono text-xs uppercase transition-all border ${
+                selectedCategory === 'ACTIVE'
+                  ? 'border-line bg-invert-bg text-invert-fg font-bold'
+                  : 'border-line bg-bg text-faint hover:text-ink'
+              }`}
+            >
+              ACTIVE ({activeSlugs.size})
+            </button>
+          </div>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-1.5 border border-line bg-bg-raised p-2 font-mono text-xs">
-          <button
-            onClick={() => setSelectedCategory('ALL')}
-            className={`px-3 py-1 uppercase transition-all ${
-              selectedCategory === 'ALL'
-                ? 'bg-invert-bg text-invert-fg font-bold'
-                : 'text-faint hover:text-ink'
-            }`}
-          >
-            ALL ({techList.length})
-          </button>
-          <button
-            onClick={() => setSelectedCategory('ACTIVE')}
-            className={`px-3 py-1 uppercase transition-all ${
-              selectedCategory === 'ACTIVE'
-                ? 'bg-invert-bg text-invert-fg font-bold'
-                : 'text-faint hover:text-ink'
-            }`}
-          >
-            ACTIVE IN DB ({activeSlugs.size})
-          </button>
+        {/* Category Pills Bar */}
+        <div className="flex flex-wrap gap-1.5">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 uppercase transition-all ${
+              className={`px-2.5 py-1 font-mono text-[11px] uppercase transition-all border ${
                 selectedCategory === cat
-                  ? 'bg-invert-bg text-invert-fg font-bold'
-                  : 'text-faint hover:text-ink'
+                  ? 'border-line bg-invert-bg text-invert-fg font-bold'
+                  : 'border-line bg-bg-raised text-faint hover:text-ink hover:border-line-strong'
               }`}
             >
               {cat}
@@ -195,57 +120,61 @@ export default function AdminSkillsPage() {
       </div>
 
       {/* Skills Matrix Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        {filteredTech.map((tech) => {
-          const isActive = activeSlugs.has(tech.slug);
-          const category = getCategoryForSlug(tech.slug);
-          const isToggling = togglingSlug === tech.slug;
+      {loading ? (
+        <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
+          <RefreshCw size={24} className="animate-spin mx-auto mb-3 text-ink" />
+          <div>SYNCHRONIZING CAPABILITIES MATRIX...</div>
+        </div>
+      ) : filteredTech.length === 0 ? (
+        <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
+          <Code size={32} className="mx-auto mb-2 text-faint" />
+          <div>NO TECHNOLOGIES MATCHING ACTIVE QUERY.</div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {filteredTech.map((tech) => {
+            const isActive = activeSlugs.has(tech.slug);
+            const isToggling = togglingSlug === tech.slug;
 
-          return (
-            <button
-              key={tech.slug}
-              onClick={() => toggleSkill(tech)}
-              disabled={isToggling}
-              className={`relative border p-3 flex flex-col justify-between text-left transition-all group ${
-                isActive
-                  ? 'border-line bg-bg-raised shadow-xs ring-1 ring-line'
-                  : 'border-line/40 bg-bg opacity-60 hover:opacity-100 hover:border-line'
-              }`}
-            >
-              <CornerCrosses />
-              <div className="flex items-center justify-between mb-3 w-full">
-                <div className="w-8 h-8 flex items-center justify-center border border-line bg-bg">
-                  <TechIcon slug={tech.slug} icon={tech.icon} name={tech.name} color={tech.color} size={18} />
+            return (
+              <button
+                key={tech.slug}
+                type="button"
+                onClick={() => toggleSkill(tech)}
+                disabled={isToggling}
+                className={`p-3 border relative text-left transition-all flex flex-col justify-between min-h-[90px] group ${
+                  isActive
+                    ? 'border-line bg-bg-raised shadow-xs'
+                    : 'border-line/40 bg-bg opacity-50 hover:opacity-100 hover:border-line'
+                }`}
+              >
+                <CornerCrosses />
+                <div className="flex items-center justify-between">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <TechIcon slug={tech.slug} size={18} className="text-ink" />
+                  </div>
+                  {isToggling ? (
+                    <Loader2 size={12} className="animate-spin text-ink" />
+                  ) : (
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        isActive ? 'bg-emerald-500' : 'bg-transparent border border-line'
+                      }`}
+                    />
+                  )}
                 </div>
-                {isToggling ? (
-                  <Loader2 size={12} className="animate-spin text-ink" />
-                ) : (
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      isActive ? 'bg-emerald-500 animate-pulse' : 'bg-line'
-                    }`}
-                    title={isActive ? 'Active in DB' : 'Inactive'}
-                  />
-                )}
-              </div>
 
-              <div className="w-full">
-                <div className="font-mono font-bold text-xs text-ink truncate">{tech.name}</div>
-                <div className="font-mono text-[9px] uppercase tracking-wider text-faint truncate">
-                  {category}
+                <div className="mt-2">
+                  <div className="font-mono text-xs font-bold text-ink truncate">{tech.name}</div>
+                  <div className="font-mono text-[9px] text-faint uppercase tracking-wider">
+                    {isActive ? 'ACTIVE' : 'INACTIVE'}
+                  </div>
                 </div>
-              </div>
-
-              <div className="mt-3 pt-2 border-t border-line/40 flex items-center justify-between font-mono text-[9px] w-full">
-                <span className="text-faint uppercase">TOGGLE</span>
-                <span className={isActive ? 'font-bold text-emerald-600 dark:text-emerald-400' : 'text-faint'}>
-                  {isActive ? 'ACTIVE' : 'STANDBY'}
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

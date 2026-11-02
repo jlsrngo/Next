@@ -1,141 +1,59 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FolderOpen, Plus, RefreshCw, Search } from 'lucide-react';
-import { projectsService } from '@/services/api';
-import type { Project } from '@/types/project.types';
+import useAdminProjects from '../hooks/useAdminProjects';
 import ProjectAdminCard from '../components/ProjectAdminCard';
-import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
-
-type FilterType = 'all' | 'featured' | 'normal';
+import AdminFeedbackBanner from '../components/AdminFeedbackBanner';
+import AdminPageHeaderHUD from '../components/AdminPageHeaderHUD';
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [filterFeatured, setFilterFeatured] = useState<FilterType>('all');
-  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
-  const [deletingId, setDeletingId] = useState<string | number | null>(null);
-
-  const fetchProjects = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
-    try {
-      const data = await projectsService.getProjects();
-      if (signal?.aborted) return;
-      setProjects(Array.isArray(data) ? data : []);
-    } catch (err: unknown) {
-      if (signal?.aborted) return;
-      const message = err instanceof Error ? err.message : 'Failed to synchronize projects';
-      console.error('[AdminProjects] Fetch error:', message);
-    } finally {
-      if (!signal?.aborted) {
-        setLoading(false);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchProjects(controller.signal);
-    return () => controller.abort();
-  }, [fetchProjects]);
-
-  const getTechArray = useCallback((p: Project): string[] => {
-    const val = p.techStack ?? p.tech_stack;
-    if (!val) return [];
-    if (Array.isArray(val)) return val;
-    return String(val)
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }, []);
-
-  const handleDelete = useCallback(
-    async (id: string | number, title: string) => {
-      if (!window.confirm(`CONFIRMATION: Permanently delete project "${title}"?`)) {
-        return;
-      }
-
-      setDeletingId(id);
-      try {
-        const res = await fetch(`/api/projects/${id}`, {
-          method: 'DELETE',
-        });
-        if (!res.ok) throw new Error('Deletion request rejected by server');
-        setFeedback({ type: 'success', message: `Project "${title}" deleted from registry.` });
-        await fetchProjects();
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Deletion failed';
-        setFeedback({ type: 'error', message });
-      } finally {
-        setDeletingId(null);
-      }
-    },
-    [fetchProjects]
-  );
-
-  const counts = useMemo(
-    () => ({
-      all: projects.length,
-      featured: projects.filter((p) => p.featured).length,
-      normal: projects.filter((p) => !p.featured).length,
-    }),
-    [projects]
-  );
-
-  const filtered = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return projects.filter((p) => {
-      const techList = getTechArray(p);
-      const matchesSearch =
-        !query ||
-        p.title.toLowerCase().includes(query) ||
-        (p.description && p.description.toLowerCase().includes(query)) ||
-        techList.some((t) => t.toLowerCase().includes(query));
-
-      if (!matchesSearch) return false;
-      if (filterFeatured === 'featured') return p.featured;
-      if (filterFeatured === 'normal') return !p.featured;
-      return true;
-    });
-  }, [projects, search, filterFeatured, getTechArray]);
+  const {
+    filtered,
+    loading,
+    search,
+    setSearch,
+    filterFeatured,
+    setFilterFeatured,
+    counts,
+    feedback,
+    setFeedback,
+    deletingId,
+    fetchProjects,
+    handleDelete,
+    getTechArray,
+  } = useAdminProjects();
 
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-            [ 02 // REPOSITORY ARCHIVE & WORK MATRIX ]
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            PROJECTS // <span className="font-mono text-faint font-normal">REGISTRY</span>
-          </h1>
-          <p className="text-xs text-faint mt-1 font-mono">
-            Direct inventory management for showcased repositories, engineering deployments, and case studies.
-          </p>
-        </div>
+      <AdminPageHeaderHUD
+        systemCode="[ 02 // REPOSITORY ARCHIVE & WORK MATRIX ]"
+        title="PROJECTS //"
+        titleHighlight="REGISTRY"
+        description="Direct inventory management for showcased repositories, engineering deployments, and case studies."
+        actions={
+          <>
+            <Link
+              to="/admin/projects/new"
+              className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            >
+              <Plus size={14} />
+              <span>ADD PROJECT</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => fetchProjects()}
+              className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
+              title="Refresh database records"
+            >
+              <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+              <span>SYNC</span>
+            </button>
+          </>
+        }
+      />
 
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <Link
-            to="/admin/projects/new"
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            <Plus size={14} />
-            <span>ADD PROJECT</span>
-          </Link>
-          <button
-            type="button"
-            onClick={() => fetchProjects()}
-            className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
-            title="Refresh database records"
-          >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>SYNC</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Dismissible Feedback Banner Component */}
+      {/* Dismissible Feedback Banner */}
       <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {/* Filter and Search Bar */}
@@ -190,7 +108,7 @@ export default function AdminProjectsPage() {
         </div>
       </div>
 
-      {/* Projects Display: Separated Swiss Brutalist Cards */}
+      {/* Projects Display */}
       {loading ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
           <RefreshCw size={24} className="animate-spin mx-auto mb-3 text-ink" />

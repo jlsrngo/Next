@@ -5,7 +5,7 @@ import { changelog } from '@/lib/changelog';
 
 export default function AdminChangelogPage() {
   return (
-    <div className="space-y-6 animate-fade-in text-ink">
+    <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <div className="border-b border-line pb-5">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">

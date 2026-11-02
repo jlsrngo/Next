@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, Briefcase, Calendar, MapPin } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2, Briefcase } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { aboutService } from '@/services/api';
+import type { ExperienceItemRecord } from '../components/ExperienceAdminCard';
+import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminExperienceFormPage() {
   const navigate = useNavigate();
@@ -10,7 +14,7 @@ export default function AdminExperienceFormPage() {
 
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form Fields
   const [company, setCompany] = useState('');
@@ -22,11 +26,11 @@ export default function AdminExperienceFormPage() {
 
   useEffect(() => {
     if (isEditing && id) {
-      fetch('/api/about')
-        .then((r) => r.json())
+      aboutService
+        .getAboutData()
         .then((data) => {
-          const list = Array.isArray(data.experiences) ? data.experiences : [];
-          const found = list.find((item: any) => String(item.id) === String(id));
+          const list = Array.isArray(data?.experiences) ? (data.experiences as ExperienceItemRecord[]) : [];
+          const found = list.find((item) => String(item.id) === String(id));
           if (found) {
             setCompany(found.company || found.company_name || '');
             setPosition(found.position || '');
@@ -62,28 +66,19 @@ export default function AdminExperienceFormPage() {
 
     try {
       if (isEditing && id) {
-        const res = await fetch(`/api/experiences/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Update failed');
+        await aboutService.updateExperience(id, payload);
         setFeedback({ type: 'success', message: `Experience at "${company}" updated successfully! Redirecting...` });
       } else {
-        const res = await fetch('/api/experiences', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Creation failed');
-        setFeedback({ type: 'success', message: `Experience at "${company}" created successfully! Redirecting...` });
+        await aboutService.createExperience(payload);
+        setFeedback({ type: 'success', message: `Experience at "${company}" deployed to PostgreSQL! Redirecting...` });
       }
 
       setTimeout(() => {
         navigate('/admin/experiences');
       }, 1000);
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed';
+      setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
   };
@@ -100,64 +95,27 @@ export default function AdminExperienceFormPage() {
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/admin/experiences"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-ink transition-colors mb-2"
-          >
-            <ArrowLeft size={13} />
-            <span>RETURN TO EXPERIENCES TIMELINE</span>
-          </Link>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-            {isEditing ? '[ 03 // EDIT CAREER DEPLOYMENT ]' : '[ 03 // NEW CAREER DEPLOYMENT ]'}
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            {isEditing ? 'EDIT EXPERIENCE //' : 'NEW EXPERIENCE //'} <span className="font-mono text-faint font-normal">TIMELINE</span>
-          </h1>
-        </div>
+      <AdminFormHeaderHUD
+        returnTo="/admin/experiences"
+        returnLabel="RETURN TO EXPERIENCES TIMELINE"
+        systemCode={isEditing ? '[ 03 // EDIT CAREER DEPLOYMENT ]' : '[ 03 // NEW CAREER DEPLOYMENT ]'}
+        title={isEditing ? 'EDIT EXPERIENCE //' : 'NEW EXPERIENCE //'}
+        titleHighlight="TIMELINE"
+        discardTo="/admin/experiences"
+        submitLabel={isEditing ? 'UPDATE RECORD' : 'CONFIRM ROLE'}
+        isSubmitting={submitting}
+        onSubmit={handleSubmit}
+      />
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin/experiences"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            {submitting ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            <span>{isEditing ? 'SAVE CHANGES' : 'CONFIRM ROLE'}</span>
-          </button>
-        </div>
-      </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center gap-2 transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          ) : (
-            <AlertTriangle size={15} className="text-red-500 shrink-0" />
-          )}
-          <span>{feedback.message}</span>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <Briefcase size={13} />
-            <span>[ ROLE & ORGANIZATIONAL METRICS ]</span>
+            <span>[ ROLE & EMPLOYMENT SPEC ]</span>
           </div>
 
           <div className="space-y-5 font-mono text-xs">
@@ -169,106 +127,86 @@ export default function AdminExperienceFormPage() {
                   required
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  placeholder="e.g. Acme Corp"
+                  placeholder="e.g. Acme Systems Ltd."
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Position Title *</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">Position / Job Title *</label>
                 <input
                   type="text"
                   required
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
-                  placeholder="e.g. Lead Systems Architect"
+                  placeholder="e.g. Lead Full Stack Architect"
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">Deployment Location</label>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g. Remote / Jakarta, ID"
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">Sort Sequence Index</label>
+                <input
+                  type="number"
+                  value={order}
+                  onChange={(e) => setOrder(Number(e.target.value))}
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-faint uppercase font-bold mb-1.5 flex items-center gap-1.5">
-                <MapPin size={12} />
-                <span>Location / Workplace Model</span>
-              </label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. Jakarta, Indonesia (Hybrid) / Remote"
-                className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
-              />
-            </div>
-
-            <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Key Responsibilities, Architectural Impact & Technology Used
+                Role Responsibilities & Engineering Milestones
               </label>
               <textarea
                 rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Architected distributed event-driven microservices processing 10k req/sec..."
+                placeholder="Key deliverables, system architecture choices, microservices engineered..."
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="flex items-center gap-3 border border-line bg-bg p-4">
-                <input
-                  type="checkbox"
-                  id="currentRoleToggle"
-                  checked={current}
-                  onChange={(e) => setCurrent(e.target.checked)}
-                  className="w-4 h-4 accent-ink cursor-pointer"
-                />
-                <div>
-                  <label htmlFor="currentRoleToggle" className="text-ink font-bold uppercase cursor-pointer block text-xs">
-                    Current Active Role
-                  </label>
-                  <span className="text-[10px] text-faint block">
-                    Displays 'Present' as the end period.
-                  </span>
-                </div>
-              </div>
-
-              <div className="border border-line bg-bg p-4 flex items-center justify-between">
-                <div>
-                  <label className="text-ink font-bold uppercase block text-xs">Order Index</label>
-                  <span className="text-[10px] text-faint block">Sort sequence index</span>
-                </div>
-                <input
-                  type="number"
-                  min={0}
-                  value={order}
-                  onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-20 border border-line bg-bg-raised px-3 py-1.5 text-ink font-bold text-xs font-mono"
-                />
-              </div>
+            <div className="flex items-center gap-3 border border-line bg-bg p-4">
+              <input
+                type="checkbox"
+                id="currentRoleToggle"
+                checked={current}
+                onChange={(e) => setCurrent(e.target.checked)}
+                className="w-4 h-4 accent-ink cursor-pointer"
+              />
+              <label htmlFor="currentRoleToggle" className="cursor-pointer select-none">
+                <span className="font-bold block uppercase text-ink">Active Career Engagement</span>
+                <span className="text-[10px] text-faint">Currently deployed in this capacity</span>
+              </label>
             </div>
           </div>
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="border border-line bg-bg-raised p-4 flex items-center justify-between">
-          <Link
-            to="/admin/experiences"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD CHANGES
-          </Link>
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            <span>{isEditing ? 'SAVE EXPERIENCE' : 'CONFIRM ROLE'}</span>
+            {submitting ? 'COMMITTING TO POSTGRESQL...' : isEditing ? 'UPDATE TIMELINE' : 'REGISTER ENGAGEMENT'}
           </button>
         </div>
       </form>
     </div>
   );
 }
-

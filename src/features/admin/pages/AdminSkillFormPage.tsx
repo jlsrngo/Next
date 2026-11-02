@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, Code } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Code } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { CATEGORIES } from '@/lib/techCategories';
+import { skillsService } from '@/services/api';
+import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminSkillFormPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form Fields
   const [name, setName] = useState('');
@@ -35,20 +38,15 @@ export default function AdminSkillFormPage() {
     };
 
     try {
-      const res = await fetch('/api/skills', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error('Registration failed');
+      await skillsService.createSkill(payload);
       setFeedback({ type: 'success', message: `Technology "${name}" registered successfully! Redirecting...` });
 
       setTimeout(() => {
         navigate('/admin/skills');
       }, 1000);
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed';
+      setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
   };
@@ -56,57 +54,20 @@ export default function AdminSkillFormPage() {
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/admin/skills"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-ink transition-colors mb-2"
-          >
-            <ArrowLeft size={13} />
-            <span>RETURN TO SKILLS MATRIX</span>
-          </Link>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-            [ 01 // CUSTOM TECHNOLOGY REGISTRATION ]
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            NEW SKILL // <span className="font-mono text-faint font-normal">SPECIFICATION</span>
-          </h1>
-        </div>
+      <AdminFormHeaderHUD
+        returnTo="/admin/skills"
+        returnLabel="RETURN TO SKILLS MATRIX"
+        systemCode="[ 01 // CUSTOM TECHNOLOGY REGISTRATION ]"
+        title="NEW SKILL //"
+        titleHighlight="SPECIFICATION"
+        discardTo="/admin/skills"
+        submitLabel="ADD TO REGISTRY"
+        isSubmitting={submitting}
+        onSubmit={handleSubmit}
+      />
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin/skills"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            {submitting ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            <span>ADD TO REGISTRY</span>
-          </button>
-        </div>
-      </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center gap-2 transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          ) : (
-            <AlertTriangle size={15} className="text-red-500 shrink-0" />
-          )}
-          <span>{feedback.message}</span>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="border border-line bg-bg-raised p-6 relative">
@@ -183,52 +144,35 @@ export default function AdminSkillFormPage() {
                   onChange={(e) => setFeatured(e.target.checked)}
                   className="w-4 h-4 accent-ink cursor-pointer"
                 />
-                <div>
-                  <label htmlFor="featuredSkillToggle" className="text-ink font-bold uppercase cursor-pointer block text-xs">
-                    ★ Priority Core Skill
-                  </label>
-                  <span className="text-[10px] text-faint block">
-                    Showcase prominently in competency matrices.
-                  </span>
-                </div>
+                <label htmlFor="featuredSkillToggle" className="cursor-pointer select-none">
+                  <span className="font-bold block uppercase text-ink">Priority Highlight</span>
+                  <span className="text-[10px] text-faint">Feature in prominent telemetry viewports</span>
+                </label>
               </div>
 
-              <div className="border border-line bg-bg p-4 flex items-center justify-between">
-                <div>
-                  <label className="text-ink font-bold uppercase block text-xs">Order Index</label>
-                  <span className="text-[10px] text-faint block">Sort sequence index</span>
-                </div>
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">Sort Sequence Index</label>
                 <input
                   type="number"
-                  min={0}
                   value={order}
                   onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-20 border border-line bg-bg-raised px-3 py-1.5 text-ink font-bold text-xs font-mono"
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="border border-line bg-bg-raised p-4 flex items-center justify-between">
-          <Link
-            to="/admin/skills"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD CHANGES
-          </Link>
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            <span>REGISTER SKILL</span>
+            {submitting ? 'COMMITTING TO NEON...' : 'CONFIRM SPECIFICATION'}
           </button>
         </div>
       </form>
     </div>
   );
 }
-

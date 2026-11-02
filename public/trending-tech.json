@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-02T02:25:40.432Z",
+  "last_crawled_at": "2026-11-02T03:25:48.955Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "metric": "▲ 962 PTS",
+  "metric": "▲ 1011 PTS",
   "spec": "TECH WIRE // LIVE: Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "viral_repo": "Effect-TS/effect",
-  "repo_metric": "★ 17.5k",
-  "repo_desc": "Build production-ready applications in TypeScript",
-  "repo_spec": "VIRAL REPO // Effect-TS/effect",
+  "viral_repo": "astral-sh/uv",
+  "repo_metric": "★ 91.4k",
+  "repo_desc": "An extremely fast Python package and project manager, written in Rust.",
+  "repo_spec": "VIRAL REPO // astral-sh/uv",
   "trending_repos": [
     {
-      "name": "effect",
-      "full_name": "Effect-TS/effect",
-      "stars": 17456,
-      "stars_formatted": "★ 17.5k",
+      "name": "uv",
+      "full_name": "astral-sh/uv",
+      "stars": 91442,
+      "stars_formatted": "★ 91.4k",
+      "language": "Rust",
+      "description": "An extremely fast Python package and project manager, written in Rust.",
+      "url": "https://github.com/astral-sh/uv"
+    },
+    {
+      "name": "opencode",
+      "full_name": "anomalyco/opencode",
+      "stars": 223884,
+      "stars_formatted": "★ 223.9k",
       "language": "TypeScript",
-      "description": "Build production-ready applications in TypeScript",
-      "url": "https://github.com/Effect-TS/effect"
+      "description": "The open source coding agent.",
+      "url": "https://github.com/anomalyco/opencode"
     },
     {
-      "name": "openrig",
-      "full_name": "mvschwarz/openrig",
-      "stars": 8546,
-      "stars_formatted": "★ 8.5k",
+      "name": "dux-shell",
+      "full_name": "duxlabs-dev/dux-shell",
+      "stars": 8738,
+      "stars_formatted": "★ 8.7k",
+      "language": "QML",
+      "description": "Desktop shell for wayland compositors built with Quickshell & GO, optimized for niri, hyprland, sway, MangoWC, labwc, and MiracleWM.",
+      "url": "https://github.com/duxlabs-dev/dux-shell"
+    },
+    {
+      "name": "fluxer",
+      "full_name": "fluxerapp/fluxer",
+      "stars": 10745,
+      "stars_formatted": "★ 10.7k",
       "language": "TypeScript",
-      "description": "Build your own network of agents from Claude Code, Codex and Pi: persistent teams with roles, shared context and owned work.",
-      "url": "https://github.com/mvschwarz/openrig"
+      "description": "A free and open source instant messaging and VoIP chat app built for friends, groups, and communities.",
+      "url": "https://github.com/fluxerapp/fluxer"
     },
     {
-      "name": "winget-pkgs",
-      "full_name": "microsoft/winget-pkgs",
-      "stars": 11274,
-      "stars_formatted": "★ 11.3k",
-      "language": "Code",
-      "description": "The Microsoft community Windows Package Manager manifest repository",
-      "url": "https://github.com/microsoft/winget-pkgs"
+      "name": "aerial-tv",
+      "full_name": "pengchujin/aerial-tv",
+      "stars": 8730,
+      "stars_formatted": "★ 8.7k",
+      "language": "Kotlin",
+      "description": "给国产电视的一块干净桌面：参照 tvOS 设计的开源 Android TV 桌面，没有广告，开机自动接管。A tvOS-style launcher for Xiaomi, TCL and other China-market TVs.",
+      "url": "https://github.com/pengchujin/aerial-tv"
     },
     {
-      "name": "shadowrocket-rules",
-      "full_name": "deezertidal/shadowrocket-rules",
-      "stars": 6784,
-      "stars_formatted": "★ 6.8k",
-      "language": "JavaScript",
-      "description": "小火箭 shadowrocket 配置文件 模块 脚本 module sgmodule 图文教程 规则 分流 破解 解锁",
-      "url": "https://github.com/deezertidal/shadowrocket-rules"
+      "name": "edk2",
+      "full_name": "tianocore/edk2",
+      "stars": 6379,
+      "stars_formatted": "★ 6.4k",
+      "language": "C",
+      "description": "EDK II",
+      "url": "https://github.com/tianocore/edk2"
     },
     {
-      "name": "beads",
-      "full_name": "gastownhall/beads",
-      "stars": 28401,
-      "stars_formatted": "★ 28.4k",
-      "language": "Go",
-      "description": "Beads - A memory upgrade for your coding agent",
-      "url": "https://github.com/gastownhall/beads"
+      "name": "ccusage",
+      "full_name": "ccusage/ccusage",
+      "stars": 19288,
+      "stars_formatted": "★ 19.3k",
+      "language": "Rust",
+      "description": "npx ccusage",
+      "url": "https://github.com/ccusage/ccusage"
     },
     {
-      "name": "TensorRT-LLM",
-      "full_name": "NVIDIA/TensorRT-LLM",
-      "stars": 14987,
-      "stars_formatted": "★ 15.0k",
-      "language": "Python",
-      "description": "TensorRT LLM provides users with an easy-to-use Python API to define Large Language Models (LLMs) and supports state-of-the-art optimizations to perform inference efficiently on NVIDIA GPUs. TensorRT LLM also contains components to create Python and C++ runtimes that orchestrate the inference execution in a performant way.",
-      "url": "https://github.com/NVIDIA/TensorRT-LLM"
-    },
-    {
-      "name": "models.dev",
-      "full_name": "anomalyco/models.dev",
-      "stars": 7470,
-      "stars_formatted": "★ 7.5k",
-      "language": "TypeScript",
-      "description": "An open-source database of AI models.",
-      "url": "https://github.com/anomalyco/models.dev"
-    },
-    {
-      "name": "openwork",
-      "full_name": "different-ai/openwork",
-      "stars": 24362,
-      "stars_formatted": "★ 24.4k",
-      "language": "TypeScript",
-      "description": "The open-source alternative to Claude Cowork (powered by opencode)",
-      "url": "https://github.com/different-ai/openwork"
+      "name": "skillhub",
+      "full_name": "iflytek/skillhub",
+      "stars": 5352,
+      "stars_formatted": "★ 5.4k",
+      "language": "Java",
+      "description": "Self-hosted, open-source agent skill registry for enterprises. Publish & version skill packages, govern with RBAC and audit logs, deploy   on-premise with Docker or Kubernetes.",
+      "url": "https://github.com/iflytek/skillhub"
     },
     {
       "name": "orca",
       "full_name": "stablyai/orca",
-      "stars": 112638,
-      "stars_formatted": "★ 112.6k",
+      "stars": 112694,
+      "stars_formatted": "★ 112.7k",
       "language": "TypeScript",
       "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
       "url": "https://github.com/stablyai/orca"
     },
     {
-      "name": "awesome-mac",
-      "full_name": "jaywcjlove/awesome-mac",
-      "stars": 117553,
-      "stars_formatted": "★ 117.6k",
-      "language": "Swift",
-      "description": " This project is dedicated to collecting high-quality macOS software and organizing them systematically by different categories for easy search and use.",
-      "url": "https://github.com/jaywcjlove/awesome-mac"
+      "name": "gpustack",
+      "full_name": "gpustack/gpustack",
+      "stars": 5942,
+      "stars_formatted": "★ 5.9k",
+      "language": "Python",
+      "description": "A GPU cluster manager for high-performance AI model serving (vLLM, SGLang) and on-demand SSH-accessible GPU instances.",
+      "url": "https://github.com/gpustack/gpustack"
     }
   ]
 }

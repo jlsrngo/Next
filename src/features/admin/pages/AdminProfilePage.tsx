@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  User,
   Mail,
   Phone,
   MapPin,
   Globe,
-  ExternalLink,
   RefreshCw,
   Edit3,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { profileService } from '@/services/api';
+import type { Profile } from '@/types/profile.types';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinary';
+import AdminPageHeaderHUD from '../components/AdminPageHeaderHUD';
 
 export default function AdminProfilePage() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async () => {
@@ -39,38 +39,33 @@ export default function AdminProfilePage() {
   const avatar = optimizeCloudinaryUrl(profile?.avatarUrl || profile?.avatar_url);
 
   return (
-    <div className="space-y-6 animate-fade-in text-ink">
+    <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-            [ 00 // OPERATOR DOSSIER & IDENTITY MATRIX ]
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            PROFILE // <span className="font-mono text-faint font-normal">SPECIFICATION</span>
-          </h1>
-          <p className="text-xs text-faint mt-1 font-mono">
-            Identity registry, public bio statements, and primary contact endpoints stored in PostgreSQL.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <Link
-            to="/admin/profile/edit"
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            <Edit3 size={14} />
-            <span>EDIT PROFILE</span>
-          </Link>
-          <button
-            onClick={fetchProfile}
-            className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
-          >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>SYNC</span>
-          </button>
-        </div>
-      </div>
+      <AdminPageHeaderHUD
+        systemCode="[ 00 // OPERATOR DOSSIER & IDENTITY MATRIX ]"
+        title="PROFILE //"
+        titleHighlight="SPECIFICATION"
+        description="Identity registry, public bio statements, and primary contact endpoints stored in PostgreSQL."
+        actions={
+          <>
+            <Link
+              to="/admin/profile/edit"
+              className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            >
+              <Edit3 size={14} />
+              <span>EDIT PROFILE</span>
+            </Link>
+            <button
+              type="button"
+              onClick={fetchProfile}
+              className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
+            >
+              <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+              <span>SYNC</span>
+            </button>
+          </>
+        }
+      />
 
       {/* Main Dossier Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

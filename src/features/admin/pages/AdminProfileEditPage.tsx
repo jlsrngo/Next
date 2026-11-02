@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, User, Mail, MapPin, Globe, Phone } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Loader2, User, Mail, MapPin, Globe, Phone, Save } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import ImageUploadAdjuster from '@/components/ui/ImageUploadAdjuster';
 import { profileService } from '@/services/api';
+import type { Profile } from '@/types/profile.types';
+import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminProfileEditPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form State
   const [fullName, setFullName] = useState('');
@@ -27,7 +30,7 @@ export default function AdminProfileEditPage() {
   useEffect(() => {
     profileService
       .getProfile()
-      .then((data: any) => {
+      .then((data: Profile) => {
         if (data) {
           setFullName(data.fullName || data.name || '');
           setHeadline(data.headline || '');
@@ -54,33 +57,29 @@ export default function AdminProfileEditPage() {
     }
 
     setSubmitting(true);
+    const payload = {
+      fullName: fullName.trim(),
+      headline: headline.trim(),
+      bioHome: bioHome.trim(),
+      bioAbout: bioAbout.trim(),
+      avatarUrl: avatarUrl.trim() || undefined,
+      email: email.trim(),
+      phone: phone.trim(),
+      location: location.trim(),
+      website: website.trim(),
+      githubUrl: githubUrl.trim(),
+      linkedinUrl: linkedinUrl.trim(),
+    };
+
     try {
-      const res = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: fullName.trim(),
-          headline: headline.trim(),
-          bioHome: bioHome.trim(),
-          bioAbout: bioAbout.trim(),
-          avatarUrl: avatarUrl.trim() || undefined,
-          email: email.trim(),
-          phone: phone.trim(),
-          location: location.trim(),
-          website: website.trim(),
-          githubUrl: githubUrl.trim(),
-          linkedinUrl: linkedinUrl.trim(),
-        }),
-      });
-
-      if (!res.ok) throw new Error('Failed to update profile specification');
-
+      await profileService.updateProfile(payload);
       setFeedback({ type: 'success', message: 'Profile specification saved successfully! Redirecting...' });
       setTimeout(() => {
         navigate('/admin/profile');
       }, 1000);
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Saving failed' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Saving failed';
+      setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
   };
@@ -97,57 +96,20 @@ export default function AdminProfileEditPage() {
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/admin/profile"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-ink transition-colors mb-2"
-          >
-            <ArrowLeft size={13} />
-            <span>RETURN TO PROFILE SPEC</span>
-          </Link>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-            [ 00 // OPERATOR DOSSIER CONFIGURATION ]
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            EDIT PROFILE // <span className="font-mono text-faint font-normal">SPECIFICATION</span>
-          </h1>
-        </div>
+      <AdminFormHeaderHUD
+        returnTo="/admin/profile"
+        returnLabel="RETURN TO PROFILE SPEC"
+        systemCode="[ 00 // OPERATOR DOSSIER CONFIGURATION ]"
+        title="EDIT PROFILE //"
+        titleHighlight="SPECIFICATION"
+        discardTo="/admin/profile"
+        submitLabel="SAVE DOSSIER"
+        isSubmitting={submitting}
+        onSubmit={handleSubmit}
+      />
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin/profile"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            {submitting ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            <span>SAVE DOSSIER</span>
-          </button>
-        </div>
-      </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center gap-2 transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          ) : (
-            <AlertTriangle size={15} className="text-red-500 shrink-0" />
-          )}
-          <span>{feedback.message}</span>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Avatar Image Adjuster Component */}
@@ -317,17 +279,11 @@ export default function AdminProfileEditPage() {
         </div>
 
         {/* Bottom Actions Bar */}
-        <div className="border border-line bg-bg-raised p-4 flex items-center justify-between">
-          <Link
-            to="/admin/profile"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD CHANGES
-          </Link>
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs disabled:opacity-50"
           >
             {submitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
             <span>SAVE PROFILE SPECIFICATION</span>

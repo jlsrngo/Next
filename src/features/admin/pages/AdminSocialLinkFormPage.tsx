@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, CheckCircle2, AlertTriangle, Link2, ExternalLink } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2, Link2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { socialLinksService } from '@/services/api';
+import type { SocialLinkItemRecord } from '../components/SocialLinkAdminCard';
+import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminSocialLinkFormPage() {
   const navigate = useNavigate();
@@ -11,7 +14,7 @@ export default function AdminSocialLinkFormPage() {
 
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form Fields
   const [platform, setPlatform] = useState('GitHub');
@@ -25,8 +28,9 @@ export default function AdminSocialLinkFormPage() {
     if (isEditing && id) {
       socialLinksService
         .getSocialLinks()
-        .then((items: any[]) => {
-          const found = items.find((l) => String(l.id) === String(id));
+        .then((items: unknown) => {
+          const list = Array.isArray(items) ? (items as (SocialLinkItemRecord & { title?: string; description?: string; is_featured?: boolean; isFeatured?: boolean })[]) : [];
+          const found = list.find((l) => String(l.id) === String(id));
           if (found) {
             setPlatform(found.platform || 'GitHub');
             setTitle(found.title || found.platform || '');
@@ -62,28 +66,19 @@ export default function AdminSocialLinkFormPage() {
 
     try {
       if (isEditing && id) {
-        const res = await fetch(`/api/social-links/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Update failed');
+        await socialLinksService.updateSocialLink(id, payload);
         setFeedback({ type: 'success', message: `Relay channel "${platform}" updated successfully! Redirecting...` });
       } else {
-        const res = await fetch('/api/social-links', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Creation failed');
+        await socialLinksService.createSocialLink(payload);
         setFeedback({ type: 'success', message: `Relay channel "${platform}" registered successfully! Redirecting...` });
       }
 
       setTimeout(() => {
         navigate('/admin/social-links');
       }, 1000);
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Operation failed' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed';
+      setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
   };
@@ -100,57 +95,20 @@ export default function AdminSocialLinkFormPage() {
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
-      <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/admin/social-links"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-faint hover:text-ink transition-colors mb-2"
-          >
-            <ArrowLeft size={13} />
-            <span>RETURN TO SOCIAL RELAYS</span>
-          </Link>
-          <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint">
-            {isEditing ? '[ 06 // EDIT COMMUNICATION RELAY ]' : '[ 06 // NEW COMMUNICATION RELAY ]'}
-          </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-            {isEditing ? 'EDIT RELAY //' : 'NEW RELAY //'} <span className="font-mono text-faint font-normal">CHANNEL</span>
-          </h1>
-        </div>
+      <AdminFormHeaderHUD
+        returnTo="/admin/social-links"
+        returnLabel="RETURN TO SOCIAL RELAYS"
+        systemCode={isEditing ? '[ 06 // EDIT COMMUNICATION RELAY ]' : '[ 06 // NEW COMMUNICATION RELAY ]'}
+        title={isEditing ? 'EDIT RELAY //' : 'NEW RELAY //'}
+        titleHighlight="CHANNEL"
+        discardTo="/admin/social-links"
+        submitLabel={isEditing ? 'SAVE CHANGES' : 'CONFIRM RELAY'}
+        isSubmitting={submitting}
+        onSubmit={handleSubmit}
+      />
 
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin/social-links"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-5 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
-          >
-            {submitting ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            <span>{isEditing ? 'SAVE CHANGES' : 'CONFIRM RELAY'}</span>
-          </button>
-        </div>
-      </div>
-
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center gap-2 transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          {feedback.type === 'success' ? (
-            <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-          ) : (
-            <AlertTriangle size={15} className="text-red-500 shrink-0" />
-          )}
-          <span>{feedback.message}</span>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="border border-line bg-bg-raised p-6 relative">
@@ -247,25 +205,16 @@ export default function AdminSocialLinkFormPage() {
           </div>
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="border border-line bg-bg-raised p-4 flex items-center justify-between">
-          <Link
-            to="/admin/social-links"
-            className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
-          >
-            DISCARD CHANGES
-          </Link>
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
           <button
             type="submit"
             disabled={submitting}
-            className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
+            className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            <span>{isEditing ? 'SAVE CHANNEL SPEC' : 'CONFIRM RELAY'}</span>
+            {submitting ? 'COMMITTING TO NEON...' : isEditing ? 'UPDATE RELAY' : 'DEPLOY RELAY'}
           </button>
         </div>
       </form>
     </div>
   );
 }
-

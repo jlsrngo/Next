@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Code, FolderOpen, Trophy, Briefcase, GraduationCap, Link2, ArrowUpRight, TrendingUp, User, RefreshCw } from 'lucide-react';
+import { Code, FolderOpen, Trophy, Briefcase, GraduationCap, Link2, ArrowUpRight, TrendingUp, User } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
-import { profileService, dashboardService, skillsService, projectsService, achievementsService, socialLinksService } from '@/services/api';
+import {
+  profileService,
+  skillsService,
+  projectsService,
+  achievementsService,
+  socialLinksService,
+  aboutService,
+} from '@/services/api';
+import type { Profile } from '@/types/profile.types';
 
 export default function AdminOverviewPage() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [counts, setCounts] = useState({
     skills: 0,
     projects: 0,
@@ -23,17 +31,16 @@ export default function AdminOverviewPage() {
       projectsService.getProjects().catch(() => []),
       achievementsService.getAchievements().catch(() => []),
       socialLinksService.getSocialLinks().catch(() => []),
-      fetch('/api/experiences').then(r => r.ok ? r.json() : []).catch(() => []),
-      fetch('/api/education').then(r => r.ok ? r.json() : []).catch(() => []),
-    ]).then(([p, skills, projects, achievements, socialLinks, exp, edu]) => {
+      aboutService.getAboutData().catch(() => ({ experiences: [], educations: [] })),
+    ]).then(([p, skills, projects, achievements, socialLinks, aboutData]) => {
       setProfile(p);
       setCounts({
         skills: Array.isArray(skills) ? skills.length : 0,
         projects: Array.isArray(projects) ? projects.length : 0,
         achievements: Array.isArray(achievements) ? achievements.length : 0,
         socialLinks: Array.isArray(socialLinks) ? socialLinks.length : 0,
-        experiences: Array.isArray(exp) ? exp.length : 0,
-        education: Array.isArray(edu) ? edu.length : 0,
+        experiences: Array.isArray(aboutData?.experiences) ? aboutData.experiences.length : 0,
+        education: Array.isArray(aboutData?.educations) ? aboutData.educations.length : 0,
       });
       setLoading(false);
     });
@@ -59,7 +66,7 @@ export default function AdminOverviewPage() {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in text-ink">
+    <div className="space-y-8 animate-fade-in text-ink w-full">
       {/* Top HUD Overview */}
       <div className="border-b border-line pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -144,4 +151,3 @@ export default function AdminOverviewPage() {
     </div>
   );
 }
-
