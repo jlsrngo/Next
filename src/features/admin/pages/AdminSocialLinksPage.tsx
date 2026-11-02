@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Link2,
@@ -7,55 +7,70 @@ import {
   Plus,
   Trash2,
   Edit3,
-  CheckCircle2,
-  X,
   Loader2,
-  AlertTriangle,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { socialLinksService } from '@/services/api';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
+
+interface SocialLinkRecord {
+  id: string | number;
+  platform: string;
+  url: string;
+  order?: number;
+}
 
 export default function AdminSocialLinksPage() {
-  const [links, setLinks] = useState<any[]>([]);
+  const [links, setLinks] = useState<SocialLinkRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
 
-  const fetchLinks = async () => {
+  const fetchLinks = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     try {
       const data = await socialLinksService.getSocialLinks();
+      if (signal?.aborted) return;
       setLinks(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      console.error('[AdminSocialLinks] Fetch error:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    fetchLinks();
   }, []);
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`CONFIRMATION: Permanently delete relay channel "${name}"?`)) {
-      return;
-    }
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchLinks(controller.signal);
+    return () => controller.abort();
+  }, [fetchLinks]);
 
-    setDeletingId(id);
-    try {
-      const res = await fetch(`/api/social-links/${id}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) throw new Error('Deletion failed');
-      setFeedback({ type: 'success', message: `Relay channel deleted.` });
-      await fetchLinks();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Deletion failed.' });
-    } finally {
-      setDeletingId(null);
-    }
-  };
+  const handleDelete = useCallback(
+    async (id: string | number, name: string) => {
+      if (!window.confirm(`CONFIRMATION: Permanently delete relay channel "${name}"?`)) {
+        return;
+      }
+
+      setDeletingId(id);
+      try {
+        const res = await fetch(`/api/social-links/${id}`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Deletion failed');
+        setFeedback({ type: 'success', message: `Relay channel deleted.` });
+        await fetchLinks();
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Deletion failed.';
+        setFeedback({ type: 'error', message });
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [fetchLinks]
+  );
 
   return (
     <div className="space-y-6 animate-fade-in text-ink">
@@ -91,27 +106,8 @@ export default function AdminSocialLinksPage() {
         </div>
       </div>
 
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {loading ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">

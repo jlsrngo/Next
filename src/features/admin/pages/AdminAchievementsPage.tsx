@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Trophy,
@@ -8,64 +8,87 @@ import {
   Plus,
   Trash2,
   Edit3,
-  CheckCircle2,
-  X,
   Loader2,
-  AlertTriangle,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { achievementsService } from '@/services/api';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
+
+interface AchievementRecord {
+  id: string | number;
+  title: string;
+  issuer?: string;
+  issueDate?: string;
+  description?: string;
+  credentialUrl?: string;
+  featured?: boolean;
+  order?: number;
+}
 
 export default function AdminAchievementsPage() {
-  const [achievements, setAchievements] = useState<any[]>([]);
+  const [achievements, setAchievements] = useState<AchievementRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
 
-  const fetchAchievements = async () => {
+  const fetchAchievements = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     try {
       const data = await achievementsService.getAchievements();
+      if (signal?.aborted) return;
       setAchievements(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      console.error('[AdminAchievements] Fetch error:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    fetchAchievements();
   }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`CONFIRMATION: Permanently delete achievement "${title}"?`)) {
-      return;
-    }
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchAchievements(controller.signal);
+    return () => controller.abort();
+  }, [fetchAchievements]);
 
-    setDeletingId(id);
-    try {
-      const res = await fetch(`/api/achievements/${id}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) throw new Error('Deletion failed');
-      setFeedback({ type: 'success', message: `Achievement "${title}" deleted from registry.` });
-      await fetchAchievements();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Deletion failed.' });
-    } finally {
-      setDeletingId(null);
-    }
-  };
+  const handleDelete = useCallback(
+    async (id: string | number, title: string) => {
+      if (!window.confirm(`CONFIRMATION: Permanently delete achievement "${title}"?`)) {
+        return;
+      }
 
-  const filtered = achievements.filter((a) => {
-    return (
-      a.title?.toLowerCase().includes(search.toLowerCase()) ||
-      a.issuer?.toLowerCase().includes(search.toLowerCase()) ||
-      a.description?.toLowerCase().includes(search.toLowerCase())
-    );
-  });
+      setDeletingId(id);
+      try {
+        const res = await fetch(`/api/achievements/${id}`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Deletion failed');
+        setFeedback({ type: 'success', message: `Achievement "${title}" deleted from registry.` });
+        await fetchAchievements();
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Deletion failed.';
+        setFeedback({ type: 'error', message });
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [fetchAchievements]
+  );
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return achievements;
+    return achievements.filter((a) => {
+      return (
+        a.title?.toLowerCase().includes(q) ||
+        a.issuer?.toLowerCase().includes(q) ||
+        a.description?.toLowerCase().includes(q)
+      );
+    });
+  }, [achievements, search]);
 
   return (
     <div className="space-y-6 animate-fade-in text-ink">
@@ -101,27 +124,8 @@ export default function AdminAchievementsPage() {
         </div>
       </div>
 
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {/* Search Bar */}
       <div className="border border-line bg-bg-raised p-3">

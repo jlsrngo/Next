@@ -1,44 +1,50 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Code,
-  Search,
-  RefreshCw,
-  Plus,
-  CheckCircle2,
-  X,
-  Loader2,
-  AlertTriangle,
-} from 'lucide-react';
+import { Code, Search, RefreshCw, Plus, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
 import { skillsService } from '@/services/api';
 import { techList } from '@/lib/techList';
 import { CATEGORIES, getCategoryForSlug, filterByCategory } from '@/lib/techCategories';
 import { TechIcon } from '@/components/TechIcon';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
+
+interface SkillRecord {
+  id?: string | number;
+  name?: string;
+  iconName?: string;
+  icon?: string;
+  category?: string;
+}
 
 export default function AdminSkillsPage() {
-  const [dbSkills, setDbSkills] = useState<any[]>([]);
+  const [dbSkills, setDbSkills] = useState<SkillRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
-  const fetchSkills = async () => {
+  const fetchSkills = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     try {
       const data = await skillsService.getSkills();
+      if (signal?.aborted) return;
       setDbSkills(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      console.error('[AdminSkills] Fetch error:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchSkills();
-  }, []);
+    const controller = new AbortController();
+    fetchSkills(controller.signal);
+    return () => controller.abort();
+  }, [fetchSkills]);
 
   const activeSlugs = useMemo(() => {
     return new Set(
@@ -74,8 +80,9 @@ export default function AdminSkillsPage() {
         setFeedback({ type: 'success', message: `${tech.name} activated in PostgreSQL.` });
       }
       await fetchSkills();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Toggle failed.' });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Toggle failed.';
+      setFeedback({ type: 'error', message });
     } finally {
       setTogglingSlug(null);
     }
@@ -131,27 +138,8 @@ export default function AdminSkillsPage() {
         </div>
       </div>
 
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {/* Filter and Category Pills */}
       <div className="space-y-3">

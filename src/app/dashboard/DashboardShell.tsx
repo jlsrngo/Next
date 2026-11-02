@@ -1,8 +1,5 @@
-'use client'
-
 import React, { useState, useEffect, useMemo, useRef } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '@/context/ThemeContext'
 import TechnicalRuler from '@/components/TechnicalRuler'
 import {
@@ -32,7 +29,7 @@ import id from '@/messages/id.json'
 
 type NavItem =
   | { divider: true }
-  | { href: string; labelKey: string; icon: any }
+  | { href: string; labelKey: string; icon: React.ComponentType<{ size?: number; className?: string }> }
 
 const navItems: NavItem[] = [
   { href: '/admin', labelKey: 'admin.overview', icon: LayoutDashboard },
@@ -94,8 +91,8 @@ export default function DashboardShell({
   profileAccent: initialAccent,
 }: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const pathname = usePathname()
-  const router = useRouter()
+  const location = useLocation()
+  const pathname = location.pathname
   const { isDark, toggle } = useTheme()
   const [latestVersion, setLatestVersion] = useState<ChangelogEntry | null>(null)
   const mainRef = useRef<HTMLElement>(null)

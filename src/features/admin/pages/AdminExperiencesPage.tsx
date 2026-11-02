@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Briefcase,
@@ -7,57 +7,81 @@ import {
   Plus,
   Trash2,
   Edit3,
-  CheckCircle2,
-  X,
   Loader2,
-  AlertTriangle,
 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
+
+interface ExperienceRecord {
+  id: string | number;
+  position: string;
+  company?: string;
+  company_name?: string;
+  location?: string;
+  startDate?: string;
+  start_date?: string;
+  endDate?: string;
+  end_date?: string;
+  current?: boolean;
+  is_current?: boolean;
+  description?: string;
+  order?: number;
+}
 
 export default function AdminExperiencesPage() {
-  const [experiences, setExperiences] = useState<any[]>([]);
+  const [experiences, setExperiences] = useState<ExperienceRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
 
-  const fetchExperiences = async () => {
+  const fetchExperiences = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/about');
+      const res = await fetch('/api/about', { signal });
       if (res.ok) {
         const data = await res.json();
+        if (signal?.aborted) return;
         setExperiences(Array.isArray(data.experiences) ? data.experiences : []);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      console.error('[AdminExperiences] Fetch error:', err);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    fetchExperiences();
   }, []);
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`CONFIRMATION: Permanently delete experience at "${name}"?`)) {
-      return;
-    }
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchExperiences(controller.signal);
+    return () => controller.abort();
+  }, [fetchExperiences]);
 
-    setDeletingId(id);
-    try {
-      const res = await fetch(`/api/experiences/${id}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) throw new Error('Deletion failed');
-      setFeedback({ type: 'success', message: `Experience at "${name}" deleted.` });
-      await fetchExperiences();
-    } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Deletion failed.' });
-    } finally {
-      setDeletingId(null);
-    }
-  };
+  const handleDelete = useCallback(
+    async (id: string | number, name: string) => {
+      if (!window.confirm(`CONFIRMATION: Permanently delete experience at "${name}"?`)) {
+        return;
+      }
+
+      setDeletingId(id);
+      try {
+        const res = await fetch(`/api/experiences/${id}`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Deletion failed');
+        setFeedback({ type: 'success', message: `Experience at "${name}" deleted.` });
+        await fetchExperiences();
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Deletion failed.';
+        setFeedback({ type: 'error', message });
+      } finally {
+        setDeletingId(null);
+      }
+    },
+    [fetchExperiences]
+  );
 
   return (
     <div className="space-y-6 animate-fade-in text-ink">
@@ -93,27 +117,8 @@ export default function AdminExperiencesPage() {
         </div>
       </div>
 
-      {feedback && (
-        <div
-          className={`border px-4 py-3 font-mono text-xs flex items-center justify-between transition-all ${
-            feedback.type === 'success'
-              ? 'border-line bg-bg-raised text-ink'
-              : 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {feedback.type === 'success' ? (
-              <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-            ) : (
-              <AlertTriangle size={14} className="text-red-500 shrink-0" />
-            )}
-            <span>{feedback.message}</span>
-          </div>
-          <button onClick={() => setFeedback(null)} className="text-faint hover:text-ink">
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      {/* Dismissible Feedback Banner */}
+      <AdminFeedbackBanner feedback={feedback} onDismiss={() => setFeedback(null)} />
 
       {loading ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
