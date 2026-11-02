@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /dashboard/profile
+Disallow: /dashboard/account
+Disallow: /api/
+
+Sitemap: https://juliosiringoringo.space/sitemap.xml

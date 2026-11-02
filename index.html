@@ -3,9 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Julio Siringoringo // Portfolio</title>
-    <meta name="description" content="Portfolio of Julio Siringoringo - Junior Full-Stack Web Developer. Powered by Rust, Axum & React." />
+    <title>Julio Siringoringo // Junior Full-Stack Developer</title>
+    <meta name="description" content="Portfolio of Julio Siringoringo - Junior Full-Stack Web Developer specializing in Rust, Axum, React, and TypeScript with Swiss Brutalist aesthetic." />
+    <meta name="keywords" content="Julio Siringoringo, Full-Stack Developer, Rust, Axum, React, TypeScript, Portfolio, Web Developer, Neon PostgreSQL" />
+    <meta name="author" content="Julio Siringoringo" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://juliosiringoringo.space/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://juliosiringoringo.space/" />
+    <meta property="og:title" content="Julio Siringoringo // Junior Full-Stack Developer" />
+    <meta property="og:description" content="Portfolio of Julio Siringoringo - Junior Full-Stack Web Developer specializing in Rust, Axum, React, and TypeScript." />
+    <meta property="og:image" content="https://juliosiringoringo.space/avatar.jpg" />
+    <meta property="og:site_name" content="Julio Siringoringo Portfolio" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://juliosiringoringo.space/" />
+    <meta name="twitter:title" content="Julio Siringoringo // Junior Full-Stack Developer" />
+    <meta name="twitter:description" content="Portfolio of Julio Siringoringo - Junior Full-Stack Web Developer specializing in Rust, Axum, React, and TypeScript." />
+    <meta name="twitter:image" content="https://juliosiringoringo.space/avatar.jpg" />
+
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+
+    <!-- Structured Data (JSON-LD) for Search Engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://juliosiringoringo.space/#person",
+            "name": "Julio Siringoringo",
+            "url": "https://juliosiringoringo.space/",
+            "image": "https://juliosiringoringo.space/avatar.jpg",
+            "jobTitle": "Junior Full-Stack Web Developer",
+            "sameAs": [
+              "https://github.com/jlsrngo"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://juliosiringoringo.space/#website",
+            "url": "https://juliosiringoringo.space/",
+            "name": "Julio Siringoringo Portfolio",
+            "publisher": {
+              "@id": "https://juliosiringoringo.space/#person"
+            }
+          }
+        ]
+      }
+    </script>
+
     <!-- Google Fonts for ArtCraft Design System -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +68,13 @@
     />
   </head>
   <body class="bg-bg text-ink antialiased">
+    <noscript>
+      <div style="padding: 2rem; font-family: sans-serif; text-align: center;">
+        <h1>Julio Siringoringo - Junior Full-Stack Web Developer</h1>
+        <p>Specializing in Rust, Axum, React, TypeScript, and modern web application development.</p>
+        <p>Please enable JavaScript to view the interactive portfolio.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
