@@ -296,7 +296,7 @@ export default function DashboardShell({
             ref={mainRef}
             className="flex-1 h-full overflow-y-auto px-4 sm:px-6 md:pl-8 md:pr-24 lg:pl-10 lg:pr-28 py-4 sm:py-6 md:py-8 select-text scroll-smooth"
           >
-            <div className="max-w-6xl mx-auto w-full">
+            <div className="w-full">
               {children}
             </div>
           </main>

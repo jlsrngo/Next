@@ -95,7 +95,7 @@ export default function AdminProfileEditPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in text-ink max-w-5xl">
+    <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
