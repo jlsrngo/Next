@@ -1,11 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { projectsService } from '@/services/api';
+import { useLocale } from '@/context/I18nContext';
+import { localizeProject } from '@/lib/localize';
 import type { Project } from '@/types/project.types';
 import type { AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export type FilterType = 'all' | 'featured' | 'normal';
 
 export function useAdminProjects() {
+  const locale = useLocale();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -67,18 +70,22 @@ export function useAdminProjects() {
     [fetchProjects]
   );
 
+  const localizedProjects = useMemo(() => {
+    return projects.map((p) => localizeProject(p, locale));
+  }, [projects, locale]);
+
   const counts = useMemo(
     () => ({
-      all: projects.length,
-      featured: projects.filter((p) => p.featured).length,
-      normal: projects.filter((p) => !p.featured).length,
+      all: localizedProjects.length,
+      featured: localizedProjects.filter((p) => p.featured).length,
+      normal: localizedProjects.filter((p) => !p.featured).length,
     }),
-    [projects]
+    [localizedProjects]
   );
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return projects.filter((p) => {
+    return localizedProjects.filter((p) => {
       const techList = getTechArray(p);
       const matchesSearch =
         !query ||
@@ -91,10 +98,10 @@ export function useAdminProjects() {
       if (filterFeatured === 'normal') return !p.featured;
       return true;
     });
-  }, [projects, search, filterFeatured, getTechArray]);
+  }, [localizedProjects, search, filterFeatured, getTechArray]);
 
   return {
-    projects,
+    projects: localizedProjects,
     filtered,
     loading,
     search,

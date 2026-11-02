@@ -1,9 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { achievementsService } from '@/services/api';
+import { useLocale } from '@/context/I18nContext';
+import { localizeAchievement } from '@/lib/localize';
 import type { AchievementItemRecord } from '../components/AchievementAdminCard';
 import type { AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export function useAdminAchievements() {
+  const locale = useLocale();
   const [achievements, setAchievements] = useState<AchievementItemRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -53,20 +56,25 @@ export function useAdminAchievements() {
     [fetchAchievements]
   );
 
+  const localizedAchievements = useMemo(() => {
+    return achievements.map((a) => localizeAchievement(a, locale));
+  }, [achievements, locale]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return achievements;
-    return achievements.filter((a) => {
+    if (!q) return localizedAchievements;
+    return localizedAchievements.filter((a) => {
       return (
         a.title?.toLowerCase().includes(q) ||
         a.issuer?.toLowerCase().includes(q) ||
+        a.category?.toLowerCase().includes(q) ||
         a.description?.toLowerCase().includes(q)
       );
     });
-  }, [achievements, search]);
+  }, [localizedAchievements, search]);
 
   return {
-    achievements,
+    achievements: localizedAchievements,
     filtered,
     loading,
     search,

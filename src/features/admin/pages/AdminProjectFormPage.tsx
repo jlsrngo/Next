@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, FolderOpen, Star } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 import { projectsService } from '@/services/api';
 import type { Project } from '@/types/project.types';
 import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
 import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminProjectFormPage() {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
   const isEditing = Boolean(id);
@@ -41,18 +44,18 @@ export default function AdminProjectFormPage() {
             setFeatured(Boolean(found.featured));
             setOrder(found.order ?? 0);
           } else {
-            setFeedback({ type: 'error', message: 'Project not found in registry.' });
+            setFeedback({ type: 'error', message: isId ? 'Proyek tidak ditemukan di registri.' : 'Project not found in registry.' });
           }
         })
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
-  }, [id, isEditing]);
+  }, [id, isEditing, isId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      setFeedback({ type: 'error', message: 'Project Title is required.' });
+      setFeedback({ type: 'error', message: isId ? 'Judul Proyek wajib diisi.' : 'Project Title is required.' });
       return;
     }
 
@@ -80,14 +83,16 @@ export default function AdminProjectFormPage() {
       }
       setFeedback({
         type: 'success',
-        message: `Project "${title}" saved to PostgreSQL registry! Redirecting...`,
+        message: isId
+          ? `Proyek "${title}" berhasil disimpan ke registri! Mengalihkan...`
+          : `Project "${title}" saved to PostgreSQL registry! Redirecting...`,
       });
 
       setTimeout(() => {
         navigate('/admin/projects');
       }, 1000);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Operation failed';
+      const message = err instanceof Error ? err.message : (isId ? 'Operasi gagal' : 'Operation failed');
       setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
@@ -97,7 +102,7 @@ export default function AdminProjectFormPage() {
     return (
       <div className="border border-line bg-bg-raised p-16 text-center font-mono text-xs text-faint">
         <Loader2 size={24} className="animate-spin mx-auto mb-3 text-ink" />
-        <div>RETRIEVING PROJECT RECORD...</div>
+        <div>{isId ? 'MEMUAT DATA PROYEK...' : 'RETRIEVING PROJECT RECORD...'}</div>
       </div>
     );
   }
@@ -107,12 +112,24 @@ export default function AdminProjectFormPage() {
       {/* Header HUD */}
       <AdminFormHeaderHUD
         returnTo="/admin/projects"
-        returnLabel="RETURN TO PROJECTS REGISTRY"
-        systemCode={isEditing ? '[ 02 // EDIT REPOSITORY RECORD ]' : '[ 02 // NEW REPOSITORY RECORD ]'}
-        title={isEditing ? 'EDIT PROJECT //' : 'NEW PROJECT //'}
-        titleHighlight="WORKBENCH"
+        returnLabel={isId ? 'KEMBALI KE REGISTRI PROYEK' : 'RETURN TO PROJECTS REGISTRY'}
+        systemCode={
+          isEditing
+            ? (isId ? '[ 02 // EDIT DATA REPOSITORI ]' : '[ 02 // EDIT REPOSITORY RECORD ]')
+            : (isId ? '[ 02 // DATA REPOSITORI BARU ]' : '[ 02 // NEW REPOSITORY RECORD ]')
+        }
+        title={
+          isEditing
+            ? (isId ? 'EDIT PROYEK //' : 'EDIT PROJECT //')
+            : (isId ? 'PROYEK BARU //' : 'NEW PROJECT //')
+        }
+        titleHighlight={isId ? 'MEJA KERJA' : 'WORKBENCH'}
         discardTo="/admin/projects"
-        submitLabel={isEditing ? 'SAVE CHANGES' : 'CREATE PROJECT'}
+        submitLabel={
+          isEditing
+            ? (isId ? 'SIMPAN PERUBAHAN' : 'SAVE CHANGES')
+            : (isId ? 'BUAT PROYEK' : 'CREATE PROJECT')
+        }
         isSubmitting={submitting}
         onSubmit={handleSubmit}
       />
@@ -126,39 +143,45 @@ export default function AdminProjectFormPage() {
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <FolderOpen size={13} />
-            <span>[ SPECIFICATION & ARCHITECTURE ]</span>
+            <span>{isId ? '[ SPESIFIKASI & ARSITEKTUR ]' : '[ SPECIFICATION & ARCHITECTURE ]'}</span>
           </div>
 
           <div className="space-y-5 font-mono text-xs">
             <div>
-              <label className="block text-faint uppercase font-bold mb-1.5">Project Title *</label>
+              <label className="block text-faint uppercase font-bold mb-1.5">
+                {isId ? 'Judul Proyek *' : 'Project Title *'}
+              </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Arunaki Desktop Agent"
+                placeholder={isId ? 'cth. Arunaki Desktop Agent' : 'e.g. Arunaki Desktop Agent'}
                 className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
 
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Technical Synopsis & Problem Statement *
+                {isId ? 'Sinopsis Teknis & Deskripsi *' : 'Technical Synopsis & Problem Statement *'}
               </label>
               <textarea
                 rows={4}
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Detailed summary of system architecture, performance characteristics, and purpose..."
+                placeholder={
+                  isId
+                    ? 'Ringkasan detail arsitektur sistem, karakteristik kinerja, dan tujuan...'
+                    : 'Detailed summary of system architecture, performance characteristics, and purpose...'
+                }
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
 
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Technology Stack (Comma-separated tokens)
+                {isId ? 'Teknologi Stack (Token dipisahkan koma)' : 'Technology Stack (Comma-separated tokens)'}
               </label>
               <input
                 type="text"
@@ -168,7 +191,7 @@ export default function AdminProjectFormPage() {
                 className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
               />
               <span className="text-[10px] text-faint mt-1 block">
-                Tags will be indexed and rendered as Swiss Brutalist badge tokens.
+                {isId ? 'Tag akan diindeks sebagai lencana token Swiss Brutalist.' : 'Tags will be indexed and rendered as Swiss Brutalist badge tokens.'}
               </span>
             </div>
           </div>
@@ -179,13 +202,15 @@ export default function AdminProjectFormPage() {
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <Star size={13} />
-            <span>[ TELEMETRY RELAYS & PRIORITY ]</span>
+            <span>{isId ? '[ RELAY TELEMETRI & PRIORITAS ]' : '[ TELEMETRY RELAYS & PRIORITY ]'}</span>
           </div>
 
           <div className="space-y-5 font-mono text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Live Production URL</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'URL Penerapan Live' : 'Live Production URL'}
+                </label>
                 <input
                   type="url"
                   value={liveUrl}
@@ -196,7 +221,9 @@ export default function AdminProjectFormPage() {
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">GitHub Repository URL</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'URL Repositori GitHub' : 'GitHub Repository URL'}
+                </label>
                 <input
                   type="url"
                   value={githubUrl}
@@ -217,13 +244,19 @@ export default function AdminProjectFormPage() {
                   className="w-4 h-4 accent-ink cursor-pointer"
                 />
                 <label htmlFor="featuredProjectToggle" className="cursor-pointer select-none">
-                  <span className="font-bold block uppercase text-ink">Feature on Showcase HUD</span>
-                  <span className="text-[10px] text-faint">Render in priority featured grid with badges</span>
+                  <span className="font-bold block uppercase text-ink">
+                    {isId ? 'Tampilkan di Showcase Utama' : 'Feature on Showcase HUD'}
+                  </span>
+                  <span className="text-[10px] text-faint">
+                    {isId ? 'Tampilkan dalam grid prioritas dengan lencana unggulan' : 'Render in priority featured grid with badges'}
+                  </span>
                 </label>
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Sort Sequence Index</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Indeks Urutan Tampilan' : 'Sort Sequence Index'}
+                </label>
                 <input
                   type="number"
                   value={order}
@@ -241,7 +274,11 @@ export default function AdminProjectFormPage() {
             disabled={submitting}
             className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? 'COMMITTING TO POSTGRESQL...' : isEditing ? 'UPDATE SPECIFICATION' : 'DEPLOY TO REGISTRY'}
+            {submitting
+              ? (isId ? 'MENYIMPAN KE POSTGRESQL...' : 'COMMITTING TO POSTGRESQL...')
+              : isEditing
+              ? (isId ? 'PERBARUI SPESIFIKASI' : 'UPDATE SPECIFICATION')
+              : (isId ? 'TERAPKAN KE REGISTRI' : 'DEPLOY TO REGISTRY')}
           </button>
         </div>
       </form>

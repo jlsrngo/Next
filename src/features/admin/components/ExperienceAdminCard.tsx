@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Edit3, Trash2, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 
 export interface ExperienceItemRecord {
   id: string | number;
@@ -32,8 +33,10 @@ function ExperienceAdminCardComponent({
   isDeleting,
   onDelete,
 }: ExperienceAdminCardProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const roleNumber = String(item.order ?? index + 1).padStart(2, '0');
-  const companyName = item.company || item.company_name || 'Organization';
+  const companyName = item.company || item.company_name || (isId ? 'Organisasi' : 'Organization');
 
   return (
     <article
@@ -44,11 +47,11 @@ function ExperienceAdminCardComponent({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-line/60 pb-3 mb-4">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-widest text-faint">
-            ROLE // #{roleNumber}
+            {isId ? 'PERAN //' : 'ROLE //'} #{roleNumber}
           </div>
           <h3 className="font-display text-lg font-bold text-ink mt-0.5">{item.position}</h3>
           <div className="font-mono text-xs text-faint font-bold text-ink/80">
-            {companyName} • {item.location || 'Remote'}
+            {companyName} • {item.location || (isId ? 'Jarak Jauh' : 'Remote')}
           </div>
         </div>
 
@@ -59,14 +62,14 @@ function ExperienceAdminCardComponent({
             aria-label={`Edit ${item.position}`}
           >
             <Edit3 size={11} />
-            <span>EDIT</span>
+            <span>{isId ? 'EDIT' : 'EDIT'}</span>
           </Link>
           <button
             type="button"
             onClick={() => onDelete(item.id, companyName)}
             disabled={isDeleting}
             className="p-1 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all disabled:opacity-50"
-            title="Delete experience"
+            title={isId ? 'Hapus pengalaman' : 'Delete experience'}
             aria-label={`Delete ${item.position}`}
           >
             {isDeleting ? (

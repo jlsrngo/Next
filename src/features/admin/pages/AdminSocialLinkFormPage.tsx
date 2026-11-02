@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, Link2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 import { socialLinksService } from '@/services/api';
-import type { SocialLinkItemRecord } from '../components/SocialLinkAdminCard';
 import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
 import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminSocialLinkFormPage() {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
   const isEditing = Boolean(id);
@@ -17,7 +19,7 @@ export default function AdminSocialLinkFormPage() {
   const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
 
   // Form Fields
-  const [platform, setPlatform] = useState('GitHub');
+  const [platform, setPlatform] = useState('');
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
@@ -28,29 +30,28 @@ export default function AdminSocialLinkFormPage() {
     if (isEditing && id) {
       socialLinksService
         .getSocialLinks()
-        .then((items: unknown) => {
-          const list = Array.isArray(items) ? (items as (SocialLinkItemRecord & { title?: string; description?: string; is_featured?: boolean; isFeatured?: boolean })[]) : [];
-          const found = list.find((l) => String(l.id) === String(id));
+        .then((links) => {
+          const found = (links || []).find((l) => String(l.id) === String(id));
           if (found) {
-            setPlatform(found.platform || 'GitHub');
-            setTitle(found.title || found.platform || '');
+            setPlatform(found.platform || '');
+            setTitle(found.title || found.username || '');
             setUrl(found.url || '');
             setDescription(found.description || '');
-            setIsFeatured(Boolean(found.is_featured || found.isFeatured));
+            setIsFeatured(Boolean(found.isFeatured || found.is_featured));
             setOrder(found.order ?? 0);
           } else {
-            setFeedback({ type: 'error', message: 'Relay channel record not found.' });
+            setFeedback({ type: 'error', message: isId ? 'Saluran relay tidak ditemukan.' : 'Relay channel not found in database.' });
           }
         })
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
-  }, [id, isEditing]);
+  }, [id, isEditing, isId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!platform.trim() || !url.trim()) {
-      setFeedback({ type: 'error', message: 'Platform and Channel URL are required.' });
+      setFeedback({ type: 'error', message: isId ? 'Nama Platform dan URL tujuan wajib diisi.' : 'Platform Name and Destination URL are required.' });
       return;
     }
 
@@ -60,24 +61,34 @@ export default function AdminSocialLinkFormPage() {
       title: title.trim() || platform.trim(),
       url: url.trim(),
       description: description.trim(),
-      is_featured: isFeatured,
+      isFeatured,
       order: Number(order) || 0,
     };
 
     try {
       if (isEditing && id) {
         await socialLinksService.updateSocialLink(id, payload);
-        setFeedback({ type: 'success', message: `Relay channel "${platform}" updated successfully! Redirecting...` });
+        setFeedback({
+          type: 'success',
+          message: isId
+            ? `Relay "${platform}" berhasil diperbarui! Mengalihkan...`
+            : `Relay "${platform}" updated successfully! Redirecting...`,
+        });
       } else {
         await socialLinksService.createSocialLink(payload);
-        setFeedback({ type: 'success', message: `Relay channel "${platform}" registered successfully! Redirecting...` });
+        setFeedback({
+          type: 'success',
+          message: isId
+            ? `Relay "${platform}" berhasil disimpan ke PostgreSQL! Mengalihkan...`
+            : `Relay "${platform}" deployed to PostgreSQL! Redirecting...`,
+        });
       }
 
       setTimeout(() => {
         navigate('/admin/social-links');
       }, 1000);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Operation failed';
+      const message = err instanceof Error ? err.message : (isId ? 'Operasi gagal' : 'Operation failed');
       setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
@@ -87,7 +98,7 @@ export default function AdminSocialLinkFormPage() {
     return (
       <div className="border border-line bg-bg-raised p-16 text-center font-mono text-xs text-faint">
         <Loader2 size={24} className="animate-spin mx-auto mb-3 text-ink" />
-        <div>RETRIEVING RELAY CHANNEL RECORD...</div>
+        <div>{isId ? 'MEMUAT DATA SALURAN RELAY...' : 'RETRIEVING RELAY CHANNEL RECORD...'}</div>
       </div>
     );
   }
@@ -97,12 +108,24 @@ export default function AdminSocialLinkFormPage() {
       {/* Header HUD */}
       <AdminFormHeaderHUD
         returnTo="/admin/social-links"
-        returnLabel="RETURN TO SOCIAL RELAYS"
-        systemCode={isEditing ? '[ 06 // EDIT COMMUNICATION RELAY ]' : '[ 06 // NEW COMMUNICATION RELAY ]'}
-        title={isEditing ? 'EDIT RELAY //' : 'NEW RELAY //'}
-        titleHighlight="CHANNEL"
+        returnLabel={isId ? 'KEMBALI KE RELAY SOSIAL' : 'RETURN TO SOCIAL RELAYS'}
+        systemCode={
+          isEditing
+            ? (isId ? '[ 06 // EDIT RELAY KOMUNIKASI ]' : '[ 06 // EDIT COMMUNICATION RELAY ]')
+            : (isId ? '[ 06 // RELAY KOMUNIKASI BARU ]' : '[ 06 // NEW COMMUNICATION RELAY ]')
+        }
+        title={
+          isEditing
+            ? (isId ? 'EDIT RELAY //' : 'EDIT RELAY //')
+            : (isId ? 'RELAY BARU //' : 'NEW RELAY //')
+        }
+        titleHighlight={isId ? 'SALURAN' : 'CHANNEL'}
         discardTo="/admin/social-links"
-        submitLabel={isEditing ? 'SAVE CHANGES' : 'CONFIRM RELAY'}
+        submitLabel={
+          isEditing
+            ? (isId ? 'SIMPAN PERUBAHAN' : 'SAVE CHANGES')
+            : (isId ? 'SIMPAN RELAY' : 'CONFIRM RELAY')
+        }
         isSubmitting={submitting}
         onSubmit={handleSubmit}
       />
@@ -115,13 +138,15 @@ export default function AdminSocialLinkFormPage() {
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <Link2 size={13} />
-            <span>[ CHANNEL CONFIGURATION & DESTINATION ]</span>
+            <span>{isId ? '[ KONFIGURASI SALURAN & TUJUAN ]' : '[ CHANNEL CONFIGURATION & DESTINATION ]'}</span>
           </div>
 
           <div className="space-y-5 font-mono text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Platform Identifier *</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Identifikasi Platform *' : 'Platform Identifier *'}
+                </label>
                 <input
                   type="text"
                   required
@@ -133,7 +158,9 @@ export default function AdminSocialLinkFormPage() {
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Display Title / Handle</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Nama Tampilan / Username' : 'Display Title / Handle'}
+                </label>
                 <input
                   type="text"
                   value={title}
@@ -145,7 +172,9 @@ export default function AdminSocialLinkFormPage() {
             </div>
 
             <div>
-              <label className="block text-faint uppercase font-bold mb-1.5">Destination URL *</label>
+              <label className="block text-faint uppercase font-bold mb-1.5">
+                {isId ? 'URL Tujuan *' : 'Destination URL *'}
+              </label>
               <input
                 type="url"
                 required
@@ -158,13 +187,17 @@ export default function AdminSocialLinkFormPage() {
 
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Channel Purpose & Communication Note
+                {isId ? 'Tujuan Saluran & Catatan' : 'Channel Purpose & Communication Note'}
               </label>
               <textarea
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Public developer portfolio, open source contributions, and engineering thoughts..."
+                placeholder={
+                  isId
+                    ? 'Portofolio publik pengembang, kontribusi sumber terbuka, dan pemikiran rekayasa...'
+                    : 'Public developer portfolio, open source contributions, and engineering thoughts...'
+                }
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
@@ -180,25 +213,23 @@ export default function AdminSocialLinkFormPage() {
                 />
                 <div>
                   <label htmlFor="featuredRelayToggle" className="text-ink font-bold uppercase cursor-pointer block text-xs">
-                    ★ Priority Relay Channel
+                    ★ {isId ? 'Saluran Relay Prioritas' : 'Priority Relay Channel'}
                   </label>
-                  <span className="text-[10px] text-faint block">
-                    Highlighted in footer telemetry and contact channels.
+                  <span className="text-[10px] text-faint">
+                    {isId ? 'Tampilkan dengan sorotan prioritas di kartu kontak' : 'Render with priority accent on contact overview'}
                   </span>
                 </div>
               </div>
 
-              <div className="border border-line bg-bg p-4 flex items-center justify-between">
-                <div>
-                  <label className="text-ink font-bold uppercase block text-xs">Order Index</label>
-                  <span className="text-[10px] text-faint block">Sort sequence index</span>
-                </div>
+              <div>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Indeks Urutan Tampilan' : 'Sort Sequence Index'}
+                </label>
                 <input
                   type="number"
-                  min={0}
                   value={order}
                   onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-20 border border-line bg-bg-raised px-3 py-1.5 text-ink font-bold text-xs font-mono"
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
             </div>
@@ -211,7 +242,11 @@ export default function AdminSocialLinkFormPage() {
             disabled={submitting}
             className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? 'COMMITTING TO NEON...' : isEditing ? 'UPDATE RELAY' : 'DEPLOY RELAY'}
+            {submitting
+              ? (isId ? 'MENYIMPAN KE POSTGRESQL...' : 'SAVING TO POSTGRESQL...')
+              : isEditing
+              ? (isId ? 'SIMPAN PERUBAHAN' : 'SAVE CHANGES')
+              : (isId ? 'SIMPAN RELAY' : 'CONFIRM RELAY')}
           </button>
         </div>
       </form>

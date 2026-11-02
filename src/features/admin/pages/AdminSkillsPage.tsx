@@ -1,25 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Code, Search, RefreshCw, Plus, Loader2 } from 'lucide-react';
+import { Plus, RefreshCw, Search, Loader2, Code } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
-import { CATEGORIES } from '@/lib/techCategories';
 import { TechIcon } from '@/components/TechIcon';
+import { useLocale } from '@/context/I18nContext';
+import { CATEGORIES } from '@/lib/techCategories';
 import useAdminSkills from '../hooks/useAdminSkills';
 import AdminFeedbackBanner from '../components/AdminFeedbackBanner';
 import AdminPageHeaderHUD from '../components/AdminPageHeaderHUD';
 
+const CATEGORY_MAP_ID: Record<string, string> = {
+  Languages: 'Bahasa',
+  Frontend: 'Frontend',
+  Backend: 'Backend',
+  Mobile: 'Mobile',
+  Database: 'Basis Data',
+  'Tools & DevOps': 'DevOps & Alat',
+  AI: 'AI',
+  Cloud: 'Cloud',
+};
+
 export default function AdminSkillsPage() {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const {
+    activeSlugs,
     loading,
     search,
     setSearch,
     selectedCategory,
     setSelectedCategory,
+    filteredTech,
     togglingSlug,
     feedback,
     setFeedback,
-    activeSlugs,
-    filteredTech,
     fetchSkills,
     toggleSkill,
   } = useAdminSkills();
@@ -28,10 +42,14 @@ export default function AdminSkillsPage() {
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <AdminPageHeaderHUD
-        systemCode="[ 01 // TECHNICAL CAPABILITY & ENGINE MATRIX ]"
-        title="SKILLS //"
-        titleHighlight="TAXONOMY"
-        description="Interactive skill registry. Click any skill card to toggle database state, or register custom technologies."
+        systemCode={isId ? '[ 01 // MATRIKS KEMAMPUAN TEKNIS ]' : '[ 01 // TECHNICAL CAPABILITY & ENGINE MATRIX ]'}
+        title={isId ? 'KEAHLIAN //' : 'SKILLS //'}
+        titleHighlight={isId ? 'TAKSONOMI' : 'TAXONOMY'}
+        description={
+          isId
+            ? 'Registri keahlian interaktif. Klik kartu keahlian untuk mengubah status aktif, atau daftarkan teknologi kustom.'
+            : 'Interactive skill registry. Click any skill card to toggle database state, or register custom technologies.'
+        }
         actions={
           <>
             <Link
@@ -39,7 +57,7 @@ export default function AdminSkillsPage() {
               className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
             >
               <Plus size={14} />
-              <span>ADD CUSTOM SKILL</span>
+              <span>{isId ? 'TAMBAH KEAHLIAN' : 'ADD CUSTOM SKILL'}</span>
             </Link>
             <button
               type="button"
@@ -47,10 +65,10 @@ export default function AdminSkillsPage() {
               className="flex items-center gap-1.5 border border-line bg-bg-raised hover:bg-bg-sunken px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink transition-all"
             >
               <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-              <span>SYNC</span>
+              <span>{isId ? 'SINKRON' : 'SYNC'}</span>
             </button>
             <div className="border border-line bg-bg-raised px-3 py-2 font-mono text-xs">
-              <span className="text-faint text-[10px] uppercase mr-2">ACTIVE</span>
+              <span className="text-faint text-[10px] uppercase mr-2">{isId ? 'AKTIF' : 'ACTIVE'}</span>
               <span className="font-bold">{activeSlugs.size}</span>
             </div>
           </>
@@ -67,7 +85,7 @@ export default function AdminSkillsPage() {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
             <input
               type="text"
-              placeholder="Search technology by name or slug..."
+              placeholder={isId ? 'Cari teknologi berdasarkan nama atau slug...' : 'Search technology by name or slug...'}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-bg border border-line pl-9 pr-3 py-1.5 font-mono text-xs text-ink placeholder:text-faint focus:outline-none focus:border-line-strong transition-all"
@@ -84,7 +102,7 @@ export default function AdminSkillsPage() {
                   : 'border-line bg-bg text-faint hover:text-ink'
               }`}
             >
-              ALL ({filteredTech.length})
+              {isId ? 'SEMUA' : 'ALL'} ({filteredTech.length})
             </button>
             <button
               type="button"
@@ -95,7 +113,7 @@ export default function AdminSkillsPage() {
                   : 'border-line bg-bg text-faint hover:text-ink'
               }`}
             >
-              ACTIVE ({activeSlugs.size})
+              {isId ? 'AKTIF' : 'ACTIVE'} ({activeSlugs.size})
             </button>
           </div>
         </div>
@@ -113,7 +131,7 @@ export default function AdminSkillsPage() {
                   : 'border-line bg-bg-raised text-faint hover:text-ink hover:border-line-strong'
               }`}
             >
-              {cat}
+              {isId ? CATEGORY_MAP_ID[cat] || cat : cat}
             </button>
           ))}
         </div>
@@ -123,12 +141,12 @@ export default function AdminSkillsPage() {
       {loading ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
           <RefreshCw size={24} className="animate-spin mx-auto mb-3 text-ink" />
-          <div>SYNCHRONIZING CAPABILITIES MATRIX...</div>
+          <div>{isId ? 'MENYINKRONKAN MATRIKS KEMAMPUAN...' : 'SYNCHRONIZING CAPABILITIES MATRIX...'}</div>
         </div>
       ) : filteredTech.length === 0 ? (
         <div className="border border-line bg-bg-raised p-12 text-center font-mono text-xs text-faint">
           <Code size={32} className="mx-auto mb-2 text-faint" />
-          <div>NO TECHNOLOGIES MATCHING ACTIVE QUERY.</div>
+          <div>{isId ? 'TIDAK ADA TEKNOLOGI YANG COCOK DENGAN PENCARIAN.' : 'NO TECHNOLOGIES MATCHING ACTIVE QUERY.'}</div>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -157,17 +175,19 @@ export default function AdminSkillsPage() {
                     <Loader2 size={12} className="animate-spin text-ink" />
                   ) : (
                     <span
-                      className={`w-2 h-2 rounded-full ${
-                        isActive ? 'bg-emerald-500' : 'bg-transparent border border-line'
+                      className={`w-2 h-2 rounded-none ${
+                        isActive ? 'bg-ink' : 'bg-line border border-line-strong'
                       }`}
                     />
                   )}
                 </div>
 
                 <div className="mt-2">
-                  <div className="font-mono text-xs font-bold text-ink truncate">{tech.name}</div>
-                  <div className="font-mono text-[9px] text-faint uppercase tracking-wider">
-                    {isActive ? 'ACTIVE' : 'INACTIVE'}
+                  <div className="font-mono text-xs font-bold text-ink uppercase truncate">
+                    {tech.name}
+                  </div>
+                  <div className="font-mono text-[9px] text-faint tracking-wider uppercase">
+                    {isId ? CATEGORY_MAP_ID[tech.category] || tech.category : tech.category}
                   </div>
                 </div>
               </button>

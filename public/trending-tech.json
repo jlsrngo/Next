@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-02T03:55:58.455Z",
+  "last_crawled_at": "2026-11-02T04:26:02.004Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "metric": "▲ 1040 PTS",
+  "metric": "▲ 1070 PTS",
   "spec": "TECH WIRE // LIVE: Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "viral_repo": "cloud-custodian/cloud-custodian",
-  "repo_metric": "★ 6.1k",
-  "repo_desc": "Rules engine for cloud security, cost optimization, and governance, DSL in yaml for policies to query, filter, and take actions on resources",
-  "repo_spec": "VIRAL REPO // cloud-custodian/cloud-custodian",
+  "viral_repo": "Evil0ctal/Douyin_TikTok_Download_API",
+  "repo_metric": "★ 21.1k",
+  "repo_desc": "🚀 自托管的抖音、TikTok、B 站数据采集与无水印视频下载 API，支持 AI agent 通过 MCP 调用与离线语音转文字，Docker 一键部署。| Self-hosted TikTok, Douyin & Bilibili scraper and no-watermark video downloader — async REST API, MCP server for AI agents, CLI and web console, plus offline speech-to-text for downloaded videos. Self-healing identity pool, PostgreSQL archive, one docker compose up.",
+  "repo_spec": "VIRAL REPO // Evil0ctal/Douyin_TikTok_Download_API",
   "trending_repos": [
     {
-      "name": "cloud-custodian",
-      "full_name": "cloud-custodian/cloud-custodian",
-      "stars": 6099,
-      "stars_formatted": "★ 6.1k",
+      "name": "Douyin_TikTok_Download_API",
+      "full_name": "Evil0ctal/Douyin_TikTok_Download_API",
+      "stars": 21090,
+      "stars_formatted": "★ 21.1k",
       "language": "Python",
-      "description": "Rules engine for cloud security, cost optimization, and governance, DSL in yaml for policies to query, filter, and take actions on resources",
-      "url": "https://github.com/cloud-custodian/cloud-custodian"
+      "description": "🚀 自托管的抖音、TikTok、B 站数据采集与无水印视频下载 API，支持 AI agent 通过 MCP 调用与离线语音转文字，Docker 一键部署。| Self-hosted TikTok, Douyin & Bilibili scraper and no-watermark video downloader — async REST API, MCP server for AI agents, CLI and web console, plus offline speech-to-text for downloaded videos. Self-healing identity pool, PostgreSQL archive, one docker compose up.",
+      "url": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API"
     },
     {
-      "name": "atuin",
-      "full_name": "atuinsh/atuin",
-      "stars": 32173,
-      "stars_formatted": "★ 32.2k",
-      "language": "Rust",
-      "description": "✨ Making your shell magical",
-      "url": "https://github.com/atuinsh/atuin"
-    },
-    {
-      "name": "oh-my-hermes",
-      "full_name": "rlaope/oh-my-hermes",
-      "stars": 5014,
-      "stars_formatted": "★ 5.0k",
-      "language": "Python",
-      "description": "⚚ The coding harness with Hermes Agent wired into IDE.",
-      "url": "https://github.com/rlaope/oh-my-hermes"
-    },
-    {
-      "name": "horizon",
-      "full_name": "horizon-rust/horizon",
-      "stars": 5713,
-      "stars_formatted": "★ 5.7k",
-      "language": "Rust",
-      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
-      "url": "https://github.com/horizon-rust/horizon"
-    },
-    {
-      "name": "Specs",
-      "full_name": "CocoaPods/Specs",
-      "stars": 6818,
-      "stars_formatted": "★ 6.8k",
-      "language": "Code",
-      "description": "The CocoaPods Master Repo",
-      "url": "https://github.com/CocoaPods/Specs"
-    },
-    {
-      "name": "codon",
-      "full_name": "exaloop/codon",
-      "stars": 16865,
-      "stars_formatted": "★ 16.9k",
-      "language": "Python",
-      "description": "A high-performance, zero-overhead, extensible Python compiler with built-in NumPy support",
-      "url": "https://github.com/exaloop/codon"
-    },
-    {
-      "name": "eslint-plugin-react",
-      "full_name": "jsx-eslint/eslint-plugin-react",
-      "stars": 9292,
-      "stars_formatted": "★ 9.3k",
+      "name": "register",
+      "full_name": "is-a-dev/register",
+      "stars": 11716,
+      "stars_formatted": "★ 11.7k",
       "language": "JavaScript",
-      "description": "React-specific linting rules for ESLint",
-      "url": "https://github.com/jsx-eslint/eslint-plugin-react"
+      "description": "Grab your own sweet-looking '.is-a.dev' subdomain.",
+      "url": "https://github.com/is-a-dev/register"
     },
     {
-      "name": "freebsd-src",
-      "full_name": "freebsd/freebsd-src",
-      "stars": 9420,
-      "stars_formatted": "★ 9.4k",
+      "name": "chromium",
+      "full_name": "chromium/chromium",
+      "stars": 25216,
+      "stars_formatted": "★ 25.2k",
+      "language": "Code",
+      "description": "The official GitHub mirror of the Chromium source",
+      "url": "https://github.com/chromium/chromium"
+    },
+    {
+      "name": "mpv",
+      "full_name": "mpv-player/mpv",
+      "stars": 37664,
+      "stars_formatted": "★ 37.7k",
       "language": "C",
-      "description": "The FreeBSD src tree publish-only repository. Experimenting with 'simple' pull requests....",
-      "url": "https://github.com/freebsd/freebsd-src"
+      "description": "🎥 Command line media player",
+      "url": "https://github.com/mpv-player/mpv"
     },
     {
-      "name": "LMCache",
-      "full_name": "LMCache/LMCache",
-      "stars": 12256,
-      "stars_formatted": "★ 12.3k",
-      "language": "Python",
-      "description": "LMCache: Supercharge Your LLM with the Fastest KV Cache Layer",
-      "url": "https://github.com/LMCache/LMCache"
+      "name": "iptv",
+      "full_name": "vbskycn/iptv",
+      "stars": 10041,
+      "stars_formatted": "★ 10.0k",
+      "language": "HTML",
+      "description": "iptv最新可用直播源,支持iptv4/iptv6双栈访问。直播电视系统，这里有折腾好的��直接下载用吧。直播电视app电视手机全部兼容。",
+      "url": "https://github.com/vbskycn/iptv"
     },
     {
-      "name": "agentscope",
-      "full_name": "agentscope-ai/agentscope",
-      "stars": 35155,
-      "stars_formatted": "★ 35.2k",
-      "language": "Python",
-      "description": "Build and run agents you can see, understand and trust.",
-      "url": "https://github.com/agentscope-ai/agentscope"
+      "name": "shadowrocket-rules",
+      "full_name": "deezertidal/shadowrocket-rules",
+      "stars": 6784,
+      "stars_formatted": "★ 6.8k",
+      "language": "JavaScript",
+      "description": "小火箭 shadowrocket 配置文件 模块 脚本 module sgmodule 图文教程 规则 分流 破解 解锁",
+      "url": "https://github.com/deezertidal/shadowrocket-rules"
+    },
+    {
+      "name": "multica",
+      "full_name": "multica-ai/multica",
+      "stars": 54566,
+      "stars_formatted": "★ 54.6k",
+      "language": "Go",
+      "description": "Make humans and AI agents work as one team — open-source and self-hostable.",
+      "url": "https://github.com/multica-ai/multica"
+    },
+    {
+      "name": "FFmpeg",
+      "full_name": "FFmpeg/FFmpeg",
+      "stars": 66242,
+      "stars_formatted": "★ 66.2k",
+      "language": "C",
+      "description": "Mirror of https://git.ffmpeg.org/ffmpeg.git",
+      "url": "https://github.com/FFmpeg/FFmpeg"
+    },
+    {
+      "name": "website",
+      "full_name": "kubernetes/website",
+      "stars": 5417,
+      "stars_formatted": "★ 5.4k",
+      "language": "HTML",
+      "description": "Kubernetes website and documentation repo: ",
+      "url": "https://github.com/kubernetes/website"
+    },
+    {
+      "name": "marktext",
+      "full_name": "marktext/marktext",
+      "stars": 63465,
+      "stars_formatted": "★ 63.5k",
+      "language": "TypeScript",
+      "description": "📝A simple and elegant markdown editor, available for Linux, macOS and Windows.",
+      "url": "https://github.com/marktext/marktext"
     }
   ]
 }

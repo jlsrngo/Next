@@ -2,14 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Edit3, Trash2, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 
 export interface AchievementItemRecord {
   id: string | number;
   title: string;
-  issuer?: string;
+  issuer: string;
   issueDate?: string;
+  issue_date?: string;
   description?: string;
   credentialUrl?: string;
+  credential_url?: string;
+  credentialId?: string;
+  credential_id?: string;
+  category?: string;
   featured?: boolean;
   order?: number;
 }
@@ -27,6 +33,8 @@ function AchievementAdminCardComponent({
   isDeleting,
   onDelete,
 }: AchievementAdminCardProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const regNumber = String(item.order ?? index + 1).padStart(2, '0');
   const year = item.issueDate ? new Date(item.issueDate).getFullYear() : null;
 
@@ -39,11 +47,11 @@ function AchievementAdminCardComponent({
       <div>
         <div className="flex items-center justify-between mb-2">
           <span className="font-mono text-[9px] uppercase tracking-widest text-faint">
-            REG // #{regNumber}
+            {isId ? 'REG //' : 'REG //'} #{regNumber}
           </span>
           {item.featured && (
             <span className="border border-line bg-bg px-2 py-0.5 font-mono text-[9px] uppercase font-bold text-ink">
-              ★ NOTABLE
+              ★ {isId ? 'UNGGULAN' : 'NOTABLE'}
             </span>
           )}
         </div>
@@ -71,7 +79,7 @@ function AchievementAdminCardComponent({
               className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-1 text-ink transition-all"
               aria-label={`Verify credential for ${item.title}`}
             >
-              <span>VERIFY</span>
+              <span>{isId ? 'VERIFIKASI' : 'VERIFY'}</span>
               <ExternalLink size={10} />
             </a>
           )}
@@ -84,14 +92,14 @@ function AchievementAdminCardComponent({
             aria-label={`Edit ${item.title}`}
           >
             <Edit3 size={11} />
-            <span>EDIT</span>
+            <span>{isId ? 'EDIT' : 'EDIT'}</span>
           </Link>
           <button
             type="button"
             onClick={() => onDelete(item.id, item.title)}
             disabled={isDeleting}
             className="p-1 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all disabled:opacity-50"
-            title="Delete achievement"
+            title={isId ? 'Hapus pencapaian' : 'Delete achievement'}
             aria-label={`Delete ${item.title}`}
           >
             {isDeleting ? (

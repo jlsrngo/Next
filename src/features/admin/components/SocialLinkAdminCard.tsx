@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Edit3, Trash2, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 
 export interface SocialLinkItemRecord {
   id: string | number;
@@ -24,6 +25,8 @@ function SocialLinkAdminCardComponent({
   isDeleting,
   onDelete,
 }: SocialLinkAdminCardProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const channelNumber = String(item.order ?? index + 1).padStart(2, '0');
 
   return (
@@ -35,10 +38,10 @@ function SocialLinkAdminCardComponent({
       <div>
         <div className="flex items-center justify-between mb-3">
           <span className="font-mono text-[9px] uppercase tracking-widest text-faint">
-            CH // #{channelNumber}
+            {isId ? 'SALURAN //' : 'CH //'} #{channelNumber}
           </span>
           <span className="border border-line bg-bg px-2 py-0.5 font-mono text-[9px] uppercase font-bold text-ink">
-            ONLINE
+            {isId ? 'AKTIF' : 'ONLINE'}
           </span>
         </div>
 
@@ -58,7 +61,7 @@ function SocialLinkAdminCardComponent({
           className="flex items-center gap-1 border border-line bg-bg hover:bg-bg-sunken px-2 py-1 text-ink transition-all"
           aria-label={`Test relay link for ${item.platform}`}
         >
-          <span>TEST</span>
+          <span>{isId ? 'UJI' : 'TEST'}</span>
           <ExternalLink size={10} />
         </a>
 
@@ -69,20 +72,20 @@ function SocialLinkAdminCardComponent({
             aria-label={`Edit ${item.platform}`}
           >
             <Edit3 size={11} />
-            <span>EDIT</span>
+            <span>{isId ? 'EDIT' : 'EDIT'}</span>
           </Link>
           <button
             type="button"
             onClick={() => onDelete(item.id, item.platform)}
             disabled={isDeleting}
             className="p-1 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all disabled:opacity-50"
-            title="Delete relay channel"
+            title={isId ? 'Hapus tautan' : 'Delete relay'}
             aria-label={`Delete ${item.platform}`}
           >
             {isDeleting ? (
-              <Loader2 size={12} className="animate-spin" />
+              <Loader2 size={13} className="animate-spin" />
             ) : (
-              <Trash2 size={12} />
+              <Trash2 size={13} />
             )}
           </button>
         </div>

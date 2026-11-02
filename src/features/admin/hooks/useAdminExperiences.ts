@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { aboutService } from '@/services/api';
+import { useLocale } from '@/context/I18nContext';
+import { localizeExperience } from '@/lib/localize';
 import type { ExperienceItemRecord } from '../components/ExperienceAdminCard';
 import type { AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export function useAdminExperiences() {
+  const locale = useLocale();
   const [experiences, setExperiences] = useState<ExperienceItemRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
@@ -52,8 +55,12 @@ export function useAdminExperiences() {
     [fetchExperiences]
   );
 
+  const localizedExperiences = useMemo(() => {
+    return experiences.map((exp) => localizeExperience(exp, locale));
+  }, [experiences, locale]);
+
   return {
-    experiences,
+    experiences: localizedExperiences,
     loading,
     feedback,
     setFeedback,

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, Briefcase } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 import { aboutService } from '@/services/api';
 import type { ExperienceItemRecord } from '../components/ExperienceAdminCard';
 import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
 import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export default function AdminExperienceFormPage() {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
   const isEditing = Boolean(id);
@@ -34,23 +37,26 @@ export default function AdminExperienceFormPage() {
           if (found) {
             setCompany(found.company || found.company_name || '');
             setPosition(found.position || '');
-            setLocation(found.location || 'Remote');
+            setLocation(found.location || (isId ? 'Jarak Jauh' : 'Remote'));
             setDescription(found.description || '');
             setCurrent(Boolean(found.current || found.is_current));
             setOrder(found.order ?? 0);
           } else {
-            setFeedback({ type: 'error', message: 'Work experience record not found.' });
+            setFeedback({ type: 'error', message: isId ? 'Data pengalaman kerja tidak ditemukan.' : 'Work experience record not found.' });
           }
         })
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
-  }, [id, isEditing]);
+  }, [id, isEditing, isId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!company.trim() || !position.trim()) {
-      setFeedback({ type: 'error', message: 'Company Name and Position Title are required.' });
+      setFeedback({
+        type: 'error',
+        message: isId ? 'Nama Perusahaan dan Posisi Jabatan wajib diisi.' : 'Company Name and Position Title are required.',
+      });
       return;
     }
 
@@ -67,17 +73,27 @@ export default function AdminExperienceFormPage() {
     try {
       if (isEditing && id) {
         await aboutService.updateExperience(id, payload);
-        setFeedback({ type: 'success', message: `Experience at "${company}" updated successfully! Redirecting...` });
+        setFeedback({
+          type: 'success',
+          message: isId
+            ? `Pengalaman di "${company}" berhasil diperbarui! Mengalihkan...`
+            : `Experience at "${company}" updated successfully! Redirecting...`,
+        });
       } else {
         await aboutService.createExperience(payload);
-        setFeedback({ type: 'success', message: `Experience at "${company}" deployed to PostgreSQL! Redirecting...` });
+        setFeedback({
+          type: 'success',
+          message: isId
+            ? `Pengalaman di "${company}" berhasil disimpan! Mengalihkan...`
+            : `Experience at "${company}" deployed to PostgreSQL! Redirecting...`,
+        });
       }
 
       setTimeout(() => {
         navigate('/admin/experiences');
       }, 1000);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Operation failed';
+      const message = err instanceof Error ? err.message : (isId ? 'Operasi gagal' : 'Operation failed');
       setFeedback({ type: 'error', message });
       setSubmitting(false);
     }
@@ -87,7 +103,7 @@ export default function AdminExperienceFormPage() {
     return (
       <div className="border border-line bg-bg-raised p-16 text-center font-mono text-xs text-faint">
         <Loader2 size={24} className="animate-spin mx-auto mb-3 text-ink" />
-        <div>RETRIEVING WORK EXPERIENCE RECORD...</div>
+        <div>{isId ? 'MEMUAT DATA PENGALAMAN...' : 'RETRIEVING WORK EXPERIENCE RECORD...'}</div>
       </div>
     );
   }
@@ -97,12 +113,24 @@ export default function AdminExperienceFormPage() {
       {/* Header HUD */}
       <AdminFormHeaderHUD
         returnTo="/admin/experiences"
-        returnLabel="RETURN TO EXPERIENCES TIMELINE"
-        systemCode={isEditing ? '[ 03 // EDIT CAREER DEPLOYMENT ]' : '[ 03 // NEW CAREER DEPLOYMENT ]'}
-        title={isEditing ? 'EDIT EXPERIENCE //' : 'NEW EXPERIENCE //'}
-        titleHighlight="TIMELINE"
+        returnLabel={isId ? 'KEMBALI KE LINIMASA PENGALAMAN' : 'RETURN TO EXPERIENCES TIMELINE'}
+        systemCode={
+          isEditing
+            ? (isId ? '[ 03 // EDIT PENGALAMAN KARIR ]' : '[ 03 // EDIT CAREER DEPLOYMENT ]')
+            : (isId ? '[ 03 // PENGALAMAN KARIR BARU ]' : '[ 03 // NEW CAREER DEPLOYMENT ]')
+        }
+        title={
+          isEditing
+            ? (isId ? 'EDIT PENGALAMAN //' : 'EDIT EXPERIENCE //')
+            : (isId ? 'PENGALAMAN BARU //' : 'NEW EXPERIENCE //')
+        }
+        titleHighlight={isId ? 'LINIMASA' : 'TIMELINE'}
         discardTo="/admin/experiences"
-        submitLabel={isEditing ? 'UPDATE RECORD' : 'CONFIRM ROLE'}
+        submitLabel={
+          isEditing
+            ? (isId ? 'PERBARUI DATA' : 'UPDATE RECORD')
+            : (isId ? 'SIMPAN PERAN' : 'CONFIRM ROLE')
+        }
         isSubmitting={submitting}
         onSubmit={handleSubmit}
       />
@@ -115,31 +143,35 @@ export default function AdminExperienceFormPage() {
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4 border-b border-line pb-2 flex items-center gap-2">
             <Briefcase size={13} />
-            <span>[ ROLE & EMPLOYMENT SPEC ]</span>
+            <span>{isId ? '[ SPESIFIKASI PERAN & PEKERJAAN ]' : '[ ROLE & EMPLOYMENT SPEC ]'}</span>
           </div>
 
           <div className="space-y-5 font-mono text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Company / Organization *</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Perusahaan / Organisasi *' : 'Company / Organization *'}
+                </label>
                 <input
                   type="text"
                   required
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  placeholder="e.g. Acme Systems Ltd."
+                  placeholder={isId ? 'cth. Acme Systems Ltd.' : 'e.g. Acme Systems Ltd.'}
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Position / Job Title *</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Posisi / Jabatan *' : 'Position / Job Title *'}
+                </label>
                 <input
                   type="text"
                   required
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
-                  placeholder="e.g. Lead Full Stack Architect"
+                  placeholder={isId ? 'cth. Lead Full Stack Architect' : 'e.g. Lead Full Stack Architect'}
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
@@ -147,7 +179,9 @@ export default function AdminExperienceFormPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Deployment Location</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Lokasi Penempatan' : 'Deployment Location'}
+                </label>
                 <input
                   type="text"
                   value={location}
@@ -158,7 +192,9 @@ export default function AdminExperienceFormPage() {
               </div>
 
               <div>
-                <label className="block text-faint uppercase font-bold mb-1.5">Sort Sequence Index</label>
+                <label className="block text-faint uppercase font-bold mb-1.5">
+                  {isId ? 'Indeks Urutan Tampilan' : 'Sort Sequence Index'}
+                </label>
                 <input
                   type="number"
                   value={order}
@@ -170,13 +206,17 @@ export default function AdminExperienceFormPage() {
 
             <div>
               <label className="block text-faint uppercase font-bold mb-1.5">
-                Role Responsibilities & Engineering Milestones
+                {isId ? 'Tanggung Jawab & Pencapaian Teknis' : 'Role Responsibilities & Engineering Milestones'}
               </label>
               <textarea
                 rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Key deliverables, system architecture choices, microservices engineered..."
+                placeholder={
+                  isId
+                    ? 'Hasil kerja utama, keputusan arsitektur sistem, layanan mikro yang dibuat...'
+                    : 'Key deliverables, system architecture choices, microservices engineered...'
+                }
                 className="w-full border border-line bg-bg p-3 text-ink font-sans text-xs leading-relaxed focus:outline-none focus:border-line-strong transition-all"
               />
             </div>
@@ -190,8 +230,12 @@ export default function AdminExperienceFormPage() {
                 className="w-4 h-4 accent-ink cursor-pointer"
               />
               <label htmlFor="currentRoleToggle" className="cursor-pointer select-none">
-                <span className="font-bold block uppercase text-ink">Active Career Engagement</span>
-                <span className="text-[10px] text-faint">Currently deployed in this capacity</span>
+                <span className="font-bold block uppercase text-ink">
+                  {isId ? 'Peran Saat Ini' : 'Current Active Role'}
+                </span>
+                <span className="text-[10px] text-faint">
+                  {isId ? 'Tandai peran ini masih aktif dikerjakan sekarang' : 'Mark this engagement as ongoing and currently occupied'}
+                </span>
               </label>
             </div>
           </div>
@@ -203,7 +247,11 @@ export default function AdminExperienceFormPage() {
             disabled={submitting}
             className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
-            {submitting ? 'COMMITTING TO POSTGRESQL...' : isEditing ? 'UPDATE TIMELINE' : 'REGISTER ENGAGEMENT'}
+            {submitting
+              ? (isId ? 'MENYIMPAN KE POSTGRESQL...' : 'SAVING TO POSTGRESQL...')
+              : isEditing
+              ? (isId ? 'PERBARUI REKAMAN' : 'UPDATE RECORD')
+              : (isId ? 'SIMPAN PENGALAMAN' : 'CONFIRM ROLE')}
           </button>
         </div>
       </form>

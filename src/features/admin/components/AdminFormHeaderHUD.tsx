@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { useLocale } from '@/context/I18nContext';
 
 export interface AdminFormHeaderHUDProps {
   returnTo: string;
@@ -25,6 +26,9 @@ function AdminFormHeaderHUDComponent({
   isSubmitting,
   onSubmit,
 }: AdminFormHeaderHUDProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
+
   return (
     <div className="border-b border-line pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
@@ -51,7 +55,7 @@ function AdminFormHeaderHUDComponent({
           to={discardTo}
           className="border border-line bg-bg hover:bg-bg-sunken px-4 py-2 font-mono text-xs uppercase text-ink transition-all"
         >
-          DISCARD
+          {isId ? 'BATAL' : 'DISCARD'}
         </Link>
         <button
           type="button"

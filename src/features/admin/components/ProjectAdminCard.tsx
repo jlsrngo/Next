@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Github, ExternalLink, Edit3, Trash2, Loader2 } from 'lucide-react';
 import CornerCrosses from '@/components/ui/CornerCrosses';
+import { useLocale } from '@/context/I18nContext';
 import type { Project } from '@/types/project.types';
 
 export interface ProjectAdminCardProps {
@@ -19,6 +20,8 @@ function ProjectAdminCardComponent({
   isDeleting,
   onDelete,
 }: ProjectAdminCardProps) {
+  const locale = useLocale();
+  const isId = locale === 'id';
   const github = project.githubUrl ?? project.github_url;
   const live = project.liveUrl ?? project.live_url;
   const ordStr = String(project.order ?? index).padStart(2, '0');
@@ -41,7 +44,7 @@ function ProjectAdminCardComponent({
             </h3>
             {project.featured && (
               <span className="border border-line bg-bg px-2 py-0.5 text-[9px] uppercase font-bold font-mono text-ink">
-                ★ FEATURED
+                ★ {isId ? 'UNGGULAN' : 'FEATURED'}
               </span>
             )}
             <span
@@ -51,7 +54,7 @@ function ProjectAdminCardComponent({
                   : 'border-line bg-bg text-faint'
               }`}
             >
-              {project.featured ? 'PRIORITY' : 'INDEXED'}
+              {project.featured ? (isId ? 'PRIORITAS' : 'PRIORITY') : (isId ? 'TERINDEKS' : 'INDEXED')}
             </span>
           </div>
 
@@ -83,7 +86,7 @@ function ProjectAdminCardComponent({
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-              title="View GitHub Repository"
+              title={isId ? 'Lihat Repositori GitHub' : 'View GitHub Repository'}
               aria-label={`GitHub repository for ${project.title}`}
             >
               <Github size={13} />
@@ -95,7 +98,7 @@ function ProjectAdminCardComponent({
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 border border-line bg-bg hover:bg-bg-sunken text-ink transition-all"
-              title="View Live Deployment"
+              title={isId ? 'Lihat Penerapan Live' : 'View Live Deployment'}
               aria-label={`Live site for ${project.title}`}
             >
               <ExternalLink size={13} />
@@ -107,14 +110,14 @@ function ProjectAdminCardComponent({
             aria-label={`Edit ${project.title}`}
           >
             <Edit3 size={12} />
-            <span>EDIT</span>
+            <span>{isId ? 'EDIT' : 'EDIT'}</span>
           </Link>
           <button
             type="button"
             onClick={() => onDelete(project.id, project.title)}
             disabled={isDeleting}
             className="p-2 border border-line bg-bg hover:bg-red-500/10 hover:border-red-500 text-faint hover:text-red-500 transition-all disabled:opacity-50"
-            title="Delete Project"
+            title={isId ? 'Hapus Proyek' : 'Delete Project'}
             aria-label={`Delete ${project.title}`}
           >
             {isDeleting ? (

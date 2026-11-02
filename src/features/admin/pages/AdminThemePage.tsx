@@ -7,19 +7,25 @@ import { useI18n } from '@/context/I18nContext';
 export default function AdminThemePage() {
   const { isDark, toggle } = useTheme();
   const { locale, setLocale, t } = useI18n();
+  const isId = locale === 'id';
 
   return (
     <div className="space-y-6 animate-fade-in text-ink w-full">
       {/* Header HUD */}
       <div className="border-b border-line pb-5">
         <div className="font-mono text-[10px] tracking-widest uppercase font-bold text-faint mb-1">
-          [ 07 // SYSTEM APPEARANCE & BRUTALIST TOKENS ]
+          {isId ? '[ 07 // TAMPILAN SISTEM & TOKEN BRUTALIS ]' : '[ 07 // SYSTEM APPEARANCE & BRUTALIST TOKENS ]'}
         </div>
         <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink uppercase">
-          THEME // <span className="font-mono text-faint font-normal">SPECIFICATION</span>
+          {isId ? 'TEMA //' : 'THEME //'}{' '}
+          <span className="font-mono text-faint font-normal">
+            {isId ? 'SPESIFIKASI' : 'SPECIFICATION'}
+          </span>
         </h1>
         <p className="text-xs text-faint mt-1 font-mono">
-          Swiss Brutalist color token configurations, contrast ratios, and typography specifications.
+          {isId
+            ? 'Konfigurasi token warna Swiss Brutalist, rasio kontras, dan spesifikasi tipografi.'
+            : 'Swiss Brutalist color token configurations, contrast ratios, and typography specifications.'}
         </p>
       </div>
 
@@ -28,7 +34,7 @@ export default function AdminThemePage() {
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4">
-            [ DISPLAY MODE ]
+            {isId ? '[ MODE TAMPILAN ]' : '[ DISPLAY MODE ]'}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -46,8 +52,12 @@ export default function AdminThemePage() {
                 <Sun size={20} className={!isDark ? 'text-amber-500' : 'text-faint'} />
                 {!isDark && <Check size={16} />}
               </div>
-              <div className="font-mono text-xs uppercase font-bold text-ink">LIGHT MODE</div>
-              <div className="font-mono text-[10px] text-faint mt-0.5">High-contrast daylight paper</div>
+              <div className="font-mono text-xs uppercase font-bold text-ink">
+                {isId ? 'MODE TERANG' : 'LIGHT MODE'}
+              </div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">
+                {isId ? 'Kertas kontras tinggi siang hari' : 'High-contrast daylight paper'}
+              </div>
             </button>
 
             <button
@@ -64,8 +74,12 @@ export default function AdminThemePage() {
                 <Moon size={20} className={isDark ? 'text-indigo-400' : 'text-faint'} />
                 {isDark && <Check size={16} />}
               </div>
-              <div className="font-mono text-xs uppercase font-bold text-ink">DARK MODE</div>
-              <div className="font-mono text-[10px] text-faint mt-0.5">Midnight brutalist contrast</div>
+              <div className="font-mono text-xs uppercase font-bold text-ink">
+                {isId ? 'MODE GELAP' : 'DARK MODE'}
+              </div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">
+                {isId ? 'Kontras brutalis tengah malam' : 'Midnight brutalist contrast'}
+              </div>
             </button>
           </div>
         </div>
@@ -74,12 +88,12 @@ export default function AdminThemePage() {
         <div className="border border-line bg-bg-raised p-6 relative">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-4">
-            [ DESIGN SYSTEM TOKENS ]
+            {isId ? '[ TOKEN SISTEM DESAIN ]' : '[ DESIGN SYSTEM TOKENS ]'}
           </div>
 
           <div className="space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="text-faint">BACKGROUND CANVAS</span>
+              <span className="text-faint">{isId ? 'KANVAS LATAR' : 'BACKGROUND CANVAS'}</span>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 border border-line bg-bg inline-block" />
                 <span className="font-bold">var(--bg)</span>
@@ -87,7 +101,7 @@ export default function AdminThemePage() {
             </div>
 
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="text-faint">RAISED SURFACE</span>
+              <span className="text-faint">{isId ? 'PERMUKAAN TIMBUL' : 'RAISED SURFACE'}</span>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 border border-line bg-bg-raised inline-block" />
                 <span className="font-bold">var(--bg-raised)</span>
@@ -95,7 +109,7 @@ export default function AdminThemePage() {
             </div>
 
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="text-faint">HAIRLINE BORDER</span>
+              <span className="text-faint">{isId ? 'GARIS BATAS TIPIS' : 'HAIRLINE BORDER'}</span>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 border border-line bg-line inline-block" />
                 <span className="font-bold">var(--line)</span>
@@ -103,7 +117,7 @@ export default function AdminThemePage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-faint">PRIMARY INK</span>
+              <span className="text-faint">{isId ? 'TINTA UTAMA' : 'PRIMARY INK'}</span>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 border border-line bg-ink inline-block" />
                 <span className="font-bold">var(--ink)</span>
@@ -116,10 +130,12 @@ export default function AdminThemePage() {
         <div className="border border-line bg-bg-raised p-6 relative md:col-span-2">
           <CornerCrosses />
           <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-faint mb-2">
-            [ {t('admin.language') || 'LANGUAGE CONFIGURATION'} ]
+            [ {isId ? 'KONFIGURASI BAHASA' : 'LANGUAGE CONFIGURATION'} ]
           </div>
           <p className="font-mono text-xs text-faint mb-4">
-            {t('admin.language_desc') || 'Select the active system locale for both Admin Workstation and Public interfaces.'}
+            {isId
+              ? 'Pilih bahasa sistem aktif untuk Meja Kerja Admin dan antarmuka Publik.'
+              : 'Select the active system locale for both Admin Workstation and Public interfaces.'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -136,7 +152,9 @@ export default function AdminThemePage() {
                 {locale === 'en' && <Check size={16} />}
               </div>
               <div className="font-mono text-xs uppercase font-bold text-ink">ENGLISH [EN]</div>
-              <div className="font-mono text-[10px] text-faint mt-0.5">International standard specification</div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">
+                {isId ? 'Spesifikasi standar internasional' : 'International standard specification'}
+              </div>
             </button>
 
             <button
@@ -152,7 +170,9 @@ export default function AdminThemePage() {
                 {locale === 'id' && <Check size={16} />}
               </div>
               <div className="font-mono text-xs uppercase font-bold text-ink">INDONESIAN [ID]</div>
-              <div className="font-mono text-[10px] text-faint mt-0.5">Bahasa Indonesia terlokalisasi penuh</div>
+              <div className="font-mono text-[10px] text-faint mt-0.5">
+                Bahasa Indonesia terlokalisasi penuh
+              </div>
             </button>
           </div>
         </div>
@@ -160,4 +180,3 @@ export default function AdminThemePage() {
     </div>
   );
 }
-

@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { aboutService } from '@/services/api';
+import { useLocale } from '@/context/I18nContext';
+import { localizeEducation } from '@/lib/localize';
 import type { EducationItemRecord } from '../components/EducationAdminCard';
 import type { AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
 export function useAdminEducation() {
+  const locale = useLocale();
   const [education, setEducation] = useState<EducationItemRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<AdminFeedbackState | null>(null);
@@ -52,8 +55,12 @@ export function useAdminEducation() {
     [fetchEducation]
   );
 
+  const localizedEducation = useMemo(() => {
+    return education.map((edu) => localizeEducation(edu, locale));
+  }, [education, locale]);
+
   return {
-    education,
+    education: localizedEducation,
     loading,
     feedback,
     setFeedback,
