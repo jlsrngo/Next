@@ -5,6 +5,22 @@
   "buildCommand": "prisma generate && vite build",
   "rewrites": [
     {
+      "source": "/api/experiences/:id",
+      "destination": "/api/experiences?id=:id"
+    },
+    {
+      "source": "/api/education/:id",
+      "destination": "/api/education?id=:id"
+    },
+    {
+      "source": "/api/achievements/:id",
+      "destination": "/api/achievements?id=:id"
+    },
+    {
+      "source": "/api/projects/:id",
+      "destination": "/api/projects?id=:id"
+    },
+    {
       "source": "/((?!api).*)",
       "destination": "/index.html"
     }
