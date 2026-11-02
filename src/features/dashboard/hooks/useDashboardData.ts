@@ -31,14 +31,14 @@ export function useDashboardData() {
   const [ghLoading, setGhLoading] = useState<boolean>(() => !memoryGithubCache);
 
   useEffect(() => {
-    // Clear legacy mock cache
+    // Check cached session
     if (typeof window !== 'undefined') {
       try {
         sessionStorage.removeItem('portfolio_github_cache');
         const stored = sessionStorage.getItem('portfolio_github_cache_v3');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed?.data?.weeks && Date.now() - parsed.timestamp < 1000 * 60 * 30) {
+          if (parsed?.data?.weeks && Date.now() - parsed.timestamp < 1000 * 60 * 3) {
             memoryGithubCache = parsed.data;
             setGithub(parsed.data);
             setGhLoading(false);
@@ -56,9 +56,12 @@ export function useDashboardData() {
         .finally(() => setLoading(false));
     }
 
-    // Always fetch verified real contributions dataset
-    fetch('/github-contributions.json')
-      .then(r => r.json())
+    // Fetch live contributions dataset from backend API
+    fetch('/api/github/contributions')
+      .then(r => {
+        if (!r.ok) throw new Error('API failed');
+        return r.json();
+      })
       .then(data => {
         if (data && data.weeks) {
           memoryGithubCache = data;
@@ -69,8 +72,8 @@ export function useDashboardData() {
         }
       })
       .catch(() => {
-        // Fallback to API if static file fails
-        return fetch('/api/github/contributions')
+        // Fallback to static file if API fails
+        return fetch('/github-contributions.json')
           .then(r => r.json())
           .then(data => {
             if (data && data.weeks) {

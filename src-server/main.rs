@@ -44,6 +44,7 @@ async fn main() {
     let state = Arc::new(AppState {
         pool,
         http_client,
+        github_cache: Arc::new(tokio::sync::RwLock::new(None)),
     });
 
     let cors = CorsLayer::new()

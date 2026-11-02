@@ -99,9 +99,9 @@ export default function GithubClient({ profile, initialStats }: { profile: any; 
         .catch(() => setLoading(false));
     }
 
-    fetch('/github-contributions.json')
+    fetch('/api/github/contributions')
       .then(r => {
-        if (!r.ok) return fetch('/api/github/contributions').then(res => res.json());
+        if (!r.ok) return fetch('/github-contributions.json').then(res => res.json());
         return r.json();
       })
       .then(data => {

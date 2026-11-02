@@ -1,11 +1,19 @@
 use serde_json::Value;
 use sqlx::PgPool;
 use std::sync::Arc;
+use tokio::sync::RwLock;
+
+#[derive(Clone)]
+pub struct CachedGithub {
+    pub data: Value,
+    pub fetched_at: std::time::Instant,
+}
 
 #[derive(Clone)]
 pub struct AppState {
     pub pool: Option<PgPool>,
     pub http_client: reqwest::Client,
+    pub github_cache: Arc<RwLock<Option<CachedGithub>>>,
 }
 
 pub type SharedState = Arc<AppState>;

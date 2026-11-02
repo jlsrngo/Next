@@ -2,9 +2,112 @@ const fs = require('fs');
 
 async function syncGithub() {
   const username = process.env.GITHUB_USERNAME || 'jlsrngo';
-  console.log(`[sync-github] Fetching GitHub data for: ${username}...`);
+  const token = process.env.GITHUB_TOKEN || '';
+  console.log(`[sync-github] Fetching live GitHub data for: ${username}...`);
 
-  // 1. Fetch user profile
+  // 1. Try GraphQL if token exists
+  if (token) {
+    try {
+      const query = `
+      query($username: String!) {
+        user(login: $username) {
+          contributionsCollection {
+            totalCommitContributions
+            totalPullRequestContributions
+            totalIssueContributions
+            totalRepositoryContributions
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  date
+                  contributionCount
+                  contributionLevel
+                }
+              }
+            }
+          }
+          repositories(first: 100, ownerAffiliations: OWNER, orderBy: {field: STARGAZERS, direction: DESC}) {
+            totalCount
+            nodes {
+              name
+              stargazerCount
+              primaryLanguage {
+                name
+                color
+              }
+            }
+          }
+          followers { totalCount }
+          following { totalCount }
+        }
+      }
+      `;
+
+      const gqlRes = await fetch('https://api.github.com/graphql', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'Portfolio',
+        },
+        body: JSON.stringify({ query, variables: { username } }),
+      });
+
+      if (gqlRes.ok) {
+        const gqlData = await gqlRes.json();
+        const user = gqlData.data?.user;
+        if (user) {
+          const contrib = user.contributionsCollection;
+          const cal = contrib.contributionCalendar;
+          const levelMap = { NONE: 0, FIRST_QUARTILE: 1, SECOND_QUARTILE: 2, THIRD_QUARTILE: 3, FOURTH_QUARTILE: 4 };
+
+          const weeks = cal.weeks.map(w =>
+            w.contributionDays.map(d => ({
+              date: d.date,
+              count: d.contributionCount,
+              level: levelMap[d.contributionLevel] || 0,
+            }))
+          );
+
+          const langCounts = {};
+          for (const repo of user.repositories.nodes) {
+            if (repo.primaryLanguage) {
+              const { name, color } = repo.primaryLanguage;
+              langCounts[name] = langCounts[name] || { name, color: color || '#888888', count: 0 };
+              langCounts[name].count++;
+            }
+          }
+
+          const topLanguages = Object.values(langCounts)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 7);
+
+          const result = {
+            username,
+            total_contributions: cal.totalContributions,
+            total_commits: contrib.totalCommitContributions,
+            total_prs: contrib.totalPullRequestContributions,
+            total_issues: contrib.totalIssueContributions,
+            total_repos: user.repositories.totalCount,
+            followers: user.followers.totalCount,
+            following: user.following.totalCount,
+            weeks,
+            top_languages: topLanguages,
+            updated_at: new Date().toISOString(),
+          };
+
+          fs.writeFileSync('public/github-contributions.json', JSON.stringify(result, null, 2));
+          console.log(`[sync-github] Successfully synced live GraphQL data for ${username}!`);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('[sync-github] GraphQL fetch failed, switching to public API:', err.message);
+    }
+  }
+
+  // 2. Fetch User Profile
   let user = { public_repos: 17, followers: 0, following: 0 };
   try {
     const userRes = await fetch(`https://api.github.com/users/${username}`, {
@@ -14,10 +117,22 @@ async function syncGithub() {
       user = await userRes.json();
     }
   } catch (err) {
-    console.warn('Failed to fetch user profile:', err.message);
+    console.warn('[sync-github] Failed to fetch user profile:', err.message);
   }
 
-  // 2. Fetch repos for language stats
+  // 3. Fetch PR count
+  let totalPrs = 0;
+  try {
+    const prRes = await fetch(`https://api.github.com/search/issues?q=author:${username}+type:pr`, {
+      headers: { 'User-Agent': 'Portfolio' },
+    });
+    if (prRes.ok) {
+      const prData = await prRes.json();
+      totalPrs = prData.total_count || 0;
+    }
+  } catch {}
+
+  // 4. Fetch Repos for Language Breakdown
   let topLanguages = [];
   try {
     const reposRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`, {
@@ -31,7 +146,7 @@ async function syncGithub() {
           langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
         }
       }
-      
+
       const paletteMap = {
         TypeScript: '#69D2E7',
         HTML: '#FFA07A',
@@ -53,95 +168,89 @@ async function syncGithub() {
         }));
     }
   } catch (err) {
-    console.warn('Failed to fetch repos:', err.message);
+    console.warn('[sync-github] Failed to fetch repos:', err.message);
   }
 
-  // 3. Fetch contribution calendar HTML
-  let days = [];
-  let totalContributions = 1957; // Match exact GitHub profile with private contributions enabled
+  // 5. Fetch Contributions (Try edge API first, fallback to scraping)
+  let weeks = [];
+  let totalContributions = 0;
+
   try {
-    const calRes = await fetch(`https://github.com/users/${username}/contributions`, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-    });
-    if (calRes.ok) {
-      const html = await calRes.text();
-
-      // Tooltips
-      const tooltipRegex = /<tool-tip[^>]*for="([^"]+)"[^>]*>([\s\S]*?)<\/tool-tip>/g;
-      const tooltips = {};
-      let tMatch;
-      while ((tMatch = tooltipRegex.exec(html)) !== null) {
-        tooltips[tMatch[1]] = tMatch[2].trim();
+    const edgeRes = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+    if (edgeRes.ok) {
+      const edgeData = await edgeRes.json();
+      totalContributions = edgeData.total?.lastYear || edgeData.total?.['2026'] || 0;
+      const days = edgeData.contributions || [];
+      for (let i = 0; i < days.length; i += 7) {
+        weeks.push(days.slice(i, i + 7));
       }
-
-      // Day cells
-      const dayRegex = /<td[^>]*data-date="([^"]+)"[^>]*id="([^"]+)"[^>]*data-level="(\d+)"[^>]*>/g;
-      let match;
-      while ((match = dayRegex.exec(html)) !== null) {
-        const date = match[1];
-        const id = match[2];
-        const level = parseInt(match[3], 10);
-        const tip = tooltips[id] || '';
-
-        let count = 0;
-        const cMatch = tip.match(/(\d+)\s+contribution/i);
-        if (cMatch) {
-          count = parseInt(cMatch[1], 10);
-        }
-
-        days.push({ date, level, count });
-      }
-
-      days.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
   } catch (err) {
-    console.warn('Failed to fetch contributions calendar:', err.message);
+    console.warn('[sync-github] Edge contributions API failed, fallback to scrape:', err.message);
   }
 
-  // If parsed, adjust private commits so sum matches user's 1,957 profile badge
-  if (days.length > 0) {
-    const publicSum = days.reduce((sum, d) => sum + d.count, 0);
-    const diff = totalContributions - publicSum;
-    if (diff > 0) {
-      const recentActive = days.filter(d => d.count > 0 && d.date >= '2026-08-01');
-      let remaining = diff;
-      while (remaining > 0) {
-        for (const d of recentActive) {
-          if (remaining <= 0) break;
-          d.count += 1;
-          remaining--;
+  // Fallback to HTML scrape if edge API had no weeks
+  if (weeks.length === 0) {
+    try {
+      const calRes = await fetch(`https://github.com/users/${username}/contributions`, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      });
+      if (calRes.ok) {
+        const html = await calRes.text();
+        const totalMatch = html.match(/([0-9,]+)\s+contributions?\s+in\s+the\s+last\s+year/i);
+        if (totalMatch) {
+          totalContributions = parseInt(totalMatch[1].replace(/,/g, ''), 10);
+        }
+
+        const tooltipRegex = /<tool-tip[^>]*for="([^"]+)"[^>]*>([\s\S]*?)<\/tool-tip>/g;
+        const tooltips = {};
+        let tMatch;
+        while ((tMatch = tooltipRegex.exec(html)) !== null) {
+          tooltips[tMatch[1]] = tMatch[2].trim();
+        }
+
+        const days = [];
+        const dayRegex = /<td[^>]*data-date="([^"]+)"[^>]*id="([^"]+)"[^>]*data-level="(\d+)"[^>]*>/g;
+        let match;
+        while ((match = dayRegex.exec(html)) !== null) {
+          const date = match[1];
+          const id = match[2];
+          const level = parseInt(match[3], 10);
+          const tip = tooltips[id] || '';
+          let count = 0;
+          const cMatch = tip.match(/(\d+)\s+contribution/i);
+          if (cMatch) {
+            count = parseInt(cMatch[1], 10);
+          }
+          days.push({ date, level, count });
+        }
+
+        days.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        for (let i = 0; i < days.length; i += 7) {
+          weeks.push(days.slice(i, i + 7));
         }
       }
-
-      for (const d of days) {
-        if (d.count === 0) d.level = 0;
-        else if (d.count <= 2) d.level = 1;
-        else if (d.count <= 6) d.level = 2;
-        else if (d.count <= 14) d.level = 3;
-        else d.level = 4;
-      }
+    } catch (err) {
+      console.warn('[sync-github] HTML scrape failed:', err.message);
     }
-  }
-
-  // Group into weeks (7 days each)
-  const weeks = [];
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(days.slice(i, i + 7));
   }
 
   const result = {
     username,
     total_contributions: totalContributions,
+    total_commits: totalContributions,
+    total_prs: totalPrs,
+    total_issues: 0,
     total_repos: user.public_repos || 17,
-    total_prs: 0,
     followers: user.followers || 0,
     following: user.following || 0,
     weeks,
     top_languages: topLanguages,
+    updated_at: new Date().toISOString(),
   };
 
   fs.writeFileSync('public/github-contributions.json', JSON.stringify(result, null, 2));
-  console.log(`[sync-github] Successfully synced ${days.length} days and ${weeks.length} weeks to public/github-contributions.json!`);
+  console.log(`[sync-github] Live sync completed: ${totalContributions} contributions, ${weeks.length} weeks.`);
 }
 
 syncGithub().catch(console.error);
