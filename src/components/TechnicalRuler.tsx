@@ -33,9 +33,16 @@ export default function TechnicalRuler({ scrollContainerRef }: TechnicalRulerPro
     window.addEventListener('resize', updateScroll)
     updateScroll()
 
+    let ro: ResizeObserver | null = null
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => updateScroll())
+      ro.observe(el)
+    }
+
     return () => {
       el.removeEventListener('scroll', updateScroll)
       window.removeEventListener('resize', updateScroll)
+      ro?.disconnect()
     }
   }, [scrollContainerRef, updateScroll])
 

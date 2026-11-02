@@ -9,9 +9,10 @@ tsconfig.tsbuildinfo
 check.mjs
 target/
 
-# Ignore all .md except README.md
+# Ignore all .md except README.md and AGENTS.md
 *.md
 !README.md
+!AGENTS.md
 .env*
 .neon
 bun.lock

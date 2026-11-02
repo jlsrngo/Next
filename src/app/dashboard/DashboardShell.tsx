@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
+import TechnicalRuler from '@/components/TechnicalRuler'
 import {
   LayoutDashboard,
   User,
@@ -97,11 +98,18 @@ export default function DashboardShell({
   const router = useRouter()
   const { isDark, toggle } = useTheme()
   const [latestVersion, setLatestVersion] = useState<ChangelogEntry | null>(null)
+  const mainRef = useRef<HTMLElement>(null)
 
   const [fullName, setFullName] = useState<string | null>(initialName ?? null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initialAvatar ?? null)
 
   const [locale, setLocale] = useState<string>('en')
+
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0
+    }
+  }, [pathname])
 
   useEffect(() => {
     const saved = localStorage.getItem('portfolio_locale')
@@ -282,12 +290,19 @@ export default function DashboardShell({
           </div>
         </header>
 
-        {/* Page Content Body with Swiss Brutalist Layout */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 select-text">
-          <div className="max-w-6xl mx-auto w-full">
-            {children}
-          </div>
-        </main>
+        {/* Page Content Body with Swiss Brutalist Layout & Technical Ruler */}
+        <div className="relative flex-1 overflow-hidden flex min-h-0">
+          <main
+            ref={mainRef}
+            className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8 md:pr-20 select-text scroll-smooth"
+          >
+            <div className="max-w-6xl mx-auto w-full">
+              {children}
+            </div>
+          </main>
+
+          <TechnicalRuler scrollContainerRef={mainRef} />
+        </div>
       </div>
     </div>
   )
