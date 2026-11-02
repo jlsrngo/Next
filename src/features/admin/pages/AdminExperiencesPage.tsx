@@ -75,13 +75,13 @@ export default function AdminExperiencesPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <Link
             to="/admin/experiences/new"
             className="flex items-center gap-1.5 border border-line bg-invert-bg text-invert-fg hover:opacity-90 px-4 py-2 font-mono text-xs uppercase font-bold tracking-wider transition-all shadow-xs"
           >
             <Plus size={14} />
-            <span>+ ADD EXPERIENCE</span>
+            <span>ADD EXPERIENCE</span>
           </Link>
           <button
             onClick={fetchExperiences}

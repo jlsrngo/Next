@@ -246,8 +246,8 @@ export default function DashboardShell({
 
       {/* Main Admin Viewport */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0 bg-bg">
-        {/* Top Telemetry Header */}
-        <header className="flex h-14 items-center justify-between border-b border-line bg-bg-raised px-4 sm:px-6 shrink-0 z-20">
+        {/* Top Telemetry Header - Same h-16 as sidebar header so border-b connects continuously */}
+        <header className="flex h-16 items-center justify-between border-b border-line bg-bg-raised px-4 sm:px-6 shrink-0 z-20">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -294,7 +294,7 @@ export default function DashboardShell({
         <div className="relative flex-1 overflow-hidden flex min-h-0">
           <main
             ref={mainRef}
-            className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8 md:pr-20 select-text scroll-smooth"
+            className="flex-1 h-full overflow-y-auto px-4 sm:px-6 md:pl-8 md:pr-24 lg:pl-10 lg:pr-28 py-4 sm:py-6 md:py-8 select-text scroll-smooth"
           >
             <div className="max-w-6xl mx-auto w-full">
               {children}
