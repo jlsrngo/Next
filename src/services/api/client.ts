@@ -6,7 +6,10 @@ export class ApiError extends Error {
 }
 
 export async function apiClient<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  // 1. In local development, attempt direct sub-millisecond connection to Rust Axum server
+  const method = (options?.method || 'GET').toUpperCase();
+  const isMutation = method !== 'GET' && method !== 'HEAD';
+
+  // 1. In local development, attempt direct connection to Rust Axum server
   const isLocal = typeof window !== 'undefined' && 
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
@@ -23,14 +26,26 @@ export async function apiClient<T>(endpoint: string, options?: RequestInit): Pro
       if (axumRes.ok) {
         return (await axumRes.json()) as T;
       }
-    } catch {
-      // Continue to next layer if Axum daemon is not active
+      if (isMutation) {
+        let errMsg = `Axum error: ${axumRes.status} ${axumRes.statusText}`;
+        try {
+          const errData = await axumRes.json();
+          if (errData?.error) errMsg = errData.error;
+        } catch {}
+        throw new ApiError(axumRes.status, errMsg);
+      }
+    } catch (err) {
+      if (isMutation) throw err;
+      // Continue to next layer for GET if Axum daemon is not active
     }
   }
 
-  // 2. Standard relative endpoint (proxied or serverless)
+  // 2. Standard relative or configured endpoint (Vercel serverless / proxy)
+  const apiBase = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '';
+  const url = endpoint.startsWith('http') ? endpoint : `${apiBase}${endpoint}`;
+
   try {
-    const res = await fetch(endpoint, {
+    const res = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
@@ -43,12 +58,28 @@ export async function apiClient<T>(endpoint: string, options?: RequestInit): Pro
       if (contentType.includes('application/json')) {
         return (await res.json()) as T;
       }
+      if (isMutation) {
+        throw new ApiError(502, 'API endpoint returned non-JSON response');
+      }
+    } else {
+      if (isMutation) {
+        let errMsg = `Request failed (${res.status})`;
+        try {
+          const errData = await res.json();
+          if (errData?.error) errMsg = errData.error;
+        } catch {}
+        throw new ApiError(res.status, errMsg);
+      }
     }
-  } catch {
-    // Continue to verified database snapshot fallback
+  } catch (err) {
+    if (isMutation) throw err;
   }
 
-  // 3. Graceful fallback to verified Neon PostgreSQL snapshot
+  // 3. Graceful fallback to verified Neon PostgreSQL snapshot (READ-ONLY)
+  if (isMutation) {
+    throw new ApiError(503, 'Backend mutation unavailable in offline mode');
+  }
+
   try {
     const fallbackRes = await fetch('/db-data.json');
     if (fallbackRes.ok) {

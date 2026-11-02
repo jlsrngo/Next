@@ -1,104 +1,104 @@
 {
   "status": "LIVE_SYNC",
-  "last_crawled_at": "2026-11-02T04:56:06.644Z",
+  "last_crawled_at": "2026-11-02T05:26:10.188Z",
   "source": "GitHub Search API & HackerNews Live Wire",
   "headline": "Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "metric": "▲ 1110 PTS",
+  "metric": "▲ 1131 PTS",
   "spec": "TECH WIRE // LIVE: Show HN: HackerBooks – HackerTube, but for books mentioned on HN",
-  "viral_repo": "langchain-ai/langchainjs",
-  "repo_metric": "★ 18.3k",
-  "repo_desc": "The agent engineering platform",
-  "repo_spec": "VIRAL REPO // langchain-ai/langchainjs",
+  "viral_repo": "storytold/vectorcraft",
+  "repo_metric": "★ 11.2k",
+  "repo_desc": "VectorCraft: An open-source, vector art tool written by scratch in pure Rust",
+  "repo_spec": "VIRAL REPO // storytold/vectorcraft",
   "trending_repos": [
     {
-      "name": "langchainjs",
-      "full_name": "langchain-ai/langchainjs",
-      "stars": 18312,
-      "stars_formatted": "★ 18.3k",
-      "language": "TypeScript",
-      "description": "The agent engineering platform",
-      "url": "https://github.com/langchain-ai/langchainjs"
+      "name": "vectorcraft",
+      "full_name": "storytold/vectorcraft",
+      "stars": 11196,
+      "stars_formatted": "★ 11.2k",
+      "language": "Rust",
+      "description": "VectorCraft: An open-source, vector art tool written by scratch in pure Rust",
+      "url": "https://github.com/storytold/vectorcraft"
     },
     {
-      "name": "calibre",
-      "full_name": "kovidgoyal/calibre",
-      "stars": 26318,
-      "stars_formatted": "★ 26.3k",
+      "name": "platform",
+      "full_name": "hcengineering/platform",
+      "stars": 28036,
+      "stars_formatted": "★ 28.0k",
+      "language": "TypeScript",
+      "description": "Huly — All-in-One Project Management Platform (alternative to Linear, Jira, Slack, Notion, Motion)",
+      "url": "https://github.com/hcengineering/platform"
+    },
+    {
+      "name": "flashinfer",
+      "full_name": "flashinfer-ai/flashinfer",
+      "stars": 6831,
+      "stars_formatted": "★ 6.8k",
+      "language": "Cuda",
+      "description": "FlashInfer: Kernel Library for LLM Serving",
+      "url": "https://github.com/flashinfer-ai/flashinfer"
+    },
+    {
+      "name": "TensorRT-LLM",
+      "full_name": "NVIDIA/TensorRT-LLM",
+      "stars": 14988,
+      "stars_formatted": "★ 15.0k",
       "language": "Python",
-      "description": "The official source code repository for the calibre ebook manager",
-      "url": "https://github.com/kovidgoyal/calibre"
+      "description": "TensorRT LLM provides users with an easy-to-use Python API to define Large Language Models (LLMs) and supports state-of-the-art optimizations to perform inference efficiently on NVIDIA GPUs. TensorRT LLM also contains components to create Python and C++ runtimes that orchestrate the inference execution in a performant way.",
+      "url": "https://github.com/NVIDIA/TensorRT-LLM"
     },
     {
-      "name": "oxc",
-      "full_name": "oxc-project/oxc",
-      "stars": 23294,
-      "stars_formatted": "★ 23.3k",
-      "language": "Rust",
-      "description": "⚓ A collection of high-performance JavaScript tools.",
-      "url": "https://github.com/oxc-project/oxc"
-    },
-    {
-      "name": "orca",
-      "full_name": "stablyai/orca",
-      "stars": 112765,
-      "stars_formatted": "★ 112.8k",
+      "name": "t3code",
+      "full_name": "pingdotgg/t3code",
+      "stars": 38593,
+      "stars_formatted": "★ 38.6k",
       "language": "TypeScript",
-      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
-      "url": "https://github.com/stablyai/orca"
+      "description": "",
+      "url": "https://github.com/pingdotgg/t3code"
     },
     {
-      "name": "fasthttp",
-      "full_name": "valyala/fasthttp",
-      "stars": 23501,
-      "stars_formatted": "★ 23.5k",
-      "language": "Go",
-      "description": "Fast HTTP package for Go. Tuned for high performance. Zero memory allocations in hot paths. Up to 10x faster than net/http",
-      "url": "https://github.com/valyala/fasthttp"
-    },
-    {
-      "name": "orleans",
-      "full_name": "dotnet/orleans",
-      "stars": 10919,
-      "stars_formatted": "★ 10.9k",
-      "language": "C#",
-      "description": "Cloud Native application framework for .NET",
-      "url": "https://github.com/dotnet/orleans"
-    },
-    {
-      "name": "cc-switch",
-      "full_name": "farion1231/cc-switch",
-      "stars": 150991,
-      "stars_formatted": "★ 151.0k",
-      "language": "Rust",
-      "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io",
-      "url": "https://github.com/farion1231/cc-switch"
-    },
-    {
-      "name": "leon",
-      "full_name": "leon-ai/leon",
-      "stars": 17627,
-      "stars_formatted": "★ 17.6k",
-      "language": "TypeScript",
-      "description": "🧠 Leon is your open-source personal assistant.",
-      "url": "https://github.com/leon-ai/leon"
-    },
-    {
-      "name": "core-js",
-      "full_name": "zloirock/core-js",
-      "stars": 25521,
-      "stars_formatted": "★ 25.5k",
-      "language": "JavaScript",
-      "description": "Standard Library",
-      "url": "https://github.com/zloirock/core-js"
-    },
-    {
-      "name": "termux-packages",
-      "full_name": "termux/termux-packages",
-      "stars": 17288,
+      "name": "coder",
+      "full_name": "coder/coder",
+      "stars": 17252,
       "stars_formatted": "★ 17.3k",
-      "language": "Shell",
-      "description": "A package build system for Termux.",
-      "url": "https://github.com/termux/termux-packages"
+      "language": "Go",
+      "description": "Secure environments for developers and their agents",
+      "url": "https://github.com/coder/coder"
+    },
+    {
+      "name": "solidcraft",
+      "full_name": "tangency-labs/solidcraft",
+      "stars": 12952,
+      "stars_formatted": "★ 13.0k",
+      "language": "Rust",
+      "description": "SolidCraft: an open-source parametric 3D CAD application built in pure Rust. Desktop, web, and automation through MCP.",
+      "url": "https://github.com/tangency-labs/solidcraft"
+    },
+    {
+      "name": "dify",
+      "full_name": "langgenius/dify",
+      "stars": 160186,
+      "stars_formatted": "★ 160.2k",
+      "language": "Python",
+      "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+      "url": "https://github.com/langgenius/dify"
+    },
+    {
+      "name": "tokenizers",
+      "full_name": "huggingface/tokenizers",
+      "stars": 11217,
+      "stars_formatted": "★ 11.2k",
+      "language": "Rust",
+      "description": "💥 Fast State-of-the-Art Tokenizers optimized for Research and Production",
+      "url": "https://github.com/huggingface/tokenizers"
+    },
+    {
+      "name": "macro",
+      "full_name": "macro-inc/macro",
+      "stars": 6065,
+      "stars_formatted": "★ 6.1k",
+      "language": "Rust",
+      "description": "Macro is a unified workspace for teams: email, chat, docs, tasks, agents, calls, and CRM — @-linked together with shared AI memory.",
+      "url": "https://github.com/macro-inc/macro"
     }
   ]
 }

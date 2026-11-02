@@ -2,10 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "outputDirectory": "dist",
-  "buildCommand": "vite build",
+  "buildCommand": "prisma generate && vite build",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api($|/)).*)",
       "destination": "/index.html"
     }
   ]
