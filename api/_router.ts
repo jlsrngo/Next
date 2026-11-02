@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import { prisma, getDbSnapshot } from './_db';
+import { getPrisma, getDbSnapshot } from './_db';
 import fs from 'fs';
 import path from 'path';
 
@@ -76,6 +76,8 @@ export async function handleRequest(req: VercelReq, res: VercelRes) {
     return urlObj.searchParams.get(param);
   };
 
+  const prisma = getPrisma();
+
   try {
     // 1. Health & Diagnostics
     if (pathname === '/api/health' || pathname === '/api/stats') {
@@ -89,34 +91,41 @@ export async function handleRequest(req: VercelReq, res: VercelRes) {
     // 2. Skills CRUD
     if (pathname === '/api/skills') {
       if (method === 'GET') {
-        try {
-          const skills = await prisma.skill.findMany({
-            orderBy: [{ order: 'asc' }, { name: 'asc' }],
-          });
-          if (skills.length > 0) {
-            return sendJson(
-              res,
-              200,
-              skills.map((s) => ({
-                id: s.id,
-                name: s.name,
-                category: s.category,
-                icon: s.iconName || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-                iconName: s.iconName || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-                proficiency: s.proficiency,
-                featured: s.featured,
-                order: s.order,
-              }))
-            );
+        if (prisma) {
+          try {
+            const skills = await prisma.skill.findMany({
+              orderBy: [{ order: 'asc' }, { name: 'asc' }],
+            });
+            if (skills.length > 0) {
+              return sendJson(
+                res,
+                200,
+                skills.map((s) => ({
+                  id: s.id,
+                  name: s.name,
+                  category: s.category,
+                  icon: s.iconName || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                  iconName: s.iconName || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                  proficiency: s.proficiency,
+                  featured: s.featured,
+                  order: s.order,
+                }))
+              );
+            }
+          } catch (err) {
+            console.error('[API /api/skills GET error]', err);
           }
-        } catch (err) {
-          console.error('[API /api/skills GET error]', err);
         }
         const snap = getDbSnapshot();
         return sendJson(res, 200, snap?.skills || []);
       }
 
       if (method === 'POST') {
+        if (!prisma) {
+          return sendJson(res, 503, {
+            error: 'DATABASE_URL is not configured in Vercel Environment Variables.',
+          });
+        }
         const body = parseBody(req);
         const name = body.name || 'New Skill';
         const category = body.category || 'Tools & DevOps';
@@ -143,6 +152,11 @@ export async function handleRequest(req: VercelReq, res: VercelRes) {
       }
 
       if (method === 'DELETE') {
+        if (!prisma) {
+          return sendJson(res, 503, {
+            error: 'DATABASE_URL is not configured in Vercel Environment Variables.',
+          });
+        }
         const id = getQuery('id');
         const iconName = getQuery('iconName');
 

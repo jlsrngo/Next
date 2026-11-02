@@ -1,6 +1,23 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import { handleRequest } from './_router';
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  return handleRequest(req as any, res as any);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Content-Type', 'application/json');
+
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 200;
+    res.end();
+    return;
+  }
+
+  res.statusCode = 200;
+  res.end(
+    JSON.stringify({
+      status: 'online',
+      hasDbUrl: Boolean(process.env.DATABASE_URL),
+      node: process.version,
+      timestamp: new Date().toISOString(),
+    })
+  );
 }

@@ -4,14 +4,32 @@ import path from 'path';
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-  });
+let prismaInstance: PrismaClient | null = null;
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+export function getPrisma(): PrismaClient | null {
+  if (!process.env.DATABASE_URL) {
+    return null;
+  }
+
+  if (globalForPrisma.prisma) {
+    return globalForPrisma.prisma;
+  }
+
+  if (!prismaInstance) {
+    try {
+      prismaInstance = new PrismaClient({
+        log: ['error'],
+      });
+      if (process.env.NODE_ENV !== 'production') {
+        globalForPrisma.prisma = prismaInstance;
+      }
+    } catch (err) {
+      console.error('[DB] Failed to initialize PrismaClient:', err);
+      return null;
+    }
+  }
+
+  return prismaInstance;
 }
 
 let cachedSnapshot: any = null;
