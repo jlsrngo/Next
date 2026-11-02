@@ -160,7 +160,7 @@ export default function AdminSkillsPage() {
                 type="button"
                 onClick={() => toggleSkill(tech)}
                 disabled={isToggling}
-                className={`p-3 border relative text-left transition-all flex flex-col justify-between min-h-[90px] group ${
+                className={`p-3 border relative text-left transition-all flex flex-col justify-between min-h-[98px] group ${
                   isActive
                     ? 'border-line bg-bg-raised shadow-xs'
                     : 'border-line/40 bg-bg opacity-50 hover:opacity-100 hover:border-line'
@@ -182,11 +182,22 @@ export default function AdminSkillsPage() {
                   )}
                 </div>
 
-                <div className="mt-2">
-                  <div className="font-mono text-xs font-bold text-ink uppercase truncate">
-                    {tech.name}
+                <div className="mt-2.5">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="font-mono text-xs font-bold text-ink uppercase truncate">
+                      {tech.name}
+                    </span>
+                    <span
+                      className={`font-mono text-[8.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 border shrink-0 ${
+                        isActive
+                          ? 'border-ink bg-invert-bg text-invert-fg'
+                          : 'border-line text-faint bg-bg-sunken'
+                      }`}
+                    >
+                      {isActive ? (isId ? 'AKTIF' : 'ACTIVE') : (isId ? 'NONAKTIF' : 'INACTIVE')}
+                    </span>
                   </div>
-                  <div className="font-mono text-[9px] text-faint tracking-wider uppercase">
+                  <div className="font-mono text-[9px] text-faint tracking-wider uppercase mt-1">
                     {(() => {
                       const cat = getCategoryForSlug(tech.slug);
                       return isId ? CATEGORY_MAP_ID[cat] || cat : cat;
