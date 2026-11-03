@@ -57,7 +57,7 @@ export function useDashboardData() {
     }
 
     // Fetch live contributions dataset from backend API
-    fetch('/api/github/contributions')
+    const loadGithub = () => fetch('/api/github/contributions')
       .then((r) => {
         if (!r.ok) throw new Error('API failed');
         return r.json();
@@ -116,6 +116,14 @@ export function useDashboardData() {
         } catch {}
       })
       .finally(() => setGhLoading(false));
+
+    loadGithub();
+    // Keep the "live" badge honest while the tab stays open
+    const timer = setInterval(() => {
+      if (document.visibilityState === 'visible') loadGithub();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   return { stats, github, loading, ghLoading };

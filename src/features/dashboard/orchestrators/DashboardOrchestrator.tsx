@@ -80,7 +80,9 @@ export default function DashboardOrchestrator() {
           </div>
           {github?.updated_at && (
             <div className="font-mono text-[10px] text-black/70 dark:text-white/70">
-              {t('dashboard.synced') || 'SYNCED'}: {formatDate(github.updated_at, locale)}
+              {t('dashboard.synced') || 'SYNCED'}: {formatDate(github.updated_at, locale, {
+                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false,
+              })}
             </div>
           )}
         </div>
