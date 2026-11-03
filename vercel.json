@@ -21,6 +21,10 @@
       "destination": "/api/projects?id=:id"
     },
     {
+      "source": "/api/social-links/:id",
+      "destination": "/api/social-links?id=:id"
+    },
+    {
       "source": "/((?!api).*)",
       "destination": "/index.html"
     }
