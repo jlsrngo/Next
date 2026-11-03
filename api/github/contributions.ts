@@ -142,6 +142,45 @@ export default async function handler(
     }
   }
 
+  // Fallback: public contributions API (no token required), keeps data current on Vercel
+  try {
+    const liveRes = await fetch(
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+      { headers: { 'User-Agent': 'Portfolio-Vercel/1.0' } }
+    );
+
+    if (liveRes.ok) {
+      const live = (await liveRes.json()) as any;
+      const days = Array.isArray(live?.contributions) ? live.contributions : [];
+
+      if (days.length > 0) {
+        let snapshot: any = null;
+        try {
+          const filePath = path.join(process.cwd(), 'public', 'github-contributions.json');
+          if (fs.existsSync(filePath)) snapshot = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        } catch {}
+
+        const weeks = [];
+        for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+        const liveTotal = days.reduce((sum: number, d: any) => sum + (d.count || 0), 0);
+
+        res.statusCode = 200;
+        res.end(
+          JSON.stringify({
+            ...snapshot,
+            username,
+            total_contributions: Math.max(snapshot?.total_contributions ?? 0, liveTotal),
+            weeks,
+            updated_at: new Date().toISOString(),
+          })
+        );
+        return;
+      }
+    }
+  } catch (err) {
+    console.error('[API/GitHub] Live fallback error:', err);
+  }
+
   // Fallback to static snapshot in public/github-contributions.json
   try {
     const filePath = path.join(process.cwd(), 'public', 'github-contributions.json');
