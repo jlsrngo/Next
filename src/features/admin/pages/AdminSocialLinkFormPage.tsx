@@ -7,6 +7,23 @@ import { socialLinksService } from '@/services/api';
 import AdminFormHeaderHUD from '../components/AdminFormHeaderHUD';
 import AdminFeedbackBanner, { type AdminFeedbackState } from '../components/AdminFeedbackBanner';
 
+export const POPULAR_PLATFORMS = [
+  { id: 'github', label: 'GitHub', defaultUrl: 'https://github.com/' },
+  { id: 'linkedin', label: 'LinkedIn', defaultUrl: 'https://linkedin.com/in/' },
+  { id: 'threads', label: 'Threads', defaultUrl: 'https://www.threads.com/@' },
+  { id: 'twitter', label: 'Twitter / X', defaultUrl: 'https://x.com/' },
+  { id: 'instagram', label: 'Instagram', defaultUrl: 'https://instagram.com/' },
+  { id: 'discord', label: 'Discord', defaultUrl: 'https://discord.gg/' },
+  { id: 'telegram', label: 'Telegram', defaultUrl: 'https://t.me/' },
+  { id: 'youtube', label: 'YouTube', defaultUrl: 'https://youtube.com/@' },
+  { id: 'tiktok', label: 'TikTok', defaultUrl: 'https://tiktok.com/@' },
+  { id: 'facebook', label: 'Facebook', defaultUrl: 'https://facebook.com/' },
+  { id: 'whatsapp', label: 'WhatsApp', defaultUrl: 'https://wa.me/' },
+  { id: 'email', label: 'Email / Gmail', defaultUrl: 'mailto:' },
+  { id: 'website', label: 'Website / Portfolio', defaultUrl: 'https://' },
+  { id: 'custom', label: 'Custom / Other Platform...', defaultUrl: 'https://' },
+] as const;
+
 export default function AdminSocialLinkFormPage() {
   const locale = useLocale();
   const isId = locale === 'id';
@@ -20,6 +37,7 @@ export default function AdminSocialLinkFormPage() {
 
   // Form Fields
   const [platform, setPlatform] = useState('');
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
@@ -33,7 +51,18 @@ export default function AdminSocialLinkFormPage() {
         .then((links) => {
           const found = (links || []).find((l) => String(l.id) === String(id));
           if (found) {
-            setPlatform(found.platform || '');
+            const rawPlatform = (found.platform || '').trim();
+            setPlatform(rawPlatform);
+
+            const match = POPULAR_PLATFORMS.find(
+              (p) => p.id === rawPlatform.toLowerCase() || p.label.toLowerCase() === rawPlatform.toLowerCase()
+            );
+            if (match && match.id !== 'custom') {
+              setSelectedPreset(match.id);
+            } else if (rawPlatform) {
+              setSelectedPreset('custom');
+            }
+
             setTitle(found.title || found.username || '');
             setUrl(found.url || '');
             setDescription(found.description || '');
@@ -48,17 +77,41 @@ export default function AdminSocialLinkFormPage() {
     }
   }, [id, isEditing, isId]);
 
+  const handlePresetChange = (presetId: string) => {
+    setSelectedPreset(presetId);
+    if (presetId === 'custom') {
+      if (POPULAR_PLATFORMS.some((p) => p.id === platform.toLowerCase())) {
+        setPlatform('');
+      }
+      return;
+    }
+
+    const matched = POPULAR_PLATFORMS.find((p) => p.id === presetId);
+    if (matched) {
+      setPlatform(matched.id);
+      // Auto-populate Title if empty or was set to previous preset
+      if (!title || POPULAR_PLATFORMS.some((p) => p.label === title || p.id === title)) {
+        setTitle(matched.label);
+      }
+      // Auto-populate URL if empty or default template
+      if (!url || url === 'https://' || POPULAR_PLATFORMS.some((p) => p.defaultUrl === url)) {
+        setUrl(matched.defaultUrl);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!platform.trim() || !url.trim()) {
-      setFeedback({ type: 'error', message: isId ? 'Nama Platform dan URL tujuan wajib diisi.' : 'Platform Name and Destination URL are required.' });
+    const finalPlatform = platform.trim() || selectedPreset;
+    if (!finalPlatform || !url.trim()) {
+      setFeedback({ type: 'error', message: isId ? 'Pilih Platform dan isi URL tujuan.' : 'Select a Platform and Destination URL.' });
       return;
     }
 
     setSubmitting(true);
     const payload = {
-      platform: platform.trim(),
-      title: title.trim() || platform.trim(),
+      platform: finalPlatform,
+      title: title.trim() || finalPlatform,
       url: url.trim(),
       description: description.trim(),
       isFeatured,
@@ -71,16 +124,16 @@ export default function AdminSocialLinkFormPage() {
         setFeedback({
           type: 'success',
           message: isId
-            ? `Relay "${platform}" berhasil diperbarui! Mengalihkan...`
-            : `Relay "${platform}" updated successfully! Redirecting...`,
+            ? `Relay "${finalPlatform}" berhasil diperbarui! Mengalihkan...`
+            : `Relay "${finalPlatform}" updated successfully! Redirecting...`,
         });
       } else {
         await socialLinksService.createSocialLink(payload);
         setFeedback({
           type: 'success',
           message: isId
-            ? `Relay "${platform}" berhasil disimpan ke PostgreSQL! Mengalihkan...`
-            : `Relay "${platform}" deployed to PostgreSQL! Redirecting...`,
+            ? `Relay "${finalPlatform}" berhasil disimpan ke PostgreSQL! Mengalihkan...`
+            : `Relay "${finalPlatform}" deployed to PostgreSQL! Redirecting...`,
         });
       }
 
@@ -145,16 +198,39 @@ export default function AdminSocialLinkFormPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-faint uppercase font-bold mb-1.5">
-                  {isId ? 'Identifikasi Platform *' : 'Platform Identifier *'}
+                  {isId ? 'Platform Media Sosial *' : 'Social Media Platform *'}
                 </label>
-                <input
-                  type="text"
+                <select
                   required
-                  value={platform}
-                  onChange={(e) => setPlatform(e.target.value)}
-                  placeholder="e.g. GitHub, LinkedIn, Twitter, Telegram, Discord"
-                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
-                />
+                  value={selectedPreset}
+                  onChange={(e) => handlePresetChange(e.target.value)}
+                  className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all uppercase cursor-pointer"
+                >
+                  <option value="" disabled>
+                    -- {isId ? 'PILIH PLATFORM MEDIA SOSIAL' : 'SELECT SOCIAL PLATFORM'} --
+                  </option>
+                  {POPULAR_PLATFORMS.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label.toUpperCase()}
+                    </option>
+                  ))}
+                </select>
+
+                {selectedPreset === 'custom' && (
+                  <div className="mt-2.5 space-y-1">
+                    <label className="block text-[10px] text-faint uppercase font-bold">
+                      {isId ? 'Nama Platform Kustom *' : 'Custom Platform Identifier *'}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={platform}
+                      onChange={(e) => setPlatform(e.target.value)}
+                      placeholder="e.g. Mastodon, Medium, Dribbble"
+                      className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
+                    />
+                  </div>
+                )}
               </div>
 
               <div>
@@ -223,12 +299,13 @@ export default function AdminSocialLinkFormPage() {
 
               <div>
                 <label className="block text-faint uppercase font-bold mb-1.5">
-                  {isId ? 'Indeks Urutan Tampilan' : 'Sort Sequence Index'}
+                  {isId ? 'Urutan Indeks Relay' : 'Sort Sequence Index'}
                 </label>
                 <input
                   type="number"
                   value={order}
                   onChange={(e) => setOrder(Number(e.target.value))}
+                  placeholder="0"
                   className="w-full border border-line bg-bg p-3 text-ink font-mono text-xs focus:outline-none focus:border-line-strong transition-all"
                 />
               </div>
@@ -236,17 +313,15 @@ export default function AdminSocialLinkFormPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
+        <div className="flex justify-end">
           <button
             type="submit"
             disabled={submitting}
-            className="border border-line bg-invert-bg text-invert-fg px-6 py-2.5 font-mono text-xs uppercase font-bold tracking-wider hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
+            className="border border-line bg-invert-bg text-invert-fg px-6 py-3 font-mono text-xs uppercase font-bold hover:opacity-90 transition-all shadow-xs disabled:opacity-50"
           >
             {submitting
-              ? (isId ? 'MENYIMPAN KE POSTGRESQL...' : 'SAVING TO POSTGRESQL...')
-              : isEditing
-              ? (isId ? 'SIMPAN PERUBAHAN' : 'SAVE CHANGES')
-              : (isId ? 'SIMPAN RELAY' : 'CONFIRM RELAY')}
+              ? (isId ? 'MENYIMPAN...' : 'SAVING...')
+              : (isEditing ? (isId ? 'SIMPAN PERUBAHAN' : 'SAVE CHANGES') : (isId ? 'SIMPAN RELAY' : 'CONFIRM RELAY'))}
           </button>
         </div>
       </form>
