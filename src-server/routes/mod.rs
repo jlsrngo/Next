@@ -1,4 +1,5 @@
 pub mod achievements;
+pub mod auth;
 pub mod dashboard;
 pub mod education;
 pub mod experiences;
@@ -18,6 +19,7 @@ use crate::state::SharedState;
 pub fn create_router(state: SharedState) -> Router {
     Router::new()
         // System & Diagnostics
+        .route("/api/auth", axum::routing::post(auth::login_handler).put(auth::update_auth_handler))
         .route("/api/health", get(health::health_handler))
         .route("/api/stats", get(health::stats_handler))
         .route("/api/dashboard", get(dashboard::dashboard_handler))

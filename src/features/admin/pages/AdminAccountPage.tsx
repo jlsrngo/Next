@@ -35,7 +35,7 @@ export default function AdminAccountPage() {
     setEmail(creds.email || 'admin@portfolio.com');
   }, []);
 
-  const handleSaveCredentials = (e: React.FormEvent) => {
+  const handleSaveCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback(null);
 
@@ -72,7 +72,7 @@ export default function AdminAccountPage() {
 
     setSubmitting(true);
     try {
-      const ok = updateAdminCredentials(trimmedEmail, newPassword || undefined);
+      const ok = await updateAdminCredentials(trimmedEmail, newPassword || undefined);
       if (ok) {
         setFeedback({
           type: 'success',

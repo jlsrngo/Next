@@ -15,21 +15,27 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
     const t = useTranslations();
     const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
+
     useEffect(() => { setMounted(true); }, []);
     useEffect(() => {
         if (isOpen) {
+            setErrorMsg('');
             requestAnimationFrame(() => setVisible(true));
         } else {
             setVisible(false);
+            setErrorMsg('');
         }
     }, [isOpen]);
+
     if (!mounted) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMsg('');
         setLoading(true);
         try {
             const result = await signIn('credentials', {
@@ -38,7 +44,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 redirect: false,
             });
             if (result?.error) {
-                toast.error(t('toast.error_auth'));
+                const msg = t('toast.error_auth') || 'Invalid email or password';
+                setErrorMsg(msg);
+                toast.error(msg);
             } else {
                 toast.success(t('toast.login_success'));
                 onClose();
@@ -47,7 +55,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 window.location.replace('/admin');
             }
         } catch {
-            toast.error(t('toast.error_auth'));
+            const msg = t('toast.error_auth') || 'Invalid email or password';
+            setErrorMsg(msg);
+            toast.error(msg);
         } finally {
             setLoading(false);
         }
@@ -86,13 +96,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                         {t('common.login_subtitle')}
                     </p>
 
+                    {errorMsg && (
+                        <div className="mb-4 p-2.5 bg-red-500/10 border border-red-500/30 text-red-500 font-mono text-[11px] text-center tracking-wide uppercase">
+                            {errorMsg}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="w-full space-y-4 relative z-10">
                         <div className="relative">
                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-faint" />
                             <input
                                 type="email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    if (errorMsg) setErrorMsg('');
+                                }}
                                 className="input-field pl-11 !rounded-none shadow-none ring-0 focus:ring-0"
                                 placeholder={t('common.username_placeholder')}
                                 required
@@ -104,7 +123,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    if (errorMsg) setErrorMsg('');
+                                }}
                                 className="input-field pl-11 pr-11 !rounded-none shadow-none ring-0 focus:ring-0"
                                 placeholder={t('common.password_placeholder')}
                                 required
@@ -121,9 +143,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="btn-primary w-full py-3 !rounded-none mt-4 uppercase font-bold"
+                            className="btn-primary w-full py-3 !rounded-none mt-4 uppercase font-bold cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {loading ? t('common.loading') : t('common.sign_in')}
+                            {loading ? (
+                                <span className="inline-flex items-center gap-2">
+                                    <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                    {t('common.loading') || 'AUTHENTICATING...'}
+                                </span>
+                            ) : (
+                                t('common.sign_in')
+                            )}
                         </button>
                     </form>
                 </div>
